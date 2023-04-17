@@ -54,7 +54,8 @@ namespace zSpace
 		 */
 		void updateAttributes();
 	};
-
+	/*! \brief A structure representing an extended mesh.
+	*/
 	struct zExtMeshArray
 	{
 		zObjMeshArray* pointer;
