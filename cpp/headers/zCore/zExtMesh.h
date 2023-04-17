@@ -1,0 +1,149 @@
+// This file is part of zspace, a simple C++ collection of geometry data-structures & algorithms, 
+// data analysis & visualization framework.
+//
+// Copyright (C) 2019 ZSPACE 
+// 
+// This Source Code Form is subject to the terms of the MIT License 
+// If a copy of the MIT License was not distributed with this file, You can 
+// obtain one at https://opensource.org/licenses/MIT.
+//
+// Author : Heba Eiz <heba.eiz@zaha-hadid.com>
+//
+
+#ifndef ZSPACE_EXT_CORE_H
+#define ZSPACE_EXT_CORE_H
+
+
+
+#pragma once
+#include <headers/base/zSpace_External.h>
+
+#include <headers/zCore/base/zExtern.h>
+#include <headers/zInterface/functionsets/zFnMesh.h>
+#include <headers/zInterface/functionsets/zFnGraph.h>
+
+
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <iostream>
+#include <sstream>
+
+#include<execution>
+
+using namespace std;
+
+
+namespace zSpace
+{
+
+	/*! \brief A structure representing an extended mesh.
+	*/
+	struct zExtMesh
+	{
+		zObjMesh* mesh; ///< Pointer to the underlying zObjMesh.
+		int vCount;     ///< The number of vertices in the mesh.
+		int fCount;     ///< The number of faces in the mesh.
+
+		/*! \brief Constructs a zExtMesh object.
+		 *  \param m Pointer to the underlying zObjMesh.
+		 */
+		zExtMesh(zObjMesh* m);
+
+		/*! \brief Updates the attributes of the zExtMesh object.
+		 */
+		void updateAttributes();
+	};
+
+	struct zExtMeshArray
+	{
+		zObjMeshArray* pointer;
+		int arrayCount;
+
+		zExtMeshArray(zObjMeshArray* m);
+		void updateAttributes();
+	};
+	struct zExtMeshPointerArray
+	{
+		zObjMeshPointerArray* pointer;
+		int arrayCount;
+
+		zExtMeshPointerArray(zObjMeshPointerArray* m);
+		void updateAttributes();
+	};
+
+	ZSPACE_EXTERNAL_C
+	{
+		/*! \brief Creates a new zExtMesh object from vertex and face data.
+		 *  \param [in]		_vertexPositions			-Pointer to an array of vertex positions.
+		 *  \param [in]		_polyCounts					-Pointer to an array of polygon counts.
+		 *  \param [in]		_polyConnects				-Pointer to an array of polygon vertex indices.
+		 *  \param [in]		numVerts					-The number of vertices in the mesh.
+		 *  \param [in]		numFaces					-The number of faces in the mesh.
+		 *  \param [in,out] out_mesh					-Reference to the zExtMesh object to be created.
+		 */
+		ZSPACE_EXTERNAL void ext_meshUtil_createMeshOBJFromArray(double* _vertexPositions, int* _polyCounts, int* _polyConnects, int numVerts, int numFaces, zExtMesh& out_mesh);
+
+		/*! \brief Creates a new zExtMesh object from vertex and face data.
+		 *  \param [in]		_vertexPositions			-File path
+		 *  \param [in,out] out_mesh					-Reference to the zExtMesh object to be created.
+		 */
+		ZSPACE_EXTERNAL void ext_meshUtil_createMeshOBJFromFile(char* filePath, zExtMesh& out_mesh);
+
+
+		/*! \brief Gets the number of faces in a zExtMesh object.
+		* 
+		 *  \param [in] objMesh The zExtMesh object to retrieve face count from.
+		 *  \param [out] outfCounts Pointer to an integer to store the face count.
+		 *  \return 0 on success, -1 on failure.
+		 * 
+		 */
+		ZSPACE_EXTERNAL int ext_meshUtil_getMeshFaceCount(zExtMesh& objMesh, int* outfCounts);
+
+		/*! \brief Gets the position and color data for the vertices of a zExtMesh object.
+		* 
+		 *  \param [in]		objMesh The			-zExtMesh object to retrieve vertex data from.
+		 *  \param [out]	outVPostions		-Pointer to an array to store vertex positions.
+		 *  \param [out]	outVColors			-Pointer to an array to store vertex colors.
+		 *  \return 0 on success, -1 on failure.
+		 * 
+		 */
+		ZSPACE_EXTERNAL int ext_meshUtil_getMeshPosition(zExtMesh& objMesh, float* outVPostions, float* outVColors);
+
+		/*! \brief Gets the face connectivity data for a zExtMesh object.
+		 *  \param [in]		objMesh				-The zExtMesh object to retrieve face connectivity data from.
+		 *  \param [out]	outfConnects		-Pointer to an array to store face connectivity data.
+		 *  \return 0 on success, -1 on failure.
+		 */
+		ZSPACE_EXTERNAL int ext_meshUtil_getMeshFaceConnect(zExtMesh& objMesh, int* outfConnects);
+
+
+		/*! \brief Gets an array of zExtMesh from zExtMeshArray object.
+		*  \param [in]		inArray				-zExtMeshArray to get zExtMesh from.
+		*  \param [out]		zExtMesh			-Out array of meshes.
+		*  \return 0 on success, -1 on failure.
+		*/
+		ZSPACE_EXTERNAL int ext_meshUtil_getMeshsFromMeshArray(zExtMeshArray& inArray, zExtMesh* outMeshes);
+
+		/*! \brief Gets an array of zExtMesh from zExtMeshPointerArray object.
+		*  \param [in]		inArray				-zExtMeshPointerArray to get zExtMesh from.
+		*  \param [out]		zExtMesh			-Out array of meshes.
+		*  \return 0 on success, -1 on failure.
+		*/
+		ZSPACE_EXTERNAL int ext_meshUtil_getMeshsFromMeshPointerArray(zExtMeshPointerArray& inArray, zExtMesh* outMeshes);
+
+
+	}
+
+}
+
+
+
+
+#if defined(ZSPACE_EXTERNAL_STATIC_LIBRARY)  || defined(ZSPACE_EXTERNAL_DYNAMIC_LIBRARY)
+// All defined OK so do nothing
+#else
+#include<source/zCore/zExtMesh.cpp>
+#endif
+
+#endif
