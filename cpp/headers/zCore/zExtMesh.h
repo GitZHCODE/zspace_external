@@ -75,6 +75,10 @@ namespace zSpace
 
 	ZSPACE_EXTERNAL_C
 	{
+		//--------------------------
+		//----CREATE METHODS
+		//--------------------------
+
 		/*! \brief Creates a new zExtMesh object from vertex and face data.
 		 *  \param [in]		_vertexPositions			-Pointer to an array of vertex positions.
 		 *  \param [in]		_polyCounts					-Pointer to an array of polygon counts.
@@ -92,44 +96,55 @@ namespace zSpace
 		ZSPACE_EXTERNAL void ext_meshUtil_createMeshOBJFromFile(char* filePath, zExtMesh& out_mesh);
 
 
+		//--------------------------
+		//----GET METHODS
+		//--------------------------
+
 		/*! \brief Gets the number of faces in a zExtMesh object.
-		* 
+		*
 		 *  \param [in] objMesh The zExtMesh object to retrieve face count from.
 		 *  \param [out] outfCounts Pointer to an integer to store the face count.
-		 *  \return 0 on success, -1 on failure.
-		 * 
+		 *  \return 1 on success, 0 on failure.
+		 *
 		 */
 		ZSPACE_EXTERNAL int ext_meshUtil_getMeshFaceCount(zExtMesh& objMesh, int* outfCounts);
 
 		/*! \brief Gets the position and color data for the vertices of a zExtMesh object.
-		* 
+		*
 		 *  \param [in]		objMesh The			-zExtMesh object to retrieve vertex data from.
 		 *  \param [out]	outVPostions		-Pointer to an array to store vertex positions.
 		 *  \param [out]	outVColors			-Pointer to an array to store vertex colors.
-		 *  \return 0 on success, -1 on failure.
-		 * 
+		 *  \return 1 on success, 0 on failure.
+		 *
 		 */
 		ZSPACE_EXTERNAL int ext_meshUtil_getMeshPosition(zExtMesh& objMesh, float* outVPostions, float* outVColors);
 
 		/*! \brief Gets the face connectivity data for a zExtMesh object.
 		 *  \param [in]		objMesh				-The zExtMesh object to retrieve face connectivity data from.
 		 *  \param [out]	outfConnects		-Pointer to an array to store face connectivity data.
-		 *  \return 0 on success, -1 on failure.
+		 *  \return 1 on success, 0 on failure.
 		 */
 		ZSPACE_EXTERNAL int ext_meshUtil_getMeshFaceConnect(zExtMesh& objMesh, int* outfConnects);
+
+		/*! \brief Gets the center point of the mesh.
+		 *  \param [in]		objMesh				-The zExtMesh object to retrieve face connectivity data from.
+		 *  \param [out]	outCenter			-Pointer to an array to store centre position.
+		 *  \return 1 on success, 0 on failure.
+		 */
+		ZSPACE_EXTERNAL int ext_meshUtil_getMeshCentre(zExtMesh& objMesh, float* outCentre);
 
 
 		/*! \brief Gets an array of zExtMesh from zExtMeshArray object.
 		*  \param [in]		inArray				-zExtMeshArray to get zExtMesh from.
 		*  \param [out]		zExtMesh			-Out array of meshes.
-		*  \return 0 on success, -1 on failure.
+		*  \return 1 on success, 0 on failure.
 		*/
 		ZSPACE_EXTERNAL int ext_meshUtil_getMeshsFromMeshArray(zExtMeshArray& inArray, zExtMesh* outMeshes);
 
 		/*! \brief Gets an array of zExtMesh from zExtMeshPointerArray object.
 		*  \param [in]		inArray				-zExtMeshPointerArray to get zExtMesh from.
 		*  \param [out]		zExtMesh			-Out array of meshes.
-		*  \return 0 on success, -1 on failure.
+		*  \return 1 on success, 0 on failure.
 		*/
 		ZSPACE_EXTERNAL int ext_meshUtil_getMeshsFromMeshPointerArray(zExtMeshPointerArray& inArray, zExtMesh* outMeshes);
 

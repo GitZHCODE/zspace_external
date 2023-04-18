@@ -47,70 +47,11 @@ namespace zSpace
 	}
 	
 
-	ZSPACE_EXTERNAL_INLINE void ext_zTsRobot_setDirectory(zExtRobot& extRobot, char* dirPath)
-	{
-		printf("\n ext_zTsRobot_setDirectory - 0");
-
-		vector<string> robotFile;
-
-		zUtilsCore core;
-		zObjMeshArray r_meshObjs;
-		zObjGraph r_graphObj;
-		printf("\n ext_zTsRobot_setDirectory - 1");
-
-		core.getFilesFromDirectory(robotFile, dirPath, zJSON);
-
-		printf("\n ext_zTsRobot_setDirectory - 2");
 
 
-		int nF = core.getNumfiles_Type(dirPath, zOBJ);
-		if (nF < 8) nF = 8;
-
-		r_meshObjs.assign(nF, zObjMesh());
-
-		extRobot.robot = new zTsRHWC();
-
-		printf("\n ext_zTsRobot_setDirectory - 3");
-
-
-		cout << endl << robotFile[0];
-
-		extRobot.robot->createRobotfromFile(robotFile[0], zJSON);
-
-		printf("\n ext_zTsRobot_setDirectory - 4");
-
-		
-
-		extRobot.robot->createRobotJointMeshesfromFile(dirPath, zOBJ, true);
-
-
-		zTransform robotTarget;
-		zTransform robotEE;
-
-		// set target transform
-
-		robotTarget.setIdentity();
-		robotTarget(0, 0) = -1; robotTarget(0, 1) = 0; robotTarget(0, 2) = 0;
-		robotTarget(1, 0) = 0; robotTarget(1, 1) = 1; robotTarget(1, 2) = 0;
-		robotTarget(2, 0) = 0; robotTarget(2, 1) = 0; robotTarget(2, 2) = -1;
-		robotTarget(3, 0) = 2.0; robotTarget(3, 1) = 0; robotTarget(3, 2) = 0;
-
-		// set EE transform
-		robotEE.setIdentity();
-
-		robotEE(0, 0) = 0; robotEE(0, 1) = 0; robotEE(0, 2) = -1;
-		robotEE(1, 0) = 0; robotEE(1, 1) = 1; robotEE(1, 2) = 0;
-		robotEE(2, 0) = 1; robotEE(2, 1) = 0; robotEE(2, 2) = 0;
-		robotEE(3, 0) = -0.2; robotEE(3, 1) = 0; robotEE(3, 2) = -0.346;
-
-
-		extRobot.robot->setEndEffector(robotEE);
-
-		extRobot.updateAttributes();
-
-
-	}
-
+	//--------------------------
+	//----CREATE METHODS
+	//--------------------------
 	ZSPACE_EXTERNAL_INLINE void ext_zTsRobot_createRobotFromFile(zExtRobot& extRobot, char* path)
 	{
 
@@ -122,21 +63,16 @@ namespace zSpace
 
 
 	}
-	ZSPACE_EXTERNAL_INLINE void ext_zTsRobot_getComputedTargets(zExtRobot& extRobot, float* outTargets)
+	ZSPACE_EXTERNAL_INLINE void ext_zTsRobot_createRobotJointMeshesfromFile(zExtRobot& extRobot, char* dir)
 	{
-		printf("\n ext_zTsRobot_getComputedTargets");
-
-		vector<zTransform> tt = extRobot.robot->robotTargets;
-		for (int i = 0; i < 6; i++)
-		{
-			float* data = tt.at(i).data();
-			for (int j = 0; j < 16; j++)
-			{
-				outTargets[i * 16 + j] = data[j];
-			}
-		}
+		extRobot.robot->createRobotJointMeshesfromFile(dir, zOBJ, true);
 	}
-	ZSPACE_EXTERNAL_INLINE void ext_zTsRobot_setEndEffector(zExtRobot& extRobot, zExtTransform eeTransform)
+
+	
+	//--------------------------
+	//----SET METHODS
+	//--------------------------
+	ZSPACE_EXTERNAL_INLINE void ext_zTsRobot_setEndEffector(zExtRobot& extRobot, zExtTransform& eeTransform)
 	{
 
 		extRobot.robot->setEndEffector(*eeTransform._transform);
@@ -156,59 +92,136 @@ namespace zSpace
 		}
 	}
 
-	ZSPACE_EXTERNAL_INLINE void ext_zTsRobot_setFabricationPlanes(zExtRobot& extRobot, zExtTransform fabBasePlane, zExtTransform workBasePlane)
+	ZSPACE_EXTERNAL_INLINE void ext_zTsRobot_setFabricationPlane(zExtRobot& extRobot, zExtTransform fabBasePlane)
+	{
+		extRobot.robot->setFabricationRobotHome(*fabBasePlane._transform);
+	}
+	ZSPACE_EXTERNAL_INLINE void ext_zTsRobot_setRobotHomePlane(zExtRobot& extRobot, zExtTransform workBasePlane)
 	{
 		extRobot.robot->setFabricationWorkbase(*workBasePlane._transform);
-		extRobot.robot->setFabricationRobotHome(*fabBasePlane._transform);
+	}
+
+	ZSPACE_EXTERNAL_INLINE void ext_zTsRobot_setRobotBasePlane(zExtRobot& extRobot, zExtTransform robotBase)
+	{
+		extRobot.robot->setBase(*robotBase._transform);
 	}
 
 	ZSPACE_EXTERNAL_INLINE void ext_zTsRobot_setFabricationMeshJSONFromDir(zExtRobot& extRobot, char* dir)
 	{
+		//cout << endl << "setfab mesh - external " << 1;
 		extRobot.robot->createFabMeshesfromDir(dir, zJSON);
 	}
 	ZSPACE_EXTERNAL_INLINE void ext_zTsRobot_setFabricationMeshOBJFromDir(zExtRobot& extRobot, char* dir)
 	{
 		extRobot.robot->createFabMeshesfromDir(dir, zOBJ);
 	}
-	ZSPACE_EXTERNAL_INLINE void ext_zTsRobot_createRobotJointMeshesfromFile(zExtRobot& extRobot, char* dir)
+		
+	//--------------------------
+	//----SET METHODS
+	//--------------------------
+	ZSPACE_EXTERNAL_INLINE void ext_zTsRobot_getComputedTargets(zExtRobot& extRobot, float* outTargets)
 	{
-		extRobot.robot->createRobotJointMeshesfromFile(dir, zOBJ, true);
+		printf("\n ext_zTsRobot_getComputedTargets");
+
+		vector<zTransform> tt = extRobot.robot->robotTargets;
+		for (int i = 0; i < 6; i++)
+		{
+			float* data = tt.at(i).data();
+			for (int j = 0; j < 16; j++)
+			{
+				outTargets[i * 16 + j] = data[j];
+			}
+		}
 	}
+	ZSPACE_EXTERNAL_INLINE void ext_zTsRobot_getTargets(zExtRobot& extRobot, zExtTransform* targets, bool* targetsReachability, int* targetsTypes)
+	{
+		for (int i = 0; i < extRobot.robot->robotTargets.size(); i++)
+		{
+			targets[i]._transform = &extRobot.robot->robotTargets[i];
+
+			targets[i].updateAttributes();
+			cout << endl << "reachability: " << extRobot.robot->robotTargetReachabilities[i];
+
+			targetsReachability[i] = extRobot.robot->robotTargetReachabilities[i];
+			cout << endl << "reachability: " << targetsReachability[i];
+			targetsTypes[i] = extRobot.robot->robotTargetTypes[i];
+			cout << endl << "type: " << targetsTypes[i];
+
+
+		}
+	}
+	ZSPACE_EXTERNAL_INLINE void ext_zTsRobot_getFabricationPlane(zExtRobot& extRobot, zExtTransform& fabBasePlane)
+	{
+		fabBasePlane._transform = &extRobot.robot->o_fabObj.fabrication_base;
+		fabBasePlane.updateAttributes();
+	}
+	ZSPACE_EXTERNAL_INLINE void ext_zTsRobot_getRobotHomePlane(zExtRobot& extRobot, zExtTransform& workBasePlane)
+	{
+		workBasePlane._transform = &extRobot.robot->o_fabObj.robot_home;
+		workBasePlane.updateAttributes();
+	}
+	ZSPACE_EXTERNAL_INLINE void ext_zTsRobot_getFabricationMeshes(zExtRobot& extRobot, zExtMeshArray& meshArray)
+	{
+		meshArray.pointer = &extRobot.robot->o_fabObj.fabMeshes;
+		meshArray.updateAttributes();
+	}
+	
+	//--------------------------
+	//----COMPUTE METHODS
+	//--------------------------
 	ZSPACE_EXTERNAL_INLINE void ext_zTsRobot_forwardKinematics(zExtRobot& extRobot, float* jointRotation)
 	{
-		
 		for (int i = 0; i < 6; i++)
 		{
 			extRobot.robot->jointRotations[i].rotation = jointRotation[i];
 		}
 
 		extRobot.robot->forwardKinematics();
-
 		extRobot.updateAttributes();
-
 	}
 
-	ZSPACE_EXTERNAL_INLINE bool ext_zTsRobot_inverseKinematics(zExtRobot& extRobot, zExtTransform& targetTransformation)
+	ZSPACE_EXTERNAL_INLINE bool ext_zTsRobot_inverseKinematics(zExtRobot& extRobot, zExtTransform& targetTransformation, float& dot, float& angle, float& dotZeroZ, float& angleZeroZ)
 	{
 		extRobot.robot->setTarget(*targetTransformation._transform);
 
 		extRobot.robot->inverseKinematics();
 
+		zFnMesh fnbox(extRobot.robot->o_fabObj.bbox);
+		zPoint boxC = fnbox.getCenter();
+
+		zPoint targetPos((*targetTransformation._transform)(3, 0), (*targetTransformation._transform)(3, 1), (*targetTransformation._transform)(3, 2));
+		zVector targetNormal((*targetTransformation._transform)(2, 0), (*targetTransformation._transform)(2, 1), (*targetTransformation._transform)(2, 2));
+		zVector vecCentreToPos = targetPos - boxC;
+		zVector unitZ(0, 0, 1);
+		float angleZ = targetNormal.angle(unitZ);
+		dot = targetNormal * targetPos;
+		angle = targetNormal.angle(vecCentreToPos);
+		//unify the z
+		targetNormal.z = 0;
+		vecCentreToPos.z = 0;
+
+		dotZeroZ = targetNormal * targetPos;
+		angleZeroZ = targetNormal.angle(vecCentreToPos);
+
+		/*cout << endl << "dot: " << dot;
+		cout << endl << "angle: " << angle;
+		cout << endl << "dotZeroZ: " << dotZeroZ;
+		cout << endl << "angleZeroZ: " << angleZeroZ;*/
+
 		extRobot.updateAttributes();
 		return extRobot.robot->inReach;
 	}
 
-	ZSPACE_EXTERNAL_INLINE void ext_zTsRobot_exportGCodeABB(zExtRobot& extRobot, char* dir)
-	{
-		extRobot.robot->gCode_to(dir, zRobotABB);
-	}
 
 	ZSPACE_EXTERNAL_INLINE void ext_zTsRobot_computeTargetzTsRHWC(zExtRobot& extRobot, int& targetCount)
 	{
+		//cout << endl << "target " << "0";
+
 		zTsRHWC rhwc = *extRobot.robot;
 		rhwc.computeTargets();
+		//cout << endl << "target " << "1";
 
-		//rhwc.computeGcode();
+		rhwc.computeGcode();
 		*extRobot.robot = rhwc;
 		targetCount = extRobot.robot->robotTargets.size();
 		extRobot.updateAttributes();
@@ -222,31 +235,10 @@ namespace zSpace
 		extRobot.updateAttributes();
 	}
 
-	ZSPACE_EXTERNAL_INLINE void ext_zTsRobot_getTargets(zExtRobot& extRobot, zTransform* targets, bool* targetsReachability, int* targetsTypes)
+
+	ZSPACE_EXTERNAL_INLINE void ext_zTsRobot_exportGCodeABB(zExtRobot& extRobot, char* dir)
 	{
-		for (int i = 0; i < extRobot.robot->robotTargets.size(); i++)
-		{
-			targets[i] = extRobot.robot->robotTargets[i];
-			targetsReachability[i] = extRobot.robot->robotTargetReachabilities[i];
-			targetsTypes[i] = extRobot.robot->robotTargetTypes[i];
-		}
+		extRobot.robot->gCode_to(dir, zRobotABB);
 	}
-
-	ZSPACE_EXTERNAL_INLINE void ext_zTsRobot_getFabricationPlanes(zExtRobot& extRobot, zExtTransform& fabBasePlane, zExtTransform& workBasePlane)
-	{
-		fabBasePlane._transform = &extRobot.robot->o_fabObj.fabrication_base;
-		fabBasePlane.updateAttributes();
-		workBasePlane._transform = &extRobot.robot->o_fabObj.robot_home;
-		workBasePlane.updateAttributes();
-	}
-
-	ZSPACE_EXTERNAL_INLINE void ext_zTsRobot_getFabricationMeshes(zExtRobot& extRobot, zExtMeshArray& meshArray)
-	{
-		meshArray.pointer = &extRobot.robot->o_fabObj.fabMeshes;
-		meshArray.updateAttributes();
-	}
-	
-
-
 
 }

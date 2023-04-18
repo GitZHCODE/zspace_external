@@ -184,5 +184,21 @@ namespace zSpace
 		return 1;
 	}
 
+	ZSPACE_EXTERNAL_INLINE int ext_meshUtil_getMeshCentre(zExtMesh& objMesh, float* outCentre)
+	{
+		if (!objMesh.mesh)
+		{
+			"/n meshPointer is null";
+			return 0;
+		}
+		zFnMesh fn(*objMesh.mesh);
+		zPoint pt =  fn.getCenter();
+		outCentre[0] = pt.x;
+		outCentre[1] = pt.y;
+		outCentre[2] = pt.z;
+
+		return 1;
+	}
+
 
 }

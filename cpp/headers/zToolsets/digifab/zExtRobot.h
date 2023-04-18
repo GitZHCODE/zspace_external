@@ -100,7 +100,9 @@ namespace zSpace
 	ZSPACE_EXTERNAL_C
 	{
 
-
+		//--------------------------
+		//----CREATE METHODS
+		//--------------------------
 		/**
 		 * \brief Reads a robot JSON file.
 		 * \param [in,out]							-extRobot The zExtRobot object to read into.
@@ -118,13 +120,111 @@ namespace zSpace
 		 */
 		ZSPACE_EXTERNAL void ext_zTsRobot_createRobotJointMeshesfromFile(zExtRobot& extRobot, char* dir);
 
+
+
+		//--------------------------
+		//----SET METHODS
+		//--------------------------
+
 		/**
 		 * \brief Sets the end effector transform for an zExtRobot.
 		 * \param [in,out]	extRobot 				-The zExtRobot object.
 		 * \param [in]		eeTransform 			-The end effector transform to set.
 		 * \since version 0.0.1
 		 */
-		ZSPACE_EXTERNAL void ext_zTsRobot_setEndEffector(zExtRobot& extRobot, zExtTransform eeTransform);
+		ZSPACE_EXTERNAL void ext_zTsRobot_setEndEffector(zExtRobot& extRobot, zExtTransform& eeTransform);
+		/**
+		* \brief Sets the fabrication mesh from JSON dir for an zExtRobot.
+		* \param [in,out]	extRobot 				-The zExtRobot object.
+		* \param [in]		dir 				-The directory of the fabrication mesh to set.
+		* \since version 0.0.1
+		*/
+		ZSPACE_EXTERNAL void ext_zTsRobot_setFabricationMeshJSONFromDir(zExtRobot& extRobot, char* dir);
+		
+		/**
+		* \brief Sets the fabrication mesh from OBJ dir for an zExtRobot.
+		* \param [in,out]	extRobot 				-The zExtRobot object.
+		* \param [in]		dir 			-The directory of the fabrication mesh to set.
+		* \since version 0.0.1
+		*/
+		ZSPACE_EXTERNAL void ext_zTsRobot_setFabricationMeshOBJFromDir(zExtRobot& extRobot, char* dir);
+
+		/**
+		 * \brief Set fabrication mesh for an zExtRobot.
+		 * \param [in,out]	extRobot 				-The zExtRobot object.
+		 * \param [in]		fabBasePlane 			-The base plane to set.
+		 * \param [in]		workBasePlane 			-The work base plane to set.
+		 * \since version 0.0.1
+		 */
+		ZSPACE_EXTERNAL void ext_zTsRobot_setFabricationMesh(zExtRobot& extRobot, zExtMesh* fabMesh, int fabMeshCount);
+
+		/**
+		 * \brief Sets the fabrication base plane for an zExtRobot.
+		 * \param [in,out]	extRobot 				-The zExtRobot object.
+		 * \param [in]		fabBasePlane 			-The base plane to set.
+		 * \param [in]		workBasePlane 			-The work base plane to set.
+		 * \since version 0.0.1
+		 */
+		ZSPACE_EXTERNAL void ext_zTsRobot_setFabricationPlane(zExtRobot& extRobot, zExtTransform fabBasePlane);
+
+		/**
+		 * \brief Sets the robot home an zExtRobot.
+		 * \param [in,out]	extRobot 				-The zExtRobot object.
+		 * \param [in]		fabBasePlane 			-The base plane to set.
+		 * \param [in]		workBasePlane 			-The work base plane to set.
+		 * \since version 0.0.1
+		 */
+		ZSPACE_EXTERNAL void ext_zTsRobot_setRobotHomePlane(zExtRobot& extRobot, zExtTransform workBasePlane);
+
+		/**
+		 * \brief Sets the robot base for an zExtRobot.
+		 * \param [in,out]	extRobot 				-The zExtRobot object.
+		 * \param [in]		robotBase 				-The base plane of the robot.
+		 * \since version 0.0.1
+		 */
+		ZSPACE_EXTERNAL void ext_zTsRobot_setRobotBasePlane(zExtRobot& extRobot, zExtTransform robotBase);
+
+		//--------------------------
+		//----GET METHODS
+		//--------------------------
+		/**
+		 * \brief Computes the gCode for an zExtRobot based on zTsRHWC computeGcode method.
+		 * \param [in,out]	extRobot 				-The zExtRobot object.
+		 * \param [in]		targets 				-Array of tragets transforms.
+		 * \param [in]		targetsReachability 		-Array of tragets reachability.
+		 * \since version 0.0.1
+		 */
+		ZSPACE_EXTERNAL void ext_zTsRobot_getTargets(zExtRobot& extRobot, zExtTransform* targets, bool* targetsReachability, int* targetsTypes);
+
+		/**
+		* \brief Get base plane, and woekplane for an zExtRobot.
+		* \param [in,out]	extRobot 				-The zExtRobot object.
+		* \param [out]		fabBasePlane 			-The base plane.
+		* \param [out]		workBasePlane 			-The robot home plane.
+		* \since version 0.0.1
+		*/
+		ZSPACE_EXTERNAL void ext_zTsRobot_getFabricationPlane(zExtRobot& extRobot, zExtTransform& fabBasePlane);
+
+		/**
+		* \brief Get base plane, and woekplane for an zExtRobot.
+		* \param [in,out]	extRobot 				-The zExtRobot object.
+		* \param [out]		workBasePlane 			-The robot home plane.
+		* \since version 0.0.1
+		*/
+		ZSPACE_EXTERNAL void ext_zTsRobot_getRobotHomePlane(zExtRobot& extRobot, zExtTransform& workBasePlane);
+
+		/**
+		*\brief Get base plane, and woekplane for an zExtRobot.
+		* \param[in, out]	extRobot			- The zExtRobot object.
+		* \param[in, out]	meshArray			- zExtMeshArray
+		* \since version 0.0.1
+		*/
+		ZSPACE_EXTERNAL void ext_zTsRobot_getFabricationMeshes(zExtRobot & extRobot, zExtMeshArray& meshArray);
+
+
+		//--------------------------
+		//----COMPUTE METHODS
+		//--------------------------
 
 		/**
 		 * \brief Computes the forward kinematics for an zExtRobot.
@@ -140,57 +240,11 @@ namespace zSpace
 		 * \param [in,out]	targetTransformation	-The target transformation values to use.
 		 * \since version 0.0.1
 		 */
-		ZSPACE_EXTERNAL bool ext_zTsRobot_inverseKinematics(zExtRobot& extRobot, zExtTransform& targetTransformation);
+		ZSPACE_EXTERNAL bool ext_zTsRobot_inverseKinematics(zExtRobot& extRobot, zExtTransform& targetTransformation, float& dot, float& angle, float& dotZeroZ, float& angleZeroZ);
 
 		//--------------------------
-		//----SET METHODS
+		//----COMPUTE METHODS (RHWC SPECIFIC)
 		//--------------------------
-
-		/**
-		* \brief Sets the fabrication mesh, base plane, and computes targets for an zExtRobot.
-		* \param [in,out]	extRobot 				-The zExtRobot object.
-		* \param [in]		dir 				-The directory of the fabrication mesh to set.
-		* \since version 0.0.1
-		*/
-		ZSPACE_EXTERNAL void ext_zTsRobot_setFabricationMeshJSONFromDir(zExtRobot& extRobot, char* dir);
-		
-		/**
-		* \brief Sets the fabrication mesh, base plane, and computes targets for an zExtRobot.
-		* \param [in,out]	extRobot 				-The zExtRobot object.
-		* \param [in]		dir 			-The directory of the fabrication mesh to set.
-		* \since version 0.0.1
-		*/
-		ZSPACE_EXTERNAL void ext_zTsRobot_setFabricationMeshOBJFromDir(zExtRobot& extRobot, char* dir);
-
-		/**
-		 * \brief Set base plane, and woekplane for an zExtRobot.
-		 * \param [in,out]	extRobot 				-The zExtRobot object.
-		 * \param [in]		fabBasePlane 			-The base plane to set.
-		 * \param [in]		workBasePlane 			-The work base plane to set.
-		 * \since version 0.0.1
-		 */
-		ZSPACE_EXTERNAL void ext_zTsRobot_setFabricationMesh(zExtRobot& extRobot, zExtMesh* fabMesh, int fabMeshCount);
-
-		/**
-		 * \brief Sets the fabrication mesh, base plane, and computes targets for an zExtRobot.
-		 * \param [in,out]	extRobot 				-The zExtRobot object.
-		 * \param [in]		fabBasePlane 			-The base plane to set.
-		 * \param [in]		workBasePlane 			-The work base plane to set.
-		 * \since version 0.0.1
-		 */
-		ZSPACE_EXTERNAL void ext_zTsRobot_setFabricationPlanes(zExtRobot& extRobot, zExtTransform fabBasePlane, zExtTransform workBasePlane);
-
-
-
-
-		/**
-		 * \brief Export the gcode of the zExtRobot.
-		 * \param [in,out]	extRobot 				-The zExtRobot object.
-		 * \param [in]		dir 					-The directory to export the GCode.
-		 * \since version 0.0.1
-		 */
-		ZSPACE_EXTERNAL void ext_zTsRobot_exportGCodeTsRHWC(zExtRobot& extRobot, char* dir);
-
 
 		/**
 		 * \brief Computes targets for an zExtRobot based on zTsRHWC computeTarget method.
@@ -207,34 +261,18 @@ namespace zSpace
 		 */
 		ZSPACE_EXTERNAL void ext_zTsRobot_computeGCodeTsRHWC(zExtRobot& extRobot);
 
+
 		//--------------------------
-		//----GET METHODS
+		//----EXPORT METHODS
 		//--------------------------
+
 		/**
-		 * \brief Computes the gCode for an zExtRobot based on zTsRHWC computeGcode method.
+		 * \brief Export the gcode of the zExtRobot.
 		 * \param [in,out]	extRobot 				-The zExtRobot object.
-		 * \param [in]		targets 				-Array of tragets transforms.
-		 * \param [in]		targetsReachability 		-Array of tragets reachability.
+		 * \param [in]		dir 					-The directory to export the GCode.
 		 * \since version 0.0.1
 		 */
-		ZSPACE_EXTERNAL void ext_zTsRobot_getTargets(zExtRobot& extRobot, zTransform* targets, bool* targetsReachability, int* targetsTypes);
-
-		/**
-		* \brief Get base plane, and woekplane for an zExtRobot.
-		* \param [in,out]	extRobot 				-The zExtRobot object.
-		* \param [out]		fabBasePlane 			-The base plane.
-		* \param [out]		workBasePlane 			-The robot home plane.
-		* \since version 0.0.1
-		*/
-		ZSPACE_EXTERNAL void ext_zTsRobot_getFabricationPlanes(zExtRobot& extRobot, zExtTransform& fabBasePlane, zExtTransform& workBasePlane);
-
-		/**
-		*\brief Get base plane, and woekplane for an zExtRobot.
-		* \param[in, out]	extRobot			- The zExtRobot object.
-		* \param[in, out]	meshArray	- zExtMeshArray
-		* \since version 0.0.1
-		*/
-		ZSPACE_EXTERNAL void ext_zTsRobot_getFabricationMeshes(zExtRobot & extRobot, zExtMeshArray& meshArray);
+		ZSPACE_EXTERNAL void ext_zTsRobot_exportGCodeABB(zExtRobot& extRobot, char* dir);
 
 	}
 
