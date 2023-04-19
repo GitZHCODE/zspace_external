@@ -221,6 +221,15 @@ namespace zSpace
 		*/
 		ZSPACE_EXTERNAL void ext_zTsRobot_getFabricationMeshes(zExtRobot & extRobot, zExtMeshArray& meshArray);
 
+		/**
+		*\brief Get the bounding box of the fabrication mesh for an zExtRobot.
+		* \param[in, out]	extRobot			- The zExtRobot object.
+		* \param[in, out]	meshArray			- zExtMesh bounding box
+		* \since version 0.0.1
+		*/
+		ZSPACE_EXTERNAL void ext_zTsRobot_getFabricationBoundingBox(zExtRobot& extRobot, zExtMesh& boundingBox);
+
+
 
 		//--------------------------
 		//----COMPUTE METHODS
