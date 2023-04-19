@@ -94,18 +94,18 @@ namespace zSpace
 
 	ZSPACE_EXTERNAL_INLINE void ext_zTsRobot_setFabricationPlane(zExtRobot& extRobot, zExtTransform fabBasePlane)
 	{
-		extRobot.robot->setFabricationRobotHome(*fabBasePlane._transform);
+		extRobot.robot->setFabricationWorkbase(*fabBasePlane._transform);
+
 	}
 	ZSPACE_EXTERNAL_INLINE void ext_zTsRobot_setRobotHomePlane(zExtRobot& extRobot, zExtTransform workBasePlane)
 	{
-		extRobot.robot->setFabricationWorkbase(*workBasePlane._transform);
+		extRobot.robot->setFabricationRobotHome(*workBasePlane._transform);
 	}
 
 	ZSPACE_EXTERNAL_INLINE void ext_zTsRobot_setRobotBasePlane(zExtRobot& extRobot, zExtTransform robotBase)
 	{
 		extRobot.robot->setBase(*robotBase._transform);
 	}
-
 	ZSPACE_EXTERNAL_INLINE void ext_zTsRobot_setFabricationMeshJSONFromDir(zExtRobot& extRobot, char* dir)
 	{
 		//cout << endl << "setfab mesh - external " << 1;
@@ -117,22 +117,8 @@ namespace zSpace
 	}
 		
 	//--------------------------
-	//----SET METHODS
+	//----GET METHODS
 	//--------------------------
-	ZSPACE_EXTERNAL_INLINE void ext_zTsRobot_getComputedTargets(zExtRobot& extRobot, float* outTargets)
-	{
-		printf("\n ext_zTsRobot_getComputedTargets");
-
-		vector<zTransform> tt = extRobot.robot->robotTargets;
-		for (int i = 0; i < 6; i++)
-		{
-			float* data = tt.at(i).data();
-			for (int j = 0; j < 16; j++)
-			{
-				outTargets[i * 16 + j] = data[j];
-			}
-		}
-	}
 	ZSPACE_EXTERNAL_INLINE void ext_zTsRobot_getTargets(zExtRobot& extRobot, zExtTransform* targets, bool* targetsReachability, int* targetsTypes)
 	{
 		for (int i = 0; i < extRobot.robot->robotTargets.size(); i++)
@@ -164,6 +150,12 @@ namespace zSpace
 	{
 		meshArray.pointer = &extRobot.robot->o_fabObj.fabMeshes;
 		meshArray.updateAttributes();
+	}
+	ZSPACE_EXTERNAL_INLINE void ext_zTsRobot_getFabricationBoundingBox(zExtRobot& extRobot, zExtMesh& boundingBox)
+	{
+		boundingBox.mesh = new zObjMesh;
+		extRobot.robot->getFabBbox(*boundingBox.mesh);
+		boundingBox.updateAttributes();
 	}
 	
 	//--------------------------
@@ -212,7 +204,6 @@ namespace zSpace
 		return extRobot.robot->inReach;
 	}
 
-
 	ZSPACE_EXTERNAL_INLINE void ext_zTsRobot_computeTargetzTsRHWC(zExtRobot& extRobot, int& targetCount)
 	{
 		//cout << endl << "target " << "0";
@@ -234,7 +225,6 @@ namespace zSpace
 		*extRobot.robot = rhwc;
 		extRobot.updateAttributes();
 	}
-
 
 	ZSPACE_EXTERNAL_INLINE void ext_zTsRobot_exportGCodeABB(zExtRobot& extRobot, char* dir)
 	{
