@@ -45,9 +45,6 @@ namespace zSpace
 			robotJointRotationMask[i] = robot->jointRotations[i].mask;
 		}
 	}
-	
-
-
 
 	//--------------------------
 	//----CREATE METHODS
@@ -88,7 +85,7 @@ namespace zSpace
 
 		for (int i = 0; i < fabMeshCount; i++)
 		{
-			o_FabricationMeshes[i] = *fabMesh[i].mesh;
+			o_FabricationMeshes[i] = *fabMesh[i].extPointer;
 		}
 	}
 
@@ -101,7 +98,6 @@ namespace zSpace
 	{
 		extRobot.robot->setFabricationRobotHome(*workBasePlane._transform);
 	}
-
 	ZSPACE_EXTERNAL_INLINE void ext_zTsRobot_setRobotBasePlane(zExtRobot& extRobot, zExtTransform robotBase)
 	{
 		extRobot.robot->setBase(*robotBase._transform);
@@ -119,22 +115,34 @@ namespace zSpace
 	//--------------------------
 	//----GET METHODS
 	//--------------------------
-	ZSPACE_EXTERNAL_INLINE void ext_zTsRobot_getTargets(zExtRobot& extRobot, zExtTransform* targets, bool* targetsReachability, int* targetsTypes)
+	ZSPACE_EXTERNAL_INLINE void ext_zTsRobot_getTargets(zExtRobot& extRobot, zExtTransform* targets, bool* targetsReachability, int* targetsTypes, float* ovAngles, float* speed)
 	{
 		for (int i = 0; i < extRobot.robot->robotTargets.size(); i++)
 		{
 			targets[i]._transform = &extRobot.robot->robotTargets[i];
 
 			targets[i].updateAttributes();
-			cout << endl << "reachability: " << extRobot.robot->robotTargetReachabilities[i];
+			//cout << endl << "reachability: " << extRobot.robot->robotTargetReachabilities[i];
 
 			targetsReachability[i] = extRobot.robot->robotTargetReachabilities[i];
-			cout << endl << "reachability: " << targetsReachability[i];
+			//cout << endl << "reachability: " << targetsReachability[i];
 			targetsTypes[i] = extRobot.robot->robotTargetTypes[i];
-			cout << endl << "type: " << targetsTypes[i];
+			ovAngles[i] = extRobot.robot->OV_angles[i];
+			ovAngles[i] = extRobot.robot->robotTargetSpeeds[i];
+			//cout << endl << "type: " << targetsTypes[i];
 
 
 		}
+	}
+	ZSPACE_EXTERNAL_INLINE void ext_zTsRobot_getTargetsPerpToMesh(zExtRobot& extRobot, zExtTransform* targets)
+	{
+		for (int i = 0; i < extRobot.robot->targetsPerpToMesh.size(); i++)
+		{
+			targets[i]._transform = &extRobot.robot->targetsPerpToMesh[i];
+
+			targets[i].updateAttributes();
+		}
+		//ad
 	}
 	ZSPACE_EXTERNAL_INLINE void ext_zTsRobot_getFabricationPlane(zExtRobot& extRobot, zExtTransform& fabBasePlane)
 	{
@@ -153,8 +161,8 @@ namespace zSpace
 	}
 	ZSPACE_EXTERNAL_INLINE void ext_zTsRobot_getFabricationBoundingBox(zExtRobot& extRobot, zExtMesh& boundingBox)
 	{
-		boundingBox.mesh = new zObjMesh;
-		extRobot.robot->getFabBbox(*boundingBox.mesh);
+		boundingBox.extPointer = new zObjMesh;
+		extRobot.robot->getFabBbox(*boundingBox.extPointer);
 		boundingBox.updateAttributes();
 	}
 	
@@ -172,28 +180,16 @@ namespace zSpace
 		extRobot.updateAttributes();
 	}
 
-	ZSPACE_EXTERNAL_INLINE bool ext_zTsRobot_inverseKinematics(zExtRobot& extRobot, zExtTransform& targetTransformation, float& dot, float& angle, float& dotZeroZ, float& angleZeroZ)
+	ZSPACE_EXTERNAL_INLINE bool ext_zTsRobot_inverseKinematics(zExtRobot& extRobot, zExtTransform& targetTransformation)
 	{
 		extRobot.robot->setTarget(*targetTransformation._transform);
 
 		extRobot.robot->inverseKinematics();
 
-		zFnMesh fnbox(extRobot.robot->o_fabObj.bbox);
-		zPoint boxC = fnbox.getCenter();
+		//zTsRHWC rhwc = *extRobot.robot;
+		//rhwc.getOVAngle(*targetTransformation._transform, angle, rhwc.o_fabObj.fabMeshes[0]);
+		//*extRobot.robot = rhwc;
 
-		zPoint targetPos((*targetTransformation._transform)(3, 0), (*targetTransformation._transform)(3, 1), (*targetTransformation._transform)(3, 2));
-		zVector targetNormal((*targetTransformation._transform)(2, 0), (*targetTransformation._transform)(2, 1), (*targetTransformation._transform)(2, 2));
-		zVector vecCentreToPos = targetPos - boxC;
-		zVector unitZ(0, 0, 1);
-		float angleZ = targetNormal.angle(unitZ);
-		dot = targetNormal * targetPos;
-		angle = targetNormal.angle(vecCentreToPos);
-		//unify the z
-		targetNormal.z = 0;
-		vecCentreToPos.z = 0;
-
-		dotZeroZ = targetNormal * targetPos;
-		angleZeroZ = targetNormal.angle(vecCentreToPos);
 
 		/*cout << endl << "dot: " << dot;
 		cout << endl << "angle: " << angle;

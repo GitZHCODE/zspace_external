@@ -17,12 +17,23 @@
 
 #pragma once
 #include <headers/base/zSpace_External.h>
+#include <headers/zCore/zExtPoint.h>
+#include <headers/zCore/zExtColor.h>
+#include <headers/zCore/zExtUtilsCore.h>
 
 #include <headers/zCore/base/zExtern.h>
 #include <headers/zInterface/functionsets/zFnMesh.h>
 #include <headers/zInterface/functionsets/zFnGraph.h>
 
+//#include <pxr/usd/sdf/path.h>
+//#include <pxr/usd/usd/modelAPI.h>
+//#include <pxr/usd/usd/stage.h>
+//#include <pxr/usd/usdGeom/sphere.h>
 
+//#include <USD/headers/pxr/usd/sdf/path.h>
+//#include <USD/headers/pxr/usd/usd/modelAPI.h>
+//#include <USD/headers/pxr/usd/usd/stage.h>
+//#include <USD/headers/pxr/usd/usdGeom/sphere.h>
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -41,10 +52,15 @@ namespace zSpace
 	*/
 	struct zExtMesh
 	{
-		zObjMesh* mesh; ///< Pointer to the underlying zObjMesh.
+		zObjMesh* extPointer; ///< Pointer to the underlying zObjMesh.
 		int vCount;     ///< The number of vertices in the mesh.
 		int fCount;     ///< The number of faces in the mesh.
-
+		//zExtPointArray verticesArray; ///< PointerArray for the vertices of a mesh
+		//zExtColorArray colorsArray; ///< 
+		//zExtIntArray polyCount; ///< 
+		//zExtIntArray polyConnect; ///< 
+		//zExtColorArray colorsArray; ///< PointerArray for the vertices of a mesh
+		zExtMesh();
 		/*! \brief Constructs a zExtMesh object.
 		 *  \param m Pointer to the underlying zObjMesh.
 		 */
@@ -53,6 +69,9 @@ namespace zSpace
 		/*! \brief Updates the attributes of the zExtMesh object.
 		 */
 		void updateAttributes();
+
+		bool createMeshFromJson(json* pointer);
+		bool createMeshFromJson(string path);
 	};
 	/*! \brief A structure representing an extended mesh.
 	*/
@@ -95,6 +114,11 @@ namespace zSpace
 		 */
 		ZSPACE_EXTERNAL void ext_meshUtil_createMeshOBJFromFile(char* filePath, zExtMesh& out_mesh);
 
+		/*! \brief Creates a new zExtMesh object from vertex and face data.
+		*  \param [in]		_vertexPositions			-File path
+		*  \param [in,out] out_mesh					-Reference to the zExtMesh object to be created.
+		*/
+		ZSPACE_EXTERNAL void ext_meshUtil_exportToJson(zExtMesh& mesh, char* filePath);
 
 		//--------------------------
 		//----GET METHODS
@@ -147,6 +171,11 @@ namespace zSpace
 		*  \return 1 on success, 0 on failure.
 		*/
 		ZSPACE_EXTERNAL int ext_meshUtil_getMeshsFromMeshPointerArray(zExtMeshPointerArray& inArray, zExtMesh* outMeshes);
+
+
+		ZSPACE_EXTERNAL int ext_mesh_getMeshPosition(zExtMesh& objMesh, zExtPointArray& extPointArray);
+		ZSPACE_EXTERNAL int ext_mesh_getMeshColors(zExtMesh& objMesh, zExtColorArray& extPointArray);
+		ZSPACE_EXTERNAL int ext_mesh_getMeshPolygonDate(zExtMesh& objMesh, zExtIntArray& pCount, zExtIntArray& pConnect);
 
 
 	}

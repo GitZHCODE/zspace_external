@@ -82,7 +82,7 @@ namespace zSpace
 		transform.updateAttributes();
 	}
 
-	ZSPACE_EXTERNAL_INLINE void ext_zTransform_getGraphsFromTransformArray(zExtTransformArray inArray, zExtTransform* outTranfroms)
+	ZSPACE_EXTERNAL_INLINE void ext_zTransform_getItemsFromArray(zExtTransformArray inArray, zExtTransform* outTranfroms)
 	{
 		for (int i = 0; i < inArray.pointer->size(); i++)
 		{

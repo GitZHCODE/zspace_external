@@ -43,8 +43,13 @@
     <ClInclude Include="..\..\..\..\zspace_core\cpp\depends\alglib\cpp\src\stdafx.h" />
     <ClInclude Include="..\..\..\..\zspace_core\cpp\depends\spa\spa.h" />
     <ClInclude Include="..\..\..\cpp\headers\base\zSpace_External.h" />
+    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtColor.h" />
+    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtJSON.h" />
+    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtParticle.h" />
+    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtUtilsCore.h" />
     <ClInclude Include="..\..\..\cpp\headers\zCore\zExtGraph.h" />
     <ClInclude Include="..\..\..\cpp\headers\zCore\zExtMesh.h" />
+    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtPoint.h" />
     <ClInclude Include="..\..\..\cpp\headers\zCore\zExtTransform.h" />
     <ClInclude Include="..\..\..\cpp\headers\zToolsets\data\zExtKMeans.h" />
     <ClInclude Include="..\..\..\cpp\headers\zToolsets\digifab\zExtRobot.h">
@@ -66,10 +71,15 @@
     <ClCompile Include="..\..\..\..\zspace_core\cpp\depends\alglib\cpp\src\specialfunctions.cpp" />
     <ClCompile Include="..\..\..\..\zspace_core\cpp\depends\alglib\cpp\src\statistics.cpp" />
     <ClCompile Include="..\..\..\..\zspace_core\cpp\depends\spa\spa.c" />
+    <ClCompile Include="..\..\..\cpp\source\zCore\zExtColor.cpp" />
+    <ClCompile Include="..\..\..\cpp\source\zCore\zExtJSON.cpp" />
+    <ClCompile Include="..\..\..\cpp\source\zCore\zExtParticle.cpp" />
+    <ClCompile Include="..\..\..\cpp\source\zCore\zExtUtilsCore.cpp" />
     <ClCompile Include="..\..\..\cpp\source\zCore\zExtGraph.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DLL|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DLL|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\..\cpp\source\zCore\zExtMesh.cpp" />
+    <ClCompile Include="..\..\..\cpp\source\zCore\zExtPoint.cpp" />
     <ClCompile Include="..\..\..\cpp\source\zCore\zExtTransform.cpp" />
     <ClCompile Include="..\..\..\cpp\source\zToolsets\data\zExtKMeans.cpp" />
     <ClCompile Include="..\..\..\cpp\source\zToolsets\digiFab\zExtRobot.cpp" />
@@ -83,7 +93,7 @@
     <ProjectGuid>{AC6C11FF-1F49-4025-87EC-F25C219971F4}</ProjectGuid>
     <RootNamespace>zSpacev01</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>04_zSpace_External</ProjectName>
+    <ProjectName>zSpace_External</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -237,7 +247,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(zspacecoreDir)/cpp/Depends/Armadillo;$(zspacecoreDir)/cpp/Depends;$(zspacecoreDir);$(zspacecoreDir)/cpp;$(zspacetoolsetsDir);$(zspacetoolsetsDir)/cpp;$(SolutionDir)/cpp;$(zspacecoreDir)/cpp/Depends/alglib/cpp/src/;$(iglIncludeDir);$(iglBuildDir)\_deps\eigen-src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(zspacecoreDir)/cpp/Depends/Armadillo;$(zspacecoreDir)/cpp/Depends;$(zspacecoreDir);$(zspacecoreDir)/cpp;$(zspacetoolsetsDir);$(zspacetoolsetsDir)/cpp;$(SolutionDir)cpp;$(zspacecoreDir)/cpp/Depends/alglib/cpp/src/;$(iglIncludeDir);$(iglBuildDir)\_deps\eigen-src</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;IGL_STATIC_LIBRARY;_WINDLL;ZSPACE_EXTERNAL_DYNAMIC_LIBRARY;ZSPACE_TOOLSETS_STATIC_LIBRARY;ZSPACE_STATIC_LIBRARY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
