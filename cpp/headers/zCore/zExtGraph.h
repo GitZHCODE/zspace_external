@@ -20,6 +20,9 @@
 //#include <headers/zToolsets/geometry/zTsSDFSlicer.h>
 
 #include <headers/base/zSpace_External.h>
+#include <headers/zCore/zExtPoint.h>
+#include <headers/zCore/zExtColor.h>
+#include <headers/zCore/zExtUtilsCore.h>
 
 #include <headers/zCore/base/zExtern.h>
 #include <headers/zInterface/functionsets/zFnMesh.h>
@@ -66,6 +69,11 @@ namespace zSpace
 		zObjGraph* graph;
 		int vCount;
 		int eCount;
+		zExtPointArray vPositions;
+		zExtColorArray vColors;
+		zExtIntArray ePair;
+		zExtColorArray eColors;
+
 		zExtGraph(zObjGraph* g);
 		void updateAttributes();
 		zIntArray getGraphSequence();
@@ -85,6 +93,8 @@ namespace zSpace
 	
 	ZSPACE_EXTERNAL_C
 	{
+
+		//ZSPACE_EXTERNAL void ext_graph_getGraphData(zExtGraph extGraph, zext vPositions, float* vColors, int* ePairs, float* eColors);
 
 		ZSPACE_EXTERNAL void ext_graphUtil_getGraphData(zExtGraph extGraph, float* vPositions, float* vColors, int* ePairs, float* eColors);
 		ZSPACE_EXTERNAL void ext_graphUtil_getGraphSequence(zExtGraph extGraph, int* outSequence);

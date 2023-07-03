@@ -205,7 +205,7 @@ namespace zSpace
 			for (int i = 0; i < 1; i++)
 			{
 				string path = directory;
-				path.append("/r_base.obj");
+				path.append("/r_base.pointer");
 
 				zFnMesh fnMeshJoint(o_jointMeshes[i]);
 				fnMeshJoint.from(path, type, true);
@@ -217,7 +217,7 @@ namespace zSpace
 				string path = directory;
 				path.append("/r_");
 				path.append(to_string(i));
-				path.append(".obj");
+				path.append(".pointer");
 				
 				zFnMesh fnMeshJoint(o_jointMeshes[i]);
 				fnMeshJoint.from(path, type, true);
@@ -227,7 +227,7 @@ namespace zSpace
 			{
 				//// import EE
 				string path = directory;
-				path.append("/r_ee.obj");
+				path.append("/r_ee.pointer");
 				
 				zFnMesh fnMeshJoint(o_jointMeshes[7]);
 				fnMeshJoint.from(path, type, false);
@@ -297,7 +297,7 @@ namespace zSpace
 			for (int i = 0; i < 1; i++)
 			{
 				string path = directory;
-				path.append("/r_base_local.obj");
+				path.append("/r_base_local.pointer");
 
 				zFnMesh fnMeshJoint(o_jointMeshes[i]);
 				fnMeshJoint.to(path, type);
@@ -309,7 +309,7 @@ namespace zSpace
 				string path = directory;
 				path.append("/r_");
 				path.append(to_string(i + 1));
-				path.append("_local.obj");
+				path.append("_local.pointer");
 
 				zFnMesh fnMeshJoint(o_jointMeshes[i + 1]);
 				fnMeshJoint.setTransform(local, false, true);
@@ -321,7 +321,7 @@ namespace zSpace
 				if (i == DOF - 1)
 				{
 					string pathEE = directory;
-					pathEE.append("/r_EE_local.obj");
+					pathEE.append("/r_EE_local.pointer");
 
 					zFnMesh fnMesh_EE(o_jointMeshes[i + 2]);
 					fnMesh_EE.setTransform(local, false, true);
@@ -664,7 +664,7 @@ namespace zSpace
 		if (type == zRobotNachi)
 		{
 			string filename = directoryPath;
-			filename.append("/MZ07-01-A.080");
+			filename.append("/MZ07-01-a.080");
 			toNACHI_MZ07Gcode(filename);
 		}
 	}
@@ -1082,7 +1082,7 @@ namespace zSpace
 
 		for (int i = 0; i < robot_gCode.size(); i++)
 		{
-			myfile << "MOVEX A=6, AC=0, SM=0, M1J, P,";
+			myfile << "MOVEX a=6, AC=0, SM=0, M1J, P,";
 
 			myfile << "(";
 

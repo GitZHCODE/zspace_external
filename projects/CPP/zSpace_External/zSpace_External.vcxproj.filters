@@ -141,6 +141,21 @@
     <ClInclude Include="..\..\..\cpp\headers\zToolsets\digifab\zExtRobot.h">
       <Filter>Header Files\zToolset\DigiFab</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtPoint.h">
+      <Filter>Header Files\zCore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtUtilsCore.h">
+      <Filter>Header Files\zCore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtParticle.h">
+      <Filter>Header Files\zCore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtColor.h">
+      <Filter>Header Files\zCore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtJSON.h">
+      <Filter>Header Files\zCore</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\zspace_core\cpp\depends\alglib\cpp\src\alglibinternal.cpp">
@@ -199,6 +214,21 @@
     </ClCompile>
     <ClCompile Include="..\..\..\cpp\source\zToolsets\digiFab\zExtRobot.cpp">
       <Filter>Source Files\zToolset\DigiFab</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\source\zCore\zExtPoint.cpp">
+      <Filter>Source Files\zCore</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\source\zCore\zExtUtilsCore.cpp">
+      <Filter>Source Files\zCore</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\source\zCore\zExtParticle.cpp">
+      <Filter>Source Files\zCore</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\source\zCore\zExtColor.cpp">
+      <Filter>Source Files\zCore</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\source\zCore\zExtJSON.cpp">
+      <Filter>Source Files\zCore</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

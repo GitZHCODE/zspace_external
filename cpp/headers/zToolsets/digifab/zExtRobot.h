@@ -189,12 +189,28 @@ namespace zSpace
 		//--------------------------
 		/**
 		 * \brief Computes the gCode for an zExtRobot based on zTsRHWC computeGcode method.
-		 * \param [in,out]	extRobot 				-The zExtRobot object.
-		 * \param [in]		targets 				-Array of tragets transforms.
-		 * \param [in]		targetsReachability 		-Array of tragets reachability.
+		 * \param [in,out]	extRobot 					-The zExtRobot object.
+		 * \param [out]		targets 					-Array of tragets transforms.
+		 * \param [out]		targetsReachability 		-Array of tragets reachability.
+		 * \param [out]		ovAngles			 		-Array of Omniverse cutting plane angles.
 		 * \since version 0.0.1
 		 */
-		ZSPACE_EXTERNAL void ext_zTsRobot_getTargets(zExtRobot& extRobot, zExtTransform* targets, bool* targetsReachability, int* targetsTypes);
+		ZSPACE_EXTERNAL void ext_zTsRobot_getTargets(zExtRobot& extRobot, zExtTransform* targets, bool* targetsReachability, int* targetsTypes, float* ovAngles, float* speed);
+
+		//--------------------------
+		//----GET METHODS
+		//--------------------------
+		/**
+		 * \brief Computes the gCode for an zExtRobot based on zTsRHWC computeGcode method.
+		 * \param [in,out]	extRobot 					-The zExtRobot object.
+		 * \param [out]		targets 					-Array of tragets transforms.
+		 * \param [out]		targetsReachability 		-Array of tragets reachability.
+		 * \param [out]		ovAngles			 		-Array of Omniverse cutting plane angles.
+		 * \since version 0.0.1
+		 */
+		ZSPACE_EXTERNAL void ext_zTsRobot_getTargetsPerpToMesh(zExtRobot& extRobot, zExtTransform* targets);
+
+
 
 		/**
 		* \brief Get base plane, and woekplane for an zExtRobot.
@@ -249,7 +265,7 @@ namespace zSpace
 		 * \param [in,out]	targetTransformation	-The target transformation values to use.
 		 * \since version 0.0.1
 		 */
-		ZSPACE_EXTERNAL bool ext_zTsRobot_inverseKinematics(zExtRobot& extRobot, zExtTransform& targetTransformation, float& dot, float& angle, float& dotZeroZ, float& angleZeroZ);
+		ZSPACE_EXTERNAL bool ext_zTsRobot_inverseKinematics(zExtRobot& extRobot, zExtTransform& targetTransformation);
 
 		//--------------------------
 		//----COMPUTE METHODS (RHWC SPECIFIC)

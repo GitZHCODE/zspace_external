@@ -16,6 +16,7 @@
 
 namespace zSpace
 {
+
 	ZSPACE_EXTERNAL_INLINE zExtGraph::zExtGraph(zObjGraph* g)
 	{
 		graph = g;
@@ -26,6 +27,18 @@ namespace zSpace
 		zFnGraph g(*graph);
 		eCount = g.numEdges();
 		vCount = g.numVertices();
+
+		g.getVertexPositions(*vPositions.pointer);
+		vPositions.updateAttributes();
+
+		g.getVertexColors(*vColors.pointer);
+		vColors.updateAttributes();
+
+		g.getEdgeData(*ePair.pointer);
+		ePair.updateAttributes();
+
+		g.getEdgeColors(*eColors.pointer);
+		eColors.updateAttributes();
 	}
 	ZSPACE_EXTERNAL_INLINE zIntArray zExtGraph::getGraphSequence()
 	{

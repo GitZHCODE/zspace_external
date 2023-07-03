@@ -121,7 +121,7 @@ namespace zSpace
 		 *  \param [in,out] transform						-Reference to the zExtTransformArray object to update.
 		 *  \param [in]		array							-an array of zExtTranform.
 		 */
-		ZSPACE_EXTERNAL void ext_zTransform_getGraphsFromTransformArray(zExtTransformArray inArray, zExtTransform* outTranfroms);
+		ZSPACE_EXTERNAL void ext_zTransform_getItemsFromArray(zExtTransformArray inArray, zExtTransform* outTranfroms);
 
 	}
 
