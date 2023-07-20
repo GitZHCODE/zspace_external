@@ -9,8 +9,8 @@ namespace zSpace {
     public struct zExtJSON {
         public IntPtr pointer;
         public int numOfAttributes;
-        public zExtStringArray attributesNames;
-        public zExtStringArray attributesTypes;
+         zExtStringArray attributesNames;
+         zExtStringArray attributesTypes;
 
         
 
@@ -46,7 +46,7 @@ namespace zSpace {
         //    }
         //}
 
-        public bool ReadJSONAttribute2<T>(string attributeKey, out T outAttributeValue) {
+         bool ReadJSONAttribute2<T>(string attributeKey, out T outAttributeValue) {
             outAttributeValue = default(T);
             if (typeof(T) == typeof(int)) {
                 int output;
@@ -82,7 +82,7 @@ namespace zSpace {
             }
             else if (typeof(T) == typeof(float[])) {
                 var output = new zExtFloatArray();
-                Console.WriteLine("trying to read");
+                //Console.WriteLine("trying to read");
                 int success = zNativeMethods.ext_json_readJSONAttributeFloatArray(ref this, attributeKey, out output);
                 if (success == 1) {
                     outAttributeValue = (T)(object)output.getItems();
@@ -170,6 +170,129 @@ namespace zSpace {
                 }
             }
             return false;
+        }
+         T ReadJSONAttribute<T>(string attributeKey) {
+            if (typeof(T) == typeof(int)) {
+                int output;
+                int success = zNativeMethods.ext_json_readJSONAttributeInt(ref this, attributeKey, out output);
+                if (success == 1) {
+                    return (T)(object)output;
+                }
+            }
+            else if (typeof(T) == typeof(int[])) {
+                var output = new zExtIntArray();
+                int success = zNativeMethods.ext_json_readJSONAttributeIntArray(ref this, attributeKey, out output);
+                if (success == 1) {
+                    return (T)(object)output.getItems();
+                    
+                }
+            }
+            else if (typeof(T) == typeof(int[][])) {
+                var output = new zExtIntArray2D();
+                int success = zNativeMethods.ext_json_readJSONAttributeIntArray2D(ref this, attributeKey, out output);
+                if (success == 1) {
+                    return (T)(object)output.getItems();
+                    
+                }
+            }
+            else if (typeof(T) == typeof(float)) {
+                float output;
+                int success = zNativeMethods.ext_json_readJSONAttributeFloat(ref this, attributeKey, out output);
+                if (success == 1) {
+                    return (T)(object)output;
+                    
+                }
+            }
+            else if (typeof(T) == typeof(float[])) {
+                var output = new zExtFloatArray();
+                //Console.WriteLine("trying to read");
+                int success = zNativeMethods.ext_json_readJSONAttributeFloatArray(ref this, attributeKey, out output);
+                if (success == 1) {
+                    return (T)(object)output.getItems();
+                    
+                }
+            }
+            else if (typeof(T) == typeof(float[][])) {
+                var output = new zExtFloatArray2D();
+                int success = zNativeMethods.ext_json_readJSONAttributeFloatArray2D(ref this, attributeKey, out output);
+                if (success == 1) {
+                    return (T)(object)output.getItems();
+                    
+                }
+            }
+            else if (typeof(T) == typeof(double)) {
+                double output;
+                int success = zNativeMethods.ext_json_readJSONAttributeDouble(ref this, attributeKey, out output);
+                if (success == 1) {
+                    return (T)(object)output;
+                   
+                }
+            }
+            else if (typeof(T) == typeof(double[])) {
+                var output = new zExtDoubleArray();
+                int success = zNativeMethods.ext_json_readJSONAttributeDoubleArray(ref this, attributeKey, out output);
+                if (success == 1) {
+                    return (T)(object)output.getItems();
+                    
+                }
+            }
+            else if (typeof(T) == typeof(double[][])) {
+                var output = new zExtDoubleArray2D();
+                int success = zNativeMethods.ext_json_readJSONAttributeDoubleArray2D(ref this, attributeKey, out output);
+                if (success == 1) {
+                    return (T)(object)output.getItems();
+                    
+                }
+            }
+            else if (typeof(T) == typeof(string)) {
+                zExtString output;// = new zExtString();
+                int success = zNativeMethods.ext_json_readJSONAttributeString(ref this, attributeKey, out output);
+                if (success == 1) {
+                    return (T)(object)output.getString();
+                    
+                }
+            }
+            else if (typeof(T) == typeof(string[])) {
+                zExtStringArray output;
+                int success = zNativeMethods.ext_json_readJSONAttributeStringArray(ref this, attributeKey, out output);
+                if (success == 1) {
+                    return (T)(object)output.getItems();
+                    
+                }
+            }
+            else if (typeof(T) == typeof(string[][])) {
+                zExtStringArray2D output;
+                int success = zNativeMethods.ext_json_readJSONAttributeStringArray2D(ref this, attributeKey, out output);
+                if (success == 1) {
+                    return (T)(object)output.getItems();
+                    
+                }
+            }
+            else if (typeof(T) == typeof(bool)) {
+                bool output;
+                int success = zNativeMethods.ext_json_readJSONAttributeBool(ref this, attributeKey, out output);
+                if (success == 1) {
+                    return (T)(object)output;
+                    
+                }
+            }
+            else if (typeof(T) == typeof(bool[])) {
+                zExtBoolArray output;
+                int success = zNativeMethods.ext_json_readJSONAttributeBoolArray(ref this, attributeKey, out output);
+                if (success == 1) {
+                    return (T)(object)output.getItems();
+                    
+                }
+            }
+            else if (typeof(T) == typeof(bool[][])) {
+                zExtBoolArray2D output;
+                int success = zNativeMethods.ext_json_readJSONAttributeBoolArray2D(ref this, attributeKey, out output);
+                if (success == 1) {
+                    return (T)(object)output.getItems();
+                    
+                }
+            }
+            return default(T);
         }
 
         public bool ReadJSONAttribute<T>(string attributeKey, out T outAttributeValue) {
@@ -305,8 +428,7 @@ namespace zSpace {
 
             return false;
         }
-        public bool ReadJSONAttribute4(string attributeKey, Type type, out dynamic outAttributeValue) {
-
+        public bool ReadJSONAttribute(string attributeKey, Type type, out dynamic outAttributeValue) {
             switch (type.Name) {
                 case nameof(Int32):
                 case nameof(Int64):
@@ -407,6 +529,7 @@ namespace zSpace {
                         return true;
                     }
                     break;
+
                 case nameof(Boolean):
                     bool boolValue;
                     int boolSuccess = zNativeMethods.ext_json_readJSONAttributeBool(ref this, attributeKey, out boolValue);
@@ -572,49 +695,49 @@ namespace zSpace {
                     return typeof(int);
                 case nameof(Int32) + "[]":
                 case nameof(Int64) + "[]":
-                case "zIntArray":
+                case "int[]":
                     return typeof(int[]);
                 case nameof(Int32) + "[][]":
                 case nameof(Int64) + "[][]":
-                case "zIntArray2D":
+                case "int[][]":
                     return typeof(int[][]);
                 case nameof(Single):
                 case "float":
                     return typeof(float);
                 case nameof(Single) + "[]":
-                case "zFloatArray":
+                case "float[]":
                     return typeof(float[]);
                 case nameof(Single) + "[][]":
-                case "vector<zFloatArray>":
+                case "float[][]":
                     return typeof(float[][]);
                 case nameof(Double):
                 case "double":
                     return typeof(double);
 
                 case nameof(Double) + "[]":
-                case "zDoubleArray":
+                case "double[]":
                     return typeof(double[]);
                 case nameof(Double) + "[][]":
-                case "vector<vector<double>>":
+                case "double[][]":
                     return typeof(double[][]);
                 
                 case nameof(String):
                 case "string":
                     return typeof(string);
                 case nameof(String) + "[]":
-                case "zStringArray":
+                case "string[]":
                     return typeof(string[]);
                 case nameof(String) + "[][]":
-                case "vector<zStringArray>":
+                case "string[][]":
                     return typeof(string[][]);
 
                 case "bool":
                     return typeof(bool);
                 case nameof(Boolean) + "[]":
-                case "zBoolArray":
+                case "bool[]":
                     return typeof(bool[]);
                 case nameof(Boolean) + "[][]":
-                case "vector<zBoolArray>":
+                case "bool[][]":
                     return typeof(bool[][]);
 
             }
@@ -648,7 +771,12 @@ namespace zSpace {
             zNativeMethods.ext_json_createJson(ref this);
         }
 
-        
+        public string[] AttributeTypes {
+            get { return this.attributesTypes.getItems(); }
+        }
+        public string[] AttributeKeys {
+            get { return this.attributesNames.getItems(); }
+        }
     }
 
     static partial class zNativeMethods {
@@ -730,7 +858,7 @@ namespace zSpace {
         public static extern int ext_json_readJSONAttributeBool(
             ref zExtJSON extJSON,
             [MarshalAs(UnmanagedType.LPStr)] string attributeKey,
-            out bool outAttributeValue);
+            [MarshalAs(UnmanagedType.Bool)] out bool outAttributeValue);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         public static extern int ext_json_readJSONAttributeBoolArray(

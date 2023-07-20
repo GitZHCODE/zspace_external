@@ -42,12 +42,16 @@ namespace zSpace
 	}
 	ZSPACE_EXTERNAL_INLINE void zExtJSON::updateAttributes()
 	{
+
 		numOfAttributes = pointer->size();
+
 		//attributesNames = zExtStringArray(GetAllAttributeNames());
 		attributesNames.pointer = new zStringArray(GetAllAttributeNames());
+
 		attributesNames.updateAttributes();
 		// = zExtStringArray(GetAllAttributeNames());
 		attributesTypes.pointer = new zStringArray(GetAllAttributeTypes());// = zExtStringArray(GetAllAttributeNames());
+
 		attributesTypes.updateAttributes();
 		//attributesTypes = zExtStringArray(GetAllAttributeTypes());
 		/*for (int i = 0; i < attributesNames.arrayCount; i++)
@@ -904,19 +908,22 @@ namespace zSpace
 	}
 	ZSPACE_EXTERNAL_INLINE int ext_json_readJSONAttributeBool			(zExtJSON& extJSON, char* attributeKey, bool& outAttributeValue)
 	{
-		bool attributeKeySt(attributeKey);
+		string attributeKeySt(attributeKey);
 		zUtilsCore core;
 		json j = *extJSON.pointer;
 		try
 		{
 			outAttributeValue = j[attributeKeySt].get<bool>();
+
+			//outAttributeValue = j[attributeKeySt];
+
 			return 1;
 		}
 		catch (const exception&) { return 0; }
 	}
 	ZSPACE_EXTERNAL_INLINE int ext_json_readJSONAttributeBoolArray		(zExtJSON& extJSON, char* attributeKey, zExtBoolArray& outAttributeValue)
 	{
-		bool attributeKeySt(attributeKey);
+		string attributeKeySt(attributeKey);
 		zUtilsCore core;
 		json j = *extJSON.pointer;
 		try
@@ -929,7 +936,7 @@ namespace zSpace
 	}
 	ZSPACE_EXTERNAL_INLINE int ext_json_readJSONAttributeBoolArray2D	(zExtJSON& extJSON, char* attributeKey, zExtBoolArray2D& outAttributeValue)
 	{
-		bool attributeKeySt(attributeKey);
+		string attributeKeySt(attributeKey);
 		zUtilsCore core;
 		json j = *extJSON.pointer;
 		try
@@ -1098,7 +1105,9 @@ namespace zSpace
 	ZSPACE_EXTERNAL_INLINE void ext_json_createJson(zExtJSON& extJSON)
 	{
 		extJSON.pointer = new json();// = zExtJSON();
+
 		extJSON.updateAttributes();
+
 	}
 	ZSPACE_EXTERNAL_INLINE void ext_json_createJsonDeepCopy(zExtJSON& inJSON, zExtJSON& outJSON)
 	{

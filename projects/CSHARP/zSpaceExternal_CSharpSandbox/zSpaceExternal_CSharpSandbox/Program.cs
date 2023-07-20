@@ -10,8 +10,18 @@ using Rhino.Geometry;
 namespace zSpace {
     class Program {
         static void Main(string[] args) {
-            Console.WriteLine("sandbox");
+            Console.WriteLine("C# sandbox");
 
+
+
+
+            test2();
+
+            Console.WriteLine("\n Press any key to exit...");
+            Console.ReadKey();
+        }
+
+        static void test1() {
             string path = "//zaha-hadid.com/Data/Projects/1453_CODE/1453___research/res_heba/0-Projects/Striatus/Blocks/2023-02-23/200_Final/deck_3.json";
 
 
@@ -30,157 +40,128 @@ namespace zSpace {
             }
 
             // Mesh rhinoMesh = zSpaceRhinoUtil.createRhinoMeshFromExtMesh(mesh);
-            var keys = j1.attributesNames.getItems();
-            var types = j1.attributesTypes.getItems();
+            //var keys = j1.attributesNames.getItems();
+            //var types = j1.attributesTypes.getItems();
+            
+            var keys = j1.AttributeKeys;
+            var types = j1.AttributeTypes;
             for (int i = 0; i < keys.Length; i++) {
                 ////    Console.WriteLine("\n");
-                    Console.WriteLine("\n Key | Type: " + keys[i] + " | " + types[i]);
+                Console.WriteLine("\n Key | Type: " + keys[i] + " | " + types[i]);
+                Type t = j1.getType(types[i]);
+                //Console.WriteLine(t == null);
+
+                Console.WriteLine(t.Name);
+                dynamic item;
+                j1.ReadJSONAttribute(keys[i], t, out item);
                 ////    Console.WriteLine("Type: " + types[i]);
             }
-                float[][] floatArray;
-            var floatCHK = j1.ReadJSONAttribute2("LeftPlanes", out floatArray);
+            float[][] floatArray;
+            var floatCHK = j1.ReadJSONAttribute("LeftPlanes", out floatArray);
             Console.WriteLine("\n floatchk " + floatCHK + "\n");
             foreach (var item in floatArray) {
                 Console.Write(item + ", ");
             }
 
-            ////int rhVCount = rhinoMesh.Vertices.ToList().Count;
-            ////Console.WriteLine("\n \n Rhino Mesh count: " + rhVCount);
+            float[][] pts = new float[5][];
+            for (int i = 0; i < pts.Length; i++) {
+                pts[i] = new float[3];
+                pts[i][0] = i / 1.0f;
+                pts[i][1] = i / 2.0f;
+                pts[i][2] = 0f;
+            }
 
-            //try {
-            //    //bool meshChck = j1.GetMesh(ref mesh);
-            //}
-            //catch (Exception ex) {
-            //    //Console.WriteLine("\n \n Exception caught0: \n " + ex.Message);
-            //    //Console.WriteLine("\n \n Exception caught1: \n " + ex.ToString());
-            //    //Console.WriteLine("\n \n Exception caught3: \n " + ex.GetBaseException());
-            //    //Console.WriteLine("\n \n Exception caught4: \n " + ex.Source);
-            //    Console.WriteLine("\n \n Exception caught5: \n " + ex.StackTrace); //best
-            //    //Console.WriteLine("\n \n Exception caught6: \n " + ex.TargetSite);
-            //}
+            j1.WriteJSONAttribute("ControlPoints", pts);
 
 
-            //Console.WriteLine("Mesh vertices: " + mesh.getVCount());
-            //Console.WriteLine("Mesh face: " + mesh.getFaceCount());
+            printJsonDate(j1);
 
+        }
 
-            //////var k = new string[j.attributesNames.getArrayCount()];
-            ////var keys = j.attributesNames.getItems();
-            ////var types = j.attributesTypes.getItems();
+        static void test2() {
+            string writePath = "C:\\Users\\heba.eiz\\Desktop\\JSON_Temp\\testExport.json";
+            zExtJSON j1 = new zExtJSON();
+            j1.CreateJson();
 
-            //////var types = j.attributesTypes.getItems();
-            ////for (int i = 0; i < keys.Length; i++) {
-            ////    Console.WriteLine("\n");
-            ////    Console.WriteLine("\n Key: " + keys[i]);
-            ////    Console.WriteLine("Type: " + types[i]);
-            ////    Type t = j.getType(types[i]);
-            ////    Console.WriteLine(t == null);
+            //Write json Attributes
+            float[][] pts = new float[5][];
+            for (int i = 0; i < pts.Length; i++) {
+                pts[i] = new float[3];
+                pts[i][0] = i / 1.0f;
+                pts[i][1] = i / 2.0f;
+                pts[i][2] = 0f;
+            }
+            j1.WriteJSONAttribute("ControlPoints", pts);
 
-            ////    Console.WriteLine(t.Name);
-            ////    dynamic item;
-            ////    j.ReadJSONAttribute4(keys[i], t, out item);
-            ////    Console.WriteLine("");
+            int[] ints = new int[5];
+            for (int i = 0; i < pts.Length; i++) {
+                ints[i] = i;
+            }
+            j1.WriteJSONAttribute("Tests", ints);
 
-            ////    if (t.Name != "String") {
-            ////        //if (t.Name.Contains("[]")) {
-            ////        //    foreach (var dynamic in item) {
-            ////        //        if (t.Name.Contains("[][]")) {
-            ////        //            Console.WriteLine("");
+            int degree = 3;
+            j1.WriteJSONAttribute("Degree", degree);
 
-            ////        //            foreach (var x in dynamic) {
-            ////        //                Console.Write(x);
-            ////        //                Console.Write(" , ");
-            ////        //            }
-            ////        //        }
-            ////        //        else {
-            ////        //            Console.Write(dynamic);
-            ////        //            Console.Write(" , ");
-            ////        //        }
+            bool periodic = true;
+            j1.WriteJSONAttribute("Periodic", periodic);
 
-            ////        //    }
-            ////        //}
-            ////        //else {
-            ////        //    Console.WriteLine(item);
-            ////        //}
-            ////        Console.WriteLine(item);
-            ////    }
-            ////}
+            //Export Json
+            j1.ExportJsonFile(writePath);
 
             
 
-            //bool chk = j1.WriteJSONAttribute<string>("json1", "tempValueJson_1");
-            //Console.WriteLine("\n succsess write j1?: " + chk);
 
-            //var j2 = j1.copy();
-
-            //bool chk2 = j2.WriteJSONAttribute<string>("json2", "tempValueJson_2");
-            //Console.WriteLine("\n succsess write j2?: " + chk);
-
-            //var keys1 = j1.attributesNames.getItems();
-            //var types1 = j1.attributesTypes.getItems();
-
-            ////var types = j.attributesTypes.getItems();
-            //for (int i = 0; i < keys1.Length; i++) {
-            //    Console.WriteLine("\n");
-            //    Console.WriteLine("\n JSON _ 1 Key: " + keys1[i]);
-            //    Console.WriteLine(" JSON _ 1 Type: " + types1[i]);
-            //    Type t = j1.getType(types1[i]);
-            //    //Console.WriteLine(t == null);
-
-            //    //Console.WriteLine(t.Name);
-            //    dynamic item;
-            //    j1.ReadJSONAttribute4(keys1[i], t, out item);
-            //    Console.WriteLine("");
-
-            //    if (t.Name != "String") {
-            //        //Console.WriteLine(item);
-            //    }
-            //    else {
-            //        string s;
-            //        j1.ReadJSONAttribute<string>(keys1[i], out s);
-            //        Console.WriteLine(s);
-            //    }
-            //}
-            //var keys2 = j2.attributesNames.getItems();
-            //var types2 = j2.attributesTypes.getItems();
-            ////var types = j.attributesTypes.getItems();
-            //for (int i = 0; i < keys2.Length; i++) {
-            //    Console.WriteLine("\n");
-            //    Console.WriteLine("\n JSON _ 2 Key: " + keys2[i]);
-            //    Console.WriteLine(" JSON _ 2 Type: " + types2[i]);
-            //    Type t = j2.getType(types2[i]);
-            //    //Console.WriteLine(t == null);
-
-            //    //Console.WriteLine(t.Name);
-            //    dynamic item;
-            //    j2.ReadJSONAttribute4(keys2[i], t, out item);
-            //    //Console.WriteLine("");
-
-            //    if (t.Name != "String") {
-            //        //Console.WriteLine(item);
-            //    }
-            //    else {
-            //        string s;
-            //        bool c = j2.ReadJSONAttribute<string>(keys2[i], out s);
-            //        Console.WriteLine(c);
-
-            //        Console.WriteLine(s);
-            //    }
-            //}
-
-            //////var newk = j.attributesNames.getItems();
-            ////////var types = j.attributesTypes.getItems();
-            //////for (int i = 0; i < newk.Length; i++) {
-            //////    Console.WriteLine("\n newKey: " + newk[i]);
-            //////}
+            printJsonDate(j1, true);
 
 
 
-
-
-
-            Console.WriteLine("\n Press any key to exit...");
-            Console.ReadKey();
         }
+
+        static void printJsonDate(zExtJSON j1, bool printValues = false) {
+            var keys = j1.AttributeKeys;
+            var types = j1.AttributeTypes;
+
+            for (int i = 0; i < keys.Length; i++) {
+                Console.WriteLine("\n\nAttribute_" + i + ":");
+                Console.WriteLine("   Key: " + keys[i]);
+                //Console.WriteLine(string.Format("   Key: {0}"), keys[i]);
+                Console.WriteLine("   Type: " + types[i]);
+                //Console.WriteLine(string.Format("   Type: {0}"), types[i]);
+                Type t = j1.getType(types[i]);
+                dynamic value;
+                j1.ReadJSONAttribute(keys[i], t, out value);
+                if (printValues) {
+                    
+                    Console.WriteLine("   Value: ");
+                    Console.Write("       ");
+                    try {
+                        if (types[i].Contains("[]")) {
+                            //Console.Write("       ");
+                            foreach (var item in value) {
+                                if (types[i].Contains("[][]")) {
+                                    foreach (var item2 in item) {
+                                        Console.Write(item2.ToString() + ",     ");
+                                    }
+                                }
+                                else {
+                                    Console.Write(item.ToString());
+                                }
+                                Console.Write("\n       ");
+
+                            }
+                        }
+                        else {
+                            Console.Write(value.ToString());
+                        }
+                    }
+                    catch (Exception) {
+                        Console.Write("ERROR IN PRINTING VALUE");
+                    }
+
+                }
+                
+            }
+        }
+    
     }
 }

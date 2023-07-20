@@ -77,70 +77,70 @@ namespace zSpace {
             return faces;
         }
 
-        public float[][] getMeshPositions2D() {
-            float[] pos1D = new float[vCount * 3];
-            float[] color1D = new float[vCount * 4];
-            ext_meshUtil_getMeshPosition(this, pos1D, color1D);
-            return zSpaceUtil.Convert1DtoArray2D(pos1D, 3);
-        }
-        public float[] getMeshPositions1D() {
-            float[] pos1D = new float[vCount * 3];
-            Console.WriteLine("countget " + vCount * 3);
+        //public float[][] getMeshPositions2D() {
+        //    float[] pos1D = new float[vCount * 3];
+        //    float[] color1D = new float[vCount * 4];
+        //    ext_meshUtil_getMeshPosition(this, pos1D, color1D);
+        //    return zSpaceUtil.Convert1DtoArray2D(pos1D, 3);
+        //}
+        //public float[] getMeshPositions1D() {
+        //    float[] pos1D = new float[vCount * 3];
+        //    Console.WriteLine("countget " + vCount * 3);
 
-            float[] color1D = new float[vCount * 4];
-            ext_meshUtil_getMeshPosition(this, pos1D, color1D);
-            return pos1D;
-        }
-        public System.Drawing.Color[] getMeshVColors() {
-            float[] pos1D = new float[vCount * 3];
-            float[] color1D = new float[vCount * 4];
-            ext_meshUtil_getMeshPosition(this, pos1D, color1D);
-            var color = new System.Drawing.Color[vCount];
-            for (int i = 0; i < vCount; i++) {
-                int r = (int)zSpaceUtil.Remap(color1D[i * 4 + 0], 0, 1, 0, 255);
-                int g = (int)zSpaceUtil.Remap(color1D[i * 4 + 1], 0, 1, 0, 255);
-                int b = (int)zSpaceUtil.Remap(color1D[i * 4 + 2], 0, 1, 0, 255);
-                int a = (int)zSpaceUtil.Remap(color1D[i * 4 + 3], 0, 1, 0, 255);
-                color[i] = System.Drawing.Color.FromArgb(a, r, g, b);
-            }
-            return color;
-        }
+        //    float[] color1D = new float[vCount * 4];
+        //    ext_meshUtil_getMeshPosition(this, pos1D, color1D);
+        //    return pos1D;
+        //}
+        //public System.Drawing.Color[] getMeshVColors() {
+        //    float[] pos1D = new float[vCount * 3];
+        //    float[] color1D = new float[vCount * 4];
+        //    ext_meshUtil_getMeshPosition(this, pos1D, color1D);
+        //    var color = new System.Drawing.Color[vCount];
+        //    for (int i = 0; i < vCount; i++) {
+        //        int r = (int)zSpaceUtil.Remap(color1D[i * 4 + 0], 0, 1, 0, 255);
+        //        int g = (int)zSpaceUtil.Remap(color1D[i * 4 + 1], 0, 1, 0, 255);
+        //        int b = (int)zSpaceUtil.Remap(color1D[i * 4 + 2], 0, 1, 0, 255);
+        //        int a = (int)zSpaceUtil.Remap(color1D[i * 4 + 3], 0, 1, 0, 255);
+        //        color[i] = System.Drawing.Color.FromArgb(a, r, g, b);
+        //    }
+        //    return color;
+        //}
 
-        public void getMeshPositionsAndColors(out float[][] pos, out System.Drawing.Color[] color) {
-            float[] pos1D = new float[vCount * 3];
-            float[] color1D = new float[vCount * 4];
-            ext_meshUtil_getMeshPosition(this, pos1D, color1D);
-            pos = zSpaceUtil.Convert1DtoArray2D(pos1D, 3);
-            color = new System.Drawing.Color[vCount];
-            for (int i = 0; i < vCount; i++) {
-                int r = (int)zSpaceUtil.Remap(color1D[i * 4 + 0], 0, 1, 0, 255);
-                int g = (int)zSpaceUtil.Remap(color1D[i * 4 + 1], 0, 1, 0, 255);
-                int b = (int)zSpaceUtil.Remap(color1D[i * 4 + 2], 0, 1, 0, 255);
-                int a = (int)zSpaceUtil.Remap(color1D[i * 4 + 3], 0, 1, 0, 255);
-                color[i] = System.Drawing.Color.FromArgb(a, r, g, b);
-            }
-        }
+        //public void getMeshPositionsAndColors(out float[][] pos, out System.Drawing.Color[] color) {
+        //    float[] pos1D = new float[vCount * 3];
+        //    float[] color1D = new float[vCount * 4];
+        //    ext_meshUtil_getMeshPosition(this, pos1D, color1D);
+        //    pos = zSpaceUtil.Convert1DtoArray2D(pos1D, 3);
+        //    color = new System.Drawing.Color[vCount];
+        //    for (int i = 0; i < vCount; i++) {
+        //        int r = (int)zSpaceUtil.Remap(color1D[i * 4 + 0], 0, 1, 0, 255);
+        //        int g = (int)zSpaceUtil.Remap(color1D[i * 4 + 1], 0, 1, 0, 255);
+        //        int b = (int)zSpaceUtil.Remap(color1D[i * 4 + 2], 0, 1, 0, 255);
+        //        int a = (int)zSpaceUtil.Remap(color1D[i * 4 + 3], 0, 1, 0, 255);
+        //        color[i] = System.Drawing.Color.FromArgb(a, r, g, b);
+        //    }
+        //}
 
-        public List<int>[] getMeshFaceConnection() {
-            int[] pCounts = new int[fCount];
-            ext_meshUtil_getMeshFaceCount(this, pCounts);
-            int pConnectLength = 0;
-            foreach (var item in pCounts) {
-                pConnectLength += item;
-            }
-            int[] pConnects = new int[pConnectLength];
-            ext_meshUtil_getMeshFaceConnect(this, pConnects);
-            int counter = 0;
-            var faceConnects = new List<int>[fCount];
-            for (int i = 0; i < fCount; i++) {
-                faceConnects[i] = new List<int>();
-                for (int j = 0; j < pCounts[i]; j++) {
-                    faceConnects[i].Add(counter);
-                    counter++;
-                }
-            }
-            return faceConnects;
-        }
+        //public List<int>[] getMeshFaceConnection() {
+        //    int[] pCounts = new int[fCount];
+        //    ext_meshUtil_getMeshFaceCount(this, pCounts);
+        //    int pConnectLength = 0;
+        //    foreach (var item in pCounts) {
+        //        pConnectLength += item;
+        //    }
+        //    int[] pConnects = new int[pConnectLength];
+        //    ext_meshUtil_getMeshFaceConnect(this, pConnects);
+        //    int counter = 0;
+        //    var faceConnects = new List<int>[fCount];
+        //    for (int i = 0; i < fCount; i++) {
+        //        faceConnects[i] = new List<int>();
+        //        for (int j = 0; j < pCounts[i]; j++) {
+        //            faceConnects[i].Add(counter);
+        //            counter++;
+        //        }
+        //    }
+        //    return faceConnects;
+        //}
 
         public int getVCount() {
             return vCount;
@@ -148,6 +148,8 @@ namespace zSpace {
         public int getFaceCount() {
             return fCount;
         }
+
+
 
         public void getFaceColors() {
 
