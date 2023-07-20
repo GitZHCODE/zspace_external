@@ -9,8 +9,13 @@ using Rhino.Geometry;
 
 namespace zSpace
 {
-    public static class zSpaceRhinoUtilXXX
+    public static class zSpaceRhinoUtil
     {
+
+      
+
+
+
         ///// <summary>
         ///// Creates a Rhino Mesh object from a zSpace external mesh object.
         ///// </summary>

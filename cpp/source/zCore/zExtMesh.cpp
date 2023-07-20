@@ -120,6 +120,7 @@ namespace zSpace
 		for (int i = 0; i < meshJSON.faces.size(); i++) extPointer->mesh.faces[i].setId(i);
 
 
+
 		// set Pointers
 		int n_v = 0;
 		for (zItMeshVertex v(*extPointer); !v.end(); v++)
@@ -912,6 +913,23 @@ namespace zSpace
 		pCount.updateAttributes();
 		pConnect.updateAttributes();
 		return 1;
+	}
+
+	ZSPACE_EXTERNAL int ext_mesh_catmullclark(zExtMesh& objMesh, int level, bool fixedCorner)
+	{
+		try
+		{
+
+			zFnMesh fn(*objMesh.extPointer);
+			fn.smoothMesh(level, !fixedCorner);
+			objMesh.updateAttributes();
+			return 1;
+		}
+		catch (const std::exception&)
+		{
+			printf("\n Catmullclark failed!");
+			return 0;
+		}
 	}
 
 

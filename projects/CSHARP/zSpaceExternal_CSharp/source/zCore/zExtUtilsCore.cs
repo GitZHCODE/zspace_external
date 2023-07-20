@@ -145,16 +145,25 @@ namespace zSpace {
         private int arrayCount;
 
         public string getString() {
-            char[] ch = new char[arrayCount];
-            //Console.WriteLine(arrayCount);
+            char[] c = new char[arrayCount];
+            //string s = new string(c);
 
+            //Console.WriteLine(arrayCount);
+            zNativeMethods.ext_string_getCharArrayFromExtString(ref this, c);
             //int chk = 
-                zNativeMethods.ext_string_getCharArrayFromExtString(ref this, ch);
+                //zNativeMethods.ext_string_getCharArrayFromExtString(ref this, ch);
             //Console.WriteLine(chk);
-            string s = new string(ch);
             //Console.WriteLine(s);
 
-            return s;
+            return new string(c);
+        }
+
+        public void setString(string input) {
+            char[] c = new char[input.Length];
+
+            zNativeMethods.ext_string_setExtStringFromCharArray(ref this, c, c.Length);
+
+
         }
     }
     
@@ -165,18 +174,24 @@ namespace zSpace {
 
 
         public string[] getItems() {
-            string[] items = new string[arrayCount];
+            //string[] items = new string[arrayCount];
+            var output = new string[arrayCount];
+            var mid = new zExtString[arrayCount];
+            zNativeMethods.ext_string_getItemsFromArray(ref this, mid);
             for (int i = 0; i < arrayCount; i++) {
-                //Console.WriteLine(i);
-                //items[i] = zNativeMethods.ext_string_getItemFromArray(ref this, i);
-                int length = zNativeMethods.ext_string_getItemFromArrayCharLength(ref this, i);
-               // Console.WriteLine("c# char array length " + length);
-                char[] c = new char[length];
-                zNativeMethods.ext_string_getItemFromArrayChar(ref this, i, c);
-                items[i] = new string(c);
+                output[i] = mid[i].getString();
             }
+            //for (int i = 0; i < arrayCount; i++) {
+            //    //Console.WriteLine(i);
+            //    //items[i] = zNativeMethods.ext_string_getItemFromArray(ref this, i);
+            //    int length = zNativeMethods.ext_string_getItemFromArrayCharLength(ref this, i);
+            //   // Console.WriteLine("c# char array length " + length);
+            //    char[] c = new char[length];
+            //    zNativeMethods.ext_string_getItemFromArrayChar(ref this, i, c);
+            //    items[i] = new string(c);
+            //}
             //zNativeMethods.ext_string_getItemsFromArray(ref this, items);
-            return items;
+            return output;
         }
 
         public void setItems(string[] input) {
@@ -260,6 +275,8 @@ namespace zSpace {
 
     #region External methods for array
     static partial  class zNativeMethods {
+
+        #region Int Array 1D
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         public static extern void ext_int_getItemsFromArray(ref zExtIntArray array,
         [MarshalAs(UnmanagedType.LPArray), In, Out] int[] outItems);
@@ -267,7 +284,8 @@ namespace zSpace {
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         public static extern void ext_int_setItemsFromArray(ref zExtIntArray array,
         [MarshalAs(UnmanagedType.LPArray), In] int[] outItems, int count);
-
+        #endregion
+        #region Int Array 2D
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         public static extern void ext_int_getItemsFromArray2D(ref zExtIntArray2D array,
             [MarshalAs(UnmanagedType.LPArray), In, Out] zExtIntArray[] outItems); 
@@ -275,7 +293,8 @@ namespace zSpace {
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         public static extern void ext_int_setItemsFromArray2D(ref zExtIntArray2D array,
             [MarshalAs(UnmanagedType.LPArray), In] zExtIntArray[] outItems, int count);
-
+        #endregion
+        #region Float Array 1D
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         public static extern void ext_float_getItemsFromArray(ref zExtFloatArray array,
             [MarshalAs(UnmanagedType.LPArray), In, Out] float[] outItems);
@@ -283,15 +302,17 @@ namespace zSpace {
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         public static extern void ext_float_setItemsFromArray(ref zExtFloatArray array,
             [MarshalAs(UnmanagedType.LPArray), In] float[] outItems, int count);
-
+        #endregion
+        #region Float Array 2D
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         public static extern void ext_float_getItemsFromArray2D(ref zExtFloatArray2D array,
             [MarshalAs(UnmanagedType.LPArray), In, Out] zExtFloatArray[] outItems);  
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         public static extern void ext_float_setItemsFromArray2D(ref zExtFloatArray2D array,
-            [MarshalAs(UnmanagedType.LPArray), In] zExtFloatArray[] outItems, int count);        
-        
+            [MarshalAs(UnmanagedType.LPArray), In] zExtFloatArray[] outItems, int count);
+        #endregion
+        #region Double Array 1D
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         public static extern void ext_double_getItemsFromArray(ref zExtDoubleArray array,
             [MarshalAs(UnmanagedType.LPArray), In, Out] double[] outItems);
@@ -299,55 +320,52 @@ namespace zSpace {
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         public static extern void ext_double_setItemsFromArray(ref zExtDoubleArray array,
             [MarshalAs(UnmanagedType.LPArray), In] double[] outItems, int count);
-
+        #endregion
+        #region Double Array 2D
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         public static extern void ext_double_getItemsFromArray2D(ref zExtDoubleArray2D array,
             [MarshalAs(UnmanagedType.LPArray), In, Out] zExtDoubleArray[] outItems);
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         public static extern void ext_double_setItemsFromArray2D(ref zExtDoubleArray2D array,
             [MarshalAs(UnmanagedType.LPArray), In] zExtDoubleArray[] outItems, int count);
-
+        #endregion
+        #region String
+        [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int ext_string_getCharArrayFromExtString(ref zExtString extString,
+            [MarshalAs(UnmanagedType.LPArray), In, Out] char[] outString
+           );
+        [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int ext_string_setExtStringFromCharArray(ref zExtString extString,
+            [MarshalAs(UnmanagedType.LPArray), In] char[] inString, int charCount);
+        #endregion
+        #region String Array 1D
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         public static extern void ext_string_getItemsFromArray(ref zExtStringArray array,
             [MarshalAs(UnmanagedType.LPArray), In, Out] zExtString[] outItems);
         //[MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr .LPWStr), In, Out] string[] outItems);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.LPStr)]
-        public static extern string ext_string_getItemFromArray(ref zExtStringArray array,int index);
-
-        [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int ext_string_getItemFromArrayCharLength(ref zExtStringArray array, int index);
-        [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void ext_string_getItemFromArrayChar(ref zExtStringArray array, int index,
-            [MarshalAs(UnmanagedType.LPArray), In, Out] char[] item
-           );
-
-        [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int ext_string_getCharArrayFromExtString(ref zExtString extString,
-            [MarshalAs(UnmanagedType.LPArray), In, Out] char[] item
-           );
-
-        [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         public static extern void ext_string_setItemsFromArray(ref zExtStringArray array,
             [MarshalAs(UnmanagedType.LPArray), In] string[] outItems, int count);
-
+        #endregion
+        #region String Array 2D
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         public static extern void ext_string_getItemsFromArray2D(ref zExtStringArray2D array,
             [MarshalAs(UnmanagedType.LPArray), In, Out] zExtStringArray[] outItems);
         
-        
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         public static extern void ext_string_setItemsFromArray2D(ref zExtStringArray2D array,
             [MarshalAs(UnmanagedType.LPArray), In] zExtStringArray[] outItems, int count);
-
+        #endregion
+        #region Bool Array 1D
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         public static extern void ext_bool_getItemsFromArray(ref zExtBoolArray array,
             [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Bool), In, Out] bool[] outItems);
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         public static extern void ext_bool_setItemsFromArray(ref zExtBoolArray array,
             [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Bool), In] bool[] outItems, int count);
-
+        #endregion
+        #region Bool Array 2D
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         public static extern void ext_bool_getItemsFromArray2D(ref zExtBoolArray2D array,
             [MarshalAs(UnmanagedType.LPArray), In, Out] zExtBoolArray[] outItems);
@@ -355,6 +373,21 @@ namespace zSpace {
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         public static extern void ext_bool_setItemsFromArray2D(ref zExtBoolArray2D array,
             [MarshalAs(UnmanagedType.LPArray), In] zExtBoolArray[] outItems, int count);
+        #endregion
+
+
+
+
+        //[DllImport(path, CallingConvention = CallingConvention.Cdecl)]
+        //[return: MarshalAs(UnmanagedType.LPStr)]
+        //public static extern string ext_string_getItemFromArray(ref zExtStringArray array, int index);
+
+        //[DllImport(path, CallingConvention = CallingConvention.Cdecl)]
+        //public static extern int ext_string_getItemFromArrayCharLength(ref zExtStringArray array, int index);
+        //[DllImport(path, CallingConvention = CallingConvention.Cdecl)]
+        //public static extern void ext_string_getItemFromArrayChar(ref zExtStringArray array, int index,
+        //    [MarshalAs(UnmanagedType.LPArray), In, Out] char[] item
+        //   );
 
     }
     #endregion

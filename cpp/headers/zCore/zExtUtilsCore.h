@@ -157,8 +157,8 @@ namespace zSpace
 		///**
 		// * \brief Gets items from the array
 		// */
-		//char* getCharecters(void);
-		//void setItems(char* items, int count);
+		void getCharecters(char* outString);
+		void setItems(char* items, int count);
 	};
 
 	struct zExtStringArray
@@ -248,72 +248,28 @@ namespace zSpace
 	ZSPACE_EXTERNAL_C
 	{
 
-
-		/*! \brief Get items from zExtIntArray
-		*  \param [in,out] extArray    - Reference to the zExtIntArray.
-		*  \param [in]      outArray    - An array of int.
-		*/
-		ZSPACE_EXTERNAL void ext_int_getItemsFromArray(zExtIntArray& extArray, int* outArray);
-
-		/*! \brief Get items from zInt2DArray
-		 *  \param [in,out] extArray    - Reference to the zInt2DArray.
-		 *  \param [in]      outArray    - An array of zExtIntArray.
-		 */
+		ZSPACE_EXTERNAL void ext_int_getItemsFromArray(zExtIntArray & extArray, int* outArray);
+		ZSPACE_EXTERNAL void ext_int_setItemsFromArray(zExtIntArray& extArray, int* inArray, int count);
 		ZSPACE_EXTERNAL void ext_int_getItemsFromArray2D(zExtIntArray2D& extArray, zExtIntArray* outArray);
-
-		/*! \brief Get items from zExtFloatArray
-		 *  \param [in,out] extArray    - Reference to the zExtFloatArray.
-		 *  \param [in]      outArray    - An array of float.
-		 */
+		ZSPACE_EXTERNAL void ext_int_setItemsFromArray2D(zExtIntArray2D& extArray, zExtIntArray* inArray, int count);
 		ZSPACE_EXTERNAL void ext_float_getItemsFromArray(zExtFloatArray& extArray, float* outArray);
-
-		/*! \brief Get items from zExtFloat2DArray
-		 *  \param [in,out] extArray    - Reference to the zExtFloat2DArray.
-		 *  \param [in]      outArray    - An array of zExtFloatArray.
-		 */
+		ZSPACE_EXTERNAL void ext_float_setItemsFromArray(zExtFloatArray& extArray, float* inArray, int count);
 		ZSPACE_EXTERNAL void ext_float_getItemsFromArray2D(zExtFloatArray2D& extArray, zExtFloatArray* outArray);
-
-		/*! \brief Get items from zExtDoubleArray
-		 *  \param [in,out] extArray    - Reference to the zExtDoubleArray.
-		 *  \param [in]      outArray    - An array of Double.
-		 */
+		ZSPACE_EXTERNAL void ext_float_setItemsFromArray2D(zExtFloatArray2D& extArray, zExtFloatArray* inArray, int count);
 		ZSPACE_EXTERNAL void ext_double_getItemsFromArray(zExtDoubleArray& extArray, double* outArray);
-
-		/*! \brief Get items from zExtDouble2DArray
-		 *  \param [in,out] extArray    - Reference to the zExtDouble2DArray.
-		 *  \param [in]      outArray    - An array of zExtDoubleArray.
-		 */
+		ZSPACE_EXTERNAL void ext_double_setItemsFromArray(zExtDoubleArray& extArray, double* inArray, int count);
 		ZSPACE_EXTERNAL void ext_double_getItemsFromArray2D(zExtDoubleArray2D& extArray, zExtDoubleArray* outArray);
-
-		/*! \brief Get items from zExtStringArray
-		 *  \param [in,out] extArray    - Reference to the zExtStringArray.
-		 *  \param [in]      outArray    - An array of string.
-		 */
+		ZSPACE_EXTERNAL void ext_double_setItemsFromArray2D(zExtDoubleArray2D& extArray, zExtDoubleArray* inArray, int count);
+		ZSPACE_EXTERNAL int ext_string_getCharArrayFromExtString(zExtString& extString, char* outString);
+		ZSPACE_EXTERNAL int ext_string_setExtStringFromCharArray(zExtString& extString, char* inString, int count);
 		ZSPACE_EXTERNAL void ext_string_getItemsFromArray(zExtStringArray& extArray, zExtString* outArray);
-		ZSPACE_EXTERNAL string ext_string_getItemFromArray(zExtStringArray& extArray,int index);
-		ZSPACE_EXTERNAL int ext_string_getItemFromArrayCharLength(zExtStringArray& extArray,int index);
-		ZSPACE_EXTERNAL void ext_string_getItemFromArrayChar(zExtStringArray& extArray,int index, char* outString);
-		ZSPACE_EXTERNAL int ext_string_getCharArrayFromExtString(zExtString& extArray, char* outString);
-
-
-		/*! \brief Get items from zExtString2DArray
-		 *  \param [in,out] extArray    - Reference to the zExtString2DArray.
-		 *  \param [in]      outArray    - An array of zExtStringArray.
-		 */
+		ZSPACE_EXTERNAL void ext_string_setItemsFromArray(zExtStringArray& extArray, string* inArray, int count);
 		ZSPACE_EXTERNAL void ext_string_getItemsFromArray2D(zExtStringArray2D& extArray, zExtStringArray* outArray);
-
-		
-		/*! \brief Get items from zExtStringArray
-		 *  \param [in,out] extArray    - Reference to the zExtStringArray.
-		 *  \param [in]      outArray    - An array of bool.
-		 */
-		ZSPACE_EXTERNAL void ext_bool_getItemsFromArray(zExtStringArray& extArray, bool* outArray);
-
-		/*! \brief Get items from zExtString2DArray
-		 *  \param [in,out] extArray    - Reference to the zExtString2DArray.
-		 *  \param [in]      outArray    - An array of zExtStringArray.
-		 */
-		ZSPACE_EXTERNAL void ext_bool_getItemsFromArray2D(zExtStringArray2D& extArray, zExtStringArray* outArray);
+		ZSPACE_EXTERNAL void ext_string_setItemsFromArray2D(zExtStringArray2D& extArray, zExtStringArray* inArray, int count);
+		ZSPACE_EXTERNAL void ext_bool_getItemsFromArray(zExtBoolArray& extArray, bool* outArray);
+		ZSPACE_EXTERNAL void ext_bool_setItemsFromArray(zExtBoolArray& extArray, bool* inArray, int count);
+		ZSPACE_EXTERNAL void ext_bool_getItemsFromArray2D(zExtBoolArray2D& extArray, zExtBoolArray* outArray);
+		ZSPACE_EXTERNAL void ext_bool_setItemsFromArray2D(zExtBoolArray2D& extArray, zExtBoolArray* inArray, int count);
 
 
 

@@ -22,6 +22,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zSpaceExternal_CSharp", "pr
 		{AC6C11FF-1F49-4025-87EC-F25C219971F4} = {AC6C11FF-1F49-4025-87EC-F25C219971F4}
 	EndProjectSection
 EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "zSpaceExternal_Python", "projects\PYTHON\zSpaceExternal_Python\zSpaceExternal_Python.pyproj", "{1B6E8242-ED02-427A-BBA7-EF136F42F222}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1_CSharp", "1_CSharp", "{62EED717-2071-47E0-8EAD-3F46B15B8FC2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2_Pyhton", "2_Pyhton", "{68D3A008-86E3-4D3D-BE7A-9DC41781A22C}"
+EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "zSpaceExternal_PythonSandbox", "projects\PYTHON\zSpaceExternal_PythonSandbox\zSpaceExternal_PythonSandbox.pyproj", "{DE954A7C-F4E6-4FFF-9C1B-8B86F818D2DF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0_CPP", "0_CPP", "{0B124D3D-3A2A-413C-AFEE-254C66BCAEE4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug_DLL|Any CPU = Debug_DLL|Any CPU
@@ -32,6 +42,8 @@ Global
 		Release_DLL|x64 = Release_DLL|x64
 		Release_Make|Any CPU = Release_Make|Any CPU
 		Release_Make|x64 = Release_Make|x64
+		Release_Python|Any CPU = Release_Python|Any CPU
+		Release_Python|x64 = Release_Python|x64
 		Release_Unreal|Any CPU = Release_Unreal|Any CPU
 		Release_Unreal|x64 = Release_Unreal|x64
 		Release|Any CPU = Release|Any CPU
@@ -50,6 +62,9 @@ Global
 		{AC6C11FF-1F49-4025-87EC-F25C219971F4}.Release_Make|Any CPU.ActiveCfg = Release_Make|x64
 		{AC6C11FF-1F49-4025-87EC-F25C219971F4}.Release_Make|x64.ActiveCfg = Release_Make|x64
 		{AC6C11FF-1F49-4025-87EC-F25C219971F4}.Release_Make|x64.Build.0 = Release_Make|x64
+		{AC6C11FF-1F49-4025-87EC-F25C219971F4}.Release_Python|Any CPU.ActiveCfg = Release|x64
+		{AC6C11FF-1F49-4025-87EC-F25C219971F4}.Release_Python|Any CPU.Build.0 = Release|x64
+		{AC6C11FF-1F49-4025-87EC-F25C219971F4}.Release_Python|x64.ActiveCfg = Release_Unreal|x64
 		{AC6C11FF-1F49-4025-87EC-F25C219971F4}.Release_Unreal|Any CPU.ActiveCfg = Release_Unreal|x64
 		{AC6C11FF-1F49-4025-87EC-F25C219971F4}.Release_Unreal|x64.ActiveCfg = Release_Unreal|x64
 		{AC6C11FF-1F49-4025-87EC-F25C219971F4}.Release_Unreal|x64.Build.0 = Release_Unreal|x64
@@ -72,6 +87,9 @@ Global
 		{934EB997-7979-41CA-A391-0B03AC4A8BD0}.Release_Make|Any CPU.Build.0 = Release|Any CPU
 		{934EB997-7979-41CA-A391-0B03AC4A8BD0}.Release_Make|x64.ActiveCfg = Release|Any CPU
 		{934EB997-7979-41CA-A391-0B03AC4A8BD0}.Release_Make|x64.Build.0 = Release|Any CPU
+		{934EB997-7979-41CA-A391-0B03AC4A8BD0}.Release_Python|Any CPU.ActiveCfg = Release|Any CPU
+		{934EB997-7979-41CA-A391-0B03AC4A8BD0}.Release_Python|Any CPU.Build.0 = Release|Any CPU
+		{934EB997-7979-41CA-A391-0B03AC4A8BD0}.Release_Python|x64.ActiveCfg = Release|Any CPU
 		{934EB997-7979-41CA-A391-0B03AC4A8BD0}.Release_Unreal|Any CPU.ActiveCfg = Release|Any CPU
 		{934EB997-7979-41CA-A391-0B03AC4A8BD0}.Release_Unreal|Any CPU.Build.0 = Release|Any CPU
 		{934EB997-7979-41CA-A391-0B03AC4A8BD0}.Release_Unreal|x64.ActiveCfg = Release|Any CPU
@@ -96,6 +114,9 @@ Global
 		{245A3E02-DA7D-4D55-AB2F-234C70C8387A}.Release_Make|Any CPU.Build.0 = Release|Any CPU
 		{245A3E02-DA7D-4D55-AB2F-234C70C8387A}.Release_Make|x64.ActiveCfg = Release|Any CPU
 		{245A3E02-DA7D-4D55-AB2F-234C70C8387A}.Release_Make|x64.Build.0 = Release|Any CPU
+		{245A3E02-DA7D-4D55-AB2F-234C70C8387A}.Release_Python|Any CPU.ActiveCfg = Release|Any CPU
+		{245A3E02-DA7D-4D55-AB2F-234C70C8387A}.Release_Python|Any CPU.Build.0 = Release|Any CPU
+		{245A3E02-DA7D-4D55-AB2F-234C70C8387A}.Release_Python|x64.ActiveCfg = Release|Any CPU
 		{245A3E02-DA7D-4D55-AB2F-234C70C8387A}.Release_Unreal|Any CPU.ActiveCfg = Release|Any CPU
 		{245A3E02-DA7D-4D55-AB2F-234C70C8387A}.Release_Unreal|Any CPU.Build.0 = Release|Any CPU
 		{245A3E02-DA7D-4D55-AB2F-234C70C8387A}.Release_Unreal|x64.ActiveCfg = Release|Any CPU
@@ -120,6 +141,9 @@ Global
 		{57B85256-F967-4F94-B35A-629392DBF651}.Release_Make|Any CPU.Build.0 = Release|Any CPU
 		{57B85256-F967-4F94-B35A-629392DBF651}.Release_Make|x64.ActiveCfg = Release|Any CPU
 		{57B85256-F967-4F94-B35A-629392DBF651}.Release_Make|x64.Build.0 = Release|Any CPU
+		{57B85256-F967-4F94-B35A-629392DBF651}.Release_Python|Any CPU.ActiveCfg = Release|Any CPU
+		{57B85256-F967-4F94-B35A-629392DBF651}.Release_Python|Any CPU.Build.0 = Release|Any CPU
+		{57B85256-F967-4F94-B35A-629392DBF651}.Release_Python|x64.ActiveCfg = Release|Any CPU
 		{57B85256-F967-4F94-B35A-629392DBF651}.Release_Unreal|Any CPU.ActiveCfg = Release|Any CPU
 		{57B85256-F967-4F94-B35A-629392DBF651}.Release_Unreal|Any CPU.Build.0 = Release|Any CPU
 		{57B85256-F967-4F94-B35A-629392DBF651}.Release_Unreal|x64.ActiveCfg = Release|Any CPU
@@ -128,9 +152,43 @@ Global
 		{57B85256-F967-4F94-B35A-629392DBF651}.Release|Any CPU.Build.0 = Release|Any CPU
 		{57B85256-F967-4F94-B35A-629392DBF651}.Release|x64.ActiveCfg = Release|Any CPU
 		{57B85256-F967-4F94-B35A-629392DBF651}.Release|x64.Build.0 = Release|Any CPU
+		{1B6E8242-ED02-427A-BBA7-EF136F42F222}.Debug_DLL|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B6E8242-ED02-427A-BBA7-EF136F42F222}.Debug_DLL|x64.ActiveCfg = Debug|Any CPU
+		{1B6E8242-ED02-427A-BBA7-EF136F42F222}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B6E8242-ED02-427A-BBA7-EF136F42F222}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1B6E8242-ED02-427A-BBA7-EF136F42F222}.Release_DLL|Any CPU.ActiveCfg = Release|Any CPU
+		{1B6E8242-ED02-427A-BBA7-EF136F42F222}.Release_DLL|x64.ActiveCfg = Release|Any CPU
+		{1B6E8242-ED02-427A-BBA7-EF136F42F222}.Release_Make|Any CPU.ActiveCfg = Release|Any CPU
+		{1B6E8242-ED02-427A-BBA7-EF136F42F222}.Release_Make|x64.ActiveCfg = Release|Any CPU
+		{1B6E8242-ED02-427A-BBA7-EF136F42F222}.Release_Python|Any CPU.ActiveCfg = Release_Python|Any CPU
+		{1B6E8242-ED02-427A-BBA7-EF136F42F222}.Release_Python|x64.ActiveCfg = Release_Python|Any CPU
+		{1B6E8242-ED02-427A-BBA7-EF136F42F222}.Release_Unreal|Any CPU.ActiveCfg = Release|Any CPU
+		{1B6E8242-ED02-427A-BBA7-EF136F42F222}.Release_Unreal|x64.ActiveCfg = Release|Any CPU
+		{1B6E8242-ED02-427A-BBA7-EF136F42F222}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B6E8242-ED02-427A-BBA7-EF136F42F222}.Release|x64.ActiveCfg = Release|Any CPU
+		{DE954A7C-F4E6-4FFF-9C1B-8B86F818D2DF}.Debug_DLL|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE954A7C-F4E6-4FFF-9C1B-8B86F818D2DF}.Debug_DLL|x64.ActiveCfg = Debug|Any CPU
+		{DE954A7C-F4E6-4FFF-9C1B-8B86F818D2DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE954A7C-F4E6-4FFF-9C1B-8B86F818D2DF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DE954A7C-F4E6-4FFF-9C1B-8B86F818D2DF}.Release_DLL|Any CPU.ActiveCfg = Release|Any CPU
+		{DE954A7C-F4E6-4FFF-9C1B-8B86F818D2DF}.Release_DLL|x64.ActiveCfg = Release|Any CPU
+		{DE954A7C-F4E6-4FFF-9C1B-8B86F818D2DF}.Release_Make|Any CPU.ActiveCfg = Release|Any CPU
+		{DE954A7C-F4E6-4FFF-9C1B-8B86F818D2DF}.Release_Make|x64.ActiveCfg = Release|Any CPU
+		{DE954A7C-F4E6-4FFF-9C1B-8B86F818D2DF}.Release_Python|Any CPU.ActiveCfg = Release_Python|Any CPU
+		{DE954A7C-F4E6-4FFF-9C1B-8B86F818D2DF}.Release_Python|x64.ActiveCfg = Release_Python|Any CPU
+		{DE954A7C-F4E6-4FFF-9C1B-8B86F818D2DF}.Release_Unreal|Any CPU.ActiveCfg = Release|Any CPU
+		{DE954A7C-F4E6-4FFF-9C1B-8B86F818D2DF}.Release_Unreal|x64.ActiveCfg = Release|Any CPU
+		{DE954A7C-F4E6-4FFF-9C1B-8B86F818D2DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE954A7C-F4E6-4FFF-9C1B-8B86F818D2DF}.Release|x64.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{AC6C11FF-1F49-4025-87EC-F25C219971F4} = {0B124D3D-3A2A-413C-AFEE-254C66BCAEE4}
+		{934EB997-7979-41CA-A391-0B03AC4A8BD0} = {62EED717-2071-47E0-8EAD-3F46B15B8FC2}
+		{57B85256-F967-4F94-B35A-629392DBF651} = {62EED717-2071-47E0-8EAD-3F46B15B8FC2}
+		{1B6E8242-ED02-427A-BBA7-EF136F42F222} = {68D3A008-86E3-4D3D-BE7A-9DC41781A22C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {894BF4B1-8A0F-4611-AB30-F8EFD51AE1D4}

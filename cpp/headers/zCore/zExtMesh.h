@@ -177,6 +177,9 @@ namespace zSpace
 		ZSPACE_EXTERNAL int ext_mesh_getMeshColors(zExtMesh& objMesh, zExtColorArray& extPointArray);
 		ZSPACE_EXTERNAL int ext_mesh_getMeshPolygonDate(zExtMesh& objMesh, zExtIntArray& pCount, zExtIntArray& pConnect);
 
+		ZSPACE_EXTERNAL int ext_mesh_catmullclark(zExtMesh& objMesh, int level, bool fixedCorner);
+
+
 
 	}
 
