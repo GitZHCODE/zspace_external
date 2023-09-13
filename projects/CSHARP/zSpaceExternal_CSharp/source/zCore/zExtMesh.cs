@@ -14,7 +14,7 @@ namespace zSpace {
 
         public zExtPoint[] getMeshPoints() {
             zExtPointArray mid;
-            zNativeMethods.ext_mesh_getMeshPosition(ref this, out mid);
+            zNativeMethods.ext_meshUtil_getMeshPosition(ref this, out mid);
             var items = mid.getItems();
             for (int i = 0; i < items.Length; i++) {
                 Console.WriteLine(items[i].x + ", " + items[i].y + ", " +items[i].z);
@@ -24,13 +24,13 @@ namespace zSpace {
         }
         public System.Drawing.Color[] getMeshColors() {
             zExtColorArray mid;
-            zNativeMethods.ext_mesh_getMeshColors(ref this, out mid);
+            zNativeMethods.ext_meshUtil_getMeshColors(ref this, out mid);
             return mid.getColors();
         }
         public List<int>[] getFaces() {
             zExtIntArray extPCount;
             zExtIntArray extPConnect;
-            zNativeMethods.ext_mesh_getMeshPolygonDate(ref this, out extPCount, out extPConnect);
+            zNativeMethods.ext_meshUtil_getMeshPolygonDate(ref this, out extPCount, out extPConnect);
 
 
             //List<int> fVerts = new List<int>();
@@ -149,21 +149,74 @@ namespace zSpace {
             return fCount;
         }
 
-
-
-        public void getFaceColors() {
+        /// <summary>
+        /// WIP
+        /// </summary>
+        private void getFaceColors() {
 
         }
 
-        #region External Methods
+        public bool createMesh(in zExtPointArray _vertexPositions, in zExtIntArray _polyCounts, in zExtIntArray _polyConnects) {
+            int chk = zNativeMethods.ext_meshUtil_createMeshOBJFromArray(in _vertexPositions, in _polyCounts, in _polyConnects, ref this);
+            return chk == 1;
+        }
+        public bool createMesh(in zExtPointArray _vertexPositions, in zExtIntArray _polyCounts, in zExtIntArray _polyConnects, ref System.Drawing.Color[] colors) {
+            
+            int chk = zNativeMethods.ext_meshUtil_createMeshOBJFromArray(in _vertexPositions, in _polyCounts, in _polyConnects, ref this);
+            //Console.WriteLine("\n ext_meshUtil_createMeshOBJFromArray " + chk);
+            //Console.WriteLine("\n colors.Length " + colors.Length);
+            if (colors.Length == this.vCount) {
+                var extColors = new zExtColorArray();
+                //Console.WriteLine("\n new zExtColorArray ");
+                //Console.WriteLine("\n colors.Length " + colors.Length);
 
-        const string path = dllPaths.tsPath;
+                extColors.setColors(ref colors);
+                int chk2 = zNativeMethods.ext_meshUtil_setMeshVertexColors(ref this, extColors);
+                //Console.WriteLine("\n ext_meshUtil_setMeshVertexColors " + chk2);
+                return chk == 1 && chk2 == 1;
+            }
+                return chk == 1;
+        }
 
+
+        //#region External Methods
+
+        //const string path = dllPaths.tsPath;
+
+        //[DllImport(path, CallingConvention = CallingConvention.Cdecl)]
+        //internal static extern void ext_meshUtil_createMeshOBJFromRawArray(double[] _vertexPositions, int[] _polyCounts, int[] _polyConnects, int numVerts, int numFaces, ref zExtMesh out_mesh);
+
+        //[DllImport(path, CallingConvention = CallingConvention.Cdecl)]
+        //internal static extern int ext_meshUtil_createMeshOBJFromArray(in zExtDoubleArray2D _vertexPositions, in zExtIntArray _polyCounts, in zExtIntArray _polyConnects, ref zExtMesh out_mesh);
+
+        //[DllImport(path, CallingConvention = CallingConvention.Cdecl)]
+        //internal static extern int ext_meshUtil_getMeshPosition(zExtMesh objMesh,
+        //    [MarshalAs(UnmanagedType.LPArray), In, Out] float[] outVPostions,
+        //    [MarshalAs(UnmanagedType.LPArray), In, Out] float[] outVColors);
+
+        //[DllImport(path, CallingConvention = CallingConvention.Cdecl)]
+        //internal static extern int ext_meshUtil_getMeshFaceCount(zExtMesh objMesh,
+        //    [MarshalAs(UnmanagedType.LPArray), In, Out] int[] outfCounts);
+
+        //[DllImport(path, CallingConvention = CallingConvention.Cdecl)]
+        //internal static extern int ext_meshUtil_getMeshFaceConnect(zExtMesh objMesh,
+        //    [MarshalAs(UnmanagedType.LPArray), In, Out] int[] outfConnects);
+
+
+
+
+
+
+        //#endregion
+    }
+
+    static partial class zNativeMethods {
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern void ext_meshUtil_createMeshOBJ(double[] _vertexPositions, int[] _polyCounts, int[] _polyConnects, int numVerts, int numFaces, ref zExtMesh out_mesh);
+        internal static extern void ext_meshUtil_createMeshOBJFromRawArray(double[] _vertexPositions, int[] _polyCounts, int[] _polyConnects, int numVerts, int numFaces, ref zExtMesh out_mesh);
 
+        
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int ext_meshUtil_getMeshPosition(zExtMesh objMesh,
+        internal static extern int ext_meshUtil_getMeshPositionRaw(zExtMesh objMesh,
             [MarshalAs(UnmanagedType.LPArray), In, Out] float[] outVPostions,
             [MarshalAs(UnmanagedType.LPArray), In, Out] float[] outVColors);
 
@@ -175,23 +228,27 @@ namespace zSpace {
         internal static extern int ext_meshUtil_getMeshFaceConnect(zExtMesh objMesh,
             [MarshalAs(UnmanagedType.LPArray), In, Out] int[] outfConnects);
 
-
-
-
-
-
-        #endregion
     }
+
     #region External methods for array
     static partial class zNativeMethods {
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int ext_mesh_getMeshPosition(ref zExtMesh objMesh, out zExtPointArray pointArray);
+        internal static extern int ext_meshUtil_getMeshPosition(ref zExtMesh objMesh, out zExtPointArray pointArray);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int ext_mesh_getMeshColors(ref zExtMesh objMesh, out zExtColorArray colorArray);
+        internal static extern int ext_meshUtil_getMeshColors(ref zExtMesh objMesh, out zExtColorArray colorArray);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int ext_mesh_getMeshPolygonDate(ref zExtMesh objMesh, out zExtIntArray pCount, out zExtIntArray pConnect);
+        internal static extern int ext_meshUtil_getMeshPolygonDate(ref zExtMesh objMesh, out zExtIntArray pCount, out zExtIntArray pConnect);
+
+        [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int ext_meshUtil_createMeshOBJFromArray(in zExtPointArray _vertexPositions, in zExtIntArray _polyCounts, in zExtIntArray _polyConnects, ref zExtMesh out_mesh);
+
+        [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int ext_meshUtil_setMeshVertexColors(ref zExtMesh objMesh, in zExtColorArray colorArray);
+
+
+
     }
     #endregion
 }

@@ -73,6 +73,7 @@ namespace zSpace
 
 
 
+		ZSPACE_EXTERNAL int ext_json_readJSONAttributeJSON			(zExtJSON& extJSON, char* attributeKey, zExtJSON& outAttributeValue);
 		ZSPACE_EXTERNAL int ext_json_readJSONAttributeInt			(zExtJSON& extJSON, char* attributeKey, int& outAttributeValue);
 		ZSPACE_EXTERNAL int ext_json_readJSONAttributeIntArray		(zExtJSON& extJSON, char* attributeKey, zExtIntArray& outAttributeValue);
 		ZSPACE_EXTERNAL int ext_json_readJSONAttributeIntArray2D	(zExtJSON& extJSON, char* attributeKey, zExtIntArray2D& outAttributeValue);
@@ -104,7 +105,8 @@ namespace zSpace
 		ZSPACE_EXTERNAL int ext_json_writeJSONAttributeBool			(zExtJSON& extJSON, char* attributeKey, bool inAttributeValue,					bool updateExtAttributes = true);
 		ZSPACE_EXTERNAL int ext_json_writeJSONAttributeBoolArray	(zExtJSON& extJSON, char* attributeKey, zExtBoolArray& inAttributeValue,		bool updateExtAttributes = true);
 		ZSPACE_EXTERNAL int ext_json_writeJSONAttributeBoolArray2D	(zExtJSON& extJSON, char* attributeKey, zExtBoolArray2D& inAttributeValue,		bool updateExtAttributes = true);
-		
+		ZSPACE_EXTERNAL int ext_json_writeJSONAttributeJSON(zExtJSON& extJSON, char* attributeKey, zExtJSON& inAttributeValue, bool updateExtAttributes = true);
+
 	
 		ZSPACE_EXTERNAL void ext_json_createJson		(zExtJSON& extJSON);
 		ZSPACE_EXTERNAL void ext_json_createJsonDeepCopy(zExtJSON& inJSON, zExtJSON& outJSON);

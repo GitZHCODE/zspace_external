@@ -6,17 +6,21 @@ using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 
 namespace zSpace {
+    [StructLayout(LayoutKind.Sequential)]
     public struct zExtJSON {
         public IntPtr pointer;
         public int numOfAttributes;
          zExtStringArray attributesNames;
          zExtStringArray attributesTypes;
 
-        
-
-        //public zExtJSON() {
-        //    // Constructor implementation
-        //}
+        public zExtJSON(bool create = true){
+            //Constructor implementation
+            pointer = new IntPtr();
+            numOfAttributes = 0;
+            attributesNames = new zExtStringArray();
+            attributesTypes = new zExtStringArray();
+            CreateJson();
+        }
 
         // Other constructors, destructor, and methods
 
@@ -46,7 +50,7 @@ namespace zSpace {
         //    }
         //}
 
-         bool ReadJSONAttribute2<T>(string attributeKey, out T outAttributeValue) {
+        bool ReadJSONAttribute2<T>(string attributeKey, out T outAttributeValue) {
             outAttributeValue = default(T);
             if (typeof(T) == typeof(int)) {
                 int output;
@@ -634,6 +638,10 @@ namespace zSpace {
                     boolArray2DOutput.setItems(attributeValue as bool[][]);
                     int boolArray2DSuccess = zNativeMethods.ext_json_writeJSONAttributeBoolArray2D(ref this, attributeKey, boolArray2DOutput);
                     return boolArray2DSuccess == 1;
+                case nameof(zExtJSON) :
+                    zExtJSON json = (zExtJSON)(object) attributeValue;
+                    int success = zNativeMethods.ext_json_writeJSONAttributeJSON(ref this, attributeKey, json);
+                    return success == 1;
             }
 
             return false;
@@ -751,10 +759,12 @@ namespace zSpace {
             return outjson;
         }
 
-        public void ExportJsonFile(string filePath) {
-            zNativeMethods.ext_json_exportFile(ref this, filePath);
+        public bool ExportJsonFile(string filePath) {
+            int chk = zNativeMethods.ext_json_exportFile(ref this, filePath);
+            return chk == 1;
         }
         public bool ReadJsonFile(string filePath) {
+            if (filePath == null) return false;
             int chk = zNativeMethods.ext_json_readJsonFile(ref this, filePath);
             return chk == 1 ? true : false;
         }
@@ -770,7 +780,10 @@ namespace zSpace {
             Console.WriteLine("c# create json");
             zNativeMethods.ext_json_createJson(ref this);
         }
-
+        public bool SetMesh(in zExtMesh mesh) {
+            int chk = zNativeMethods.ext_json_setMeshToJson(ref this, in mesh);
+            return chk == 1 ? true : false;
+        }
         public string[] AttributeTypes {
             get { return this.attributesTypes.getItems(); }
         }
@@ -963,6 +976,12 @@ namespace zSpace {
             in zExtBoolArray2D inAttributeValue);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int ext_json_writeJSONAttributeJSON(
+            ref zExtJSON extJSON,
+            [MarshalAs(UnmanagedType.LPStr)] string attributeKey,
+            in zExtJSON inAttributeValue);
+
+        [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         public static extern void ext_json_createJson(ref zExtJSON extJSON);        
         
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
@@ -978,7 +997,7 @@ namespace zSpace {
         public static extern int ext_json_getMeshFromJsonPath([MarshalAs(UnmanagedType.LPStr)] string inputPath, ref zExtMesh outMesh);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int ext_json_setMeshToJson(ref zExtJSON extJSON, ref zExtMesh inMesh);
+        public static extern int ext_json_setMeshToJson(ref zExtJSON extJSON, in zExtMesh inMesh);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         public static extern int ext_json_exportFile(ref zExtJSON extJSON, [MarshalAs(UnmanagedType.LPStr)] string outputPath);

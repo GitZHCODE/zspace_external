@@ -91,6 +91,7 @@ namespace zSpace
 		 * \brief get items from array
 		 */
 		void getItems(zExtPoint* items);
+		void setItems(zExtPoint* items, int count);
 	};
 
 
@@ -98,7 +99,9 @@ namespace zSpace
 	ZSPACE_EXTERNAL_C
 	{
 		//ZSPACE_EXTERNAL void ext_point_create(float x, float y, float z, zExtPoint& refPoint);
+		//ZSPACE_EXTERNAL int ext_point_create(float x, float y, float z, zExtPoint& refPoint);
 		ZSPACE_EXTERNAL void ext_point_getItemsFromArray(zExtPointArray & extArray, zExtPoint * outArray);
+		ZSPACE_EXTERNAL int ext_point_setItemsFromArray(zExtPointArray & extArray, zExtPoint * inArray, int count);
 	}
 
 }

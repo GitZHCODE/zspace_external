@@ -15,6 +15,7 @@
 
 namespace zSpace
 {
+	
 	ZSPACE_EXTERNAL_INLINE void ext_KMean_computeKmeansManualInput(zTsKMeans*& kmean, double* _data, int dataCount, int strideCount, int& numCluster, int& numIterations, double* initMeans, int* outClusterID)
 	{
 		//create matrix from 1d data
@@ -36,7 +37,7 @@ namespace zSpace
 		}
 		kmean = new zTsKMeans(data, numCluster, numIterations);
 		int actualNumCluster = numCluster;
-		numIterations = kmean->getKMeansClusters(actualNumCluster, manualMeans);
+		numIterations = kmean->getKMeansClusters(actualNumCluster, manualMeans, 0.0001);
 		numCluster = actualNumCluster;
 		zIntArray clusterIDs = kmean->clusterIDS;
 		for (int i = 0; i < dataCount; i++)
@@ -60,7 +61,7 @@ namespace zSpace
 		int actualNumCluster = numCluster;
 		if (initMethod > 1) initMethod = 1;
 		zTsKMeans::initialisationMethod init = static_cast<zTsKMeans::initialisationMethod>(initMethod);
-		numIterations = kmean->getKMeansClusters(actualNumCluster, init, seed1, seed2);
+		numIterations = kmean->getKMeansClusters(actualNumCluster, init, seed1, seed2, 0.0001);
 		numCluster = actualNumCluster;
 		zIntArray clusterIDs = kmean->clusterIDS;
 		for (int i = 0; i < dataCount; i++)
@@ -123,13 +124,13 @@ namespace zSpace
 		switch (optimalCountMethod)
 		{
 		case 0:
-			optimalK = kmean.findOptimalK_Elbow(init, true, min, max, increment, seed1, seed2, KScorePair); 
+			optimalK = kmean.findOptimalK_Elbow(init, true, min, max, increment, seed1, seed2, KScorePair, 0.0001);
 			break;
 		case 1:
-			optimalK = kmean.findOptimalK_Elbow(init, false, min, max, increment, seed1, seed2, KScorePair); 
+			optimalK = kmean.findOptimalK_Elbow(init, false, min, max, increment, seed1, seed2, KScorePair, 0.0001);
 			break;
 		case 2:
-			optimalK = kmean.findOptimalK_Silhouette(init, min, max, increment, seed1, seed2, KScorePair); 
+			optimalK = kmean.findOptimalK_Silhouette(init, min, max, increment, seed1, seed2, KScorePair, 0.0001);
 			break;
 		}
 		int count = max - min +1;
@@ -148,7 +149,7 @@ namespace zSpace
 		return optimalK;
 	}
 
-	ZSPACE_EXTERNAL void ext_kmean_test_test(int test)
+	ZSPACE_EXTERNAL_INLINE void ext_kmean_test_test(int test)
 	{
 		printf("\n C++ %i", test);
 	}

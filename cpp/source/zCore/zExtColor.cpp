@@ -75,10 +75,31 @@ namespace zSpace
 			items[i].updateAttributes(pointer->at(i));
 		}
 	}
+
+	ZSPACE_EXTERNAL_INLINE void zExtColorArray::setItems(zExtColor* items, int count)
+	{
+		pointer = new zColorArray;
+		for (int i = 0; i < count; i++)
+		{
+
+			pointer->push_back(zColor(items[i].r, items[i].g, items[i].b, items[i].a));
+		}
+		/*for (int i = 0; i < count; i++)
+		{
+			printf(" \n set colors %f %f %f %f", pointer->at(i) .r, pointer->at(i).g, pointer->at(i).b);
+
+		}*/
+		updateAttributes();
+	}
 	
 	ZSPACE_EXTERNAL_INLINE void ext_color_getItemsFromArray(zExtColorArray& extArray, zExtColor* outArray)
 	{
 		extArray.getItems(outArray);
+	}
+	ZSPACE_EXTERNAL_INLINE void ext_color_setItemsFromArray(zExtColorArray& extArray, zExtColor* inArray, int count)
+	{
+		extArray.setItems(inArray, count);
+
 	}
 	ZSPACE_EXTERNAL_INLINE void ext_color_createRGB(float r, float g, float b, float a, zExtColor& refPoint)
 	{

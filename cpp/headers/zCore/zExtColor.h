@@ -92,6 +92,7 @@ namespace zSpace
 		 * \brief get items from array
 		 */
 		void getItems(zExtColor* items);
+		void setItems(zExtColor* items, int count);
 	};
 
 
@@ -100,6 +101,8 @@ namespace zSpace
 	{
 		ZSPACE_EXTERNAL void ext_color_createRGB(float r, float g, float b, float a, zExtColor& refPoint);
 		ZSPACE_EXTERNAL void ext_color_getItemsFromArray(zExtColorArray& extArray, zExtColor* outArray);
+		ZSPACE_EXTERNAL void ext_color_setItemsFromArray(zExtColorArray& extArray, zExtColor* inArray, int count);
+
 	}
 
 }

@@ -75,6 +75,29 @@ namespace zSpace
 			items[i] = zExtPoint((pointer->at(i)));
 		}
 	}
+	ZSPACE_EXTERNAL_INLINE void zExtPointArray::setItems(zExtPoint* items, int count)
+	{
+		pointer = new zPointArray();
+		for (int i = 0; i < count; i++)
+		{
+			zPoint p(items[i].x, items[i].y, items[i].z);
+			pointer->push_back(p);
+		}
+		updateAttributes();
+	}
+	//ZSPACE_EXTERNAL_INLINE int ext_point_create(float x, float y, float z, zExtPoint& refPoint)
+	//{
+	//	try
+	//	{
+	//		//refPoint
+	//		return 1;
+
+	//	}
+	//	catch (const std::exception&)
+	//	{
+	//		return 0;
+	//	}
+	//}
 	ZSPACE_EXTERNAL_INLINE void ext_point_getItemsFromArray(zExtPointArray& extArray, zExtPoint* outArray)
 	{
 		extArray.getItems(outArray);
@@ -107,5 +130,18 @@ namespace zSpace
 		x = t.x;
 		y = t.y;
 		z = t.z;
+	}
+	ZSPACE_EXTERNAL_INLINE int ext_point_setItemsFromArray(zExtPointArray& extArray, zExtPoint* inArray, int count)
+	{
+		try
+		{
+			extArray.setItems(inArray, count);
+			return 1;
+		}
+		catch (const std::exception&)
+		{
+			printf("\n ERROR set zExtPointArray");
+			return 0;
+		}
 	}
 }

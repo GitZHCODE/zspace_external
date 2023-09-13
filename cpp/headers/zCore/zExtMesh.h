@@ -106,7 +106,25 @@ namespace zSpace
 		 *  \param [in]		numFaces					-The number of faces in the mesh.
 		 *  \param [in,out] out_mesh					-Reference to the zExtMesh object to be created.
 		 */
-		ZSPACE_EXTERNAL void ext_meshUtil_createMeshOBJFromArray(double* _vertexPositions, int* _polyCounts, int* _polyConnects, int numVerts, int numFaces, zExtMesh& out_mesh);
+		ZSPACE_EXTERNAL void ext_meshUtil_createMeshOBJFromRawArray(double* _vertexPositions, int* _polyCounts, int* _polyConnects, int numVerts, int numFaces, zExtMesh& out_mesh);
+
+		/*! \brief Creates a new zExtMesh object from vertex and face data.
+		 *  \param [in]		_vertexPositions			-Pointer to an array of vertex positions.
+		 *  \param [in]		_polyCounts					-Pointer to an array of polygon counts.
+		 *  \param [in]		_polyConnects				-Pointer to an array of polygon vertex indices.
+		 *  \param [in]		numVerts					-The number of vertices in the mesh.
+		 *  \param [in]		numFaces					-The number of faces in the mesh.
+		 *  \param [in,out] out_mesh					-Reference to the zExtMesh object to be created.
+		 */
+		ZSPACE_EXTERNAL int ext_meshUtil_createMeshOBJFromArray(zExtPointArray& _vertexPositions, zExtIntArray& _polyCounts, zExtIntArray& _polyConnects, zExtMesh& out_mesh);
+
+		/*! \brief Set colors of mesh vertices.
+		 *  \param [in]		extMesh						-Reference to the zExtMesh object to be created.
+		 *  \param [in]		vertexColors				-Array of colors for each vertex.
+		 */
+		ZSPACE_EXTERNAL int ext_meshUtil_setMeshVertexColors(zExtMesh& extMesh, zExtColorArray& vertexColors);
+
+
 
 		/*! \brief Creates a new zExtMesh object from vertex and face data.
 		 *  \param [in]		_vertexPositions			-File path
@@ -141,7 +159,7 @@ namespace zSpace
 		 *  \return 1 on success, 0 on failure.
 		 *
 		 */
-		ZSPACE_EXTERNAL int ext_meshUtil_getMeshPosition(zExtMesh& objMesh, float* outVPostions, float* outVColors);
+		ZSPACE_EXTERNAL int ext_meshUtil_getMeshPositionRaw(zExtMesh& objMesh, float* outVPostions, float* outVColors);
 
 		/*! \brief Gets the face connectivity data for a zExtMesh object.
 		 *  \param [in]		objMesh				-The zExtMesh object to retrieve face connectivity data from.
@@ -173,11 +191,11 @@ namespace zSpace
 		ZSPACE_EXTERNAL int ext_meshUtil_getMeshsFromMeshPointerArray(zExtMeshPointerArray& inArray, zExtMesh* outMeshes);
 
 
-		ZSPACE_EXTERNAL int ext_mesh_getMeshPosition(zExtMesh& objMesh, zExtPointArray& extPointArray);
-		ZSPACE_EXTERNAL int ext_mesh_getMeshColors(zExtMesh& objMesh, zExtColorArray& extPointArray);
-		ZSPACE_EXTERNAL int ext_mesh_getMeshPolygonDate(zExtMesh& objMesh, zExtIntArray& pCount, zExtIntArray& pConnect);
+		ZSPACE_EXTERNAL int ext_meshUtil_getMeshPosition(zExtMesh& objMesh, zExtPointArray& extPointArray);
+		ZSPACE_EXTERNAL int ext_meshUtil_getMeshColors(zExtMesh& objMesh, zExtColorArray& extPointArray);
+		ZSPACE_EXTERNAL int ext_meshUtil_getMeshPolygonDate(zExtMesh& objMesh, zExtIntArray& pCount, zExtIntArray& pConnect);
 
-		ZSPACE_EXTERNAL int ext_mesh_catmullclark(zExtMesh& objMesh, int level, bool fixedCorner);
+		ZSPACE_EXTERNAL int ext_meshUtil_catmullclark(zExtMesh& objMesh, int level, bool fixedCorner);
 
 
 

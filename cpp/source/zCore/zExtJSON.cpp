@@ -44,7 +44,7 @@ namespace zSpace
 	{
 
 		numOfAttributes = pointer->size();
-
+		//pointer->array(); //in case of multiple levels
 		//attributesNames = zExtStringArray(GetAllAttributeNames());
 		attributesNames.pointer = new zStringArray(GetAllAttributeNames());
 
@@ -141,6 +141,8 @@ namespace zSpace
 		//printf("\n cpp add atribute");
 
 		(*pointer)[attributeName] = attributeValue;
+		
+		
 	}
 	ZSPACE_EXTERNAL_INLINE bool zExtJSON::ExportJsonFile(const string& filePath)
 	{
@@ -200,7 +202,7 @@ namespace zSpace
 		bool fileChk = coreUtils.readJSON(filePath, *pointer);
 		//printf("\n read json 1");
 
-		updateAttributes();
+		if(fileChk) updateAttributes();
 		//printf("\n read json 2");
 
 		return fileChk;
@@ -1099,6 +1101,19 @@ namespace zSpace
 		}
 		catch (const exception&) { return 0; };
 	}
+	ZSPACE_EXTERNAL_INLINE int ext_json_writeJSONAttributeJSON			(zExtJSON& extJSON, char* attributeKey, zExtJSON& inAttributeValue, bool updateExtAttributes)
+	{
+		try
+		{
+			zUtilsCore util;
+			util.writeJSONAttribute(*extJSON.pointer, attributeKey, *inAttributeValue.pointer);
+			//extJSON.AddAttribute(attributeKey, inAttributeValue.pointer);
+			if (updateExtAttributes) extJSON.updateAttributes();
+			return 1;
+		}
+		catch (const exception&) { return 0; };
+	}
+
 	// JSON - Write Attributes Generic - TRIAL
 
 	
