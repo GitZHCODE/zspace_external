@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("zSpace_External_CSharp")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("ZHA")]
 [assembly: AssemblyProduct("zSpace_External_CSharp")]
-[assembly: AssemblyCopyright("Copyright ©  2023")]
+[assembly: AssemblyCopyright("Copyright (C) 2023 ZSPACE")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

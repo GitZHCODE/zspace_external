@@ -156,6 +156,9 @@
     <ClInclude Include="..\..\..\cpp\headers\zCore\zExtJSON.h">
       <Filter>Header Files\zCore</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtUSD.h">
+      <Filter>Header Files\zCore</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\zspace_core\cpp\depends\alglib\cpp\src\alglibinternal.cpp">
@@ -228,6 +231,9 @@
       <Filter>Source Files\zCore</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\cpp\source\zCore\zExtJSON.cpp">
+      <Filter>Source Files\zCore</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\source\zCore\zExtUSD.cpp">
       <Filter>Source Files\zCore</Filter>
     </ClCompile>
   </ItemGroup>

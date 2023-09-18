@@ -169,6 +169,8 @@ namespace zSpace {
     
     [StructLayout(LayoutKind.Sequential)]
     public struct zExtStringArray {
+        //[MarshalAs(UnmanagedType.AnsiBStr)]
+
         private IntPtr pointer;
         private int arrayCount;
 
@@ -195,7 +197,14 @@ namespace zSpace {
         }
 
         public void setItems(string[] input) {
-            zNativeMethods.ext_string_setItemsFromArray(ref this, input, input.Length);
+            zExtString[] mid = new zExtString[input.Length];
+            for (int i = 0; i < input.Length; i++) {
+
+                mid[i] = new zExtString();
+                mid[i].setString(input[i]);
+            }
+            
+            zNativeMethods.ext_string_setItemsFromArray(ref this, mid, mid.Length);
         }
 
         public int getArrayCount() { return arrayCount; }
@@ -220,7 +229,7 @@ namespace zSpace {
             for (int i = 0; i < input.Length; i++) {
                 mid[i].setItems(input[i]);
             }
-            zNativeMethods.ext_string_setItemsFromArray2D(ref this, mid, input.Length);
+            zNativeMethods.ext_string_setItemsFromArray2D(ref this, mid, mid.Length);
         }
 
         public int getArrayCount() { return arrayCount; }
@@ -346,7 +355,8 @@ namespace zSpace {
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         public static extern void ext_string_setItemsFromArray(ref zExtStringArray array,
-            [MarshalAs(UnmanagedType.LPArray), In] string[] outItems, int count);
+            [MarshalAs(UnmanagedType.LPArray), In] zExtString[] inItems, int count);
+            //[MarshalAs(UnmanagedType.LPArray), In] string[] inItems, int count);
         #endregion
         #region String Array 2D
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]

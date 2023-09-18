@@ -62,23 +62,23 @@ DLLFile.ext_meshUtil_getMeshsFromMeshPointerArray.argtypes = [
     ctypes.POINTER(zExtMesh)
 ]
 
-DLLFile.ext_mesh_getMeshPosition.argtypes = [
+DLLFile.ext_meshUtil_getMeshPosition.argtypes = [
     zExtMesh,
     zExtPointArray
 ]
 
-DLLFile.ext_mesh_getMeshColors.argtypes = [
+DLLFile.ext_meshUtil_getMeshColors.argtypes = [
     zExtMesh,
     zExtColorArray
 ]
 
-DLLFile.ext_mesh_getMeshPolygonDate.argtypes = [
+DLLFile.ext_meshUtil_getMeshPolygonDate.argtypes = [
     zExtMesh,
     zExtIntArray,
     zExtIntArray
 ]
 
-DLLFile.ext_mesh_catmullclark.argtypes = [
+DLLFile.ext_meshUtil_catmullclark.argtypes = [
     zExtMesh,
     ctypes.c_int,
     ctypes.c_bool

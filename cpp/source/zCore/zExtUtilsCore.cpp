@@ -481,10 +481,10 @@ namespace zSpace
 
 		}
 	}
-	ZSPACE_EXTERNAL_INLINE void ext_string_setItemsFromArray(zExtStringArray& extArray, string* inArray, int count)
+	ZSPACE_EXTERNAL_INLINE void ext_string_setItemsFromArray(zExtStringArray& extArray, zExtString* inArray, int count)
 	{
 
-		extArray.setItems(inArray, count);
+		extArray.setItems(inArray->pointer, count);
 	}
 	//	------------------------------	//
 	//	-----	String Array 2D	------	//

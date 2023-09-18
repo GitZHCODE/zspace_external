@@ -48,7 +48,7 @@ namespace zSpace
         public static Mesh createRhinoMeshFromExtMesh(zExtMesh extMesh) {
             Mesh mesh = new Mesh();
             mesh.Vertices.Clear();
-            Console.WriteLine("extMesh " + extMesh.getVCount());
+            //Console.WriteLine("extMesh " + extMesh.getVCount());
 
             var extPts = extMesh.getMeshPoints();
             var pts = new Point3f[extPts.Length];
@@ -59,10 +59,10 @@ namespace zSpace
 
             var faceConnect = extMesh.getFaces();
             foreach (var fn in faceConnect) {
-                foreach (var iii in fn) {
-                    //Console.WriteLine(iii);
+                //foreach (var iii in fn) {
+                //    //Console.WriteLine(iii);
 
-                }
+                //}
 
                 MeshFace face;
                 if (fn.Count == 3) face = new MeshFace(fn[0], fn[1], fn[2]);
@@ -72,8 +72,8 @@ namespace zSpace
             }
 
             //mesh.Vertices.AddVertices(createRhinoPointFrom1DFloat(extMesh.getMeshPositions1D()));
-            //mesh.VertexColors.Clear();
-            //mesh.VertexColors.AppendColors(extMesh.getMeshColors());
+            mesh.VertexColors.Clear();
+            mesh.VertexColors.AppendColors(extMesh.getMeshColors());
             //foreach (var fn in extMesh.getMeshFaceConnection()) {
             //    MeshFace meshFace;
             //    if (fn.Count == 3) meshFace = new MeshFace(fn[0], fn[1], fn[2]);
@@ -83,9 +83,9 @@ namespace zSpace
             //    //else meshFace = new MeshFace(pConnects[count], pConnects[count + 1], pConnects[count + 2], pConnects[count + 3]);
             //    mesh.Faces.AddFace(meshFace);
             //}
-            Console.WriteLine("rhinomesh " + mesh.Vertices.Count());
+            //Console.WriteLine("rhinomesh " + mesh.Vertices.Count());
             mesh.RebuildNormals();
-            Console.WriteLine("rhinomesh " + mesh.Vertices.Count());
+            //Console.WriteLine("rhinomesh " + mesh.Vertices.Count());
 
             return mesh;
         }
@@ -123,7 +123,43 @@ namespace zSpace
         /// <param name="rhinoMesh">The Rhino Mesh object.</param>
         /// <returns>A zSpace external mesh object.</returns>
         public static zExtMesh createExtMeshFromRhinoMesh(Mesh rhinoMesh) {
-            return new zExtMesh();
+            zExtMesh extMesh = new zExtMesh();
+            zExtPointArray extpts = new zExtPointArray();
+            var pts = new zExtPoint[rhinoMesh.Vertices.Count];
+            for (int i = 0; i < rhinoMesh.Vertices.Count; i++) {
+                pts[i].x = rhinoMesh.Vertices[i].X;
+                pts[i].y = rhinoMesh.Vertices[i].Y;
+                pts[i].z = rhinoMesh.Vertices[i].Z;
+            }
+            extpts.setItems(pts);
+            List<int> pCountList = new List<int>();
+            List<int> pConnectList = new List<int>();
+            //for (int i = 0; i < rhinoMesh.Faces.Count; i++) {
+            //    counter += rhinoMesh.Faces[i].IsQuad ? 4 : 3;// : rhinoMesh.GetNgonAndFacesEnumerable().ToList()[i].
+            //}
+            // all faces and ngons;
+            var ngons = rhinoMesh.GetNgonAndFacesEnumerable().ToList();
+            for (int i = 0; i < ngons.Count; i++) {
+                pCountList.Add(ngons[i].BoundaryVertexCount);
+                foreach (var p in ngons[i].BoundaryVertexIndexList()) {
+                    pConnectList.Add((int)p);
+                }
+            }
+            zExtIntArray countArray = new zExtIntArray();
+            zExtIntArray connectArray = new zExtIntArray();
+            countArray.setItems(pCountList.ToArray());
+            connectArray.setItems(pConnectList.ToArray());
+            var colors = rhinoMesh.VertexColors.ToArray();
+            //Console.WriteLine("\n colors" + colors.Length);
+            //for (int i = 0; i < colors.Length; i++) {
+            //    Console.WriteLine("\n colors1 " + colors[i]);
+
+            //}
+            extMesh.createMesh(in extpts, in countArray, in connectArray, ref colors);
+
+            
+
+            return extMesh;
         }
         
         /// <summary>

@@ -23,7 +23,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="DLLConfig.py" />
-    <Compile Include="source\zCore\module1.py">
+    <Compile Include="source\zCore\zExtUtilsCore.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="source\zExtMesh.py">

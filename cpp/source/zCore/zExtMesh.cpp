@@ -26,7 +26,7 @@ namespace zSpace
 
 	ZSPACE_EXTERNAL_INLINE zExtMesh::zExtMesh()
 	{
-		//mesh = new zObjMesh();
+		//extPointer = new zObjMesh();
 	}
 
 	ZSPACE_EXTERNAL_INLINE void zExtMesh::updateAttributes()
@@ -809,7 +809,7 @@ namespace zSpace
 		arrayCount = pointer->size();
 	}
 	
-	ZSPACE_EXTERNAL_INLINE void ext_meshUtil_createMeshOBJFromArray(double* _vertexPositions, int* _polyCounts, int* _polyConnects, int numVerts, int numFaces, zExtMesh& out_mesh)
+	ZSPACE_EXTERNAL_INLINE void ext_meshUtil_createMeshOBJFromRawArray(double* _vertexPositions, int* _polyCounts, int* _polyConnects, int numVerts, int numFaces, zExtMesh& out_mesh)
 	{
 		if (!_vertexPositions || !_polyCounts || !_polyConnects) throw std::invalid_argument(" error: extPointer container is empty.");
 
@@ -838,6 +838,55 @@ namespace zSpace
 		}
 		zFnMesh fnMesh(*out_mesh.extPointer);
 		fnMesh.create(vPos, pCounts, pConnects);
+	}
+
+	ZSPACE_EXTERNAL_INLINE int ext_meshUtil_createMeshOBJFromArray(zExtPointArray& _vertexPositions, zExtIntArray& _polyCounts, zExtIntArray& _polyConnects, zExtMesh& out_mesh)
+	{
+		try
+		{
+			out_mesh.extPointer = new zObjMesh();
+			zFnMesh fnMesh(*out_mesh.extPointer);
+			fnMesh.create(*_vertexPositions.pointer, *_polyCounts.pointer, *_polyConnects.pointer);
+			out_mesh.updateAttributes();
+			
+		}
+		catch (const std::exception&)
+		{
+			printf("\n Error Creating Mesh!!!");
+			return 0;
+		}
+		return 1;
+		
+	}
+
+	ZSPACE_EXTERNAL_INLINE int ext_meshUtil_setMeshVertexColors(zExtMesh& extMesh, zExtColorArray& vertexColors)
+	{
+		try
+		{
+			zFnMesh fnMesh(*extMesh.extPointer);
+			if (vertexColors.arrayCount != fnMesh.numVertices())
+			{
+				printf("\n Error Adding colors Mesh! not equal colors and vertices: colors %i | vertex %i", vertexColors.arrayCount, fnMesh.numVertices());
+				return 0;
+			}
+			fnMesh.setVertexColors(*vertexColors.pointer, true);
+			zColorArray c;
+			fnMesh.getVertexColors(c);
+
+			/*for (int i = 0; i < c.size(); i++)
+			{
+				printf(" \n mesh set colors input	r %f g %f b %f", vertexColors.pointer->at(i).r, vertexColors.pointer->at(i).g, vertexColors.pointer->at(i).b);
+				printf(" \n mesh set colors output	r %f g %f b %f", c.at(i).r, c.at(i).g, c.at(i).b);
+
+			}*/
+			extMesh.updateAttributes();
+		}
+		catch (const std::exception&)
+		{
+			printf("\n Error Adding colors Mesh!!!");
+			return 0;
+		}
+		return 1;
 	}
 
 	ZSPACE_EXTERNAL_INLINE void ext_meshUtil_createMeshOBJFromFile(char* filePath, zExtMesh& out_mesh)
@@ -883,7 +932,7 @@ namespace zSpace
 		}
 	}
 
-	ZSPACE_EXTERNAL_INLINE int ext_mesh_getMeshPosition(zExtMesh& objMesh, zExtPointArray& extArray)
+	ZSPACE_EXTERNAL_INLINE int ext_meshUtil_getMeshPosition(zExtMesh& objMesh, zExtPointArray& extArray)
 	{
 		extArray.pointer = new zPointArray();
 
@@ -894,16 +943,24 @@ namespace zSpace
 		return 1;
 	}
 
-	ZSPACE_EXTERNAL_INLINE int ext_mesh_getMeshColors(zExtMesh& objMesh, zExtColorArray& extArray)
+	ZSPACE_EXTERNAL_INLINE int ext_meshUtil_getMeshColors(zExtMesh& objMesh, zExtColorArray& extArray)
 	{
 		extArray.pointer = new zColorArray();
 		zFnMesh fn(*objMesh.extPointer);
 		fn.getVertexColors(*extArray.pointer);
+		zColorArray c;
+		fn.getVertexColors(c);
+		for (int i = 0; i < extArray.pointer->size(); i++)
+		{
+			//printf(" \n mesh get colors extArray	r %f g %f b %f", extArray.pointer->at(i).r, extArray.pointer->at(i).g, extArray.pointer->at(i).b);
+			//printf(" \n mesh get colors zColorArray	r %f g %f b %f", c.at(i).r, c.at(i).g, c.at(i).b);
+
+		}
 		extArray.updateAttributes();
 		return 1;
 	}
 
-	ZSPACE_EXTERNAL_INLINE int ext_mesh_getMeshPolygonDate(zExtMesh& objMesh, zExtIntArray& pCount, zExtIntArray& pConnect)
+	ZSPACE_EXTERNAL_INLINE int ext_meshUtil_getMeshPolygonDate(zExtMesh& objMesh, zExtIntArray& pCount, zExtIntArray& pConnect)
 	{
 		pCount.pointer = new zIntArray();
 		pConnect.pointer = new zIntArray();
@@ -915,7 +972,7 @@ namespace zSpace
 		return 1;
 	}
 
-	ZSPACE_EXTERNAL int ext_mesh_catmullclark(zExtMesh& objMesh, int level, bool fixedCorner)
+	ZSPACE_EXTERNAL_INLINE int ext_meshUtil_catmullclark(zExtMesh& objMesh, int level, bool fixedCorner)
 	{
 		try
 		{
@@ -939,7 +996,7 @@ namespace zSpace
 		printf("\n C++ %i", outfCounts);
 
 	}
-	ZSPACE_EXTERNAL_INLINE int ext_meshUtil_getMeshPosition(zExtMesh& objMesh, float* outVPostions, float* outVColors)
+	ZSPACE_EXTERNAL_INLINE int ext_meshUtil_getMeshPositionRaw(zExtMesh& objMesh, float* outVPostions, float* outVColors)
 	{
 		if (!objMesh.extPointer)
 		{

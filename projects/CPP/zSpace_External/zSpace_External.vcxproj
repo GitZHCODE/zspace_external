@@ -46,14 +46,18 @@
     <ClInclude Include="..\..\..\cpp\headers\zCore\zExtColor.h" />
     <ClInclude Include="..\..\..\cpp\headers\zCore\zExtJSON.h" />
     <ClInclude Include="..\..\..\cpp\headers\zCore\zExtParticle.h" />
+    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtUSD.h" />
     <ClInclude Include="..\..\..\cpp\headers\zCore\zExtUtilsCore.h" />
     <ClInclude Include="..\..\..\cpp\headers\zCore\zExtGraph.h" />
     <ClInclude Include="..\..\..\cpp\headers\zCore\zExtMesh.h" />
     <ClInclude Include="..\..\..\cpp\headers\zCore\zExtPoint.h" />
     <ClInclude Include="..\..\..\cpp\headers\zCore\zExtTransform.h" />
-    <ClInclude Include="..\..\..\cpp\headers\zToolsets\data\zExtKMeans.h" />
+    <ClInclude Include="..\..\..\cpp\headers\zToolsets\data\zExtKMeans.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DLL|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="..\..\..\cpp\headers\zToolsets\digifab\zExtRobot.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DLL|x64'">true</ExcludedFromBuild>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -74,6 +78,7 @@
     <ClCompile Include="..\..\..\cpp\source\zCore\zExtColor.cpp" />
     <ClCompile Include="..\..\..\cpp\source\zCore\zExtJSON.cpp" />
     <ClCompile Include="..\..\..\cpp\source\zCore\zExtParticle.cpp" />
+    <ClCompile Include="..\..\..\cpp\source\zCore\zExtUSD.cpp" />
     <ClCompile Include="..\..\..\cpp\source\zCore\zExtUtilsCore.cpp" />
     <ClCompile Include="..\..\..\cpp\source\zCore\zExtGraph.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DLL|x64'">false</ExcludedFromBuild>
@@ -81,8 +86,12 @@
     <ClCompile Include="..\..\..\cpp\source\zCore\zExtMesh.cpp" />
     <ClCompile Include="..\..\..\cpp\source\zCore\zExtPoint.cpp" />
     <ClCompile Include="..\..\..\cpp\source\zCore\zExtTransform.cpp" />
-    <ClCompile Include="..\..\..\cpp\source\zToolsets\data\zExtKMeans.cpp" />
-    <ClCompile Include="..\..\..\cpp\source\zToolsets\digiFab\zExtRobot.cpp" />
+    <ClCompile Include="..\..\..\cpp\source\zToolsets\data\zExtKMeans.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DLL|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\source\zToolsets\digiFab\zExtRobot.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DLL|x64'">true</ExcludedFromBuild>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
