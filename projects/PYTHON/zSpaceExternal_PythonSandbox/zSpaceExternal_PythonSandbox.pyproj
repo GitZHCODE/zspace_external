@@ -25,10 +25,22 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
     <OutputPath>bin\Release_Python\</OutputPath>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Releas_DLL_OV_2' ">
+    <OutputPath>bin\Releas_DLL_OV_2\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release_DLL_OV_2' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+    <OutputPath>bin\Release_DLL_OV_2\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="DLLConfig.py" />
-    <Compile Include="source\zCore\module1.py" />
-    <Compile Include="source\zExtMesh.py" />
+    <Compile Include="source\x-zExtMesh.py" />
+    <Compile Include="source\zCore\x-zExtUtilsCore.py" />
+    <Compile Include="source\zCore\zExtColorModule.py" />
+    <Compile Include="source\zCore\zExtMeshModule.py" />
+    <Compile Include="source\zCore\zExtPointModule.py" />
+    <Compile Include="source\zCore\zExtTransformModule.py" />
     <Compile Include="zSpaceExternal_PythonSandbox.py" />
   </ItemGroup>
   <ItemGroup>

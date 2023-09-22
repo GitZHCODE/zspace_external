@@ -28,7 +28,7 @@
 #include <sstream>
 
 #include <headers/zApp/include/zInterOp.h>
-//#include<headers/zInterOp/core/zOmniCore.h>
+#include<headers/zInterOp/core/zOmniCore.h>
 
 #include<execution>
 
@@ -37,7 +37,7 @@ using namespace std;
 namespace zSpace
 {
 
-	//zOmniCore omniCore;
+	zOmniCore omniCore;
 
 
 	ZSPACE_EXTERNAL_C

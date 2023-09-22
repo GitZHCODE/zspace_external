@@ -6,14 +6,30 @@ using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using Rhino;
 using Rhino.Geometry;
+using System.Collections;
 
 namespace zSpace {
     class Program {
         static void Main(string[] args) {
             Console.WriteLine("C# sandbox");
 
+            //string dir = Environment.CurrentDirectory;
+            string dir = System.Runtime.InteropServices.RuntimeEnvironment.GetRuntimeDirectory();
+            
+            //Console.WriteLine(string.Format("current Dir {0}", dir));
 
+            //Environment.SetEnvironmentVariable("ovDir", "C:/Users/heba.eiz/AppData/Local/ov/pkg/connectsample-203.0.0/_build/windows-x86_64/release/");
             string path = null;
+
+            Console.WriteLine("GetEnvironmentVariables: ");
+            foreach (DictionaryEntry de in Environment.GetEnvironmentVariables())
+                Console.WriteLine("  {0} = {1}", de.Key, de.Value);
+
+            string usdFolderPath = "C:/Users/heba.eiz/source/repos/GitZHCODE/zspace_external/projects/CSHARP/zSpaceExternal_CSharpSandbox/zSpaceExternal_CSharpSandbox/bin/Release/ov";
+            SetDllDirectory(usdFolderPath);
+
+            //string zSpaceFolderPath = "C:/Users/heba.eiz/source/repos/GitZHCODE/zspace_external/projects/CSHARP/zSpaceExternal_CSharpSandbox/zSpaceExternal_CSharpSandbox/bin/Release/zspace";
+            //SetDllDirectory(zSpaceFolderPath);
 
 
             zExtJSON j1 = new zExtJSON();
@@ -25,6 +41,11 @@ namespace zSpace {
             Console.WriteLine("\n Press any key to exit...");
             Console.ReadKey();
         }
+        string usdDir1 = "C:/Users/heba.eiz/AppData/Local/ov/pkg/connectsample-203.0.0/_build/windows-x86_64/release/PYTHON310.DLL";
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool SetDllDirectory(string lpPathName);
+
 
         static void test1() {
             string path = "//zaha-hadid.com/Data/Projects/1453_CODE/1453___research/res_heba/0-Projects/Striatus/Blocks/2023-02-23/200_Final/deck_3.json";
