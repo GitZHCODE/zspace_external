@@ -21,14 +21,18 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Release_Python' ">
     <OutputPath>bin\Release_Python\</OutputPath>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Releas_DLL_OV_2' ">
+    <OutputPath>bin\Releas_DLL_OV_2\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release_DLL_OV_2' ">
+    <OutputPath>bin\Release_DLL_OV_2\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="DLLConfig.py" />
-    <Compile Include="source\zCore\zExtUtilsCore.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="source\zExtMesh.py">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="source\zCore\zExtColorModule.py" />
+    <Compile Include="source\zCore\zExtMeshModule.py" />
+    <Compile Include="source\zCore\zExtPointModule.py" />
+    <Compile Include="source\zCore\zExtTransformModule.py" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="source\" />
