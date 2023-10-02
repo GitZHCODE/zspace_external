@@ -21,6 +21,7 @@ namespace zSpace {
             //Environment.SetEnvironmentVariable("ovDir", "C:/Users/heba.eiz/AppData/Local/ov/pkg/connectsample-203.0.0/_build/windows-x86_64/release/");
             string path = null;
 
+
             Console.WriteLine("GetEnvironmentVariables: ");
             foreach (DictionaryEntry de in Environment.GetEnvironmentVariables())
                 Console.WriteLine("  {0} = {1}", de.Key, de.Value);
@@ -40,10 +41,13 @@ namespace zSpace {
             testMesh1();
             //testWriteJsonToJson();
 
+
             Console.WriteLine("\n Press any key to exit...");
             Console.ReadKey();
         }
+
         //string usdDir1 = "C:/Users/heba.eiz/AppData/Local/ov/pkg/connectsample-203.0.0/_build/windows-x86_64/release/PYTHON310.DLL";
+
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool SetDllDirectory(string lpPathName);

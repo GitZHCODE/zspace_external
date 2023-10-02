@@ -197,6 +197,10 @@ namespace zSpace
 
 		ZSPACE_EXTERNAL int ext_meshUtil_catmullclark(zExtMesh& objMesh, int level, bool fixedCorner);
 
+		ZSPACE_EXTERNAL int ext_meshUtil_getPlanarityDeviationPerFace(zExtMesh& objMesh, zExtDoubleArray& outPlanarityDevs, int type, bool colorFaces = false, double tolerance = 0.05);
+		ZSPACE_EXTERNAL int ext_meshUtil_getGaussianCurvature(zExtMesh& objMesh, zExtDoubleArray& outGaussianCurvature);
+
+
 		ZSPACE_EXTERNAL int ext_meshUtil_checkPlanarity(zExtMesh& objMesh, float tolerance, int planarityType, bool colorFaces,  zExtDoubleArray& outDeviations);
 		ZSPACE_EXTERNAL int ext_meshUtil_getFaceColor(zExtMesh& objMesh, zExtColorArray& extPointArray);
 

@@ -7,7 +7,7 @@ import zExtPointModule
 import zExtUtilsCoreModule
 import zExtColorModule
 
-#from zExtTransformModule import zExtTransform
+from zExtTransformModule import zExtTransform
 from DLLConfigModule import DLLConfig
 from zExtPointModule import zExtPoint, zExtPointArray
 from zExtColorModule import zExtColor, zExtColorArray
@@ -18,6 +18,12 @@ from zExtUtilsCoreModule import zExtBoolArray, zExtBoolArray2D
 
 DLLFile = DLLConfig.zExternalDLLFile
 
+if not DLLFile:
+    print("Failed to load the library")
+else:
+    print("Library loaded successfully")
+    
+    
 class zExtMesh(ctypes.Structure):
 	_fields_ = [
 		("extPointer", ctypes.c_void_p),
@@ -53,6 +59,7 @@ ext_meshUtil_setMeshVertexColors.argtypes = [ctypes.POINTER(zExtMesh), ctypes.PO
 ext_meshUtil_createMeshOBJFromFile = DLLFile.ext_meshUtil_createMeshOBJFromFile
 ext_meshUtil_createMeshOBJFromFile.restype = None
 ext_meshUtil_createMeshOBJFromFile.argtypes = [ctypes.c_char_p, ctypes.POINTER(zExtMesh)]
+
 
 ext_meshUtil_exportToJson = DLLFile.ext_meshUtil_exportToJson
 ext_meshUtil_exportToJson.restype = None
@@ -97,5 +104,18 @@ ext_meshUtil_getMeshPolygonDate.argtypes = [ctypes.POINTER(zExtMesh), ctypes.POI
 
 #---SET METHODS
 ext_meshUtil_catmullclark = DLLFile.ext_meshUtil_catmullclark
-ext_meshUtil_catmullclark = ctypes.c_int
-ext_meshUtil_catmullclark = [ctypes.POINTER(zExtMesh), ctypes.c_int, ctypes.c_bool]
+
+ext_meshUtil_catmullclark.restype = ctypes.c_int
+ext_meshUtil_catmullclark.argtypes = [ctypes.POINTER(zExtMesh), ctypes.c_int, ctypes.c_bool]
+
+ext_meshUtil_getPlanarityDeviationPerFace = DLLFile.ext_meshUtil_getPlanarityDeviationPerFace
+ext_meshUtil_getPlanarityDeviationPerFace.restype = ctypes.c_int
+ext_meshUtil_getPlanarityDeviationPerFace.argtypes = [ctypes.POINTER(zExtMesh), ctypes.POINTER(zExtDoubleArray), ctypes.c_int, ctypes.c_bool, ctypes.c_double]
+#ext_meshUtil_getPlanarityDeviationPerFace.argtypes[-1].value = 0.05
+#ext_meshUtil_getPlanarityDeviationPerFace.argtypes[-2].value = False
+
+ext_meshUtil_getGaussianCurvature = DLLFile.ext_meshUtil_getGaussianCurvature
+ext_meshUtil_getGaussianCurvature.restype = ctypes.c_int
+ext_meshUtil_getGaussianCurvature.argtypes = [ctypes.POINTER(zExtMesh), ctypes.POINTER(zExtDoubleArray)]
+
+

@@ -898,7 +898,7 @@ namespace zSpace
 
 		zFnMesh fnMesh(*out_mesh.extPointer);
 
-		if (fileExtension == ".jsonPointer")
+		if (fileExtension == ".obj")
 		{
 			fnMesh.from(pathSt, zOBJ);
 		}
@@ -1087,6 +1087,45 @@ namespace zSpace
 
 		return 1;
 	}
+	ZSPACE_EXTERNAL_INLINE int ext_meshUtil_getPlanarityDeviationPerFace(zExtMesh& objMesh, zExtDoubleArray& outPlanarityDevs, int type, bool colorFaces , double tolerance )
+	{
+		try
+		{
+			zDoubleArray devs;
+			zFnMesh fn(*objMesh.extPointer);
+			zPlanarSolverType solverType;
+			if (type == 0)
+			{
+				solverType = zPlanarSolverType::zQuadPlanar;
+			}
+			else
+			{
+				solverType = zPlanarSolverType::zVolumePlanar;
+			}
+			fn.getPlanarityDeviationPerFace(devs, solverType, colorFaces, tolerance);
+			outPlanarityDevs = zExtDoubleArray(devs);
+		}
+		catch (const std::exception&)
+		{
+			printf("\n Planarity Deviation Check Failed!");
+			return 0;
+		}
+	}
 
+	ZSPACE_EXTERNAL_INLINE int ext_meshUtil_getGaussianCurvature(zExtMesh& objMesh, zExtDoubleArray& outGaussianCurvature )
+	{
+		try
+		{
+			zDoubleArray gaussiancurv;
+			zFnMesh fn(*objMesh.extPointer);
+			fn.getGaussianCurvature(gaussiancurv);
+			outGaussianCurvature = zDoubleArray(gaussiancurv);
+		}
 
+		catch (const std::exception&)
+		{
+			printf("\n Check GaussianCurvature Failed!");
+			return 0;
+		}
+	}
 }
