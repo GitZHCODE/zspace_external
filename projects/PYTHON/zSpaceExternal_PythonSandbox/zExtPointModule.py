@@ -1,7 +1,6 @@
 import ctypes
 
-from .dll_module import DLLConfig
-from zExtMesh import zExtMesh
+from DLLConfigModule import DLLConfig
 
 DLLFile = DLLConfig.zExternalDLLFile
 
@@ -20,14 +19,14 @@ class zExtPointArray(ctypes.Structure):
 
 #---GET METHODS
 
-ext_point_getItemsFromArray = DLLfile.ext_point_getItemsFromArray
+ext_point_getItemsFromArray = DLLFile.ext_point_getItemsFromArray
 ext_point_getItemsFromArray.restype = None
 ext_point_getItemsFromArray.argtypes = [ctypes.POINTER(zExtPointArray), ctypes.POINTER(zExtPoint)]
 
 #---SET METHODS
 
-ext_point_getItemsFromArray = DLLfile.ext_point_getItemsFromArray
+ext_point_getItemsFromArray = DLLFile.ext_point_getItemsFromArray
 ext_point_getItemsFromArray.restype = ctypes.c_int
-ext_point_getItemsFromArray.argtypes = [ctypes.POINTER(zExtMesh),ctypes.POINTER(zExtPoint), ctypes.c_int]
+ext_point_getItemsFromArray.argtypes = [ctypes.POINTER(zExtPoint),ctypes.POINTER(zExtPointArray), ctypes.c_int]
 
 

@@ -1,9 +1,15 @@
 import ctypes
-import DLLConfig
+import DLLConfigModule
 import sys
- 
-sys.path.insert(0, 'C:/Users/heba.eiz/source/repos/GitZHCODE/zspace_external/projects/PYTHON/zSpaceExternal_Python/source/zCore')
+import importlib
+import zExtMeshModule
+import zExtColorModule
 
-from zExtColorModule import zExtColor
+#zExtColorModule = importlib.import_module('source.zExtColorModule')
+#zExtColorModule = importlib.import_module('source.zExtColorModule')
+
+#color = zExtColorModule.zExtColor
+
+
 
 print("\n Running Python")
