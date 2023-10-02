@@ -13,35 +13,20 @@ namespace zSpace {
         static void Main(string[] args) {
             Console.WriteLine("C# sandbox");
 
-            //string dir = Environment.CurrentDirectory;
-            string dir = System.Runtime.InteropServices.RuntimeEnvironment.GetRuntimeDirectory();
-            
-            //Console.WriteLine(string.Format("current Dir {0}", dir));
-
-            //Environment.SetEnvironmentVariable("ovDir", "C:/Users/heba.eiz/AppData/Local/ov/pkg/connectsample-203.0.0/_build/windows-x86_64/release/");
-            string path = null;
-
-            Console.WriteLine("GetEnvironmentVariables: ");
-            foreach (DictionaryEntry de in Environment.GetEnvironmentVariables())
-                Console.WriteLine("  {0} = {1}", de.Key, de.Value);
-
-            string usdFolderPath = "C:/Users/heba.eiz/source/repos/GitZHCODE/zspace_external/projects/CSHARP/zSpaceExternal_CSharpSandbox/zSpaceExternal_CSharpSandbox/bin/Release/ov";
+          
+            string usdFolderPath = "ov";
             SetDllDirectory(usdFolderPath);
 
-            //string zSpaceFolderPath = "C:/Users/heba.eiz/source/repos/GitZHCODE/zspace_external/projects/CSHARP/zSpaceExternal_CSharpSandbox/zSpaceExternal_CSharpSandbox/bin/Release/zspace";
-            //SetDllDirectory(zSpaceFolderPath);
 
 
             zExtJSON j1 = new zExtJSON();
             j1.CreateJson();
-            j1.ReadJsonFile(path);
 
-            //testWriteJsonToJson();
 
             Console.WriteLine("\n Press any key to exit...");
             Console.ReadKey();
         }
-        string usdDir1 = "C:/Users/heba.eiz/AppData/Local/ov/pkg/connectsample-203.0.0/_build/windows-x86_64/release/PYTHON310.DLL";
+        
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool SetDllDirectory(string lpPathName);

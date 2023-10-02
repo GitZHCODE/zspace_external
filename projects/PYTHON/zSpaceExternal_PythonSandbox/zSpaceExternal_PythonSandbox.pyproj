@@ -34,13 +34,16 @@
     <OutputPath>bin\Release_DLL_OV_2\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="DLLConfig.py" />
+    <Compile Include="DLLConfigModule.py" />
+    <Compile Include="zExtJSONModule.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="source\x-zExtMesh.py" />
-    <Compile Include="source\zCore\x-zExtUtilsCore.py" />
-    <Compile Include="source\zCore\zExtColorModule.py" />
-    <Compile Include="source\zCore\zExtMeshModule.py" />
-    <Compile Include="source\zCore\zExtPointModule.py" />
-    <Compile Include="source\zCore\zExtTransformModule.py" />
+    <Compile Include="zExtUtilsCoreModule.py" />
+    <Compile Include="zExtColorModule.py" />
+    <Compile Include="zExtMeshModule.py" />
+    <Compile Include="zExtPointModule.py" />
+    <Compile Include="zExtTransformModule.py" />
     <Compile Include="zSpaceExternal_PythonSandbox.py" />
   </ItemGroup>
   <ItemGroup>
