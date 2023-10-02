@@ -1,4 +1,6 @@
 import ctypes
+import os
+
 
 
 class DLLConfig:

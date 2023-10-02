@@ -5,8 +5,8 @@
       <Configuration>Debug_DLL</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Release_DLL|x64">
-      <Configuration>Release_DLL</Configuration>
+    <ProjectConfiguration Include="Release_DLL_OV|x64">
+      <Configuration>Release_DLL_OV</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Release_Make|x64">
@@ -23,6 +23,10 @@
     </ProjectConfiguration>
     <ProjectConfiguration Include="Release|x64">
       <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="TEMP|x64">
+      <Configuration>TEMP</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
@@ -53,11 +57,11 @@
     <ClInclude Include="..\..\..\cpp\headers\zCore\zExtPoint.h" />
     <ClInclude Include="..\..\..\cpp\headers\zCore\zExtTransform.h" />
     <ClInclude Include="..\..\..\cpp\headers\zToolsets\data\zExtKMeans.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DLL|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DLL_OV|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="..\..\..\cpp\headers\zToolsets\digifab\zExtRobot.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DLL|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DLL_OV|x64'">true</ExcludedFromBuild>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -81,16 +85,16 @@
     <ClCompile Include="..\..\..\cpp\source\zCore\zExtUSD.cpp" />
     <ClCompile Include="..\..\..\cpp\source\zCore\zExtUtilsCore.cpp" />
     <ClCompile Include="..\..\..\cpp\source\zCore\zExtGraph.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DLL|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DLL_OV|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\..\cpp\source\zCore\zExtMesh.cpp" />
     <ClCompile Include="..\..\..\cpp\source\zCore\zExtPoint.cpp" />
     <ClCompile Include="..\..\..\cpp\source\zCore\zExtTransform.cpp" />
     <ClCompile Include="..\..\..\cpp\source\zToolsets\data\zExtKMeans.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DLL|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DLL_OV|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\..\cpp\source\zToolsets\digiFab\zExtRobot.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DLL|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DLL_OV|x64'">true</ExcludedFromBuild>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -125,7 +129,7 @@
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_DLL|x64'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_DLL_OV|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
@@ -166,9 +170,10 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="zExternalPropertySheet.props" />
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_DLL|x64'" Label="PropertySheets">
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_DLL_OV|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="zExternalPropertySheet.props" />
+    <Import Project="OV_203.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_Make|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -189,7 +194,7 @@
     <TargetExt>$(TargetExt)</TargetExt>
     <OutDir>$(SolutionDir)cpp\compiled\UnrealLib</OutDir>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_DLL|x64'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_DLL_OV|x64'">
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath); </IncludePath>
     <OutDir>$(SolutionDir)cpp\compiled\dll</OutDir>
     <TargetExt>$(TargetExt)</TargetExt>
@@ -248,7 +253,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_DLL|x64'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_DLL_OV|x64'">
     <ClCompile>
       <WarningLevel>TurnOffAllWarnings</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
@@ -256,15 +261,15 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(zspacecoreDir)/cpp/Depends/Armadillo;$(zspacecoreDir)/cpp/Depends;$(zspacecoreDir);$(zspacecoreDir)/cpp;$(zspacetoolsetsDir);$(zspacetoolsetsDir)/cpp;$(SolutionDir)cpp;$(zspacecoreDir)/cpp/Depends/alglib/cpp/src/;$(iglIncludeDir);$(iglBuildDir)\_deps\eigen-src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(zspacecoreDir)/cpp/Depends/Armadillo;$(zspacecoreDir)/cpp/Depends;$(zspacecoreDir);$(zspacecoreDir)/cpp;$(zspacetoolsetsDir);$(zspacetoolsetsDir)/cpp;$(SolutionDir)cpp;$(zspacecoreDir)/cpp/Depends/alglib/cpp/src/;$(iglIncludeDir);$(iglBuildDir)\_deps\eigen-src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;IGL_STATIC_LIBRARY;_WINDLL;ZSPACE_EXTERNAL_DYNAMIC_LIBRARY;ZSPACE_TOOLSETS_STATIC_LIBRARY;ZSPACE_STATIC_LIBRARY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(zspacecoreDir)/cpp/depends/OPENGL/lib;$(zspacecoreDir)/cpp/depends/SQLITE/lib;$(zspacecoreDir)/cpp/compiled/dll;$(zspacecoreDir)/cpp/Depends/freeglut</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(iglBuildDir)\lib\igl.lib;$(zSpaceCoreLibDir)\zSpace_Core.lib;$(zSpaceCoreLibDir)\zSpace_Interface.lib;$(zSpaceToolsetsLibDir)\zSpace_Toolsets.lib;sqlite3.lib;opengl32.lib;glew32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(zspacecoreDir)/cpp/depends/OPENGL/lib;$(zspacecoreDir)/cpp/depends/SQLITE/lib;$(zspacecoreDir)/cpp/compiled/$(Configuration)/;$(zspacecoreDir)/cpp/Depends/freeglut;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(iglBuildDir)\lib\igl.lib;$(zSpaceCoreLibDir)\$(Configuration)\zSpace_Core.lib;$(zSpaceCoreLibDir)\$(Configuration)\zSpace_Interface.lib;$(zSpaceToolsetsLibDir)\$(Configuration)\zSpace_Toolsets.lib;sqlite3.lib;opengl32.lib;glew32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_Make|x64'">

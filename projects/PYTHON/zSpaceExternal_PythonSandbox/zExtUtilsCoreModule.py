@@ -1,8 +1,8 @@
-import DLLConfig
+from DLLConfigModule import DLLConfig
 import ctypes
 
 # Load the DLL file that contains the C++ external methods
-DLLFile = DLLConfig.DLLConfig.zExternalDLLFile
+DLLFile = DLLConfig.zExternalDLLFile
 
 class zExtIntArray(ctypes.Structure):
     _fields_ = [
@@ -139,14 +139,6 @@ class zExtString(ctypes.Structure):
         ("arrayCount", ctypes.c_int)
     ]
 
-    def getString(self):
-        ch = (ctypes.c_char * self.arrayCount)()
-        ext_string_getCharArrayFromExtString(ctypes.byref(self), ch)
-        return ctypes.string_at(ch)
-
-    def getArrayCount(self):
-        return self.arrayCount
-
 
 class zExtStringArray(ctypes.Structure):
     _fields_ = [
@@ -154,44 +146,12 @@ class zExtStringArray(ctypes.Structure):
         ("arrayCount", ctypes.c_int)
     ]
 
-    def getItems(self):
-        items = []
-        for i in range(self.arrayCount):
-            length = ext_string_getItemFromArrayCharLength(ctypes.byref(self), i)
-            ch = (ctypes.c_char * length)()
-            ext_string_getItemFromArrayChar(ctypes.byref(self), i, ch)
-            items.append(ctypes.string_at(ch))
-        return items
-
-    def setItems(self, input):
-        ext_string_setItemsFromArray(ctypes.byref(self), input, len(input))
-
-    def getArrayCount(self):
-        return self.arrayCount
-
 
 class zExtStringArray2D(ctypes.Structure):
     _fields_ = [
         ("pointer", ctypes.c_void_p),
         ("arrayCount", ctypes.c_int)
     ]
-
-    def getItems(self):
-        items = []
-        temp = (zExtStringArray * self.arrayCount)()
-        ext_string_getItemsFromArray2D(ctypes.byref(self), temp)
-        for i in range(self.arrayCount):
-            items.append(temp[i].getItems())
-        return items
-
-    def setItems(self, input):
-        temp = (zExtStringArray * len(input))()
-        for i in range(len(input)):
-            temp[i].setItems(input[i])
-        ext_string_setItemsFromArray2D(ctypes.byref(self), temp, len(input))
-
-    def getArrayCount(self):
-        return self.arrayCount
 
 
 class zExtBoolArray(ctypes.Structure):
@@ -293,34 +253,21 @@ ext_string_getItemsFromArray.argtypes = [
     ctypes.POINTER(zExtString)
 ]
 
-ext_string_getItemFromArray = DLLFile.ext_string_getItemFromArray
-ext_string_getItemFromArray.restype = ctypes.c_char_p
-ext_string_getItemFromArray.argtypes = [
+ext_string_setItemsFromArray = DLLFile.ext_string_setItemsFromArray
+ext_string_setItemsFromArray.restype = ctypes.c_char_p
+ext_string_setItemsFromArray.argtypes = [
     zExtStringArray,
+    ctypes.POINTER(zExtString),
     ctypes.c_int
-]
-
-ext_string_getItemFromArrayCharLength = DLLFile.ext_string_getItemFromArrayCharLength
-ext_string_getItemFromArrayCharLength.restype = ctypes.c_int
-ext_string_getItemFromArrayCharLength.argtypes = [
-    zExtStringArray,
-    ctypes.c_int
-]
-
-ext_string_getItemFromArrayChar = DLLFile.ext_string_getItemFromArrayChar
-ext_string_getItemFromArrayChar.restype = None
-ext_string_getItemFromArrayChar.argtypes = [
-    zExtStringArray,
-    ctypes.c_int,
-    ctypes.c_char_p
 ]
 
 ext_string_getCharArrayFromExtString = DLLFile.ext_string_getCharArrayFromExtString
 ext_string_getCharArrayFromExtString.restype = ctypes.c_int
 ext_string_getCharArrayFromExtString.argtypes = [
-    zExtString,
+    zExtStringArray,
     ctypes.c_char_p
 ]
+
 
 # zExtStringArray2D
 ext_string_getItemsFromArray2D = DLLFile.ext_string_getItemsFromArray2D

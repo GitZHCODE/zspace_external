@@ -197,6 +197,8 @@ namespace zSpace
 
 		ZSPACE_EXTERNAL int ext_meshUtil_catmullclark(zExtMesh& objMesh, int level, bool fixedCorner);
 
+		ZSPACE_EXTERNAL int ext_meshUtil_checkPlanarity(zExtMesh& objMesh, float tolerance, int planarityType, bool colorFaces,  zExtDoubleArray& outDeviations);
+		ZSPACE_EXTERNAL int ext_meshUtil_getFaceColor(zExtMesh& objMesh, zExtColorArray& extPointArray);
 
 
 	}

@@ -23,10 +23,11 @@ CALL "$(SolutionDir)scripts\"zspace_includedeploy.bat "$(SolutionDir)\cpp\header
 REM CALL "$(SolutionDir)scripts\"zspace_includedeploy.bat "$(SolutionDir)\cpp\depends" "$(zspaceDeployDir)\depends"</Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>xcopy /Y "$(zspacecoreDir)\cpp\compiled\lib\*.lib" "$(zSpaceCoreLibDir)"
-xcopy /Y "$(zspacetoolsetsDir)\cpp\compiled\lib\*.lib" "$(zSpaceToolsetsLibDir)"
+      <Command>xcopy /Y "$(zspacecoreDir)\cpp\compiled\$(Configuration)\*.lib" "$(zSpaceCoreLibDir)\$(Configuration)\"
+xcopy /Y "$(zspacecoreDir)\cpp\compiled\$(Configuration)\*.dll" "$(zSpaceCoreLibDir)\$(Configuration)\"
 
-CALL "$(SolutionDir)scripts\"zspace_libdeploy.bat "($(zspacecoreDir)\cpp\compiled\lib)" "$(zSpaceCoreLibDir)"</Command>
+xcopy /Y "$(zspacetoolsetsDir)\cpp\compiled\Release_DLL_OV\*.lib" "$(zSpaceToolsetsLibDir)\Release_DLL_OV\"
+xcopy /Y "$(zspacetoolsetsDir)\cpp\compiled\Release_DLL_OV\*.dll" "$(zSpaceToolsetsLibDir)\Release_DLL_OV\"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

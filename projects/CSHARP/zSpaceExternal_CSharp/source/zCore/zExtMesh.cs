@@ -178,6 +178,11 @@ namespace zSpace {
                 return chk == 1;
         }
 
+        public void checkPlanrityPerFace(float tolerance, int planarityType, bool colorMesh, out double[] deviation) {
+            zExtDoubleArray devs = new zExtDoubleArray();
+            zNativeMethods.ext_meshUtil_checkPlanarity(ref this, tolerance, planarityType, colorMesh, ref devs);
+            deviation = devs.getItems();
+        }
 
         //#region External Methods
 
@@ -246,6 +251,11 @@ namespace zSpace {
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         internal static extern int ext_meshUtil_setMeshVertexColors(ref zExtMesh objMesh, in zExtColorArray colorArray);
+
+        [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int ext_meshUtil_checkPlanarity(ref zExtMesh objMesh, float tolerance, int planarityType,
+            [MarshalAs(UnmanagedType.Bool)] bool colorFaces, 
+            ref zExtDoubleArray outDeviations);
 
 
 
