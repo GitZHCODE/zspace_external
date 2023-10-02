@@ -35,10 +35,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="DLLConfigModule.py" />
-    <Compile Include="zExtJSONModule.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="source\x-zExtMesh.py" />
+
+    <Compile Include="x-zExtMesh.py" />
+
     <Compile Include="zExtUtilsCoreModule.py" />
     <Compile Include="zExtColorModule.py" />
     <Compile Include="zExtMeshModule.py" />

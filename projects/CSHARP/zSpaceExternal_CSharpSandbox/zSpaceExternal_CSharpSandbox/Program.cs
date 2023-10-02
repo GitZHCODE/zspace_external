@@ -13,20 +13,41 @@ namespace zSpace {
         static void Main(string[] args) {
             Console.WriteLine("C# sandbox");
 
-          
+            //string dir = Environment.CurrentDirectory;
+            string dir = System.Runtime.InteropServices.RuntimeEnvironment.GetRuntimeDirectory();
+            
+            //Console.WriteLine(string.Format("current Dir {0}", dir));
+
+            //Environment.SetEnvironmentVariable("ovDir", "C:/Users/heba.eiz/AppData/Local/ov/pkg/connectsample-203.0.0/_build/windows-x86_64/release/");
+            string path = null;
+
+
+            Console.WriteLine("GetEnvironmentVariables: ");
+            foreach (DictionaryEntry de in Environment.GetEnvironmentVariables())
+                Console.WriteLine("  {0} = {1}", de.Key, de.Value);
+
+            //string usdFolderPath = "C:/Users/heba.eiz/source/repos/GitZHCODE/zspace_external/projects/CSHARP/zSpaceExternal_CSharpSandbox/zSpaceExternal_CSharpSandbox/bin/Release/ov";
             string usdFolderPath = "ov";
             SetDllDirectory(usdFolderPath);
 
+            //string zSpaceFolderPath = "C:/Users/heba.eiz/source/repos/GitZHCODE/zspace_external/projects/CSHARP/zSpaceExternal_CSharpSandbox/zSpaceExternal_CSharpSandbox/bin/Release/zspace";
+            //SetDllDirectory(zSpaceFolderPath);
 
 
-            zExtJSON j1 = new zExtJSON();
-            j1.CreateJson();
+            //zExtJSON j1 = new zExtJSON();
+            //j1.CreateJson();
+            //j1.ReadJsonFile(path);
+
+            testMesh1();
+            //testWriteJsonToJson();
 
 
             Console.WriteLine("\n Press any key to exit...");
             Console.ReadKey();
         }
-        
+
+        //string usdDir1 = "C:/Users/heba.eiz/AppData/Local/ov/pkg/connectsample-203.0.0/_build/windows-x86_64/release/PYTHON310.DLL";
+
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool SetDllDirectory(string lpPathName);
@@ -322,6 +343,37 @@ namespace zSpace {
 
         }
 
+        static void testMesh1() {
+            zExtPoint[] pts = new zExtPoint[4];
+            pts[0] = new zExtPoint(0, 0, 0);
+            pts[1] = new zExtPoint(0, 1, 0);
+            pts[2] = new zExtPoint(1, 1, 0);
+            pts[3] = new zExtPoint(1, 0, 1);
+
+            zExtPointArray ptarray = new zExtPointArray(pts);
+
+            zExtIntArray counts = new zExtIntArray();
+            counts.setItems(new int[] { 4 });
+
+            zExtIntArray connects = new zExtIntArray();
+            connects.setItems(new int[] { 0, 1, 2, 3 });
+
+            zExtMesh newmesh = new zExtMesh();
+            newmesh.createMesh(ptarray, counts, connects);
+
+            Console.WriteLine("\n  newMesh count = " + newmesh.getVCount());
+
+            double[] devs;
+            newmesh.checkPlanrityPerFace(0.01f, 0, false, out devs);
+
+            foreach (var item in devs) {
+                Console.WriteLine(item);
+            }
+
+
+
+
+        }
 
     }
 }

@@ -1,6 +1,6 @@
-import ctypes
-from DLLConfigModule import DLLConfig
 
+from DLLConfigModule import DLLConfig
+import ctypes
 
 # Load the DLL file that contains the C++ external methods
 DLLFile = DLLConfig.zExternalDLLFile
@@ -246,6 +246,7 @@ ext_int_getItemsFromArray.argtypes = [
     ctypes.POINTER(ctypes.c_int)
 ]
 
+
 ext_int_setItemsFromArray = DLLFile.ext_int_setItemsFromArray
 ext_int_setItemsFromArray.restype = None
 ext_int_setItemsFromArray.argtypes = [
@@ -262,6 +263,7 @@ ext_int_getItemsFromArray2D.argtypes = [
     ctypes.POINTER(zExtIntArray)
 ]
 
+
 ext_int_setItemsFromArray2D = DLLFile.ext_int_setItemsFromArray2D
 ext_int_setItemsFromArray2D.restype = None
 ext_int_setItemsFromArray2D.argtypes = [
@@ -270,7 +272,6 @@ ext_int_setItemsFromArray2D.argtypes = [
      ctypes.c_int
 ]
 
-
 # zExtFloatArray
 ext_float_getItemsFromArray = DLLFile.ext_float_getItemsFromArray
 ext_float_getItemsFromArray.restype = None
@@ -278,6 +279,7 @@ ext_float_getItemsFromArray.argtypes = [
     zExtFloatArray,
     ctypes.POINTER(ctypes.c_float)
 ]
+
 
 ext_float_setItemsFromArray = DLLFile.ext_float_setItemsFromArray
 ext_float_setItemsFromArray.restype = None
@@ -294,6 +296,7 @@ ext_float_getItemsFromArray2D.argtypes = [
     zExtFloatArray2D,
     ctypes.POINTER(zExtFloatArray)
 ]
+
 
 ext_float_setItemsFromArray2D = DLLFile.ext_float_setItemsFromArray2D
 ext_float_setItemsFromArray2D.restype = None
@@ -319,7 +322,6 @@ ext_double_setItemsFromArray.argtypes = [
     ctypes.c_int
 ]
 
-
 # zExtDoubleArray2D
 ext_double_getItemsFromArray2D = DLLFile.ext_double_getItemsFromArray2D
 ext_double_getItemsFromArray2D.restype = None
@@ -327,6 +329,7 @@ ext_double_getItemsFromArray2D.argtypes = [
     zExtDoubleArray2D,
     ctypes.POINTER(zExtDoubleArray)
 ]
+
 
 ext_double_setItemsFromArray2D = DLLFile.ext_double_setItemsFromArray2D
 ext_double_setItemsFromArray2D.restype = None
@@ -363,10 +366,19 @@ ext_string_getItemsFromArray.argtypes = [
 ]
 ext_string_setItemsFromArray = DLLFile.ext_string_setItemsFromArray
 ext_string_setItemsFromArray.restype = None
+
 ext_string_setItemsFromArray.argtypes = [
     zExtStringArray,
     ctypes.POINTER(zExtString),
     ctypes.c_int
+]
+
+
+ext_string_getCharArrayFromExtString = DLLFile.ext_string_getCharArrayFromExtString
+ext_string_getCharArrayFromExtString.restype = ctypes.c_int
+ext_string_getCharArrayFromExtString.argtypes = [
+    zExtStringArray,
+    ctypes.c_char_p
 ]
 
 
@@ -377,6 +389,7 @@ ext_string_getItemsFromArray2D.argtypes = [
     zExtStringArray2D,
     ctypes.POINTER(zExtStringArray)
 ]
+
 
 ext_string_setItemsFromArray2D = DLLFile.ext_string_setItemsFromArray2D
 ext_string_setItemsFromArray2D.restype = None
@@ -396,6 +409,7 @@ ext_bool_getItemsFromArray.argtypes = [
     ctypes.POINTER(ctypes.c_bool)
 ]
 
+
 ext_bool_setItemsFromArray = DLLFile.ext_bool_setItemsFromArray
 ext_bool_setItemsFromArray.restype = None
 ext_bool_setItemsFromArray.argtypes = [
@@ -412,6 +426,7 @@ ext_bool_getItemsFromArray2D.argtypes = [
     ctypes.POINTER(zExtBoolArray)
 ]
 
+
 ext_bool_setItemsFromArray2D = DLLFile.ext_bool_setItemsFromArray2D
 ext_bool_setItemsFromArray2D.restype = None
 ext_bool_setItemsFromArray2D.argtypes = [
@@ -420,5 +435,4 @@ ext_bool_setItemsFromArray2D.argtypes = [
     ctypes.c_int
 
 ]
-
 

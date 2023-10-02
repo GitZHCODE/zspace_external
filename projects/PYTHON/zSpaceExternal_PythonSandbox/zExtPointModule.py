@@ -2,7 +2,6 @@ import ctypes
 
 from DLLConfigModule import DLLConfig
 
-
 DLLFile = DLLConfig.zExternalDLLFile
 
 class zExtPoint(ctypes.Structure):
@@ -29,5 +28,6 @@ ext_point_getItemsFromArray.argtypes = [ctypes.POINTER(zExtPointArray), ctypes.P
 ext_point_getItemsFromArray = DLLFile.ext_point_getItemsFromArray
 ext_point_getItemsFromArray.restype = ctypes.c_int
 ext_point_getItemsFromArray.argtypes = [ctypes.POINTER(zExtPointArray),ctypes.POINTER(zExtPoint), ctypes.c_int]
+
 
 

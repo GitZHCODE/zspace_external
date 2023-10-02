@@ -7,7 +7,7 @@ import zExtMeshModule
 from zExtMeshModule import zExtMesh
 import zExtUtilsCoreModule
 import os
-#sys.path.insert(0, 'C:/Users/Keerti.Manney/source/repos/GitZHCODE/zspace_external/projects/PYTHON/zSpaceExternal_Python/source/zCore')
+
 
 from zExtColorModule import zExtColor
 

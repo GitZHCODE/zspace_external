@@ -989,6 +989,24 @@ namespace zSpace
 		}
 	}
 
+	ZSPACE_EXTERNAL int ext_meshUtil_checkPlanarity(zExtMesh& objMesh, float tolerance, int planarityType, bool colorFaces, zExtDoubleArray& outDeviations)
+	{
+		try
+		{
+			zFnMesh fn(*objMesh.extPointer);
+			outDeviations.pointer = new zDoubleArray();
+			fn.getPlanarityDeviationPerFace(*outDeviations.pointer, planarityType == 0 ? zPlanarSolverType::zQuadPlanar : zPlanarSolverType::zVolumePlanar, colorFaces, tolerance);
+			outDeviations.updateAttributes();
+			objMesh.updateAttributes();
+			return 1;
+		}
+		catch (const std::exception&)
+		{
+			printf("\n planarity failed!");
+			return 0;
+		}
+	}
+
 
 
 	ZSPACE_EXTERNAL_INLINE void ext_meshUtil_meshTest(int outfCounts)
