@@ -12,6 +12,12 @@ namespace zSpace {
         private int vCount;
         private int fCount;
 
+        zExtMesh(string s) {
+
+            o_mesh = IntPtr.Zero;
+            vCount = 10;
+            fCount = 10;
+        }
         public zExtPoint[] getMeshPoints() {
             zExtPointArray mid;
             zNativeMethods.ext_meshUtil_getMeshPosition(ref this, out mid);
@@ -178,6 +184,11 @@ namespace zSpace {
                 return chk == 1;
         }
 
+        public bool createMesh(string filePath) {
+            int success = zNativeMethods.ext_meshUtil_createMeshFromFile(filePath, out this);
+            return success == 1;
+        }
+
         public void checkPlanrityPerFace(float tolerance, int planarityType, bool colorMesh, out double[] deviation) {
             zExtDoubleArray devs = new zExtDoubleArray();
             zNativeMethods.ext_meshUtil_checkPlanarity(ref this, tolerance, planarityType, colorMesh, ref devs);
@@ -219,7 +230,11 @@ namespace zSpace {
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         internal static extern void ext_meshUtil_createMeshOBJFromRawArray(double[] _vertexPositions, int[] _polyCounts, int[] _polyConnects, int numVerts, int numFaces, ref zExtMesh out_mesh);
 
-        
+
+        [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int ext_meshUtil_createMeshFromFile([MarshalAs(UnmanagedType.LPStr)] string inputPath, out zExtMesh out_mesh);
+
+
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         internal static extern int ext_meshUtil_getMeshPositionRaw(zExtMesh objMesh,
             [MarshalAs(UnmanagedType.LPArray), In, Out] float[] outVPostions,

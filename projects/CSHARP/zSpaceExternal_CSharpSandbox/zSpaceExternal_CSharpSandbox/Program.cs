@@ -39,6 +39,7 @@ namespace zSpace {
             //j1.ReadJsonFile(path);
 
             testMesh1();
+            //testJSONSDF();
             //testWriteJsonToJson();
 
 
@@ -344,6 +345,13 @@ namespace zSpace {
         }
 
         static void testMesh1() {
+
+            string path = "C:/Users/heba.eiz/source/repos/GitZHCODE/zspace_alice/ALICE_PLATFORM/x64/Release/EXE/data/cube-2.obj";
+            zExtMesh mesh = new zExtMesh();
+            bool s = mesh.createMesh(path);
+            Console.WriteLine(string.Format("mesh read {0}", s));
+
+
             zExtPoint[] pts = new zExtPoint[4];
             pts[0] = new zExtPoint(0, 0, 0);
             pts[1] = new zExtPoint(0, 1, 0);
@@ -375,5 +383,18 @@ namespace zSpace {
 
         }
 
+        static void testJSONSDF() {
+            string readPath = "//zaha-hadid.com/Data/Projects/1453_CODE/1453___research/res_heba/0-Projects/Striatus/Blocks/2023-01-11/200_Final/Export11-4/JSONWrite/Block_17-updatedManually.json";
+            zExtJSON json = new zExtJSON();
+            json.CreateJson();
+            json.ReadJsonFile(readPath);
+            var keys = json.AttributeKeys;
+            var types = json.AttributeTypes;
+
+            printJsonDate(json, false);
+            
+
+
+        }
     }
 }

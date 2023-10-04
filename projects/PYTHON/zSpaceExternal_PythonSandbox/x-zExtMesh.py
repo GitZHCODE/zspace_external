@@ -21,7 +21,7 @@
 #    ctypes.POINTER(zExtMesh)
 #]
 
-#DLLFile.ext_meshUtil_createMeshOBJFromFile.argtypes = [
+#DLLFile.ext_meshUtil_createMeshFromFile.argtypes = [
 #    ctypes.c_char_p,
 #    ctypes.POINTER(zExtMesh)
 #]
