@@ -130,7 +130,7 @@ namespace zSpace
 		 *  \param [in]		_vertexPositions			-File path
 		 *  \param [in,out] out_mesh					-Reference to the zExtMesh object to be created.
 		 */
-		ZSPACE_EXTERNAL void ext_meshUtil_createMeshOBJFromFile(char* filePath, zExtMesh& out_mesh);
+		ZSPACE_EXTERNAL int ext_meshUtil_createMeshFromFile(char* filePath, zExtMesh& out_mesh);
 
 		/*! \brief Creates a new zExtMesh object from vertex and face data.
 		*  \param [in]		_vertexPositions			-File path

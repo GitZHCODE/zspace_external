@@ -56,9 +56,9 @@ ext_meshUtil_setMeshVertexColors = DLLFile.ext_meshUtil_setMeshVertexColors
 ext_meshUtil_setMeshVertexColors.restype = ctypes.c_int
 ext_meshUtil_setMeshVertexColors.argtypes = [ctypes.POINTER(zExtMesh), ctypes.POINTER(zExtColorArray)]
 
-ext_meshUtil_createMeshOBJFromFile = DLLFile.ext_meshUtil_createMeshOBJFromFile
-ext_meshUtil_createMeshOBJFromFile.restype = None
-ext_meshUtil_createMeshOBJFromFile.argtypes = [ctypes.c_char_p, ctypes.POINTER(zExtMesh)]
+ext_meshUtil_createMeshFromFile = DLLFile.ext_meshUtil_createMeshFromFile
+ext_meshUtil_createMeshFromFile.restype = None
+ext_meshUtil_createMeshFromFile.argtypes = [ctypes.c_char_p, ctypes.POINTER(zExtMesh)]
 
 
 ext_meshUtil_exportToJson = DLLFile.ext_meshUtil_exportToJson

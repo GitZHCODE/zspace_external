@@ -51,6 +51,7 @@ namespace zSpace {
         //}
 
         bool ReadJSONAttribute2<T>(string attributeKey, out T outAttributeValue) {
+            
             outAttributeValue = default(T);
             if (typeof(T) == typeof(int)) {
                 int output;
@@ -558,11 +559,19 @@ namespace zSpace {
                         return true;
                     }
                     break;
+                case nameof(zExtJSON):
+                    zExtJSON json;
+                    int jsonArraySuccess = zNativeMethods.ext_json_readJSONAttributeJSON(ref this, attributeKey, out json);
+                    if (jsonArraySuccess == 1) {
+                        outAttributeValue = json;
+                        return true;
+                    }
+                    break;
             }
             outAttributeValue = null;
             return false;
-        }
 
+        }
         public bool WriteJSONAttribute<T>(string attributeKey, T attributeValue) {
             switch (typeof(T).Name) {
                 case nameof(Int32):
@@ -777,9 +786,16 @@ namespace zSpace {
             return chk == 1 ? true : false;
         }
         public void CreateJson() {
+
+            if (pointer == IntPtr.Zero) {
+
+            }
+
             Console.WriteLine("c# create json");
             zNativeMethods.ext_json_createJson(ref this);
         }
+
+         
         public bool SetMesh(in zExtMesh mesh) {
             int chk = zNativeMethods.ext_json_setMeshToJson(ref this, in mesh);
             return chk == 1 ? true : false;
@@ -884,6 +900,12 @@ namespace zSpace {
             ref zExtJSON extJSON,
             [MarshalAs(UnmanagedType.LPStr)] string attributeKey,
             out zExtBoolArray2D outAttributeValue);
+
+        [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int ext_json_readJSONAttributeJSON(
+            ref zExtJSON extJSON,
+            [MarshalAs(UnmanagedType.LPStr)] string attributeKey,
+            out zExtJSON outAttributeValue);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         public static extern int ext_json_writeJSONAttributeInt(

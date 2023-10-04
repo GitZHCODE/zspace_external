@@ -90,47 +90,99 @@ namespace zSpace
 	{
 		zStringArray types;
 		types.clear();
-		for (auto it = pointer->begin(); it != pointer->end(); ++it)
+
+		for (auto& it : pointer->items())
 		{
+			string type = "";
 			try
 			{
 				if (!it.value().is_null())
 				{
 					//int
-					if (it.value().is_number_integer())
-						types.push_back("int");
+					if (it.value().is_number_integer()) 
+						type = "int";
 					else if (it.value().is_array() && it.value().size() > 0 && it.value()[0].is_number_integer())
-						types.push_back("int[]");
+						type = "int[]";
 					else if (it.value().is_array() && it.value().size() > 0 && it.value()[0].is_array() && it.value()[0].size() > 0 && it.value()[0][0].is_number_integer())
-						types.push_back("int[][]");
+						type = "int[][]";
 					//float
 					else if (it.value().is_number_float())
-						types.push_back("float");
+						type = "float";
 					else if (it.value().is_array() && it.value().size() > 0 && it.value()[0].is_number_float())
-						types.push_back("float[]");
+						type = "float[]";
 					else if (it.value().is_array() && it.value().size() > 0 && it.value()[0].is_array() && it.value()[0].size() > 0 && it.value()[0][0].is_number_float())
-						types.push_back("float[][]");
+						type = "float[][]";
+					else if (it.value().is_array() && it.value().size() > 0 && it.value()[0].is_array() && it.value()[0].size() > 0 && it.value()[0][0].is_array(), it.value()[0][0][0].is_number_float())
+						type = "zExtJSON";
 					//bool
 					else if (it.value().is_boolean())
-						types.push_back("bool");
+						type = "bool";
 					else if (it.value().is_array() && it.value().size() > 0 && it.value()[0].is_boolean())
-						types.push_back("bool[]");
+						type = "bool[]";
 					else if (it.value().is_array() && it.value().size() > 0 && it.value()[0].is_array() && it.value()[0].size() > 0 && it.value()[0][0].is_boolean())
-						types.push_back("bool[][]");
+						type = "bool[][]";
 					//string
 					else if (it.value().is_string())
-						types.push_back("string");
+						type = "string";
 					else if (it.value().is_array())
-						types.push_back("string[]");
+						type = "string[]";
 					else if (it.value().is_array() && it.value().size() > 0 && it.value()[0].is_array())
-						types.push_back("string[][]");
+						type = "string[][]";
 				}
 			}
 			catch (const json::exception&)
 			{
-				types.push_back("TYPE UNIDENTIFIED");
+				//type = "TYPE UNIDENTIFIED";
+				type = "string";
+
 			}
+
+			printf("\n item key and type %s - %s", it.key().c_str(), type);
+			types.push_back(type);
 		}
+
+
+		//for (auto it = pointer->begin(); it != pointer->end(); ++it)
+		//{
+		//	try
+		//	{
+		//		if (!it.value().is_null())
+		//		{
+		//			//int
+		//			if (it.value().is_number_integer())
+		//				types.push_back("int");
+		//			else if (it.value().is_array() && it.value().size() > 0 && it.value()[0].is_number_integer())
+		//				types.push_back("int[]");
+		//			else if (it.value().is_array() && it.value().size() > 0 && it.value()[0].is_array() && it.value()[0].size() > 0 && it.value()[0][0].is_number_integer())
+		//				types.push_back("int[][]");
+		//			//float
+		//			else if (it.value().is_number_float())
+		//				types.push_back("float");
+		//			else if (it.value().is_array() && it.value().size() > 0 && it.value()[0].is_number_float())
+		//				types.push_back("float[]");
+		//			else if (it.value().is_array() && it.value().size() > 0 && it.value()[0].is_array() && it.value()[0].size() > 0 && it.value()[0][0].is_number_float())
+		//				types.push_back("float[][]");
+		//			//bool
+		//			else if (it.value().is_boolean())
+		//				types.push_back("bool");
+		//			else if (it.value().is_array() && it.value().size() > 0 && it.value()[0].is_boolean())
+		//				types.push_back("bool[]");
+		//			else if (it.value().is_array() && it.value().size() > 0 && it.value()[0].is_array() && it.value()[0].size() > 0 && it.value()[0][0].is_boolean())
+		//				types.push_back("bool[][]");
+		//			//string
+		//			else if (it.value().is_string())
+		//				types.push_back("string");
+		//			else if (it.value().is_array())
+		//				types.push_back("string[]");
+		//			else if (it.value().is_array() && it.value().size() > 0 && it.value()[0].is_array())
+		//				types.push_back("string[][]");
+		//		}
+		//	}
+		//	catch (const json::exception&)
+		//	{
+		//		types.push_back("TYPE UNIDENTIFIED");
+		//	}
+		//}
 		
 
 		

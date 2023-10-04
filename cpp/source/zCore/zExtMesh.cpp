@@ -26,7 +26,8 @@ namespace zSpace
 
 	ZSPACE_EXTERNAL_INLINE zExtMesh::zExtMesh()
 	{
-		//extPointer = new zObjMesh();
+		extPointer = new zObjMesh();
+		updateAttributes();
 	}
 
 	ZSPACE_EXTERNAL_INLINE void zExtMesh::updateAttributes()
@@ -889,23 +890,35 @@ namespace zSpace
 		return 1;
 	}
 
-	ZSPACE_EXTERNAL_INLINE void ext_meshUtil_createMeshOBJFromFile(char* filePath, zExtMesh& out_mesh)
+	ZSPACE_EXTERNAL_INLINE int ext_meshUtil_createMeshFromFile(char* filePath, zExtMesh& out_mesh)
 	{
-		string pathSt(filePath);
-		filesystem::path file_path(pathSt);
-		string fileExtension = file_path.extension().string();
-		transform(fileExtension.begin(), fileExtension.end(), fileExtension.begin(), [](unsigned char c) { return std::tolower(c); });
-
-		zFnMesh fnMesh(*out_mesh.extPointer);
-
-		if (fileExtension == ".obj")
+		try
 		{
-			fnMesh.from(pathSt, zOBJ);
+			string pathSt(filePath);
+			filesystem::path file_path(pathSt);
+			string fileExtension = file_path.extension().string();
+			transform(fileExtension.begin(), fileExtension.end(), fileExtension.begin(), [](unsigned char c) { return std::tolower(c); });
+
+			out_mesh = zExtMesh();
+			zFnMesh fnMesh(*out_mesh.extPointer);
+
+			if (fileExtension == ".obj")
+			{
+				fnMesh.from(pathSt, zOBJ);
+			}
+			else if (fileExtension == ".json")
+			{
+				fnMesh.from(pathSt, zJSON);
+			}
+			out_mesh.updateAttributes();
+			return 1;
+
 		}
-		else if (fileExtension == ".json")
+		catch (const std::exception&)
 		{
-			fnMesh.from(pathSt, zJSON);
+			return 0;
 		}
+		
 	}
 
 	ZSPACE_EXTERNAL_INLINE void ext_meshUtil_exportToJson(zExtMesh& mesh, char* filePath)
@@ -989,7 +1002,7 @@ namespace zSpace
 		}
 	}
 
-	ZSPACE_EXTERNAL int ext_meshUtil_checkPlanarity(zExtMesh& objMesh, float tolerance, int planarityType, bool colorFaces, zExtDoubleArray& outDeviations)
+	ZSPACE_EXTERNAL_INLINE int ext_meshUtil_checkPlanarity(zExtMesh& objMesh, float tolerance, int planarityType, bool colorFaces, zExtDoubleArray& outDeviations)
 	{
 		try
 		{
