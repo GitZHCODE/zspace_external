@@ -21,4 +21,16 @@ namespace zSpace
 
 
 
+	zExtUSD::zExtUSD()
+	{
+		pointer = new UsdPrim();
+		updateAttributes();
+	}
+
+	zExtUSD::zExtUSD(UsdPrim* usd)
+	{
+		pointer = usd;
+
+	}
+
 }

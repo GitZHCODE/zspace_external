@@ -39,6 +39,13 @@ namespace zSpace
 
 	zOmniCore omniCore;
 
+	struct zExtUSD
+	{
+		UsdPrim* pointer;
+		zExtUSD();
+		zExtUSD(UsdPrim *usd);
+		void updateAttributes();
+	};
 
 	ZSPACE_EXTERNAL_C
 	{
