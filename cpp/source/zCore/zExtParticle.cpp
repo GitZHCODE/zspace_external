@@ -16,7 +16,11 @@
 
 namespace zSpace
 {
-
+	ZSPACE_EXTERNAL_INLINE zExtParticle::~zExtParticle()
+	{
+		delete pointer;
+		pointer = nullptr;
+	}
 	ZSPACE_EXTERNAL_INLINE void zExtParticle::updateAttributes()
 	{
 		/*mass = pointer->particle.m;
@@ -36,6 +40,12 @@ namespace zSpace
 
 		velDerivative.pointer = &pointer->particle.derivative.dV;
 		velDerivative.updateAttributes();*/
+	}
+
+	ZSPACE_EXTERNAL_INLINE zExtParticleArray::~zExtParticleArray()
+	{
+		delete pointer;
+		pointer = nullptr;
 	}
 
 }

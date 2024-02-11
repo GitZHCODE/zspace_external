@@ -4,7 +4,8 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>de954a7c-f4e6-4fff-9c1b-8b86f818d2df</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>zSpaceExternal_PythonSandbox.py</StartupFile>
+    <StartupFile>
+    </StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -33,17 +34,24 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
     <OutputPath>bin\Release_DLL_OV_2\</OutputPath>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release_DLL' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+    <OutputPath>bin\Release_DLL\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Realease_DLL_Rh' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+    <OutputPath>bin\Realease_DLL_Rh\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="DLLConfigModule.py" />
-
     <Compile Include="x-zExtMesh.py" />
-
     <Compile Include="zExtUtilsCoreModule.py" />
     <Compile Include="zExtColorModule.py" />
     <Compile Include="zExtMeshModule.py" />
     <Compile Include="zExtPointModule.py" />
     <Compile Include="zExtTransformModule.py" />
-    <Compile Include="zSpaceExternal_PythonSandbox.py" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\zSpaceExternal_Python\zSpaceExternal_Python.pyproj">

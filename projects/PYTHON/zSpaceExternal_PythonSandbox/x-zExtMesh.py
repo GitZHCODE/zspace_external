@@ -36,7 +36,7 @@
 #    ctypes.POINTER(ctypes.c_int)
 #]
 
-#DLLFile.ext_meshUtil_getMeshPosition.argtypes = [
+#DLLFile.ext_meshUtil_getVertexPositions.argtypes = [
 #    zExtMesh,
 #    ctypes.POINTER(ctypes.c_float),
 #    ctypes.POINTER(ctypes.c_float)
@@ -62,7 +62,7 @@
 #    ctypes.POINTER(zExtMesh)
 #]
 
-#DLLFile.ext_meshUtil_getMeshPosition.argtypes = [
+#DLLFile.ext_meshUtil_getVertexPositions.argtypes = [
 #    zExtMesh,
 #    zExtPointArray
 #]
@@ -78,7 +78,7 @@
 #    zExtIntArray
 #]
 
-#DLLFile.ext_meshUtil_catmullclark.argtypes = [
+#DLLFile.ext_meshUtil_smoothMesh.argtypes = [
 #    zExtMesh,
 #    ctypes.c_int,
 #    ctypes.c_bool

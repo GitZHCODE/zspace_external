@@ -35,16 +35,18 @@ using namespace std;
 
 namespace zSpace
 {
-	struct zExtIntArray
+	struct ZSPACE_EXTERNAL zExtIntArray
 	{
-		zIntArray* pointer; /**< A pointer to the array object */
+		zIntArray* pointer = nullptr; /**< A pointer to the array object */
 		int arrayCount; /**< The number of items in the array */
 		zExtIntArray();
 		zExtIntArray(zIntArray a);
 		zExtIntArray(zIntArray* a);
+		~zExtIntArray();
 		/**
 		 * \brief Updates the attributes of the external object
 		 */
+		int checkMemAlloc(bool allocateMemory = true);
 		void updateAttributes();
 		/**
 		 * \brief get items from array
@@ -53,13 +55,16 @@ namespace zSpace
 		void setItems(int* items, int count);
 	};
 
-	struct zExtIntArray2D
+	struct ZSPACE_EXTERNAL zExtIntArray2D
 	{
 		zInt2DArray* pointer; /**< A pointer to the array object */
 		int arrayCount; /**< The number of items in the array */
 		zExtIntArray2D();
 		zExtIntArray2D(zInt2DArray a);
 		zExtIntArray2D(zInt2DArray* a);
+		~zExtIntArray2D();
+
+		int checkMemAlloc(bool allocateMemory = true);
 
 		/**
 		 * \brief Updates the attributes of the external object
@@ -71,16 +76,18 @@ namespace zSpace
 		void getItems(zExtIntArray* items);
 		void setItems(zExtIntArray* items, int count);
 	};
-	struct zExtFloatArray
+	struct ZSPACE_EXTERNAL zExtFloatArray
 	{
 		zFloatArray* pointer; /**< A pointer to the array object */
 		int arrayCount; /**< The number of items in the array */
 		zExtFloatArray();
 		zExtFloatArray(zFloatArray a);
 		zExtFloatArray(zFloatArray* a);
+		~zExtFloatArray();
 		/**
 		 * \brief Updates the attributes of the external object
 		 */
+		int checkMemAlloc(bool allocateMemory = true);
 		void updateAttributes();
 		/**
 		 * \brief get items from array
@@ -89,13 +96,14 @@ namespace zSpace
 		void setItems(float* items, int count);
 	};
 
-	struct zExtFloatArray2D
+	struct ZSPACE_EXTERNAL zExtFloatArray2D
 	{
 		vector<zFloatArray>* pointer; /**< A pointer to the array object */
 		int arrayCount; /**< The number of items in the array */
 		zExtFloatArray2D();
 		zExtFloatArray2D(vector<zFloatArray> a);
 		zExtFloatArray2D(vector<zFloatArray>* a);
+		~zExtFloatArray2D();
 
 		/**
 		 * \brief Updates the attributes of the external object
@@ -108,13 +116,14 @@ namespace zSpace
 		void setItems(zExtFloatArray* items, int count);
 	};
 
-	struct zExtDoubleArray
+	struct ZSPACE_EXTERNAL zExtDoubleArray
 	{
 		zDoubleArray* pointer; /**< A pointer to the array object */
 		int arrayCount; /**< The number of items in the array */
 		zExtDoubleArray();
 		zExtDoubleArray(zDoubleArray a);
 		zExtDoubleArray(zDoubleArray* a);
+		~zExtDoubleArray();
 		/**
 		 * \brief Updates the attributes of the external object
 		 */
@@ -126,13 +135,14 @@ namespace zSpace
 		void setItems(double* items, int count);
 	};
 
-	struct zExtDoubleArray2D
+	struct ZSPACE_EXTERNAL zExtDoubleArray2D
 	{
 		vector<zDoubleArray>* pointer; /**< A pointer to the array object */
 		int arrayCount; /**< The number of items in the array */
 		zExtDoubleArray2D();
 		zExtDoubleArray2D(vector<zDoubleArray> a);
 		zExtDoubleArray2D(vector<zDoubleArray>* a);
+		~zExtDoubleArray2D();
 
 		/**
 		 * \brief Updates the attributes of the external object
@@ -144,11 +154,11 @@ namespace zSpace
 		void getItems(zExtDoubleArray* items);
 		void setItems(zExtDoubleArray* items, int count);
 	};
-	struct zExtString
+	struct ZSPACE_EXTERNAL zExtString
 	{
 		string* pointer; /**< A pointer to the array object */
 		int stringLength; /**< The number of items in the array */
-		//zExtString(string s);
+		~zExtString();
 		/**
 		 * \brief Updates the attributes of the external object
 		 */
@@ -161,14 +171,17 @@ namespace zSpace
 		void setItems(char* items, int count);
 	};
 
-	struct zExtStringArray
+	struct ZSPACE_EXTERNAL zExtStringArray
 	{
-		zStringArray* pointer; /**< A pointer to the array object */
+		//zStringArray* pointer; /**< A pointer to the array object */
+		vector<string>* pointer; /**< A pointer to the array object */
 		int arrayCount; /**< The number of items in the array */
 
 		zExtStringArray();
-		zExtStringArray(zStringArray a);
-		zExtStringArray(zStringArray* a);
+		//zExtStringArray(zStringArray a);
+		zExtStringArray(vector<string> a);
+		zExtStringArray(vector<string>* a);
+		~zExtStringArray();
 
 		/**
 		 * \brief Updates the attributes of the external object
@@ -182,7 +195,7 @@ namespace zSpace
 		void setItems(string* items, int count);
 	};
 
-	struct zExtStringArray2D
+	struct ZSPACE_EXTERNAL zExtStringArray2D
 	{
 		vector<zStringArray>* pointer; /**< A pointer to the array object */
 		int arrayCount; /**< The number of items in the array */
@@ -190,6 +203,7 @@ namespace zSpace
 		zExtStringArray2D();
 		zExtStringArray2D(vector<zStringArray> a);
 		zExtStringArray2D(vector<zStringArray>* a);
+		~zExtStringArray2D();
 
 		/**
 		 * \brief Updates the attributes of the external object
@@ -203,7 +217,7 @@ namespace zSpace
 		void setItems(zExtStringArray* items, int count);
 	};	
 	
-	struct zExtBoolArray
+	struct ZSPACE_EXTERNAL zExtBoolArray
 	{
 		zBoolArray* pointer; /**< A pointer to the array object */
 		int arrayCount; /**< The number of items in the array */
@@ -211,6 +225,7 @@ namespace zSpace
 		zExtBoolArray();
 		zExtBoolArray(zBoolArray a);
 		zExtBoolArray(zBoolArray* a);
+		~zExtBoolArray();
 
 		/**
 		 * \brief Updates the attributes of the external object
@@ -224,7 +239,7 @@ namespace zSpace
 		void setItems(bool* items, int count);
 	};
 
-	struct zExtBoolArray2D
+	struct ZSPACE_EXTERNAL zExtBoolArray2D
 	{
 		vector<zBoolArray>* pointer; /**< A pointer to the array object */
 		int arrayCount; /**< The number of items in the array */
@@ -232,6 +247,7 @@ namespace zSpace
 		zExtBoolArray2D();
 		zExtBoolArray2D(vector<zBoolArray> a);
 		zExtBoolArray2D(vector<zBoolArray>* a);
+		~zExtBoolArray2D();
 
 		/**
 		 * \brief Updates the attributes of the external object
@@ -248,28 +264,28 @@ namespace zSpace
 	ZSPACE_EXTERNAL_C
 	{
 
-		ZSPACE_EXTERNAL void ext_int_getItemsFromArray(zExtIntArray & extArray, int* outArray);
+		ZSPACE_EXTERNAL void ext_int_array_getItems(zExtIntArray & extArray, int* outArray);
 		ZSPACE_EXTERNAL void ext_int_setItemsFromArray(zExtIntArray& extArray, int* inArray, int count);
-		ZSPACE_EXTERNAL void ext_int_getItemsFromArray2D(zExtIntArray2D& extArray, zExtIntArray* outArray);
-		ZSPACE_EXTERNAL void ext_int_setItemsFromArray2D(zExtIntArray2D& extArray, zExtIntArray* inArray, int count);
-		ZSPACE_EXTERNAL void ext_float_getItemsFromArray(zExtFloatArray& extArray, float* outArray);
+		ZSPACE_EXTERNAL void ext_int_array2D_getItems(zExtIntArray2D& extArray, zExtIntArray* outArray);
+		ZSPACE_EXTERNAL void ext_int_array2D_setItems(zExtIntArray2D& extArray, zExtIntArray* inArray, int count);
+		ZSPACE_EXTERNAL void ext_float_array_getItems(zExtFloatArray& extArray, float* outArray);
 		ZSPACE_EXTERNAL void ext_float_setItemsFromArray(zExtFloatArray& extArray, float* inArray, int count);
-		ZSPACE_EXTERNAL void ext_float_getItemsFromArray2D(zExtFloatArray2D& extArray, zExtFloatArray* outArray);
-		ZSPACE_EXTERNAL void ext_float_setItemsFromArray2D(zExtFloatArray2D& extArray, zExtFloatArray* inArray, int count);
-		ZSPACE_EXTERNAL void ext_double_getItemsFromArray(zExtDoubleArray& extArray, double* outArray);
+		ZSPACE_EXTERNAL void ext_float_array2D_getItems(zExtFloatArray2D& extArray, zExtFloatArray* outArray);
+		ZSPACE_EXTERNAL void ext_float_array2D_setItems(zExtFloatArray2D& extArray, zExtFloatArray* inArray, int count);
+		ZSPACE_EXTERNAL void ext_double_array_getItems(zExtDoubleArray& extArray, double* outArray);
 		ZSPACE_EXTERNAL void ext_double_setItemsFromArray(zExtDoubleArray& extArray, double* inArray, int count);
-		ZSPACE_EXTERNAL void ext_double_getItemsFromArray2D(zExtDoubleArray2D& extArray, zExtDoubleArray* outArray);
-		ZSPACE_EXTERNAL void ext_double_setItemsFromArray2D(zExtDoubleArray2D& extArray, zExtDoubleArray* inArray, int count);
+		ZSPACE_EXTERNAL void ext_double_array2D_getItems(zExtDoubleArray2D& extArray, zExtDoubleArray* outArray);
+		ZSPACE_EXTERNAL void ext_double_array2D_setItems(zExtDoubleArray2D& extArray, zExtDoubleArray* inArray, int count);
 		ZSPACE_EXTERNAL int ext_string_getCharArrayFromExtString(zExtString& extString, char* outString);
 		ZSPACE_EXTERNAL int ext_string_setExtStringFromCharArray(zExtString& extString, char* inString, int count);
-		ZSPACE_EXTERNAL void ext_string_getItemsFromArray(zExtStringArray& extArray, zExtString* outArray);
+		ZSPACE_EXTERNAL void ext_string_array_getItems(zExtStringArray& extArray, zExtString* outArray);
 		ZSPACE_EXTERNAL void ext_string_setItemsFromArray(zExtStringArray& extArray, zExtString* inArray, int count);
-		ZSPACE_EXTERNAL void ext_string_getItemsFromArray2D(zExtStringArray2D& extArray, zExtStringArray* outArray);
-		ZSPACE_EXTERNAL void ext_string_setItemsFromArray2D(zExtStringArray2D& extArray, zExtStringArray* inArray, int count);
-		ZSPACE_EXTERNAL void ext_bool_getItemsFromArray(zExtBoolArray& extArray, bool* outArray);
+		ZSPACE_EXTERNAL void ext_string_array2D_getItems(zExtStringArray2D& extArray, zExtStringArray* outArray);
+		ZSPACE_EXTERNAL void ext_string_array2D_setItems(zExtStringArray2D& extArray, zExtStringArray* inArray, int count);
+		ZSPACE_EXTERNAL void ext_bool_array_getItems(zExtBoolArray& extArray, bool* outArray);
 		ZSPACE_EXTERNAL void ext_bool_setItemsFromArray(zExtBoolArray& extArray, bool* inArray, int count);
-		ZSPACE_EXTERNAL void ext_bool_getItemsFromArray2D(zExtBoolArray2D& extArray, zExtBoolArray* outArray);
-		ZSPACE_EXTERNAL void ext_bool_setItemsFromArray2D(zExtBoolArray2D& extArray, zExtBoolArray* inArray, int count);
+		ZSPACE_EXTERNAL void ext_bool_array2D_getItems(zExtBoolArray2D& extArray, zExtBoolArray* outArray);
+		ZSPACE_EXTERNAL void ext_bool_array2D_setItems(zExtBoolArray2D& extArray, zExtBoolArray* inArray, int count);
 
 
 

@@ -5,32 +5,33 @@ from DLLConfigModule import DLLConfig
 
 DLLFile = DLLConfig.zExternalDLLFile
 
-class zExtTransform(ctypes.Structure):
+class 
+(ctypes.Structure):
     _fields_ = [
         ('_transform', ctypes.c_void_p),
         ('matrix', ctypes.c_float * 4 * 4)
     ]
     def __init__(self):
-        ext_zTransform_createNew(self)
+        ext_transform_initPointer(self)
         self.readonly = True
 
     def updateTransformFromFloatArray(self,values):
         my_array = (ctypes.c_float * 16)(*values)
-        ext_zTransform_updateFromValues(ctypes.byref(self), my_array)
+        ext_transform_updateFromValues(ctypes.byref(self), my_array)
 
     def updateTransformFromListOfLists(self, values):
         ee_transformValues = (ctypes.c_float * 16)()
         for i in range(4):
             for j in range(4):
                 ee_transformValues[i*4+j] = values[i][j]
-        ext_zTransform_updateFromValues(ctypes.byref(self), ee_transformValues)
+        ext_transform_updateFromValues(ctypes.byref(self), ee_transformValues)
 
     def updateTransformFrom2dArray(self, values):
         ee_transformValues = (ctypes.c_float * 16)()        
         for i in range(4):
             for j in range(4):
                 ee_transformValues[i*4+j] = values[i][j]
-        ext_zTransform_updateFromValues(ctypes.byref(self), ee_transformValues)
+        ext_transform_updateFromValues(ctypes.byref(self), ee_transformValues)
  
     
     #def getGfMatrix(self):
@@ -60,22 +61,22 @@ class zExtTransform(ctypes.Structure):
     matrix = property(getMatrix, setMatrix)
 
 # Define the function prototypes with ctypes function annotations
-ext_zTransform_createNew = DLLFile.ext_zTransform_createNew
-ext_zTransform_createNew.restype = None
-ext_zTransform_createNew.argtypes = [
+ext_transform_createNew = DLLFile.ext_transform_createNew
+ext_transform_createNew.restype = None
+ext_transform_createNew.argtypes = [
     ctypes.POINTER(zExtTransform),
     ]    
 
-ext_zTransform_createNewFromArray = DLLFile.ext_zTransform_createNewFromArray
-ext_zTransform_createNewFromArray.restype = None
-ext_zTransform_createNewFromArray.argtypes = [
+ext_transform_createNewFromArray = DLLFile.ext_transform_createNewFromArray
+ext_transform_createNewFromArray.restype = None
+ext_transform_createNewFromArray.argtypes = [
     ctypes.POINTER(ctypes.c_float),
     ctypes.POINTER(zExtTransform),
     ]    
 
-ext_zTransform_updateFromValues = DLLFile.ext_zTransform_updateFromValues
-ext_zTransform_updateFromValues.restype = None
-ext_zTransform_updateFromValues.argtypes = [
+ext_transform_updateFromValues = DLLFile.ext_transform_updateFromValues
+ext_transform_updateFromValues.restype = None
+ext_transform_updateFromValues.argtypes = [
     ctypes.POINTER(zExtTransform),
     ctypes.POINTER(ctypes.c_float),
     ]  

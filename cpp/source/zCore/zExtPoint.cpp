@@ -16,32 +16,32 @@
 
 namespace zSpace
 {
-	/*ZSPACE_EXTERNAL_INLINE zExtPoint::zExtPoint(zPoint* t)
-	{
-		pointer = t;
-		updateAttributes(t);
-	}*/
-	ZSPACE_EXTERNAL_INLINE zExtPoint::zExtPoint()
-	{
-		//delete pointer; 
-		//pointer = new zPoint();
-		x = 0;
-		y = 0;
-		z = 0;
-		//updateAttributes();
-	}
+	///*ZSPACE_EXTERNAL_INLINE zExtPoint::zExtPoint(zPoint* t)
+	//{
+	//	pointer = t;
+	//	updateAttributes(t);
+	//}*/
+	//ZSPACE_EXTERNAL_INLINE zExtPoint::zExtPoint()
+	//{
+	//	//delete pointer; 
+	//	//pointer = new zPoint();
+	//	x = 0;
+	//	y = 0;
+	//	z = 0;
+	//	//updateAttributes();
+	//}
 
-	/*ZSPACE_EXTERNAL_INLINE void zExtPoint::updateAttributes(zPoint* t)
-	{
-		pointer = t;
-		updateAttributes();	
-	}*/
-	/*ZSPACE_EXTERNAL_INLINE void zExtPoint::updateAttributes()
-	{
-		x = pointer->x;
-		y = pointer->y;
-		z = pointer->z;
-	}*/
+	///*ZSPACE_EXTERNAL_INLINE void zExtPoint::updateAttributes(zPoint* t)
+	//{
+	//	pointer = t;
+	//	updateAttributes();	
+	//}*/
+	///*ZSPACE_EXTERNAL_INLINE void zExtPoint::updateAttributes()
+	//{
+	//	x = pointer->x;
+	//	y = pointer->y;
+	//	z = pointer->z;
+	//}*/
 
 	
 
@@ -63,6 +63,30 @@ namespace zSpace
 		//delete pointer; 
  pointer = new zPointArray;
 	}
+	ZSPACE_EXTERNAL_INLINE zExtPointArray::~zExtPointArray()
+	{
+		delete pointer;
+		pointer = nullptr;
+	}
+	ZSPACE_EXTERNAL_INLINE int zExtPointArray::checkMemAlloc(bool allocateMemory)
+	{
+		try
+		{
+			if (pointer != nullptr) return 1;
+			else
+			{
+				if (!allocateMemory) return 0;
+				pointer = new zPointArray();
+				return 2;
+
+			}
+		}
+		catch (const std::exception&)
+		{
+			printf("\n Pointer initialization failed");
+			return 404;
+		}
+	}
 	ZSPACE_EXTERNAL_INLINE void zExtPointArray::updateAttributes()
 	{
 		arrayCount = pointer->size();
@@ -77,13 +101,15 @@ namespace zSpace
 	}
 	ZSPACE_EXTERNAL_INLINE void zExtPointArray::setItems(zExtPoint* items, int count)
 	{
-		pointer = new zPointArray();
+		checkMemAlloc();
+		pointer->clear();
 		for (int i = 0; i < count; i++)
 		{
 			zPoint p(items[i].x, items[i].y, items[i].z);
 			pointer->push_back(p);
 		}
 		updateAttributes();
+		printf("\n zExtPointArray setItems %i %i", count, arrayCount);
 	}
 	//ZSPACE_EXTERNAL_INLINE int ext_point_create(float x, float y, float z, zExtPoint& refPoint)
 	//{
@@ -98,39 +124,39 @@ namespace zSpace
 	//		return 0;
 	//	}
 	//}
-	ZSPACE_EXTERNAL_INLINE void ext_point_getItemsFromArray(zExtPointArray& extArray, zExtPoint* outArray)
+	ZSPACE_EXTERNAL_INLINE void ext_point_array_getItems(zExtPointArray& extArray, zExtPoint* outArray)
 	{
 		extArray.getItems(outArray);
 	}
 
 
-	ZSPACE_EXTERNAL_INLINE zExtPoint::zExtPoint(float X, float Y, float Z)
-	{
-		x = X;
-		y = Y;
-		z = Z;
-	}
+	//ZSPACE_EXTERNAL_INLINE zExtPoint::zExtPoint(float X, float Y, float Z)
+	//{
+	//	x = X;
+	//	y = Y;
+	//	z = Z;
+	//}
 
-	ZSPACE_EXTERNAL_INLINE zExtPoint::zExtPoint(zPoint t)
-	{
-		x = t.x;
-		y = t.y;
-		z = t.z;
-	}
+	//ZSPACE_EXTERNAL_INLINE zExtPoint::zExtPoint(zPoint t)
+	//{
+	//	x = t.x;
+	//	y = t.y;
+	//	z = t.z;
+	//}
 
-	ZSPACE_EXTERNAL_INLINE void zExtPoint::updateAttributes(float X, float Y, float Z)
-	{
-		x = X;
-		y = Y;
-		z = Z;
-	}
+	//ZSPACE_EXTERNAL_INLINE void zExtPoint::updateAttributes(float X, float Y, float Z)
+	//{
+	//	x = X;
+	//	y = Y;
+	//	z = Z;
+	//}
 
-	ZSPACE_EXTERNAL_INLINE void zExtPoint::updateAttributes(zPoint t)
-	{
-		x = t.x;
-		y = t.y;
-		z = t.z;
-	}
+	//ZSPACE_EXTERNAL_INLINE void zExtPoint::updateAttributes(zPoint t)
+	//{
+	//	x = t.x;
+	//	y = t.y;
+	//	z = t.z;
+	//}
 	ZSPACE_EXTERNAL_INLINE int ext_point_setItemsFromArray(zExtPointArray& extArray, zExtPoint* inArray, int count)
 	{
 		try
@@ -143,5 +169,72 @@ namespace zSpace
 			printf("\n ERROR set zExtPointArray");
 			return 0;
 		}
+	}
+	ZSPACE_EXTERNAL_INLINE void ext_point_testAdd(zPoint& point1, zPoint& point2)
+	{
+		printf("\n point.x = %f", point1.x);
+		printf("\n point.x = %f", point2.x);
+
+		zPoint point = point1 + point2;
+		printf("\n point.x = %f", point.x);
+	}
+	ZSPACE_EXTERNAL_INLINE zExtPointArray2D::zExtPointArray2D(vector<zPointArray> a)
+	{
+		
+		pointer = new vector<zPointArray>(a);
+		updateAttributes();
+	}
+	ZSPACE_EXTERNAL_INLINE zExtPointArray2D::zExtPointArray2D(vector<zPointArray>* a)
+	{
+		pointer = a;
+		updateAttributes();
+	}
+	ZSPACE_EXTERNAL_INLINE zExtPointArray2D::~zExtPointArray2D()
+	{
+		delete pointer;
+		pointer = nullptr;
+	}
+	ZSPACE_EXTERNAL_INLINE void zExtPointArray2D::updateAttributes()
+	{
+		arrayCount = pointer->size();
+
+	}
+
+	ZSPACE_EXTERNAL_INLINE int zExtPointArray2D::checkMemAlloc(bool allocateMemory)
+	{
+		try
+		{
+			if (pointer != nullptr) return 1;
+			else
+			{
+				if (!allocateMemory) return 0;
+				pointer = new vector<zPointArray>();
+				return 2;
+
+			}
+		}
+		catch (const std::exception&)
+		{
+			printf("\n Pointer initialization failed");
+			return 404;
+		}
+	}
+
+	ZSPACE_EXTERNAL_INLINE void zExtPointArray2D::getItems(zExtPointArray* items)
+	{
+		for (int i = 0; i < pointer->size(); i++)
+		{
+			items[i].pointer = &pointer->at(i);
+			items[i].updateAttributes();
+		}
+	}
+	ZSPACE_EXTERNAL_INLINE void zExtPointArray2D::setItems(zExtPointArray* items, int count)
+	{	
+		checkMemAlloc();
+		for (int i = 0; i < count; i++)
+		{
+			pointer->push_back(*(items[i].pointer));
+		}
+		updateAttributes();
 	}
 }

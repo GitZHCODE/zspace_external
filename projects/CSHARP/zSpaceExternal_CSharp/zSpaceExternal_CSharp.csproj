@@ -29,10 +29,11 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>compiled\dll\Release\</OutputPath>
-    <DefineConstants>TRACE;ghDeployDir="C:\Users\heba.eiz\AppData\Roaming\Grasshopper\Libraries\zSpace"</DefineConstants>
+    <DefineConstants>TRACE;ghDeployDir="C:\Users\heba.eiz\AppData\Roaming\Grasshopper\Libraries\zSpace"; RHINO_CSHARP</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x64</PlatformTarget>
+    <RegisterForComInterop>false</RegisterForComInterop>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Releas_DLL_OV_2|AnyCPU'">
     <OutputPath>bin\Releas_DLL_OV_2\</OutputPath>
@@ -40,6 +41,25 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release_DLL_OV_2|AnyCPU'">
     <OutputPath>bin\Release_DLL_OV_2\</OutputPath>
     <DefineConstants>TRACE;ghDeployDir="C:\Users\heba.eiz\AppData\Roaming\Grasshopper\Libraries\zSpace"</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release_DLL|AnyCPU'">
+    <OutputPath>bin\Release_DLL\</OutputPath>
+    <DefineConstants>TRACE;ghDeployDir="C:\Users\heba.eiz\AppData\Roaming\Grasshopper\Libraries\zSpace"; RHINO_CSHARP</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Realease_DLL_Rh|AnyCPU'">
+    <OutputPath>bin\Realease_DLL_Rh\</OutputPath>
+    <DefineConstants>TRACE;ghDeployDir="C:\Users\heba.eiz\AppData\Roaming\Grasshopper\Libraries\zSpace"</DefineConstants>
+    <DefineConstants>TRACE; ghDeployDir="C:\Users\heba.eiz\AppData\Roaming\Grasshopper\Libraries\zSpace"; RHINO_CSHARP</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x64</PlatformTarget>
@@ -91,19 +111,25 @@
     </Compile>
     <Compile Include="Rhino\zDataTreeUtil.cs" />
     <Compile Include="Rhino\zSpaceRhinoUtil.cs" />
+    <Compile Include="source\base\zStatus.cs" />
+    <Compile Include="source\zCore\zEnumerators.cs" />
+    <Compile Include="source\zCore\zExtField.cs" />
+    <Compile Include="source\zCore\zExtGraph.cs" />
     <Compile Include="source\zCore\zExtJson.cs" />
     <Compile Include="source\zCore\zExtColor.cs" />
     <Compile Include="source\zCore\zExtPoint.cs" />
+    <Compile Include="source\zCore\zExtTransform.cs" />
+    <Compile Include="source\zCore\zExtUSD.cs" />
     <Compile Include="source\zCore\zExtUtilsCore.cs" />
     <Compile Include="source\zSpaceUtil.cs" />
     <Compile Include="source\zCore\zExtMesh.cs" />
+    <None Include="source\zToolsets\statics\zExtVault.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="source\zToolsets\data\" />
     <Folder Include="source\zToolsets\digiFab\" />
     <Folder Include="source\zToolsets\geometry\" />
     <Folder Include="source\zToolsets\pathNetworks\" />
-    <Folder Include="source\zToolsets\statics\" />
     <Folder Include="source\zToolsets\streamlines\" />
   </ItemGroup>
   <ItemGroup>
@@ -126,8 +152,8 @@
   </Target>
   <Import Project="..\..\..\packages\Grasshopper.7.0.20314.3001\build\Grasshopper.targets" Condition="Exists('..\..\..\packages\Grasshopper.7.0.20314.3001\build\Grasshopper.targets')" />
   <PropertyGroup>
-    <PreBuildEvent>IF "$(SolutionName)" == "zSpace_external" (xcopy "$(SolutionDir)cpp\compiled\dll\*.dll" "$(TargetDir)" /E /Y)
-IF "$(SolutionName)" == "zSpace_external" (xcopy "$(SolutionDir)cpp\compiled\dll\*.lib" "$(TargetDir)" /E /Y)</PreBuildEvent>
+    <PreBuildEvent>REM IF "$(SolutionName)" == "zSpace_external" (xcopy "$(SolutionDir)cpp\compiled\dll\*.dll" "$(TargetDir)" /E /Y)
+REM IF "$(SolutionName)" == "zSpace_external" (xcopy "$(SolutionDir)cpp\compiled\dll\*.lib" "$(TargetDir)" /E /Y)</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>

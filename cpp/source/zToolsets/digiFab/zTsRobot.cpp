@@ -205,7 +205,7 @@ namespace zSpace
 			for (int i = 0; i < 1; i++)
 			{
 				string path = directory;
-				path.append("/r_base.pointer");
+				path.append("/r_base.meshPointer");
 
 				zFnMesh fnMeshJoint(o_jointMeshes[i]);
 				fnMeshJoint.from(path, type, true);
@@ -217,7 +217,7 @@ namespace zSpace
 				string path = directory;
 				path.append("/r_");
 				path.append(to_string(i));
-				path.append(".pointer");
+				path.append(".meshPointer");
 				
 				zFnMesh fnMeshJoint(o_jointMeshes[i]);
 				fnMeshJoint.from(path, type, true);
@@ -227,7 +227,7 @@ namespace zSpace
 			{
 				//// import EE
 				string path = directory;
-				path.append("/r_ee.pointer");
+				path.append("/r_ee.meshPointer");
 				
 				zFnMesh fnMeshJoint(o_jointMeshes[7]);
 				fnMeshJoint.from(path, type, false);
@@ -297,7 +297,7 @@ namespace zSpace
 			for (int i = 0; i < 1; i++)
 			{
 				string path = directory;
-				path.append("/r_base_local.pointer");
+				path.append("/r_base_local.meshPointer");
 
 				zFnMesh fnMeshJoint(o_jointMeshes[i]);
 				fnMeshJoint.to(path, type);
@@ -309,7 +309,7 @@ namespace zSpace
 				string path = directory;
 				path.append("/r_");
 				path.append(to_string(i + 1));
-				path.append("_local.pointer");
+				path.append("_local.meshPointer");
 
 				zFnMesh fnMeshJoint(o_jointMeshes[i + 1]);
 				fnMeshJoint.setTransform(local, false, true);
@@ -321,7 +321,7 @@ namespace zSpace
 				if (i == DOF - 1)
 				{
 					string pathEE = directory;
-					pathEE.append("/r_EE_local.pointer");
+					pathEE.append("/r_EE_local.meshPointer");
 
 					zFnMesh fnMesh_EE(o_jointMeshes[i + 2]);
 					fnMesh_EE.setTransform(local, false, true);

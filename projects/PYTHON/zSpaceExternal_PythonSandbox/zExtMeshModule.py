@@ -1,6 +1,7 @@
 import ctypes
 
-import zExtTransformModule
+import 
+Module
 import DLLConfigModule
 import zExtTransformModule
 import zExtPointModule
@@ -70,9 +71,9 @@ ext_meshUtil_getMeshFaceCount = DLLFile.ext_meshUtil_getMeshFaceCount
 ext_meshUtil_getMeshFaceCount.restype = ctypes.c_int
 ext_meshUtil_getMeshFaceCount.argtypes = [ctypes.POINTER(zExtMesh), ctypes.POINTER(ctypes.c_int)]
 
-ext_meshUtil_getMeshPositionRaw = DLLFile.ext_meshUtil_getMeshPositionRaw
-ext_meshUtil_getMeshPositionRaw.restype = ctypes.c_int
-ext_meshUtil_getMeshPositionRaw.argtypes = [ctypes.POINTER(zExtMesh), ctypes.POINTER(ctypes.c_float), ctypes.POINTER(ctypes.c_float)]
+ext_meshUtil_getVertexPositionsRaw = DLLFile.ext_meshUtil_getVertexPositionsRaw
+ext_meshUtil_getVertexPositionsRaw.restype = ctypes.c_int
+ext_meshUtil_getVertexPositionsRaw.argtypes = [ctypes.POINTER(zExtMesh), ctypes.POINTER(ctypes.c_float), ctypes.POINTER(ctypes.c_float)]
 
 ext_meshUtil_getMeshFaceConnect = DLLFile.ext_meshUtil_getMeshFaceConnect
 ext_meshUtil_getMeshFaceConnect.restype = ctypes.c_int
@@ -90,9 +91,9 @@ ext_meshUtil_getMeshsFromMeshPointerArray = DLLFile.ext_meshUtil_getMeshsFromMes
 ext_meshUtil_getMeshsFromMeshPointerArray.restype = ctypes.c_int
 ext_meshUtil_getMeshsFromMeshPointerArray.argtypes = [ctypes.POINTER(zExtMeshPointerArray), ctypes.POINTER(zExtMesh)]
 
-ext_meshUtil_getMeshPosition = DLLFile.ext_meshUtil_getMeshPosition
-ext_meshUtil_getMeshPosition.restype = ctypes.c_int
-ext_meshUtil_getMeshPosition.argtypes = [ctypes.POINTER(zExtMesh), ctypes.POINTER(zExtPointArray)]
+ext_meshUtil_getVertexPositions = DLLFile.ext_meshUtil_getVertexPositions
+ext_meshUtil_getVertexPositions.restype = ctypes.c_int
+ext_meshUtil_getVertexPositions.argtypes = [ctypes.POINTER(zExtMesh), ctypes.POINTER(zExtPointArray)]
 
 ext_meshUtil_getMeshColors = DLLFile.ext_meshUtil_getMeshColors
 ext_meshUtil_getMeshColors.restype = ctypes.c_int
@@ -103,10 +104,10 @@ ext_meshUtil_getMeshPolygonDate.restype = ctypes.c_int
 ext_meshUtil_getMeshPolygonDate.argtypes = [ctypes.POINTER(zExtMesh), ctypes.POINTER(zExtIntArray), ctypes.POINTER(zExtIntArray)]
 
 #---SET METHODS
-ext_meshUtil_catmullclark = DLLFile.ext_meshUtil_catmullclark
+ext_meshUtil_smoothMesh = DLLFile.ext_meshUtil_smoothMesh
 
-ext_meshUtil_catmullclark.restype = ctypes.c_int
-ext_meshUtil_catmullclark.argtypes = [ctypes.POINTER(zExtMesh), ctypes.c_int, ctypes.c_bool]
+ext_meshUtil_smoothMesh.restype = ctypes.c_int
+ext_meshUtil_smoothMesh.argtypes = [ctypes.POINTER(zExtMesh), ctypes.c_int, ctypes.c_bool]
 
 ext_meshUtil_getPlanarityDeviationPerFace = DLLFile.ext_meshUtil_getPlanarityDeviationPerFace
 ext_meshUtil_getPlanarityDeviationPerFace.restype = ctypes.c_int

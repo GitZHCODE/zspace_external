@@ -39,7 +39,7 @@ using namespace std;
 namespace zSpace
 {
 
-	struct zExtParticle
+	struct ZSPACE_EXTERNAL zExtParticle
 	{
 		zObjParticle* pointer;
 		double mass;
@@ -52,15 +52,17 @@ namespace zSpace
 		
 
 		zExtParticle(zObjParticle* t);
+		~zExtParticle();
 
 		void updateAttributes();
 	};
 
-	struct zExtParticleArray
+	struct ZSPACE_EXTERNAL zExtParticleArray
 	{
 		zObjParticleArray * pointer; /**< A pointer to the array object */
 		int arrayCount; /**< The number of items in the array */
 		zExtParticleArray(zObjParticleArray* a);
+		~zExtParticleArray();
 
 		/**
 		 * \brief Updates the attributes of the external object

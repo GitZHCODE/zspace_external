@@ -13,13 +13,17 @@ namespace zSpace {
          zExtStringArray attributesNames;
          zExtStringArray attributesTypes;
 
+        /// <summary>
+        /// Initializes a new instance of the zExtJSON class.
+        /// </summary>
+        /// <param name="create">A boolean flag indicating whether to create a new instance of zExtJSON (default: true).</param>
         public zExtJSON(bool create = true){
             //Constructor implementation
             pointer = new IntPtr();
             numOfAttributes = 0;
             attributesNames = new zExtStringArray();
             attributesTypes = new zExtStringArray();
-            CreateJson();
+            createJson();
         }
 
         // Other constructors, destructor, and methods
@@ -50,6 +54,13 @@ namespace zSpace {
         //    }
         //}
 
+        /// <summary>
+        /// Reads a specific attribute from the zExtJSON object of type T and returns the value via the out parameter.
+        /// </summary>
+        /// <typeparam name="T">The type of attribute to be read from the JSON object.</typeparam>
+        /// <param name="attributeKey">The key of the attribute to be read from the JSON object.</param>
+        /// <param name="outAttributeValue">When successful, the value of the attribute is returned via this out parameter.</param>
+        /// <returns>Boolean indicating whether the attribute was successfully read or not.</returns>
         bool ReadJSONAttribute2<T>(string attributeKey, out T outAttributeValue) {
             
             outAttributeValue = default(T);
@@ -176,7 +187,14 @@ namespace zSpace {
             }
             return false;
         }
-         T ReadJSONAttribute<T>(string attributeKey) {
+
+        /// <summary>
+        /// Reads a specific attribute from the zExtJSON object of type T and returns the value.
+        /// </summary>
+        /// <typeparam name="T">The type of attribute to be read from the JSON object.</typeparam>
+        /// <param name="attributeKey">The key of the attribute to be read from the JSON object.</param>
+        /// <returns>The value of the attribute if successfully read, otherwise the default value of type T.</returns>
+        T ReadJSONAttribute<T>(string attributeKey) {
             if (typeof(T) == typeof(int)) {
                 int output;
                 int success = zNativeMethods.ext_json_readJSONAttributeInt(ref this, attributeKey, out output);
@@ -300,6 +318,13 @@ namespace zSpace {
             return default(T);
         }
 
+        /// <summary>
+        /// Reads a specific attribute from the zExtJSON object of type T and returns the value via the out parameter.
+        /// </summary>
+        /// <typeparam name="T">The type of the attribute value.</typeparam>
+        /// <param name="attributeKey">The key of the attribute to read.</param>
+        /// <param name="outAttributeValue">The output value of the attribute.</param>
+        /// <returns>True if the attribute is successfully read, otherwise false.</returns>
         public bool ReadJSONAttribute<T>(string attributeKey, out T outAttributeValue) {
             outAttributeValue = default(T);
 
@@ -433,6 +458,14 @@ namespace zSpace {
 
             return false;
         }
+
+        /// <summary>
+        /// Reads a specific attribute from the zExtJSON object based on the provided type information and returns the value via the dynamic out parameter.
+        /// </summary>
+        /// <param name="attributeKey">The key of the attribute to read.</param>
+        /// <param name="type">The type information for the attribute.</param>
+        /// <param name="outAttributeValue">The output value of the attribute.</param>
+        /// <returns>True if the attribute is successfully read, otherwise false.</returns>
         public bool ReadJSONAttribute(string attributeKey, Type type, out dynamic outAttributeValue) {
             switch (type.Name) {
                 case nameof(Int32):
@@ -572,6 +605,14 @@ namespace zSpace {
             return false;
 
         }
+
+        /// <summary>
+        /// Writes a specific attribute with its value to the zExtJSON object based on the provided type and attribute value.
+        /// </summary>
+        /// <typeparam name="T">The type of the attribute value.</typeparam>
+        /// <param name="attributeKey">The key of the attribute to write.</param>
+        /// <param name="attributeValue">The value of the attribute to be written.</param>
+        /// <returns>True if the attribute is successfully written, otherwise false.</returns>
         public bool WriteJSONAttribute<T>(string attributeKey, T attributeValue) {
             switch (typeof(T).Name) {
                 case nameof(Int32):
@@ -704,6 +745,12 @@ namespace zSpace {
             return null;
 
         }
+
+        /// <summary>
+        /// Gets the type based on the given type name.
+        /// </summary>
+        /// <param name="typeName">The name of the type.</param>
+        /// <returns>The System.Type associated with the provided type name. Returns null if the type is not found.</returns>
         public Type getType(string typeName) {
             switch (typeName) {
                 case nameof(Int32):
@@ -762,30 +809,62 @@ namespace zSpace {
 
         }
 
+        /// <summary>
+        /// Creates a deep copy of the zExtJSON object.
+        /// </summary>
+        /// <returns>A new zExtJSON object that is a deep copy of the original.</returns>
         public zExtJSON copy() {
             zExtJSON outjson;
             zNativeMethods.ext_json_createJsonDeepCopy(ref this, out outjson);
             return outjson;
         }
 
+        /// <summary>
+        /// Exports the zExtJSON content to a JSON file.
+        /// </summary>
+        /// <param name="filePath">The file path where the JSON content will be saved.</param>
+        /// <returns>True if the content is successfully exported to the file; otherwise, false.</returns>
         public bool ExportJsonFile(string filePath) {
             int chk = zNativeMethods.ext_json_exportFile(ref this, filePath);
             return chk == 1;
         }
+
+        /// <summary>
+        /// Reads JSON content from the given file and populates the zExtJSON object.
+        /// </summary>
+        /// <param name="filePath">The file path from which to read the JSON content.</param>
+        /// <returns>True if the JSON content is successfully read and applied; otherwise, false.</returns>
         public bool ReadJsonFile(string filePath) {
             if (filePath == null) return false;
             int chk = zNativeMethods.ext_json_readJsonFile(ref this, filePath);
             return chk == 1 ? true : false;
         }
+
+        /// <summary>
+        /// Retrieves a zExtMesh object from the zExtJSON.
+        /// </summary>
+        /// <param name="mesh">The zExtMesh object to be populated with the retrieved data.</param>
+        /// <returns>True if the mesh is successfully retrieved; otherwise, false.</returns>
         public bool GetMesh(ref zExtMesh mesh) {
             int chk = zNativeMethods.ext_json_getMeshFromJson(ref this, ref mesh);
             return chk == 1 ? true : false;
         }
+
+        /// <summary>
+        /// Retrieves a zExtMesh object from the provided JSON file path.
+        /// </summary>
+        /// <param name="path">The path of the JSON file from which the mesh is to be retrieved.</param>
+        /// <param name="mesh">The zExtMesh object to be populated with the retrieved data.</param>
+        /// <returns>True if the mesh is successfully retrieved; otherwise, false.</returns>
         static public bool GetMesh(string path, ref zExtMesh mesh) {
             int chk = zNativeMethods.ext_json_getMeshFromJsonPath(path, ref mesh);
             return chk == 1 ? true : false;
         }
-        public void CreateJson() {
+
+        /// <summary>
+        /// Creates a new zExtJSON object.
+        /// </summary>
+        public void createJson() {
 
             if (pointer == IntPtr.Zero) {
 
@@ -795,14 +874,26 @@ namespace zSpace {
             zNativeMethods.ext_json_createJson(ref this);
         }
 
-         
+        /// <summary>
+        /// Sets the zExtMesh data to the zExtJSON object.
+        /// </summary>
+        /// <param name="mesh">The zExtMesh object to set into the zExtJSON.</param>
+        /// <returns>True if the mesh is successfully set; otherwise, false.</returns>
         public bool SetMesh(in zExtMesh mesh) {
             int chk = zNativeMethods.ext_json_setMeshToJson(ref this, in mesh);
             return chk == 1 ? true : false;
         }
+
+        /// <summary>
+        /// Provides the array of attribute types from the zExtJSON object.
+        /// </summary>
         public string[] AttributeTypes {
             get { return this.attributesTypes.getItems(); }
         }
+
+        /// <summary>
+        /// Provides the array of attribute keys from the zExtJSON object.
+        /// </summary>
         public string[] AttributeKeys {
             get { return this.attributesNames.getItems(); }
         }
