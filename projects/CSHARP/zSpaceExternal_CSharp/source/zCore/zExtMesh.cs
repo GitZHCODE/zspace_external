@@ -416,7 +416,7 @@ namespace zSpace {
             [MarshalAs(UnmanagedType.LPArray), In, Out] float[] outVColors);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int ext_mesh_getMeshFaceCount(zExtMesh objMesh,
+        internal static extern int ext_mesh_getMeshFaceCounts(zExtMesh objMesh,
             [MarshalAs(UnmanagedType.LPArray), In, Out] int[] outfCounts);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
@@ -444,7 +444,7 @@ namespace zSpace {
         internal static extern int ext_mesh_toUSD(ref zExtMesh extMesh, ref zExtUSD usd);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int ext_mesh_getMeshFaceCount(ref zExtMesh objMesh, [MarshalAs(UnmanagedType.LPArray), In, Out] int[] outfCounts);
+        internal static extern int ext_mesh_getMeshFaceCounts(ref zExtMesh objMesh, [MarshalAs(UnmanagedType.LPArray), In, Out] int[] outfCounts);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         internal static extern int ext_mesh_getVertexPositionsRaw(ref zExtMesh objMesh,

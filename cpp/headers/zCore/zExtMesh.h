@@ -218,7 +218,7 @@ namespace zSpace
 		 *  \return 1 on success, 0 on failure.
 		 *
 		 */
-		ZSPACE_EXTERNAL int ext_mesh_getMeshFaceCount(zExtMesh& objMesh, int* outfCounts);
+		ZSPACE_EXTERNAL int ext_mesh_getMeshFaceCounts(zExtMesh& objMesh, int* outfCounts);
 
 		/*! \brief Gets the position and color data for the vertices of a zExtMesh object.
 		*

@@ -1422,6 +1422,8 @@ namespace zSpace
 	{
 		try
 		{
+			int memoryChk = extMesh.checkMemAlloc(false);
+			if (memoryChk != 1) return memoryChk;
 			zFnMesh fnMesh(*extMesh.pointer);
 			if (vertexColors.arrayCount != fnMesh.numVertices())
 			{
@@ -1607,44 +1609,61 @@ namespace zSpace
 
 	ZSPACE_EXTERNAL_INLINE int ext_mesh_getMeshsFromMeshPointerArray(zExtMeshPointerArray& inArray, zExtMesh* outMeshes)
 	{
-		for (int i = 0; i < inArray.pointer->size(); i++)
+		try
 		{
-			outMeshes[i] = zExtMesh(inArray.pointer->at(i));
-			outMeshes[i].updateAttributes();
+			int memoryChk = inArray.checkMemAlloc(false);
+			if (memoryChk != 1) return memoryChk;
+			for (int i = 0; i < inArray.pointer->size(); i++)
+			{
+				outMeshes[i] = zExtMesh(inArray.pointer->at(i));
+				outMeshes[i].updateAttributes();
+			}
 		}
+		catch (const std::exception&)
+		{
+			return 0;
+		}
+		
 	}
 
 	ZSPACE_EXTERNAL_INLINE int ext_mesh_getVertexPositions(zExtMesh& objMesh, zExtPointArray& extArray)
 	{
-		extArray.pointer = new zPointArray();
+		try
+		{
+			int memoryChk = objMesh.checkMemAlloc(false);
+			if (memoryChk != 1) return memoryChk;
+			zFnMesh fn(*objMesh.pointer);
+			fn.getVertexPositions(*extArray.pointer);
+			extArray.updateAttributes();
 
-		zFnMesh fn(*objMesh.pointer);
-		fn.getVertexPositions(*extArray.pointer);
-		extArray.updateAttributes();
-
-		return 1;
+			return 1;
+		}
+		catch (const std::exception&)
+		{
+			printf("\n ext_mesh_getVertexPositions failed!");
+			return 0;
+		}
+		
 	}
 
 	ZSPACE_EXTERNAL_INLINE int ext_mesh_getMeshColors(zExtMesh& objMesh, zExtColorArray& extArray)
 	{
-		//extArray.pointer = new zColorArray();
-		extArray.checkMemAlloc();
+		try
+		{
+			int memoryChk = objMesh.checkMemAlloc(false);
+			if (memoryChk != 1) return memoryChk;
 
-		zFnMesh fn(*objMesh.pointer);
-
-		fn.getVertexColors(*extArray.pointer);
-
-		//zColorArray c;
-		//fn.getVertexColors(c);
-		//for (int i = 0; i < extArray.pointer->size(); i++)
-		//{
-		//	//printf(" \n mesh get colors extArray	r %f g %f b %f", extArray.pointer->at(i).r, extArray.pointer->at(i).g, extArray.pointer->at(i).b);
-		//	//printf(" \n mesh get colors zColorArray	r %f g %f b %f", c.at(i).r, c.at(i).g, c.at(i).b);
-
-		//}
-		extArray.updateAttributes();
-
-		return 1;
+			zFnMesh fn(*objMesh.pointer);
+			fn.getVertexColors(*extArray.pointer);
+			extArray.updateAttributes();
+			return 1;
+		}
+		catch (const std::exception&)
+		{
+			printf("\n ext_mesh_getMeshColors failed!");
+			return 0;
+		}
+			
 	}
 
 	ZSPACE_EXTERNAL_INLINE int ext_mesh_getMeshPolygonDate(zExtMesh& objMesh, zExtIntArray& pCount, zExtIntArray& pConnect)
@@ -1663,16 +1682,9 @@ namespace zSpace
 	{
 		try
 		{
+			int memoryChk = objMesh.checkMemAlloc(false);
+			if (memoryChk != 1) return memoryChk;
 
-			//zFnMesh fn(*objMesh.pointer);
-			//fn.smoothMesh(level, !fixedCorner);
-			//objMesh.updateAttributes();
-			//return 1;
-
-			if (!objMesh.pointer)
-			{
-				return 0;
-			}
 			objMesh.smoothMesh(level, smoothCorner, *fixedVerts.pointer);
 
 			objMesh.updateAttributes();
@@ -1691,10 +1703,9 @@ namespace zSpace
 	{
 		try
 		{
-			if (!objMesh.pointer)
-			{
-				return 0;
-			}
+			int memoryChk = objMesh.checkMemAlloc(false);
+			if (memoryChk != 1) return memoryChk;
+
 			objMesh.smoothMesh1D(level, flip, smoothCorner, *fixedVerts.pointer);
 
 			objMesh.updateAttributes();
@@ -1713,10 +1724,8 @@ namespace zSpace
 	{
 		try
 		{
-			if (!objMesh.pointer)
-			{
-				return 0;
-			}
+			int memoryChk = objMesh.checkMemAlloc(false);
+			if (memoryChk != 1) return memoryChk;
 			/*vector<zItMeshHalfEdgeArray> edgeLoopU, edgeLoopV;
 			objMesh.getEdgeLoop(*objMesh.pointer, edgeLoopU, edgeLoopV);
 
@@ -1729,8 +1738,8 @@ namespace zSpace
 		}
 		catch (const std::exception&)
 		{
-			printf("\n Smooth1D failed!");
-			return 0;
+			printf("\n ext_mesh_getEdgeLoops failed!");
+			return 404;
 		}
 	}
 
@@ -1764,6 +1773,9 @@ namespace zSpace
 	{
 		try
 		{
+			int memoryChk = objMesh.checkMemAlloc(false);
+			if (memoryChk != 1) return memoryChk;
+
 			zFnMesh fn(*objMesh.pointer);
 			outDeviations.pointer = new zDoubleArray();
 			fn.getPlanarityDeviationPerFace(*outDeviations.pointer, planarityType == 0 ? zPlanarSolverType::zQuadPlanar : zPlanarSolverType::zVolumePlanar, colorFaces, tolerance);
@@ -1782,7 +1794,8 @@ namespace zSpace
 	{
 		try
 		{
-			extPointArray.checkMemAlloc();
+			int memoryChk = objMesh.checkMemAlloc(false);
+			if (memoryChk != 1) return memoryChk;
 			zFnMesh fn(*objMesh.pointer);
 			fn.getFaceColors(*extPointArray.pointer);
 			extPointArray.updateAttributes();
@@ -1804,11 +1817,8 @@ namespace zSpace
 	}
 	ZSPACE_EXTERNAL_INLINE int ext_mesh_getVertexPositionsRaw(zExtMesh& objMesh, float* outVPostions, float* outVColors)
 	{
-		if (objMesh.pointer == nullptr)
-		{
-			"/n meshPointer is null";
-			return 0;
-		}
+		int memoryChk = objMesh.checkMemAlloc(false);
+		if (memoryChk != 1) return memoryChk;
 		zFnMesh fn(*objMesh.pointer);
 		zPoint* pts = fn.getRawVertexPositions();
 		zColor* colors = fn.getRawVertexColors();
@@ -1825,55 +1835,76 @@ namespace zSpace
 		}
 		return 1;
 	}
-	ZSPACE_EXTERNAL_INLINE int ext_mesh_getMeshFaceCount(zExtMesh& objMesh, int* outfCounts)
+	ZSPACE_EXTERNAL_INLINE int ext_mesh_getMeshFaceCounts(zExtMesh& objMesh, int* outfCounts)
 	{
-		if (!objMesh.pointer)
+		try
 		{
-			"/n meshPointer is null";
+			int memoryChk = objMesh.checkMemAlloc(false);
+			if (memoryChk != 1) return memoryChk;
+
+			zFnMesh fn(*objMesh.pointer);
+			zIntArray pCounts;
+			zIntArray pConnects;
+			fn.getPolygonData(pConnects, pCounts);
+			for (int i = 0; i < pCounts.size(); i++)
+			{
+				outfCounts[i] = pCounts[i];
+			}
+			return 1;
+		}
+		catch (const std::exception&)
+		{
+			printf("\n getMeshFaceCounts failed!");
 			return 0;
 		}
-		zFnMesh fn(*objMesh.pointer);
-		zIntArray pCounts;
-		zIntArray pConnects;
-		fn.getPolygonData(pConnects, pCounts);
-		for (int i = 0; i < pCounts.size(); i++)
-		{
-			outfCounts[i] = pCounts[i];
-		}
-		return 1;
+		
 	}
 	ZSPACE_EXTERNAL_INLINE int ext_mesh_getMeshFaceConnect(zExtMesh& objMesh, int* outfConnects)
 	{
-		if (!objMesh.pointer)
+		try
 		{
-			"/n meshPointer is null";
+			int memoryChk = objMesh.checkMemAlloc(false);
+			if (memoryChk != 1) return memoryChk;
+
+			zFnMesh fn(*objMesh.pointer);
+			zIntArray pCounts;
+			zIntArray pConnects;
+			fn.getPolygonData(pConnects, pCounts);
+			for (int i = 0; i < pConnects.size(); i++)
+			{
+				outfConnects[i] = pConnects[i];
+			}
+			return 1;
+		}
+		catch (const std::exception&)
+		{
+			printf("\n getFaceColor failed!");
 			return 0;
 		}
-		zFnMesh fn(*objMesh.pointer);
-		zIntArray pCounts;
-		zIntArray pConnects;
-		fn.getPolygonData(pConnects, pCounts);
-		for (int i = 0; i < pConnects.size(); i++)
-		{
-			outfConnects[i] = pConnects[i];
-		}
-		return 1;
+		
 	}
 
 	ZSPACE_EXTERNAL_INLINE int ext_mesh_getMeshCentre(zExtMesh& objMesh, float* outCentre)
 	{
-		if (!objMesh.pointer)
+		try
 		{
-			"/n meshPointer is null";
+			int memoryChk = objMesh.checkMemAlloc(false);
+			if (memoryChk != 1) return memoryChk;
+
+			zFnMesh fn(*objMesh.pointer);
+			zPoint pt = fn.getCenter();
+			outCentre[0] = pt.x;
+			outCentre[1] = pt.y;
+			outCentre[2] = pt.z;
+
+			return 1;
+		}
+		catch (const std::exception&)
+		{
+			printf("\n getFaceCentre failed!");
 			return 0;
 		}
-		zFnMesh fn(*objMesh.pointer);
-		zPoint pt =  fn.getCenter();
-		outCentre[0] = pt.x;
-		outCentre[1] = pt.y;
-		outCentre[2] = pt.z;
-
-		return 1;
+		
 	}
 	ZSPACE_EXTERNAL_INLINE int ext_mesh_getPlanarityDeviationPerFace(zExtMesh& objMesh, zExtDoubleArray& outPlanarityDevs, int type, bool colorFaces , double tolerance )
 	{
@@ -1904,6 +1935,8 @@ namespace zSpace
 	{
 		try
 		{
+			int memoryChk = objMesh.checkMemAlloc(false);
+			if (memoryChk != 1) return memoryChk;
 			zDoubleArray gaussiancurv;
 			zFnMesh fn(*objMesh.pointer);
 			fn.getGaussianCurvature(gaussiancurv);
