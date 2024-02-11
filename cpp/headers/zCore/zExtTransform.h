@@ -55,13 +55,21 @@ namespace zSpace
 /** @}*/
 
 /** @}*/
-	struct zExtTransform
+	struct ZSPACE_EXTERNAL zExtTransform
 	{
-		zTransform* _transform;
-		float matrix[4][4];
+		zTransform* pointer;
+		float row0[4];
+		float row1[4];
+		float row2[4];
+		float row3[4];
+		//float matrix[4][4];
 
 		zExtTransform();
 		zExtTransform(zTransform* t, bool transpose = false);
+		zExtTransform(zTransform t);
+		~zExtTransform();
+		int checkMemAlloc(bool allocateMemory = true);
+		int initPointer(zTransform t);
 
 		void updateAttributes(zTransform* transform, bool transpose = false);
 		void updateAttributes(bool transpose = false);
@@ -87,41 +95,51 @@ namespace zSpace
 	/** @}*/
 
 	/** @}*/
-	struct zExtTransformArray
+	struct ZSPACE_EXTERNAL zExtTransformArray
 	{
 		vector<zTransform>* pointer; /**< A pointer to the graph array object */
 		int arrayCount; /**< The number of graphs in the array */
 
+
+		int checkMemAlloc(bool allocateMemory = true);
+		~zExtTransformArray();
 		/**
 		 * \brief Updates the attributes of the zExtGraphArray object
 		 */
+
 		void updateAttributes();
+
+		void getItems(zExtTransform* items);
+		void setItems(zExtTransform* items, int count);
 	};
 
 	ZSPACE_EXTERNAL_C
 	{
-		ZSPACE_EXTERNAL void ext_zTransform_createNewFromArray(float* array, zExtTransform& outTransform);
+	ZSPACE_EXTERNAL void ext_transform_createNewFromArray(float* array, zExtTransform & outTransform);
 
-		/*! \brief Creates a new zExtTransform with zero.
-		 *  \param [in,out] outTransform					-Reference to the zExtTransform object to be created.
-		 */
-		ZSPACE_EXTERNAL void ext_zTransform_createNew(zExtTransform& outTransform);
+	/*! \brief Creates a new zExtTransform with zero.
+	 *  \param [in,out] outTransform					-Reference to the zExtTransform object to be created.
+	 */
+	ZSPACE_EXTERNAL void ext_transform_initPointer(zExtTransform& outTransform);
 
-		/*! \brief Creates a new zExtTransform from a float array.
-		 *  \param [in]		array							-float array of size 16 to create the zExTransform.
-		 *  \param [in,out] outTransform					-Reference to the zExtTransform object to be created.
-		 */
-		ZSPACE_EXTERNAL void ext_zTransform_createNewFromArray(float* array, zExtTransform& outTransform);
-		/*! \brief Update a zExtTransform.
-		 *  \param [in,out] transform						-Reference to the zExtTransform object to update.
-		 *  \param [in]		array							-float array of size 16 to update the zExTransform.
-		 */
-		ZSPACE_EXTERNAL void ext_zTransform_updateFromValues(zExtTransform& transform, float* array);
-		/*! \brief Get array of transform from transformArray/vector<zTransform>
-		 *  \param [in,out] transform						-Reference to the zExtTransformArray object to update.
-		 *  \param [in]		array							-an array of zExtTranform.
-		 */
-		ZSPACE_EXTERNAL void ext_zTransform_getItemsFromArray(zExtTransformArray inArray, zExtTransform* outTranfroms);
+	/*! \brief Creates a new zExtTransform from a float array.
+	 *  \param [in]		array							-float array of size 16 to create the zExTransform.
+	 *  \param [in,out] outTransform					-Reference to the zExtTransform object to be created.
+	 */
+	ZSPACE_EXTERNAL void ext_transform_createNewFromArray(float* array, zExtTransform& outTransform);
+	/*! \brief Update a zExtTransform.
+	 *  \param [in,out] transform						-Reference to the zExtTransform object to update.
+	 *  \param [in]		array							-float array of size 16 to update the zExTransform.
+	 */
+	ZSPACE_EXTERNAL void ext_transform_updateFromValues(zExtTransform& transform, float* array);
+	/*! \brief Get array of transform from transformArray/vector<zTransform>
+	 *  \param [in,out] transform						-Reference to the zExtTransformArray object to update.
+	 *  \param [in]		array							-an array of zExtTranform.
+	 */
+	ZSPACE_EXTERNAL int ext_transform_array_getItems(zExtTransformArray inArray, zExtTransform* outTranfroms);
+
+	ZSPACE_EXTERNAL int ext_transform_setItemsFromArray(zExtTransformArray inArray, zExtTransform* inTranfroms, int count);
+
 
 	}
 

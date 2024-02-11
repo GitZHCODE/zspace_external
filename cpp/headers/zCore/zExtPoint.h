@@ -48,7 +48,8 @@ namespace zSpace
 *  @{
 */
 
-/*! \struct zExtTransform
+/*! \struct 
+* 
 *	\brief An external struct for zTransform .
 *	\since version 0.0.1
 */
@@ -58,31 +59,40 @@ namespace zSpace
 /** @}*/
 
 /** @}*/
-	struct zExtPoint
-	{
-		//zPoint* pointer;
-		float x;
-		float y;
-		float z;
 
-		zExtPoint();
-		zExtPoint(float X, float Y, float Z);
-		zExtPoint(zPoint t);
-		//zExtPoint(zPoint* t);
 
-		//void updateAttributes(zPoint* t);
-		//void updateAttributes();
-		void updateAttributes(float X, float Y, float Z);
-		void updateAttributes(zPoint t);
-	};
+	
+	//struct zExtPoint
+	//{
+	//	//zPoint* pointer;
+	//	float x;
+	//	float y;
+	//	float z;
 
-	struct zExtPointArray
+	//	zExtPoint();
+	//	zExtPoint(float X, float Y, float Z);
+	//	zExtPoint(zPoint t);
+	//	//zExtPoint(zPoint* t);
+
+	//	//void updateAttributes(zPoint* t);
+	//	//void updateAttributes();
+	//	void updateAttributes(float X, float Y, float Z);
+	//	void updateAttributes(zPoint t);
+	//};
+	
+	
+	typedef zPoint zExtPoint;
+	
+	
+	struct ZSPACE_EXTERNAL zExtPointArray
 	{
 		zPointArray* pointer; /**< A pointer to the array object */
 		int arrayCount; /**< The number of items in the array */
 		zExtPointArray();
 		zExtPointArray(zPointArray* a);
+		~zExtPointArray();
 
+		int checkMemAlloc(bool allocateMemory = true);
 		/**
 		 * \brief Updates the attributes of the external object
 		 */
@@ -94,14 +104,35 @@ namespace zSpace
 		void setItems(zExtPoint* items, int count);
 	};
 
+	struct ZSPACE_EXTERNAL zExtPointArray2D
+	{
+		vector<zPointArray>* pointer; /**< A pointer to the array object */
+		int arrayCount; /**< The number of items in the array */
+		zExtPointArray2D();
+		zExtPointArray2D(vector<zPointArray> a);
+		zExtPointArray2D(vector<zPointArray>* a);
+		~zExtPointArray2D();
+
+		/**
+		 * \brief Updates the attributes of the external object
+		 */
+		void updateAttributes();
+		/**
+		 * \brief get items from array
+		 */
+		int checkMemAlloc(bool allocateMemory = true);
+		void getItems(zExtPointArray* items);
+		void setItems(zExtPointArray* items, int count);
+	};
 
 
 	ZSPACE_EXTERNAL_C
 	{
 		//ZSPACE_EXTERNAL void ext_point_create(float x, float y, float z, zExtPoint& refPoint);
 		//ZSPACE_EXTERNAL int ext_point_create(float x, float y, float z, zExtPoint& refPoint);
-		ZSPACE_EXTERNAL void ext_point_getItemsFromArray(zExtPointArray & extArray, zExtPoint * outArray);
+		ZSPACE_EXTERNAL void ext_point_array_getItems(zExtPointArray & extArray, zExtPoint * outArray);
 		ZSPACE_EXTERNAL int ext_point_setItemsFromArray(zExtPointArray & extArray, zExtPoint * inArray, int count);
+		ZSPACE_EXTERNAL void ext_point_testAdd(zPoint& point1, zPoint& point2);
 	}
 
 }

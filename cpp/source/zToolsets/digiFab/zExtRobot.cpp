@@ -69,7 +69,8 @@ namespace zSpace
 	//--------------------------
 	//----SET METHODS
 	//--------------------------
-	ZSPACE_EXTERNAL_INLINE void ext_zTsRobot_setEndEffector(zExtRobot& extRobot, zExtTransform& eeTransform)
+	ZSPACE_EXTERNAL_INLINE void ext_zTsRobot_setEndEffector(zExtRobot& extRobot, 
+		& eeTransform)
 	{
 
 		extRobot.robot->setEndEffector(*eeTransform._transform);
@@ -85,7 +86,7 @@ namespace zSpace
 
 		for (int i = 0; i < fabMeshCount; i++)
 		{
-			o_FabricationMeshes[i] = *fabMesh[i].extPointer;
+			o_FabricationMeshes[i] = *fabMesh[i].pointer;
 		}
 	}
 
@@ -161,8 +162,8 @@ namespace zSpace
 	}
 	ZSPACE_EXTERNAL_INLINE void ext_zTsRobot_getFabricationBoundingBox(zExtRobot& extRobot, zExtMesh& boundingBox)
 	{
-		boundingBox.extPointer = new zObjMesh;
-		extRobot.robot->getFabBbox(*boundingBox.extPointer);
+		boundingBox.pointer = new zObjMesh;
+		extRobot.robot->getFabBbox(*boundingBox.pointer);
 		boundingBox.updateAttributes();
 	}
 	

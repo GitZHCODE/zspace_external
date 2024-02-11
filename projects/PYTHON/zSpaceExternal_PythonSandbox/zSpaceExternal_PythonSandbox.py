@@ -38,5 +38,5 @@ print(f'Result: {outfCounts}')
 
 #c = 0.05
 
-#ext_meshUtil_catmullclark = DLLFile.ext_meshUtil_catmullclark
-#ext_meshUtil_catmullclark (myMesh,3,True)
+#ext_meshUtil_smoothMesh = DLLFile.ext_meshUtil_smoothMesh
+#ext_meshUtil_smoothMesh (myMesh,3,True)

@@ -19,8 +19,9 @@
 
 
 #include <headers/base/zSpace_External.h>
-
-#include <headers/zInterface/functionsets/zFnGraph.h>
+#if defined(ZSPACE_USD_INTEROP) 
+//#include <headers/zInterOp/core/zOmniCore.h>
+#endif
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -28,31 +29,59 @@
 #include <sstream>
 
 #include <headers/zApp/include/zInterOp.h>
-#include<headers/zInterOp/core/zOmniCore.h>
+
+#include <headers/zInterface/functionsets/zFn.h>
+#include <headers/zCore/zExtUtilsCore.h>
+
+
 
 #include<execution>
+
 
 using namespace std;
 
 namespace zSpace
 {
+#if defined(ZSPACE_USD_INTEROP)  
+	//zOmniCore omniCore;
 
-	zOmniCore omniCore;
-
-	struct zExtUSD
+	struct ZSPACE_EXTERNAL zExtUSD
 	{
 		UsdPrim* pointer;
 		zExtUSD();
-		zExtUSD(UsdPrim *usd);
+		zExtUSD(UsdPrim* usd);
+		~zExtUSD();
 		void updateAttributes();
+		int checkMemAlloc(bool allocateMemory = true);
 	};
 
 	ZSPACE_EXTERNAL_C
 	{
 		
 
+
 	}
 
+
+
+	struct zExtUSDStage
+	{
+		UsdStageRefPtr* pointer;
+		zExtUSDStage();
+		zExtUSDStage(UsdStageRefPtr* usd);
+		void updateAttributes();
+		int checkMemAlloc(bool allocateMemory = true);
+	};
+
+	ZSPACE_EXTERNAL_C
+	{
+		ZSPACE_EXTERNAL int ext_usd_openStage(const string& filePath, zExtUSDStage& extUSD);
+		ZSPACE_EXTERNAL int ext_usd_createStage(const string & filePath, zExtUSDStage& extUSD);
+
+
+
+	}
+#endif
 
 
 }

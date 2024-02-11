@@ -76,6 +76,9 @@
     <Filter Include="Header Files\base">
       <UniqueIdentifier>{01380c76-d164-459d-8a91-13e4636426a6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\base">
+      <UniqueIdentifier>{cf698b10-d310-4519-a8cf-e338654bbc42}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\zspace_core\cpp\depends\alglib\cpp\src\alglibinternal.h">
@@ -135,9 +138,6 @@
     <ClInclude Include="..\..\..\cpp\headers\zCore\zExtGraph.h">
       <Filter>Header Files\zCore</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtTransform.h">
-      <Filter>Header Files\zCore</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\cpp\headers\zToolsets\digifab\zExtRobot.h">
       <Filter>Header Files\zToolset\DigiFab</Filter>
     </ClInclude>
@@ -158,6 +158,18 @@
     </ClInclude>
     <ClInclude Include="..\..\..\cpp\headers\zCore\zExtUSD.h">
       <Filter>Header Files\zCore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtField.h">
+      <Filter>Header Files\zCore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\cpp\headers\zToolsets\statics\zExtVault.h">
+      <Filter>Header Files\zToolset\Statics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtTransform.h">
+      <Filter>Header Files\zCore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\cpp\headers\base\zStatus.h">
+      <Filter>Header Files\base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -235,6 +247,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\cpp\source\zCore\zExtUSD.cpp">
       <Filter>Source Files\zCore</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\source\zCore\zExtField.cpp">
+      <Filter>Source Files\zCore</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\source\zToolsets\statics\zExtVault.cpp">
+      <Filter>Source Files\zToolset\Statics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\source\base\zStatus.cpp">
+      <Filter>Source Files\base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

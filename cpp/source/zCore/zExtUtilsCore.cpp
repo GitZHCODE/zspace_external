@@ -38,6 +38,31 @@ namespace zSpace
 		pointer = new zIntArray(a);
 		updateAttributes();
 	}
+	ZSPACE_EXTERNAL_INLINE zExtIntArray::~zExtIntArray()
+	{
+		delete pointer;
+		pointer = nullptr;
+	}
+	ZSPACE_EXTERNAL_INLINE int zExtIntArray::checkMemAlloc(bool allocateMemory)
+	{
+		try
+		{
+			if (pointer != nullptr) return 1;
+			else
+			{
+				if (!allocateMemory) return 0;
+				pointer = new vector<int>();
+				return 2;
+
+			}
+		}
+		catch (const std::exception&)
+		{
+			printf("\n Pointer initialization failed");
+			return 404;
+		}
+		
+	}
 	// Methods
 	ZSPACE_EXTERNAL_INLINE void zExtIntArray::updateAttributes()
 	{
@@ -53,7 +78,8 @@ namespace zSpace
 	ZSPACE_EXTERNAL_INLINE void zExtIntArray::setItems(int* items, int count)
 	{
 		//delete pointer;
-		pointer = new zIntArray;
+		checkMemAlloc();
+		pointer->clear();
 		for (int i = 0; i < count; i++)
 		{
 			pointer->push_back(items[i]);
@@ -61,7 +87,7 @@ namespace zSpace
 		updateAttributes();
 	}
 	// External Methods
-	ZSPACE_EXTERNAL_INLINE void ext_int_getItemsFromArray(zExtIntArray& extArray, int* outArray)
+	ZSPACE_EXTERNAL_INLINE void ext_int_array_getItems(zExtIntArray& extArray, int* outArray)
 	{
 		extArray.getItems(outArray);
 	}
@@ -89,6 +115,30 @@ namespace zSpace
 		pointer = a;
 		updateAttributes();
 	}
+	ZSPACE_EXTERNAL_INLINE zExtIntArray2D::~zExtIntArray2D()
+	{
+		delete pointer;
+		pointer = nullptr;
+	}
+	ZSPACE_EXTERNAL_INLINE int zExtIntArray2D::checkMemAlloc(bool allocateMemory)
+	{
+		try
+		{
+			if (pointer != nullptr) return 1;
+			else
+			{
+				if (!allocateMemory) return 0;
+				pointer = new vector<zIntArray>();
+				return 2;
+
+			}
+		}
+		catch (const std::exception&)
+		{
+			printf("\n Pointer initialization failed");
+			return 404;
+		}
+	}
 	// Methods
 	ZSPACE_EXTERNAL_INLINE void zExtIntArray2D::updateAttributes()
 	{
@@ -113,11 +163,11 @@ namespace zSpace
 		updateAttributes();
 	}
 	// External Methods
-	ZSPACE_EXTERNAL_INLINE void ext_int_getItemsFromArray2D(zExtIntArray2D& extArray, zExtIntArray* outArray)
+	ZSPACE_EXTERNAL_INLINE void ext_int_array2D_getItems(zExtIntArray2D& extArray, zExtIntArray* outArray)
 	{
 		extArray.getItems(outArray);
 	}
-	ZSPACE_EXTERNAL_INLINE void ext_int_setItemsFromArray2D(zExtIntArray2D& extArray, zExtIntArray* inArray, int count)
+	ZSPACE_EXTERNAL_INLINE void ext_int_array2D_setItems(zExtIntArray2D& extArray, zExtIntArray* inArray, int count)
 	{
 		extArray.setItems(inArray, count);
 	}
@@ -129,13 +179,16 @@ namespace zSpace
 	ZSPACE_EXTERNAL_INLINE zExtFloatArray::zExtFloatArray()
 	{
 		//delete pointer;
-		pointer = new zFloatArray();
+		//pointer = new zFloatArray();
+		checkMemAlloc();
 		updateAttributes();
 	}
 	ZSPACE_EXTERNAL_INLINE zExtFloatArray::zExtFloatArray(zFloatArray a)
 	{
 		//delete pointer;
-		pointer = new zFloatArray(a);
+		//pointer = new zFloatArray(a);
+		checkMemAlloc();
+
 		updateAttributes();
 	}
 	ZSPACE_EXTERNAL_INLINE zExtFloatArray::zExtFloatArray(zFloatArray* a)
@@ -143,6 +196,30 @@ namespace zSpace
 		//delete pointer;
 		pointer = a;
 		updateAttributes();
+	}
+	ZSPACE_EXTERNAL_INLINE zExtFloatArray::~zExtFloatArray()
+	{
+		delete pointer;
+		pointer = nullptr;
+	}
+	ZSPACE_EXTERNAL_INLINE int zExtFloatArray::checkMemAlloc(bool allocateMemory)
+	{
+		try
+		{
+			if (pointer != nullptr) return 1;
+			else
+			{
+				if (!allocateMemory) return 0;
+				pointer = new vector<float>();
+				return 2;
+
+			}
+		}
+		catch (const std::exception&)
+		{
+			printf("\n Pointer initialization failed");
+			return 404;
+		}
 	}
 	// Methods
 	ZSPACE_EXTERNAL_INLINE void zExtFloatArray::updateAttributes()
@@ -159,7 +236,8 @@ namespace zSpace
 	ZSPACE_EXTERNAL_INLINE void zExtFloatArray::setItems(float* items, int count)
 	{
 		//delete pointer;
-		pointer = new zFloatArray;
+		checkMemAlloc();
+		pointer->clear();
 		for (int i = 0; i < count; i++)
 		{
 			pointer->push_back(items[i]);
@@ -167,7 +245,7 @@ namespace zSpace
 		updateAttributes();
 	}
 	// External Methods
-	ZSPACE_EXTERNAL_INLINE void ext_float_getItemsFromArray(zExtFloatArray& extArray, float* outArray)
+	ZSPACE_EXTERNAL_INLINE void ext_float_array_getItems(zExtFloatArray& extArray, float* outArray)
 	{
 		extArray.getItems(outArray);
 	}
@@ -196,6 +274,11 @@ namespace zSpace
 		pointer = a;
 		updateAttributes();
 	}
+	ZSPACE_EXTERNAL_INLINE zExtFloatArray2D::~zExtFloatArray2D()
+	{
+		delete pointer;
+		pointer = nullptr;
+	}
 	// Methods
 	ZSPACE_EXTERNAL_INLINE void zExtFloatArray2D::updateAttributes()
 	{
@@ -213,6 +296,7 @@ namespace zSpace
 	{
 		//delete pointer;
 		pointer = new vector<zFloatArray>;
+	
 		for (int i = 0; i < count; i++)
 		{
 			pointer->push_back(*(items[i].pointer));
@@ -220,11 +304,11 @@ namespace zSpace
 		updateAttributes();
 	}
 	// External Methods
-	ZSPACE_EXTERNAL_INLINE void ext_float_getItemsFromArray2D(zExtFloatArray2D& extArray, zExtFloatArray* outArray)
+	ZSPACE_EXTERNAL_INLINE void ext_float_array2D_getItems(zExtFloatArray2D& extArray, zExtFloatArray* outArray)
 	{
 		extArray.getItems(outArray);
 	}
-	ZSPACE_EXTERNAL_INLINE void ext_float_setItemsFromArray2D(zExtFloatArray2D& extArray, zExtFloatArray* inArray, int count)
+	ZSPACE_EXTERNAL_INLINE void ext_float_array2D_setItems(zExtFloatArray2D& extArray, zExtFloatArray* inArray, int count)
 	{
 		extArray.setItems(inArray, count);
 	}
@@ -251,6 +335,11 @@ namespace zSpace
 		pointer = a;
 		updateAttributes();
 	}
+	ZSPACE_EXTERNAL_INLINE zExtDoubleArray::~zExtDoubleArray()
+	{
+		delete pointer;
+		pointer = nullptr;
+	}
 	// Methods
 	ZSPACE_EXTERNAL_INLINE void zExtDoubleArray::updateAttributes()
 	{
@@ -274,7 +363,7 @@ namespace zSpace
 		updateAttributes();
 	}
 	// External Methods
-	ZSPACE_EXTERNAL_INLINE void ext_double_getItemsFromArray(zExtDoubleArray& extArray, double* outArray)
+	ZSPACE_EXTERNAL_INLINE void ext_double_array_getItems(zExtDoubleArray& extArray, double* outArray)
 	{
 		extArray.getItems(outArray);
 	}
@@ -306,6 +395,11 @@ namespace zSpace
 		pointer = a;
 		updateAttributes();
 	}
+	ZSPACE_EXTERNAL_INLINE zExtDoubleArray2D::~zExtDoubleArray2D()
+	{
+		delete pointer;
+		pointer = nullptr;
+	}
 	// Methods
 	ZSPACE_EXTERNAL_INLINE void zExtDoubleArray2D::updateAttributes()
 	{
@@ -331,13 +425,19 @@ namespace zSpace
 		updateAttributes();
 	}
 	// External Methods
-	ZSPACE_EXTERNAL_INLINE void ext_double_getItemsFromArray2D(zExtDoubleArray2D& extArray, zExtDoubleArray* outArray)
+	ZSPACE_EXTERNAL_INLINE void ext_double_array2D_getItems(zExtDoubleArray2D& extArray, zExtDoubleArray* outArray)
 	{
 		extArray.getItems(outArray);
 	}
-	ZSPACE_EXTERNAL_INLINE void ext_double_setItemsFromArray2D(zExtDoubleArray2D& extArray, zExtDoubleArray* inArray, int count)
+	ZSPACE_EXTERNAL_INLINE void ext_double_array2D_setItems(zExtDoubleArray2D& extArray, zExtDoubleArray* inArray, int count)
 	{
 		extArray.setItems(inArray, count);
+	}
+
+	ZSPACE_EXTERNAL_INLINE zExtString::~zExtString()
+	{
+		delete pointer;
+		pointer = nullptr;
 	}
 
 	//	------------------------------	//
@@ -357,11 +457,14 @@ namespace zSpace
 	}
 	ZSPACE_EXTERNAL_INLINE void zExtString::setItems(char* items, int count)
 	{
-		pointer = new string;
+		pointer = new string(items, count);
+		//cout << endl << "extstring " << items;
+		//printf("\n zExtString %s", pointer->c_str());
+		/*pointer = new string;
 		for (int i = 0; i < count; i++)
 		{
 			pointer->push_back(items[i]);
-		}
+		}*/
 		updateAttributes();
 	}
 	// External Methods
@@ -402,14 +505,14 @@ namespace zSpace
 	}
 	ZSPACE_EXTERNAL_INLINE zExtStringArray::zExtStringArray(zStringArray a)
 	{
-		printf("\n string 0");
+		//printf("\n string 0");
 		try
 		{
-			printf("\n string pointer before deleted");
-			printf("\n Ptr i% ", pointer);
+			//printf("\n string meshPointer before deleted");
+			//printf("\n Ptr i% ", pointer);
 			if (pointer != nullptr)
 			{
-				printf("\n ptr");
+				printf("\n ptr init");
 
 				////delete pointer;
 
@@ -417,17 +520,17 @@ namespace zSpace
 		}
 		catch (const std::exception&)
 		{
-			printf("\n string pointer not deleted");
+			printf("\n string  not deleted");
 
 		}
 		
-		printf("\n string 1");
+		//printf("\n string 1");
 
 		pointer = new zStringArray(a);
-		printf("\n string 2");
+		//printf("\n string 2");
 
 		updateAttributes();
-		printf("\n string 3");
+		//printf("\n string 3");
 
 	}
 	ZSPACE_EXTERNAL_INLINE zExtStringArray::zExtStringArray(zStringArray* a)
@@ -435,6 +538,11 @@ namespace zSpace
 		//delete pointer;
 		pointer = a;
 		updateAttributes();
+	}
+	ZSPACE_EXTERNAL_INLINE zExtStringArray::~zExtStringArray()
+	{
+		delete pointer;
+		pointer = nullptr;
 	}
 	// Methods
 	ZSPACE_EXTERNAL_INLINE void zExtStringArray::updateAttributes()
@@ -452,16 +560,27 @@ namespace zSpace
 	}
 	ZSPACE_EXTERNAL_INLINE void zExtStringArray::setItems(string* items, int count)
 	{
+		printf("\n zExtStringArray::setItems");
 		//delete pointer;
-		pointer = new zStringArray();
+		//pointer = new zStringArray();
+		pointer = new vector<string>();
+		vector<string> st;
+
 		for (int i = 0; i < count; i++)
 		{
+			bool chk = items[i].c_str() != nullptr;
+			// Use %s format specifier for strings
+			printf("\n %i zExtString %d - %i", i, chk, items[i]);
+
+			// Use cout for printing the content
+			//cout << endl << items[i] << endl;
+		
 			pointer->push_back(items[i]);
 		}
 		updateAttributes();
 	}
 	// External Methods
-	ZSPACE_EXTERNAL_INLINE void ext_string_getItemsFromArray(zExtStringArray& extArray, zExtString* outArray)
+	ZSPACE_EXTERNAL_INLINE void ext_string_array_getItems(zExtStringArray& extArray, zExtString* outArray)
 	{
 		//extArray.getItems(outArray);
 		//printf(" \n outArray size %i ", outArray->size());
@@ -483,8 +602,19 @@ namespace zSpace
 	}
 	ZSPACE_EXTERNAL_INLINE void ext_string_setItemsFromArray(zExtStringArray& extArray, zExtString* inArray, int count)
 	{
+		//printf("\n ext_string_setItemsFromArray  count %i", count);
+		vector<string> st;
+		for (int i = 0; i < count; i++)
+		{
+			//bool chk = inArray[i].pointer->c_str() != nullptr;
+			//printf("\n %i zExtString %d - %i", i, chk, inArray[i].stringLength);
 
-		extArray.setItems(inArray->pointer, count);
+			//cout << endl << *inArray[i].pointer << endl;
+			st.push_back(*inArray[i].pointer);
+		}
+		extArray = zExtStringArray(st);
+		extArray.updateAttributes();
+		//extArray.setItems(inArray->pointer, count);
 	}
 	//	------------------------------	//
 	//	-----	String Array 2D	------	//
@@ -507,6 +637,11 @@ namespace zSpace
 		//delete pointer;
 		pointer = a;
 		updateAttributes();
+	}
+	ZSPACE_EXTERNAL_INLINE zExtStringArray2D::~zExtStringArray2D()
+	{
+		delete pointer;
+		pointer = nullptr;
 	}
 	// Methods
 	ZSPACE_EXTERNAL_INLINE void zExtStringArray2D::updateAttributes()
@@ -533,11 +668,11 @@ namespace zSpace
 		updateAttributes();
 	}
 	// External Methods
-	ZSPACE_EXTERNAL_INLINE void ext_string_getItemsFromArray2D(zExtStringArray2D& extArray, zExtStringArray* outArray)
+	ZSPACE_EXTERNAL_INLINE void ext_string_array2D_getItems(zExtStringArray2D& extArray, zExtStringArray* outArray)
 	{
 		extArray.getItems(outArray);
 	}
-	ZSPACE_EXTERNAL_INLINE void ext_string_setItemsFromArray2D(zExtStringArray2D& extArray, zExtStringArray* inArray, int count)
+	ZSPACE_EXTERNAL_INLINE void ext_string_array2D_setItems(zExtStringArray2D& extArray, zExtStringArray* inArray, int count)
 	{
 		extArray.setItems(inArray, count);
 	}
@@ -563,6 +698,11 @@ namespace zSpace
 		pointer = a;
 		updateAttributes();
 	}
+	ZSPACE_EXTERNAL_INLINE zExtBoolArray::~zExtBoolArray()
+	{
+		delete pointer;
+		pointer = nullptr;
+	}
 	// Methods
 	ZSPACE_EXTERNAL_INLINE void zExtBoolArray::updateAttributes()
 	{
@@ -586,7 +726,7 @@ namespace zSpace
 		updateAttributes();
 	}
 	// External Methods
-	ZSPACE_EXTERNAL_INLINE void ext_bool_getItemsFromArray(zExtBoolArray& extArray, bool* outArray)
+	ZSPACE_EXTERNAL_INLINE void ext_bool_array_getItems(zExtBoolArray& extArray, bool* outArray)
 	{
 		extArray.getItems(outArray);
 	}
@@ -617,6 +757,11 @@ namespace zSpace
 		pointer = a;
 		updateAttributes();
 	}
+	ZSPACE_EXTERNAL_INLINE zExtBoolArray2D::~zExtBoolArray2D()
+	{
+		delete pointer;
+		pointer = nullptr;
+	}
 	// Methods
 	ZSPACE_EXTERNAL_INLINE void zExtBoolArray2D::updateAttributes()
 	{
@@ -641,11 +786,11 @@ namespace zSpace
 		updateAttributes();
 	}
 	// External Methods
-	ZSPACE_EXTERNAL_INLINE void ext_bool_getItemsFromArray2D(zExtBoolArray2D& extArray, zExtBoolArray* outArray)
+	ZSPACE_EXTERNAL_INLINE void ext_bool_array2D_getItems(zExtBoolArray2D& extArray, zExtBoolArray* outArray)
 	{
 		extArray.getItems(outArray);
 	}
-	ZSPACE_EXTERNAL_INLINE void ext_bool_setItemsFromArray2D(zExtBoolArray2D& extArray, zExtBoolArray* inArray, int count)
+	ZSPACE_EXTERNAL_INLINE void ext_bool_array2D_setItems(zExtBoolArray2D& extArray, zExtBoolArray* inArray, int count)
 	{
 		extArray.setItems(inArray, count);
 	}

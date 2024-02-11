@@ -10,8 +10,8 @@
 // Author : Heba Eiz <heba.eiz@zaha-hadid.com>
 //
 
-#ifndef ZSPACE_EXT_CORE_H
-#define ZSPACE_EXT_CORE_H
+#ifndef ZSPACE_EXT_CORE_MESH_H
+#define ZSPACE_EXT_CORE_MESH_H
 
 
 
@@ -23,7 +23,13 @@
 
 #include <headers/zCore/base/zExtern.h>
 #include <headers/zInterface/functionsets/zFnMesh.h>
-#include <headers/zInterface/functionsets/zFnGraph.h>
+//#include <headers/zInterface/functionsets/zFnGraph.h>
+#include <headers/zCore/zExtJSON.h>
+#include <headers/zCore/zExtUSD.h>
+#include <headers/zCore/zExtGraph.h>
+
+//#include <headers/zCore/zExtJSON.h>
+//#include <headers/zCore/zExtUSD.h>
 
 //#include <pxr/usd/sdf/path.h>
 //#include <pxr/usd/usd/modelAPI.h>
@@ -47,12 +53,16 @@ using namespace std;
 
 namespace zSpace
 {
+	//struct zExtjson;
+	//struct zExtGraph;
+	//struct zExtGraphArray;
 
 	/*! \brief A structure representing an extended mesh.
 	*/
-	struct zExtMesh
+	struct ZSPACE_EXTERNAL zExtMesh
 	{
-		zObjMesh* extPointer; ///< Pointer to the underlying zObjMesh.
+	public:
+		zObjMesh* pointer; ///< Pointer to the underlying zObjMesh.
 		int vCount;     ///< The number of vertices in the mesh.
 		int fCount;     ///< The number of faces in the mesh.
 		//zExtPointArray verticesArray; ///< PointerArray for the vertices of a mesh
@@ -61,10 +71,14 @@ namespace zSpace
 		//zExtIntArray polyConnect; ///< 
 		//zExtColorArray colorsArray; ///< PointerArray for the vertices of a mesh
 		zExtMesh();
+		~zExtMesh();
 		/*! \brief Constructs a zExtMesh object.
 		 *  \param m Pointer to the underlying zObjMesh.
 		 */
 		zExtMesh(zObjMesh* m);
+		zExtMesh(zObjMesh& m);
+
+		int checkMemAlloc(bool allocateMemory = true);
 
 		/*! \brief Updates the attributes of the zExtMesh object.
 		 */
@@ -72,27 +86,47 @@ namespace zSpace
 
 		bool createMeshFromJson(json* pointer);
 		bool createMeshFromJson(string path);
+
+
+		//void createMedialGraphFromMeshes(zObjMeshArray& oMeshes, zObjGraph& outMedialGraph);
+
+		void graphFromMeshHEArray(zItMeshHalfEdgeArray& meshItHE, zObjGraph& outGraph);
+		void graphFromMeshHEArray(vector<zItMeshHalfEdgeArray>& meshItHE, zObjGraph& outGraph);
+		void getEdgeLoop(zObjMesh& mesh, vector<zItMeshHalfEdgeArray>& outUDirection, vector<zItMeshHalfEdgeArray>& outVDirection);
+		void smoothMesh(int numDivisions, bool smoothCorner, zIntArray fixedIndex = zIntArray());
+		void smoothMesh1D( int numDivisions, bool flip = false, bool smoothCorner = true, zIntArray fixedIndex = zIntArray());
+
+	private:
+		void createMedialGraph(vector<zItMeshHalfEdgeArray>& meshHalfEdges, zObjGraph& outGraph);
+		void computeLoops(zObjMesh& oMesh, zItMeshHalfEdge& heStart, zItMeshHalfEdgeArray& v_Loops);
 	};
 	/*! \brief A structure representing an extended mesh.
 	*/
-	struct zExtMeshArray
+	struct ZSPACE_EXTERNAL zExtMeshArray
 	{
 		zObjMeshArray* pointer;
 		int arrayCount;
 
 		zExtMeshArray(zObjMeshArray* m);
+		~zExtMeshArray();
+		int checkMemAlloc(bool allocateMemory = true);
 		void updateAttributes();
+		void getItems(zObjMesh* items);
+		void setItems(zObjMesh* items, int count);
 	};
-	struct zExtMeshPointerArray
+	struct ZSPACE_EXTERNAL zExtMeshPointerArray
 	{
 		zObjMeshPointerArray* pointer;
 		int arrayCount;
 
 		zExtMeshPointerArray(zObjMeshPointerArray* m);
+		~zExtMeshPointerArray();
+		int checkMemAlloc(bool allocateMemory = true);
+
 		void updateAttributes();
 	};
 
-	ZSPACE_EXTERNAL_C
+	ZSPACE_EXTERNAL_C 
 	{
 		//--------------------------
 		//----CREATE METHODS
@@ -106,7 +140,7 @@ namespace zSpace
 		 *  \param [in]		numFaces					-The number of faces in the mesh.
 		 *  \param [in,out] out_mesh					-Reference to the zExtMesh object to be created.
 		 */
-		ZSPACE_EXTERNAL void ext_meshUtil_createMeshOBJFromRawArray(double* _vertexPositions, int* _polyCounts, int* _polyConnects, int numVerts, int numFaces, zExtMesh& out_mesh);
+		ZSPACE_EXTERNAL void ext_mesh_createFromRawArrays(double* _vertexPositions, int* _polyCounts, int* _polyConnects, int numVerts, int numFaces, zExtMesh & out_mesh);
 
 		/*! \brief Creates a new zExtMesh object from vertex and face data.
 		 *  \param [in]		_vertexPositions			-Pointer to an array of vertex positions.
@@ -116,28 +150,63 @@ namespace zSpace
 		 *  \param [in]		numFaces					-The number of faces in the mesh.
 		 *  \param [in,out] out_mesh					-Reference to the zExtMesh object to be created.
 		 */
-		ZSPACE_EXTERNAL int ext_meshUtil_createMeshOBJFromArray(zExtPointArray& _vertexPositions, zExtIntArray& _polyCounts, zExtIntArray& _polyConnects, zExtMesh& out_mesh);
+		ZSPACE_EXTERNAL int ext_mesh_createFromArrays(zExtPointArray& _vertexPositions, zExtIntArray& _polyCounts, zExtIntArray& _polyConnects, zExtMesh& out_mesh);
 
 		/*! \brief Set colors of mesh vertices.
 		 *  \param [in]		extMesh						-Reference to the zExtMesh object to be created.
 		 *  \param [in]		vertexColors				-Array of colors for each vertex.
 		 */
-		ZSPACE_EXTERNAL int ext_meshUtil_setMeshVertexColors(zExtMesh& extMesh, zExtColorArray& vertexColors);
+		ZSPACE_EXTERNAL int ext_mesh_setMeshVertexColors(zExtMesh& extMesh, zExtColorArray& vertexColors);
 
+		//--------------------------
+		//----EXCHANGE METHODS
+		//--------------------------	
 
-
-		/*! \brief Creates a new zExtMesh object from vertex and face data.
-		 *  \param [in]		_vertexPositions			-File path
-		 *  \param [in,out] out_mesh					-Reference to the zExtMesh object to be created.
-		 */
-		ZSPACE_EXTERNAL int ext_meshUtil_createMeshFromFile(char* filePath, zExtMesh& out_mesh);
-
-		/*! \brief Creates a new zExtMesh object from vertex and face data.
-		*  \param [in]		_vertexPositions			-File path
-		*  \param [in,out] out_mesh					-Reference to the zExtMesh object to be created.
+		/*! \brief Creates a new ExtMesh object from a file path.
+		* \param[in]		filePath		- The path of the file to be read.
+		* \param[in, out]	outMesh			- The output zExtMesh object.
+		* \return 1 if the file was read successfully, 0 if the file was not read successfully.
 		*/
-		ZSPACE_EXTERNAL void ext_meshUtil_exportToJson(zExtMesh& mesh, char* filePath);
+		ZSPACE_EXTERNAL int ext_mesh_from(char* filePath, zExtMesh& outMesh);
 
+		/*! \brief Export zExtMesh
+		* \param[in]	extMesh				- The input zExtMesh object.
+		* \param[in]	filePath			- The path of the file to be written.
+		* \return 1 if the file was written successfully, 0 if the file was not written successfully.
+		*/
+		ZSPACE_EXTERNAL int ext_mesh_to(zExtMesh& extMesh, char* filePath);
+
+		/*! \brief Creates a new zExtMesh object from a JSON object.
+		* \param[in] json The input zExtJSON object.
+		* \param[in, out] outMesh The output zExtMesh object.
+		* \return 1 if the file was read successfully, 0 if the file was not read successfully.
+		*/
+		ZSPACE_EXTERNAL int ext_mesh_fromJSON(zExtJSON& extjson, zExtMesh& outMesh);
+
+		/*! \brief Export zExtMesh to JSON format
+		* \param[in] extGraph The input zExtMesh object.
+		* \param[in] json The output zExtJSON object.
+		* \return 1 if the file was written successfully, 0 if the file was not written successfully.
+		*/
+		ZSPACE_EXTERNAL int ext_mesh_toJSON(zExtMesh& extGraph, zExtJSON& json);
+
+		#if defined(ZSPACE_USD_INTEROP)  
+		/*! \brief Creates a new zExtMesh object from a JSON object.
+		* \param[in] json The input zExtJSON object.
+		* \param[in, out] outMesh The output zExtMesh object.
+		* \return 1 if the file was read successfully, 0 if the file was not read successfully.
+		*/
+		ZSPACE_EXTERNAL int ext_mesh_fromUSD(zExtUSD& extUsd, zExtMesh& outMesh);
+
+		/*! \brief Export zExtMesh to JSON format
+				* \param[in] extGraph The input zExtMesh object.
+				* \param[in] json The output zExtJSON object.
+				* \return 1 if the file was written successfully, 0 if the file was not written successfully.
+				*/
+		ZSPACE_EXTERNAL int ext_mesh_toUSD(zExtMesh& extMesh, zExtUSD& extUsd);
+		#endif
+		
+		
 		//--------------------------
 		//----GET METHODS
 		//--------------------------
@@ -149,7 +218,7 @@ namespace zSpace
 		 *  \return 1 on success, 0 on failure.
 		 *
 		 */
-		ZSPACE_EXTERNAL int ext_meshUtil_getMeshFaceCount(zExtMesh& objMesh, int* outfCounts);
+		ZSPACE_EXTERNAL int ext_mesh_getMeshFaceCount(zExtMesh& objMesh, int* outfCounts);
 
 		/*! \brief Gets the position and color data for the vertices of a zExtMesh object.
 		*
@@ -159,51 +228,129 @@ namespace zSpace
 		 *  \return 1 on success, 0 on failure.
 		 *
 		 */
-		ZSPACE_EXTERNAL int ext_meshUtil_getMeshPositionRaw(zExtMesh& objMesh, float* outVPostions, float* outVColors);
+		ZSPACE_EXTERNAL int ext_mesh_getVertexPositionsRaw(zExtMesh& objMesh, float* outVPostions, float* outVColors);
 
 		/*! \brief Gets the face connectivity data for a zExtMesh object.
 		 *  \param [in]		objMesh				-The zExtMesh object to retrieve face connectivity data from.
 		 *  \param [out]	outfConnects		-Pointer to an array to store face connectivity data.
 		 *  \return 1 on success, 0 on failure.
 		 */
-		ZSPACE_EXTERNAL int ext_meshUtil_getMeshFaceConnect(zExtMesh& objMesh, int* outfConnects);
+		ZSPACE_EXTERNAL int ext_mesh_getMeshFaceConnect(zExtMesh& objMesh, int* outfConnects);
 
 		/*! \brief Gets the center point of the mesh.
 		 *  \param [in]		objMesh				-The zExtMesh object to retrieve face connectivity data from.
 		 *  \param [out]	outCenter			-Pointer to an array to store centre position.
 		 *  \return 1 on success, 0 on failure.
 		 */
-		ZSPACE_EXTERNAL int ext_meshUtil_getMeshCentre(zExtMesh& objMesh, float* outCentre);
+		ZSPACE_EXTERNAL int ext_mesh_getMeshCentre(zExtMesh& objMesh, float* outCentre);
 
+		/*! \brief Gets the the vertices in a zExtMesh object.
+		 *  \param [in]		objMesh				-The zExtMesh object to retrieve vertex count from.
+		 *  \param [out]	outVCount			-out array of position.
+		 *  \return 1 on success, 0 on failure.
+		 */
+
+		ZSPACE_EXTERNAL int ext_mesh_getVertexPositions(zExtMesh& objMesh, zExtPointArray& extPointArray);
+
+		/*! \brief Get the mesh colors in a zExtMesh object.
+		   *  \param [in]  objMesh    -The zExtMesh object to retrieve vertex count from.
+		   *  \param [out] extPointArray   -Array to store colors of a mesh.
+		   *  \return 1 on success, 0 on failure.
+		  */
+		ZSPACE_EXTERNAL int ext_mesh_getMeshColors(zExtMesh& objMesh, zExtColorArray& extPointArray);
+
+		/*! \brief Gets the polygon data for a zExtMesh object.
+		 *  \param [in]  objMesh    -The zExtMesh object to retrieve polygon data from.
+		 *  \param [out] pCount  -Pointer to an array to store polygon vertex count.
+		 *  \param [out] pConnect  -Pointer to an array to store polygon vertex indices.
+		 *  \return 1 on success, 0 on failure.
+		 */
+		ZSPACE_EXTERNAL int ext_mesh_getMeshPolygonDate(zExtMesh& objMesh, zExtIntArray& pCount, zExtIntArray& pConnect);
+
+
+		ZSPACE_EXTERNAL int ext_mesh_getEdgeLoops(zExtMesh& objMesh, zExtGraphArray& graphArrayU, zExtGraphArray& graphArrayV);
+
+		ZSPACE_EXTERNAL int ext_mesh_getEdgeLoopsGraph(zExtMesh& objMesh, zExtGraph& graphU, zExtGraph& graphV);
+
+		/*! \brief Gets the planarity deviation per face for a zExtMesh object.
+		 *  \param [in]  objMesh    -The zExtMesh object to retrieve planarity deviation data from.
+		 *  \param [out] outPlanarityDevs  -Pointer to an array to store planarity deviation data.
+		 *  \param [in]  type  -The type of planarity deviation to calculate.
+		 *  \param [in]  colorFaces  -Whether to color the faces of the mesh.
+		 *  \param [in]  tolerance  -The tolerance for the planarity deviation calculation.
+		 *  \return 1 on success, 0 on failure.
+		 */
+		ZSPACE_EXTERNAL int ext_mesh_getPlanarityDeviationPerFace(zExtMesh& objMesh, zExtDoubleArray& outPlanarityDevs, int type, bool colorFaces = false, double tolerance = 0.05);
+
+		/*! \brief Gets the Gaussian curvature for a zExtMesh object.
+		 *  \param [in]  objMesh    -The zExtMesh object to retrieve Gaussian curvature data from.
+		 *  \param [out] outGaussianCurvature  -Pointer to an array to store Gaussian curvature data.
+		 *  \return 1 on success, 0 on failure.
+		 */
+		ZSPACE_EXTERNAL int ext_mesh_getGaussianCurvature(zExtMesh& objMesh, zExtDoubleArray& outGaussianCurvature);
+
+		/*! \brief Checks the planarity of a zExtMesh object.
+		 *  \param [in]  objMesh    -The zExtMesh object to check planarity for.
+		 *  \param [in]  tolerance  -The tolerance for the planarity check.
+		 *  \param [in]  planarityType  -The type of planarity to check.
+		 *  \param [in]  colorFaces  -Whether to color the faces of the mesh.
+		 *  \param [out] outDeviations  -Pointer to an array to store planarity deviation data.
+		 *  \return 1 on success, 0 on failure.
+		 */
+		ZSPACE_EXTERNAL int ext_mesh_checkPlanarity(zExtMesh& objMesh, float tolerance, int planarityType, bool colorFaces, zExtDoubleArray& outDeviations);
+
+		/*! \brief Gets the face color data for a given zExtMesh object.
+		•	\param [in]  objMesh    -The zExtMesh object to retrieve face color data from.
+		•	\param [out] extColorArray  -Pointer to an array to store the face color data.
+		•	\return 1 on success, 0 on failure.
+		*/
+		ZSPACE_EXTERNAL int ext_mesh_getFaceColor(zExtMesh& objMesh, zExtColorArray& extPointArray);
+
+		//--------------------------
+		//----OPERATORS METHODS
+		//--------------------------
+
+		/*! \brief Smooths a zExtMesh object.
+		 *  \param [in]  objMesh		-The zExtMesh object to smooth.
+		 *  \param [in]  level			-The number of times to smooth the mesh.
+		 *  \param [in]  smoothCorner	-If TRUE, mesh corner (vertices with two connected edges) will be smoothed.
+		 *  \param [in]  fixedVerts		-Array of fixed vertices.
+		 *  \return 1 on success, 0 on failure.
+		 */
+		ZSPACE_EXTERNAL int ext_mesh_smoothMesh(zExtMesh& objMesh, int level, bool smoothCorner, zExtIntArray& fixedVerts);
+
+		/*! \brief Smooths a zExtMesh object in 1 Direction.
+		 *  \param [in]  objMesh		-The zExtMesh object to smooth.
+		 *  \param [in]  level			-The number of times to smooth the mesh.
+		 *  \param [in]  smoothCorner	-If TRUE, mesh corner (vertices with two connected edges) will be smoothed.
+		 *  \param [in]  flip			-Flip the direction of 1D smoothening.
+		 *  \param [in]  fixedVerts		-Array of fixed vertices.
+		 *  \return 1 on success, 0 on failure.
+		 */
+		ZSPACE_EXTERNAL int ext_mesh_smoothMesh1D(zExtMesh& objMesh, int level, bool smoothCorner, bool flip, zExtIntArray& fixedVerts);
+
+	}
+	
+	
+	ZSPACE_EXTERNAL_C
+	{
+		//--------------------------
+		//----ARRAY METHODS
+		//--------------------------
 
 		/*! \brief Gets an array of zExtMesh from zExtMeshArray object.
 		*  \param [in]		inArray				-zExtMeshArray to get zExtMesh from.
 		*  \param [out]		zExtMesh			-Out array of meshes.
 		*  \return 1 on success, 0 on failure.
 		*/
-		ZSPACE_EXTERNAL int ext_meshUtil_getMeshsFromMeshArray(zExtMeshArray& inArray, zExtMesh* outMeshes);
+		ZSPACE_EXTERNAL int ext_mesh_getMeshsFromMeshArray(zExtMeshArray& inArray, zExtMesh* outMeshes);
 
 		/*! \brief Gets an array of zExtMesh from zExtMeshPointerArray object.
 		*  \param [in]		inArray				-zExtMeshPointerArray to get zExtMesh from.
 		*  \param [out]		zExtMesh			-Out array of meshes.
 		*  \return 1 on success, 0 on failure.
 		*/
-		ZSPACE_EXTERNAL int ext_meshUtil_getMeshsFromMeshPointerArray(zExtMeshPointerArray& inArray, zExtMesh* outMeshes);
-
-
-		ZSPACE_EXTERNAL int ext_meshUtil_getMeshPosition(zExtMesh& objMesh, zExtPointArray& extPointArray);
-		ZSPACE_EXTERNAL int ext_meshUtil_getMeshColors(zExtMesh& objMesh, zExtColorArray& extPointArray);
-		ZSPACE_EXTERNAL int ext_meshUtil_getMeshPolygonDate(zExtMesh& objMesh, zExtIntArray& pCount, zExtIntArray& pConnect);
-
-		ZSPACE_EXTERNAL int ext_meshUtil_catmullclark(zExtMesh& objMesh, int level, bool fixedCorner);
-
-		ZSPACE_EXTERNAL int ext_meshUtil_getPlanarityDeviationPerFace(zExtMesh& objMesh, zExtDoubleArray& outPlanarityDevs, int type, bool colorFaces = false, double tolerance = 0.05);
-		ZSPACE_EXTERNAL int ext_meshUtil_getGaussianCurvature(zExtMesh& objMesh, zExtDoubleArray& outGaussianCurvature);
-
-
-		ZSPACE_EXTERNAL int ext_meshUtil_checkPlanarity(zExtMesh& objMesh, float tolerance, int planarityType, bool colorFaces,  zExtDoubleArray& outDeviations);
-		ZSPACE_EXTERNAL int ext_meshUtil_getFaceColor(zExtMesh& objMesh, zExtColorArray& extPointArray);
-
+		ZSPACE_EXTERNAL int ext_mesh_getMeshsFromMeshPointerArray(zExtMeshPointerArray& inArray, zExtMesh* outMeshes);
 
 	}
 

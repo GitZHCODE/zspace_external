@@ -58,32 +58,36 @@ namespace zSpace
 /** @}*/
 
 /** @}*/
-	struct zExtColor
-	{
-		//zColor* pointer;
-		float r; ///< red component
-		float g; ///< green component
-		float b; ///< blue component
-		float a; ///< alpha component
+	//struct zExtColor
+	//{
+	//	//zColor* pointer;
+	//	float r; ///< red component
+	//	float g; ///< green component
+	//	float b; ///< blue component
+	//	float a; ///< alpha component
 
 
-		zExtColor();
-		zExtColor(zColor* t);
-		zExtColor(zColor t);
-		zExtColor(float R, float G, float B, float A);
+	//	zExtColor();
+	//	zExtColor(zColor* t);
+	//	zExtColor(zColor t);
+	//	zExtColor(float R, float G, float B, float A);
 
-		void updateAttributes(zColor* t);
-		void updateAttributes(zColor t);
-		void updateAttributes(float R, float G, float B, float A );
-	};
+	//	void updateAttributes(zColor* t);
+	//	void updateAttributes(zColor t);
+	//	void updateAttributes(float R, float G, float B, float A );
+	//};
 
-	struct zExtColorArray
+	typedef zColor zExtColor;
+
+	struct ZSPACE_EXTERNAL zExtColorArray
 	{
 		zColorArray* pointer; /**< A pointer to the array object */
 		int arrayCount; /**< The number of items in the array */
 		zExtColorArray();
 		zExtColorArray(zColorArray* a);
+		~zExtColorArray();
 
+		int checkMemAlloc(bool allocateMemory = true);
 		/**
 		 * \brief Updates the attributes of the external object
 		 */
@@ -100,9 +104,10 @@ namespace zSpace
 	ZSPACE_EXTERNAL_C
 	{
 		ZSPACE_EXTERNAL void ext_color_createRGB(float r, float g, float b, float a, zExtColor& refPoint);
-		ZSPACE_EXTERNAL void ext_color_getItemsFromArray(zExtColorArray& extArray, zExtColor* outArray);
+		ZSPACE_EXTERNAL void ext_color_array_getItems(zExtColorArray& extArray, zExtColor* outArray);
 		ZSPACE_EXTERNAL void ext_color_setItemsFromArray(zExtColorArray& extArray, zExtColor* inArray, int count);
-
+		ZSPACE_EXTERNAL int ext_color_computeHSV(zExtColor& extColor);
+		ZSPACE_EXTERNAL int ext_color_computeRGB(zExtColor& extColor);
 	}
 
 }

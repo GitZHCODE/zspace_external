@@ -20,11 +20,11 @@
 
 #include <headers/base/zSpace_External.h>
 #include<headers/zCore/zExtUtilsCore.h>
-#include<headers/zCore/zExtMesh.h>
+
 #include <headers/zCore/zCore.h>
 #include <headers/zCore/utilities/zUtilsCore.h>
 
-
+//#include<headers/zCore/zExtMesh.h>
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -35,9 +35,13 @@
 
 using namespace std;
 
+// Forward declaration 
+
 namespace zSpace
 {
-	struct zExtJSON
+	//struct zExtMesh;
+
+	struct ZSPACE_EXTERNAL zExtJSON
 	{
 		json* pointer;
 		int numOfAttributes;
@@ -50,7 +54,7 @@ namespace zSpace
 		zExtJSON(const string& filePath);
 
 		~zExtJSON();
-
+		int checkMemAlloc(bool allocateMemory = true);
 		void updateAttributes();
 		zStringArray GetAllAttributeTypes();
 		zStringArray GetAllAttributeNames();
@@ -58,11 +62,11 @@ namespace zSpace
 		bool ExportJsonFile(const string& filePath);
 		bool UpdateJsonFile(const string& filePath, const string& attributeName, const json& attributeValue);
 		bool ReadJsonFile(const string& filePath);
-		zObjMesh readMeshFromJson();
+		/*zObjMesh readMeshFromJson();
 		bool readMeshFromJson(zObjMesh& outMesh);
 		bool writeMeshToJson(zObjMesh& inMesh);
 		static bool MeshtoJSON(zObjMesh& inMesh, json& jsonObj);
-		 bool MeshFromJSON(zObjMesh& outMesh);
+		 bool MeshFromJSON(zObjMesh& outMesh);*/
 	};
 
 	ZSPACE_EXTERNAL_C
@@ -111,9 +115,9 @@ namespace zSpace
 		ZSPACE_EXTERNAL void ext_json_createJson		(zExtJSON& extJSON);
 		ZSPACE_EXTERNAL void ext_json_createJsonDeepCopy(zExtJSON& inJSON, zExtJSON& outJSON);
 		ZSPACE_EXTERNAL int ext_json_readJsonFile		(zExtJSON& extJSON, char* inputPath);
-		ZSPACE_EXTERNAL int ext_json_getMeshFromJson	(zExtJSON& extJSON, zExtMesh& outMesh);
-		ZSPACE_EXTERNAL int ext_json_getMeshFromJsonPath(char* path, zExtMesh& outMesh);
-		ZSPACE_EXTERNAL int ext_json_setMeshToJson		(zExtJSON& extJSON, zExtMesh& inMesh);
+		//ZSPACE_EXTERNAL int ext_json_getMeshFromJson	(zExtJSON& extJSON, zExtMesh& outMesh);
+		//ZSPACE_EXTERNAL int ext_json_getMeshFromJsonPath(char* path, zExtMesh& outMesh);
+		//ZSPACE_EXTERNAL int ext_json_setMeshToJson		(zExtJSON& extJSON, zExtMesh& inMesh);
 		ZSPACE_EXTERNAL int ext_json_exportFile			(zExtJSON& extJSON, char* outputPath);
 
 

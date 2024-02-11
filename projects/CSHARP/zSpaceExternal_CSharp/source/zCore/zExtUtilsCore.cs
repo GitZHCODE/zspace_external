@@ -11,10 +11,15 @@ namespace zSpace {
         private IntPtr pointer; 
         private int arrayCount;
 
+        public zExtIntArray(int[] input) {
+            pointer = new IntPtr();
+            arrayCount = 0;
+            setItems(input);
+        }
 
         public int[] getItems() {
             int[] items = new int[arrayCount];
-            zNativeMethods.ext_int_getItemsFromArray(ref this, items);
+            zNativeMethods.ext_int_array_getItems(ref this, items);
             return items;
         }
 
@@ -33,7 +38,7 @@ namespace zSpace {
         public int[][] getItems() {
             var output = new int[arrayCount][];
             var mid = new zExtIntArray[arrayCount];
-            zNativeMethods.ext_int_getItemsFromArray2D(ref this, mid);
+            zNativeMethods.ext_int_array2D_getItems(ref this, mid);
             for (int i = 0; i < arrayCount; i++) {
                 output[i] = mid[i].getItems();                
             }
@@ -44,7 +49,7 @@ namespace zSpace {
             for (int i = 0; i < input.Length; i++) {
                 mid[i].setItems(input[i]);
             }
-            zNativeMethods.ext_int_setItemsFromArray2D(ref this, mid, input.Length);
+            zNativeMethods.ext_int_array2D_setItems(ref this, mid, input.Length);
         }
 
         public int getArrayCount() { return arrayCount; }
@@ -55,10 +60,14 @@ namespace zSpace {
         private IntPtr pointer;
         private int arrayCount;
 
-
+        public zExtFloatArray(float[] input) {
+            pointer = new IntPtr();
+            arrayCount = 0;
+            setItems(input);
+        }
         public float[] getItems() {
             float[] items = new float[arrayCount];
-            zNativeMethods.ext_float_getItemsFromArray(ref this, items);
+            zNativeMethods.ext_float_array_getItems(ref this, items);
             return items;
         }
 
@@ -77,7 +86,7 @@ namespace zSpace {
         public float[][] getItems() {
             var output = new float[arrayCount][];
             var mid = new zExtFloatArray[arrayCount];
-            zNativeMethods.ext_float_getItemsFromArray2D(ref this, mid);
+            zNativeMethods.ext_float_array2D_getItems(ref this, mid);
             for (int i = 0; i < arrayCount; i++) {
                 output[i] = mid[i].getItems();
             }
@@ -88,7 +97,7 @@ namespace zSpace {
             for (int i = 0; i < input.Length; i++) {
                 mid[i].setItems(input[i]);
             }
-            zNativeMethods.ext_float_setItemsFromArray2D(ref this, mid, input.Length);
+            zNativeMethods.ext_float_array2D_setItems(ref this, mid, input.Length);
         }
 
         public int getArrayCount() { return arrayCount; }
@@ -103,7 +112,7 @@ namespace zSpace {
 
         public double[] getItems() {
             double[] items = new double[arrayCount];
-            zNativeMethods.ext_double_getItemsFromArray(ref this, items);
+            zNativeMethods.ext_double_array_getItems(ref this, items);
             return items;
         }
 
@@ -122,7 +131,7 @@ namespace zSpace {
         public double[][] getItems() {
             var output = new double[arrayCount][];
             var mid = new zExtDoubleArray[arrayCount];
-            zNativeMethods.ext_double_getItemsFromArray2D(ref this, mid);
+            zNativeMethods.ext_double_array2D_getItems(ref this, mid);
             for (int i = 0; i < arrayCount; i++) {
                 output[i] = mid[i].getItems();
             }
@@ -133,7 +142,7 @@ namespace zSpace {
             for (int i = 0; i < input.Length; i++) {
                 mid[i].setItems(input[i]);
             }
-            zNativeMethods.ext_double_setItemsFromArray2D(ref this, mid, input.Length);
+            zNativeMethods.ext_double_array2D_setItems(ref this, mid, input.Length);
         }
 
         public int getArrayCount() { return arrayCount; }
@@ -161,7 +170,8 @@ namespace zSpace {
         public void setString(string input) {
             char[] c = new char[input.Length];
 
-            zNativeMethods.ext_string_setExtStringFromCharArray(ref this, c, c.Length);
+            //zNativeMethods.ext_string_setExtStringFromCharArray(ref this, c, c.Length);
+            zNativeMethods.ext_string_setExtStringFromCharArray(ref this, input, c.Length);
 
 
         }
@@ -179,7 +189,7 @@ namespace zSpace {
             //string[] items = new string[arrayCount];
             var output = new string[arrayCount];
             var mid = new zExtString[arrayCount];
-            zNativeMethods.ext_string_getItemsFromArray(ref this, mid);
+            zNativeMethods.ext_string_array_getItems(ref this, mid);
             for (int i = 0; i < arrayCount; i++) {
                 output[i] = mid[i].getString();
             }
@@ -192,7 +202,7 @@ namespace zSpace {
             //    zNativeMethods.ext_string_getItemFromArrayChar(ref this, i, c);
             //    items[i] = new string(c);
             //}
-            //zNativeMethods.ext_string_getItemsFromArray(ref this, items);
+            //zNativeMethods.ext_string_array_getItems(ref this, items);
             return output;
         }
 
@@ -203,8 +213,11 @@ namespace zSpace {
                 mid[i] = new zExtString();
                 mid[i].setString(input[i]);
             }
+            //Console.WriteLine("array 1 + " + input.Length);
             
-            zNativeMethods.ext_string_setItemsFromArray(ref this, mid, mid.Length);
+            zNativeMethods.ext_string_setItemsFromArray(ref this, mid, input.Length);
+            //Console.WriteLine("array 2");
+
         }
 
         public int getArrayCount() { return arrayCount; }
@@ -218,7 +231,7 @@ namespace zSpace {
         public string[][] getItems() {
             var output = new string[arrayCount][];
             var mid = new zExtStringArray[arrayCount];
-            zNativeMethods.ext_string_getItemsFromArray2D(ref this, mid);
+            zNativeMethods.ext_string_array2D_getItems(ref this, mid);
             for (int i = 0; i < arrayCount; i++) {
                 output[i] = mid[i].getItems();
             }
@@ -229,7 +242,7 @@ namespace zSpace {
             for (int i = 0; i < input.Length; i++) {
                 mid[i].setItems(input[i]);
             }
-            zNativeMethods.ext_string_setItemsFromArray2D(ref this, mid, mid.Length);
+            zNativeMethods.ext_string_array2D_setItems(ref this, mid, mid.Length);
         }
 
         public int getArrayCount() { return arrayCount; }
@@ -244,7 +257,7 @@ namespace zSpace {
 
         public bool[] getItems() {
             bool[] items = new bool[arrayCount];
-            zNativeMethods.ext_bool_getItemsFromArray(ref this, items);
+            zNativeMethods.ext_bool_array_getItems(ref this, items);
             return items;
         }
 
@@ -263,7 +276,7 @@ namespace zSpace {
         public bool[][] getItems() {
             var output = new bool[arrayCount][];
             var mid = new zExtBoolArray[arrayCount];
-            zNativeMethods.ext_bool_getItemsFromArray2D(ref this, mid);
+            zNativeMethods.ext_bool_array2D_getItems(ref this, mid);
             for (int i = 0; i < arrayCount; i++) {
                 output[i] = mid[i].getItems();
             }
@@ -274,7 +287,7 @@ namespace zSpace {
             for (int i = 0; i < input.Length; i++) {
                 mid[i].setItems(input[i]);
             }
-            zNativeMethods.ext_bool_setItemsFromArray2D(ref this, mid, input.Length);
+            zNativeMethods.ext_bool_array2D_setItems(ref this, mid, input.Length);
         }
 
         public int getArrayCount() { return arrayCount; }
@@ -287,7 +300,7 @@ namespace zSpace {
 
         #region Int Array 1D
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void ext_int_getItemsFromArray(ref zExtIntArray array,
+        public static extern void ext_int_array_getItems(ref zExtIntArray array,
         [MarshalAs(UnmanagedType.LPArray), In, Out] int[] outItems);
         
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
@@ -296,16 +309,16 @@ namespace zSpace {
         #endregion
         #region Int Array 2D
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void ext_int_getItemsFromArray2D(ref zExtIntArray2D array,
+        public static extern void ext_int_array2D_getItems(ref zExtIntArray2D array,
             [MarshalAs(UnmanagedType.LPArray), In, Out] zExtIntArray[] outItems); 
         
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void ext_int_setItemsFromArray2D(ref zExtIntArray2D array,
+        public static extern void ext_int_array2D_setItems(ref zExtIntArray2D array,
             [MarshalAs(UnmanagedType.LPArray), In] zExtIntArray[] outItems, int count);
         #endregion
         #region Float Array 1D
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void ext_float_getItemsFromArray(ref zExtFloatArray array,
+        public static extern void ext_float_array_getItems(ref zExtFloatArray array,
             [MarshalAs(UnmanagedType.LPArray), In, Out] float[] outItems);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
@@ -314,16 +327,16 @@ namespace zSpace {
         #endregion
         #region Float Array 2D
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void ext_float_getItemsFromArray2D(ref zExtFloatArray2D array,
+        public static extern void ext_float_array2D_getItems(ref zExtFloatArray2D array,
             [MarshalAs(UnmanagedType.LPArray), In, Out] zExtFloatArray[] outItems);  
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void ext_float_setItemsFromArray2D(ref zExtFloatArray2D array,
+        public static extern void ext_float_array2D_setItems(ref zExtFloatArray2D array,
             [MarshalAs(UnmanagedType.LPArray), In] zExtFloatArray[] outItems, int count);
         #endregion
         #region Double Array 1D
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void ext_double_getItemsFromArray(ref zExtDoubleArray array,
+        public static extern void ext_double_array_getItems(ref zExtDoubleArray array,
             [MarshalAs(UnmanagedType.LPArray), In, Out] double[] outItems);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
@@ -332,10 +345,10 @@ namespace zSpace {
         #endregion
         #region Double Array 2D
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void ext_double_getItemsFromArray2D(ref zExtDoubleArray2D array,
+        public static extern void ext_double_array2D_getItems(ref zExtDoubleArray2D array,
             [MarshalAs(UnmanagedType.LPArray), In, Out] zExtDoubleArray[] outItems);
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void ext_double_setItemsFromArray2D(ref zExtDoubleArray2D array,
+        public static extern void ext_double_array2D_setItems(ref zExtDoubleArray2D array,
             [MarshalAs(UnmanagedType.LPArray), In] zExtDoubleArray[] outItems, int count);
         #endregion
         #region String
@@ -343,13 +356,17 @@ namespace zSpace {
         public static extern int ext_string_getCharArrayFromExtString(ref zExtString extString,
             [MarshalAs(UnmanagedType.LPArray), In, Out] char[] outString
            );
+        //[DllImport(path, CallingConvention = CallingConvention.Cdecl)]
+        //public static extern int ext_string_setExtStringFromCharArray(ref zExtString extString,
+        //    [MarshalAs(UnmanagedType.LPArray), In] char[] inString, int charCount);
+        
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         public static extern int ext_string_setExtStringFromCharArray(ref zExtString extString,
-            [MarshalAs(UnmanagedType.LPArray), In] char[] inString, int charCount);
+            [MarshalAs(UnmanagedType.LPStr), In] string inString, int charCount);
         #endregion
         #region String Array 1D
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void ext_string_getItemsFromArray(ref zExtStringArray array,
+        public static extern void ext_string_array_getItems(ref zExtStringArray array,
             [MarshalAs(UnmanagedType.LPArray), In, Out] zExtString[] outItems);
         //[MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr .LPWStr), In, Out] string[] outItems);
 
@@ -360,16 +377,16 @@ namespace zSpace {
         #endregion
         #region String Array 2D
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void ext_string_getItemsFromArray2D(ref zExtStringArray2D array,
+        public static extern void ext_string_array2D_getItems(ref zExtStringArray2D array,
             [MarshalAs(UnmanagedType.LPArray), In, Out] zExtStringArray[] outItems);
         
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void ext_string_setItemsFromArray2D(ref zExtStringArray2D array,
+        public static extern void ext_string_array2D_setItems(ref zExtStringArray2D array,
             [MarshalAs(UnmanagedType.LPArray), In] zExtStringArray[] outItems, int count);
         #endregion
         #region Bool Array 1D
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void ext_bool_getItemsFromArray(ref zExtBoolArray array,
+        public static extern void ext_bool_array_getItems(ref zExtBoolArray array,
             [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Bool), In, Out] bool[] outItems);
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         public static extern void ext_bool_setItemsFromArray(ref zExtBoolArray array,
@@ -377,11 +394,11 @@ namespace zSpace {
         #endregion
         #region Bool Array 2D
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void ext_bool_getItemsFromArray2D(ref zExtBoolArray2D array,
+        public static extern void ext_bool_array2D_getItems(ref zExtBoolArray2D array,
             [MarshalAs(UnmanagedType.LPArray), In, Out] zExtBoolArray[] outItems);
         
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void ext_bool_setItemsFromArray2D(ref zExtBoolArray2D array,
+        public static extern void ext_bool_array2D_setItems(ref zExtBoolArray2D array,
             [MarshalAs(UnmanagedType.LPArray), In] zExtBoolArray[] outItems, int count);
         #endregion
 
