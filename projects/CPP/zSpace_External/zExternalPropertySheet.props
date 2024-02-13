@@ -3,9 +3,9 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
     <codeRepoDir>C:\Users\heba.eiz\source\repos\GitZHCODE</codeRepoDir>
-    <zspaceIncludeDir>$(codeRepoDir)\zspace_depends</zspaceIncludeDir>
-    <zSpaceCoreLibDir>$(codeRepoDir)\zspace_depends\zspace_core</zSpaceCoreLibDir>
-    <zSpaceToolsetsLibDir>$(codeRepoDir)\zspace_depends\zspace_toolset</zSpaceToolsetsLibDir>
+    <zspaceIncludeDir>$(SolutionDir)cpp/depends</zspaceIncludeDir>
+    <zSpaceCoreLibDir>$(SolutionDir)cpp/depends\zspace_core</zSpaceCoreLibDir>
+    <zSpaceToolsetsLibDir>$(SolutionDir)cpp/depends\zspace_toolset</zSpaceToolsetsLibDir>
     <RhinoDir>C:\Program Files\Rhino 7 SDK</RhinoDir>
     <MayaDir>C:\Program Files\Autodesk\Maya2017</MayaDir>
     <CudaCommonDir>C:\ProgramData\NVIDIA Corporation\CUDA Samples\v10.2\common\inc</CudaCommonDir>
