@@ -79,6 +79,36 @@
     <Filter Include="Source Files\base">
       <UniqueIdentifier>{cf698b10-d310-4519-a8cf-e338654bbc42}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\zCore\Base">
+      <UniqueIdentifier>{af770d41-65c1-4271-868a-3fba96bc1077}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\zCore\Field">
+      <UniqueIdentifier>{54187148-8c2c-44d1-ad84-6a4f6bdbbcda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\zCore\Geometry">
+      <UniqueIdentifier>{a983862d-042f-417f-88be-35e183c0f285}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\zCore\Utils">
+      <UniqueIdentifier>{5515f1c5-837a-4e0e-b72c-bbc10f08d2c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\zCore\Interop">
+      <UniqueIdentifier>{7e277e2c-744a-4f36-9d46-b3fd735388da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\zCore\Base">
+      <UniqueIdentifier>{c439a224-dd3a-4627-bba5-4d5f788947f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\zCore\Field">
+      <UniqueIdentifier>{bdddb7e6-a633-4590-89a7-3eb5c63a55d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\zCore\Geometry">
+      <UniqueIdentifier>{d687f0ef-6f34-4405-b4a6-b4dfe68767cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\zCore\Interop">
+      <UniqueIdentifier>{fcb15df0-96e3-45f8-a8c7-74930b46a6f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\zCore\Utils">
+      <UniqueIdentifier>{9ebaf8b0-5ee9-4df5-b332-7c3cbfd6bf06}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\zspace_core\cpp\depends\alglib\cpp\src\alglibinternal.h">
@@ -129,47 +159,47 @@
     <ClInclude Include="..\..\..\cpp\headers\zToolsets\data\zExtKMeans.h">
       <Filter>Header Files\zToolset\Data</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtMesh.h">
-      <Filter>Header Files\zCore</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\cpp\headers\base\zSpace_External.h">
       <Filter>Header Files\base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtGraph.h">
-      <Filter>Header Files\zCore</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\cpp\headers\zToolsets\digifab\zExtRobot.h">
       <Filter>Header Files\zToolset\DigiFab</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtPoint.h">
-      <Filter>Header Files\zCore</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtUtilsCore.h">
-      <Filter>Header Files\zCore</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtParticle.h">
-      <Filter>Header Files\zCore</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtColor.h">
-      <Filter>Header Files\zCore</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtJSON.h">
-      <Filter>Header Files\zCore</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtUSD.h">
-      <Filter>Header Files\zCore</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtField.h">
-      <Filter>Header Files\zCore</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\cpp\headers\zToolsets\statics\zExtVault.h">
       <Filter>Header Files\zToolset\Statics</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtTransform.h">
-      <Filter>Header Files\zCore</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\cpp\headers\base\zStatus.h">
       <Filter>Header Files\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\cpp\headers\zCore\Base\zExtColor.h">
+      <Filter>Header Files\zCore\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\cpp\headers\zCore\Base\zExtPoint.h">
+      <Filter>Header Files\zCore\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\cpp\headers\zCore\Base\zExtTransform.h">
+      <Filter>Header Files\zCore\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\cpp\headers\zCore\Field\zExtField.h">
+      <Filter>Header Files\zCore\Field</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\cpp\headers\zCore\Geometry\zExtGraph.h">
+      <Filter>Header Files\zCore\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\cpp\headers\zCore\Geometry\zExtMesh.h">
+      <Filter>Header Files\zCore\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\cpp\headers\zCore\Geometry\zExtParticle.h">
+      <Filter>Header Files\zCore\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\cpp\headers\zCore\Interop\zExtOV.h">
+      <Filter>Header Files\zCore\Interop</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\cpp\headers\zCore\Utils\zExtJSON.h">
+      <Filter>Header Files\zCore\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\cpp\headers\zCore\Utils\zExtUtilsCore.h">
+      <Filter>Header Files\zCore\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -218,38 +248,8 @@
     <ClCompile Include="..\..\..\cpp\source\zToolsets\data\zExtKMeans.cpp">
       <Filter>Source Files\zToolset\Data</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\cpp\source\zCore\zExtMesh.cpp">
-      <Filter>Source Files\zCore</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\cpp\source\zCore\zExtGraph.cpp">
-      <Filter>Source Files\zCore</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\cpp\source\zCore\zExtTransform.cpp">
-      <Filter>Source Files\zCore</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\cpp\source\zToolsets\digiFab\zExtRobot.cpp">
       <Filter>Source Files\zToolset\DigiFab</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\cpp\source\zCore\zExtPoint.cpp">
-      <Filter>Source Files\zCore</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\cpp\source\zCore\zExtUtilsCore.cpp">
-      <Filter>Source Files\zCore</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\cpp\source\zCore\zExtParticle.cpp">
-      <Filter>Source Files\zCore</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\cpp\source\zCore\zExtColor.cpp">
-      <Filter>Source Files\zCore</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\cpp\source\zCore\zExtJSON.cpp">
-      <Filter>Source Files\zCore</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\cpp\source\zCore\zExtUSD.cpp">
-      <Filter>Source Files\zCore</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\cpp\source\zCore\zExtField.cpp">
-      <Filter>Source Files\zCore</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\cpp\source\zToolsets\statics\zExtVault.cpp">
       <Filter>Source Files\zToolset\Statics</Filter>
@@ -257,9 +257,43 @@
     <ClCompile Include="..\..\..\cpp\source\base\zStatus.cpp">
       <Filter>Source Files\base</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\cpp\source\zCore\Base\zExtColor.cpp">
+      <Filter>Source Files\zCore\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\source\zCore\Base\zExtPoint.cpp">
+      <Filter>Source Files\zCore\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\source\zCore\Base\zExtTransform.cpp">
+      <Filter>Source Files\zCore\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\source\zCore\Field\zExtField.cpp">
+      <Filter>Source Files\zCore\Field</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\source\zCore\Geometry\zExtGraph.cpp">
+      <Filter>Source Files\zCore\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\source\zCore\Geometry\zExtMesh.cpp">
+      <Filter>Source Files\zCore\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\source\zCore\Geometry\zExtParticle.cpp">
+      <Filter>Source Files\zCore\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\source\zCore\Interop\zExtOV.cpp">
+      <Filter>Source Files\zCore\Interop</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\source\zCore\Utils\zExtJSON.cpp">
+      <Filter>Source Files\zCore\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\source\zCore\Utils\zExtUtilsCore.cpp">
+      <Filter>Source Files\zCore\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
     <None Include="cpp.hint" />
+    <None Include="packages.config" />
+    <None Include="..\..\csharp\zspaceexternal_csharp\source\zcore\zenumerators.cs">
+      <Filter>Source Files\zToolset\PathNetworks</Filter>
+    </None>
   </ItemGroup>
 </Project>

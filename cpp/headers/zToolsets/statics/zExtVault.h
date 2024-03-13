@@ -19,14 +19,15 @@
 
 //#include <headers/zToolsets/geometry/zTsSDFSlicer.h>
 
-#include <headers/base/zSpace_External.h>
+
 
 #include <headers/zCore/base/zExtern.h>
-//#include <headers/zInterface/functionsets/zFnMesh.h>
-//#include <headers/zInterface/functionsets/zFnGraph.h>
 #include <headers/zToolsets/statics/zTsVault.h>
-#include<headers/zCore/zExtMesh.h>
-#include<headers/zCore/zExtGraph.h>
+
+
+#include "headers/base/zSpace_External.h"
+#include "headers/zCore/Geometry/zExtMesh.h"
+#include "headers/zCore/Geometry/zExtGraph.h"
 
 //#include <stdlib.h>
 #include <stdio.h>

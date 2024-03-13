@@ -14,7 +14,26 @@
 
 namespace zSpace
 {
-	bool zStatus::checkError()
+	
+	ZSPACE_EXTERNAL_INLINE zStatus::zStatus(zStatusCode code)
+	{
+		statusCode = code;
+
+		string error = zStatusCodeUtil::getCodeString(code);
+		errorMessage = new char[error.length() + 1];
+		strcpy(errorMessage, error.c_str());
+	}
+	ZSPACE_EXTERNAL_INLINE zStatus::zStatus(zStatusCode code, string error)
+	{
+		statusCode = code;
+		errorMessage = new char[error.length() + 1];
+		strcpy(errorMessage, error.c_str());
+	}
+	ZSPACE_EXTERNAL_INLINE zStatus::~zStatus()
+	{
+		delete[] errorMessage;
+	}
+	ZSPACE_EXTERNAL_INLINE bool zStatus::getErrorCheck()
 	{
 		switch (statusCode)
 		{
@@ -26,12 +45,13 @@ namespace zSpace
 		case zInvalidParameter: return true;
 		case zPathNotFound: return true;
 		case zRunning: return false;
+		case zSkip: return false;
 		
 		default: return false;
 		}
 		
 	}
-	void zStatus::clearError()
+	ZSPACE_EXTERNAL_INLINE void zStatus::clearError()
 	{
 		statusCode = zSuccess;
 		//errorString->clear();
@@ -48,6 +68,41 @@ namespace zSpace
 	}
 
 
+	ZSPACE_EXTERNAL_INLINE bool zStatusCodeUtil::getErrorCheck(zStatusCode code)
+	{
+		switch (code)
+		{
+		case zFail: return true;
+		case zSuccess: return false;
+		case zMemAllocSuccess: return false;
+		case zMemNotAllocError: return true;
+		case zThrowError: return true;
+		case zInvalidParameter: return true;
+		case zPathNotFound: return true;
+		case zRunning: return false;
+
+		default: return false;
+		}
+	}
+
+	ZSPACE_EXTERNAL_INLINE string zStatusCodeUtil::getCodeString(zStatusCode code)
+	{
+		switch (code)
+		{
+		case zFail: return "Process failed";
+		case zSuccess: return "Process success";
+		case zMemAllocSuccess: return "Process success: Memory allocation success";
+		case zMemNotAllocError: return "Process failed: Memory allocation error";
+		case zThrowError: return "Process failed: Unknown error";
+		case zInvalidParameter: return "Process failed: Invalid input parameter";
+		case zPathNotFound: return "Process failed: Path/Directory is not found";
+		case zRunning: return "Process is running";
+		case zSkip: return "Process is skipped";
+
+		default: return "code value is invalid/not set";
+		}
+	}
+
 	
 	ZSPACE_EXTERNAL_INLINE bool ext_status_operator_equal(zStatus& item, zStatus& item2)
 	{
@@ -58,10 +113,17 @@ namespace zSpace
 	ZSPACE_EXTERNAL_INLINE bool ext_status_operator_equalCode(zStatus& item, zStatusCode& code)
 	{
 		return item == code;
-	}	
+	}
+	ZSPACE_EXTERNAL_INLINE bool ext_status_getErrorCheck(zStatus& item)
+	{
+		return item.getErrorCheck();
+	}
 
 
 
 
+
+
+	
 
 }

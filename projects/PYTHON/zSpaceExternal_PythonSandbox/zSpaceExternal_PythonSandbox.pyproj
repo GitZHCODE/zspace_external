@@ -52,6 +52,7 @@
     <Compile Include="zExtMeshModule.py" />
     <Compile Include="zExtPointModule.py" />
     <Compile Include="zExtTransformModule.py" />
+    <Compile Include="zSpaceExternal_PythonSandbox.py" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\zSpaceExternal_Python\zSpaceExternal_Python.pyproj">

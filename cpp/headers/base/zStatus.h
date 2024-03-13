@@ -17,7 +17,7 @@
 
 #pragma once
 
-#include <headers/base/zSpace_External.h>
+#include "headers/base/zSpace_External.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -43,19 +43,27 @@ namespace zSpace
 		zThrowError,		///<The operation failed due to a THROW error
 		zInvalidParameter,	///<The operation failed due to IVALID input
 		zPathNotFound,		///<The operation failed due to NOT FOUND PATH
-		zRunning			///<The operation is RUNNING
+		zRunning,			///<The operation is RUNNING
+		zSkip				///<The operation is skipped due to internal condition
+	};
+
+	class zStatusCodeUtil
+	{
+	public:
+		static bool getErrorCheck(zStatusCode code);
+		static string getCodeString(zStatusCode code);
 	};
 
 	struct ZSPACE_EXTERNAL zStatus
 	{
 	//public:
 		zStatusCode statusCode;
-		char* errorString;
-		zStatus();
+		char* errorMessage;
+		zStatus(zStatusCode code);
 		zStatus(zStatusCode code, string error);
-		
+		~zStatus();
 
-		bool checkError();
+		bool getErrorCheck();
 		void clearError();
 		bool operator==(const zStatus& item);
 		bool operator==(const zStatusCode& code);
@@ -66,7 +74,7 @@ namespace zSpace
 	{
 		ZSPACE_EXTERNAL bool ext_status_operator_equal(zStatus& item, zStatus& item2);
 		ZSPACE_EXTERNAL bool ext_status_operator_equalCode(zStatus& item, zStatusCode& code);
-
+		ZSPACE_EXTERNAL bool ext_status_getErrorCheck(zStatus& item);
 
 	}
 

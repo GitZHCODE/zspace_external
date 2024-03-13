@@ -26,7 +26,15 @@ namespace zSpace {
 
             //testMesh1();
 
-            testMeshUSD1();
+            //testMeshUSD1();
+            //smoothMesh();
+
+            string temppath = "";
+            zExtMesh m = new zExtMesh();
+            var chk = m.from(temppath);
+            Console.WriteLine(chk);
+
+            runOmniverse();
 
             Console.WriteLine("\n Press any key to exit...");
             Console.ReadKey();
@@ -95,7 +103,28 @@ namespace zSpace {
             printJsonDate(j1);
 
         }
+        static void smoothMesh() {
+            string path = "//zaha-hadid.com/Data/Projects/4071_NatPower/4071_Production/user_sketch/HE/1-Rhino/WORKFLOW/JSON/testForSmooth.obj";
+            var mesh = new zExtMesh();
+            mesh.from(path);
 
+            //zExtIntArray fixedv = new zExtIntArray(new int[] {11, 10, 17, 16, 2 , 5, 8, 0,3,6});
+            //zExtIntArray fixedv = new zExtIntArray(new int[] {11, 10, 17, 16, 2 , 5, 8});
+            zExtIntArray fixedv = new zExtIntArray(new int[] {8, 22, 5, 14, 2, 17, 23, 9, 10, 25});
+            // bool smoothChk = mesh.smoothMesh(1, true, fixedv);
+            //bool smoothChk = mesh.smoothMesh(1, true);
+            //Console.WriteLine("\n 2_ mesh.smooth " + smoothChk + " _ " + mesh.getVCount());
+            var smoothChk = mesh.smoothMesh(1, false, fixedv, false);
+
+            mesh.to("//zaha-hadid.com/Data/Projects/4071_NatPower/4071_Production/user_sketch/HE/1-Rhino/WORKFLOW/JSON/testForSmooth_out.obj");
+            //Rhino.Geometry.Mesh mesh1 = new Rhino.Geometry.Mesh();
+            mesh.toTest();
+
+            //zFnMesh fnresult = zFnMesh(resultObj);
+            ////fnresult.from(path, zJSON);
+            //fnresult.from(path, zOBJ);
+            //fnresult.subdivide(1);
+        }
         static void test2() {
             string writePath = "C:\\Users\\heba.eiz\\Desktop\\JSON_Temp\\testExport.json";
             zExtJSON j1 = new zExtJSON();
@@ -410,31 +439,48 @@ namespace zSpace {
             Console.WriteLine("\n 1_ mesh exported usda ");
 
             zExtUSD usd = new zExtUSD();
-            int chk = mesh.to(ref usd);
+            zStatus chk = mesh.to(ref usd);
             Console.WriteLine("\n 1_ mesh.to(ref usd) ");
-            Console.WriteLine("\n 1_ chk0 = " + chk + "\n");
+            Console.WriteLine("\n 1_ chk0 = " + chk.ToString() + "\n");
+
+
+            Console.WriteLine("\n 2_ mesh" + " _ " + mesh.getVCount());
+
+            //zExtIntArray fixedv = new zExtIntArray(new int[] { });
+            // bool smoothChk = mesh.smoothMesh(1, true, fixedv);
+            zStatus smoothChk = mesh.smoothMesh(1, true);
+            Console.WriteLine("\n 2_ mesh.smooth " + smoothChk.ToString() + " _ " +mesh.getVCount());
 
 
 
 
+            //var mesh2 = new zExtMesh();
+            //int chk1 = mesh2.from(ref usd);
 
-            var mesh2 = new zExtMesh();
-            int chk1 = mesh2.from(ref usd);
-
-            Console.WriteLine("\n 2_ chk1 = " + chk1 + "\n");
+            //Console.WriteLine("\n 2_ chk1 = " + chk1 + "\n");
 
 
-            string exportPath2 = "data/testMesh_2.usda";
-            int chk2= mesh2.to(exportPath2);
-            Console.WriteLine("\n 2_ chk2 = " + chk2 + "\n");
+            //string exportPath2 = "data/testMesh_2.usda";
+            //int chk2= mesh2.to(exportPath2);
+            //Console.WriteLine("\n 2_ chk2 = " + chk2 + "\n");
 
-            Console.WriteLine("\n 2_ mesh_2 exported usda ");
+            //Console.WriteLine("\n 2_ mesh_2 exported usda ");
 
 
 
 
         }
 
+        static void runOmniverse() {
+            zExtOmniClient omniClient = new zExtOmniClient();
+            string destinationPath = "omniverse://nucleus.zaha-hadid.com/Projects";
+            int chk = omniClient.startOmniverse(destinationPath);
+            Console.WriteLine("\n omni started = " + chk.ToString());
+            
+            chk = omniClient.startOmniverse(destinationPath);
+            Console.WriteLine("\n omni started2 = " + chk.ToString());
+            omniClient.shutdownOmniverse();
+        }
 
         static void testJSONSDF() {
             string readPath = "//zaha-hadid.com/Data/Projects/1453_CODE/1453___research/res_heba/0-Projects/Striatus/Blocks/2023-01-11/200_Final/Export11-4/JSONWrite/Block_17-updatedManually.json";

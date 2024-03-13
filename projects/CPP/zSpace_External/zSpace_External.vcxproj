@@ -56,19 +56,16 @@
     <ClInclude Include="..\..\..\..\zspace_core\cpp\depends\spa\spa.h" />
     <ClInclude Include="..\..\..\cpp\headers\base\zSpace_External.h" />
     <ClInclude Include="..\..\..\cpp\headers\base\zStatus.h" />
-    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtColor.h" />
-    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtField.h" />
-    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtJSON.h" />
-    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtParticle.h" />
-    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtUSD.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DLL|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Realease_DLL_Rh|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtUtilsCore.h" />
-    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtGraph.h" />
-    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtMesh.h" />
-    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtPoint.h" />
-    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtTransform.h" />
+    <ClInclude Include="..\..\..\cpp\headers\zCore\Base\zExtColor.h" />
+    <ClInclude Include="..\..\..\cpp\headers\zCore\Base\zExtPoint.h" />
+    <ClInclude Include="..\..\..\cpp\headers\zCore\Base\zExtTransform.h" />
+    <ClInclude Include="..\..\..\cpp\headers\zCore\Field\zExtField.h" />
+    <ClInclude Include="..\..\..\cpp\headers\zCore\Geometry\zExtGraph.h" />
+    <ClInclude Include="..\..\..\cpp\headers\zCore\Geometry\zExtMesh.h" />
+    <ClInclude Include="..\..\..\cpp\headers\zCore\Geometry\zExtParticle.h" />
+    <ClInclude Include="..\..\..\cpp\headers\zCore\Interop\zExtOV.h" />
+    <ClInclude Include="..\..\..\cpp\headers\zCore\Utils\zExtJSON.h" />
+    <ClInclude Include="..\..\..\cpp\headers\zCore\Utils\zExtUtilsCore.h" />
     <ClInclude Include="..\..\..\cpp\headers\zToolsets\data\zExtKMeans.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DLL_OV|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DLL|x64'">true</ExcludedFromBuild>
@@ -101,23 +98,16 @@
     <ClCompile Include="..\..\..\..\zspace_core\cpp\depends\alglib\cpp\src\statistics.cpp" />
     <ClCompile Include="..\..\..\..\zspace_core\cpp\depends\spa\spa.c" />
     <ClCompile Include="..\..\..\cpp\source\base\zStatus.cpp" />
-    <ClCompile Include="..\..\..\cpp\source\zCore\zExtColor.cpp" />
-    <ClCompile Include="..\..\..\cpp\source\zCore\zExtField.cpp" />
-    <ClCompile Include="..\..\..\cpp\source\zCore\zExtJSON.cpp" />
-    <ClCompile Include="..\..\..\cpp\source\zCore\zExtParticle.cpp" />
-    <ClCompile Include="..\..\..\cpp\source\zCore\zExtUSD.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DLL|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Realease_DLL_Rh|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\cpp\source\zCore\zExtUtilsCore.cpp" />
-    <ClCompile Include="..\..\..\cpp\source\zCore\zExtGraph.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DLL_OV|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DLL|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Realease_DLL_Rh|x64'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\cpp\source\zCore\zExtMesh.cpp" />
-    <ClCompile Include="..\..\..\cpp\source\zCore\zExtPoint.cpp" />
-    <ClCompile Include="..\..\..\cpp\source\zCore\zExtTransform.cpp" />
+    <ClCompile Include="..\..\..\cpp\source\zCore\Base\zExtColor.cpp" />
+    <ClCompile Include="..\..\..\cpp\source\zCore\Base\zExtPoint.cpp" />
+    <ClCompile Include="..\..\..\cpp\source\zCore\Base\zExtTransform.cpp" />
+    <ClCompile Include="..\..\..\cpp\source\zCore\Field\zExtField.cpp" />
+    <ClCompile Include="..\..\..\cpp\source\zCore\Geometry\zExtGraph.cpp" />
+    <ClCompile Include="..\..\..\cpp\source\zCore\Geometry\zExtMesh.cpp" />
+    <ClCompile Include="..\..\..\cpp\source\zCore\Geometry\zExtParticle.cpp" />
+    <ClCompile Include="..\..\..\cpp\source\zCore\Interop\zExtOV.cpp" />
+    <ClCompile Include="..\..\..\cpp\source\zCore\Utils\zExtJSON.cpp" />
+    <ClCompile Include="..\..\..\cpp\source\zCore\Utils\zExtUtilsCore.cpp" />
     <ClCompile Include="..\..\..\cpp\source\zToolsets\data\zExtKMeans.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DLL_OV|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_DLL|x64'">true</ExcludedFromBuild>
@@ -134,8 +124,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\csharp\zspaceexternal_csharp\source\zcore\zenumerators.cs" />
     <None Include="ClassDiagram.cd" />
     <None Include="cpp.hint" />
+    <None Include="packages.config" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -234,6 +226,8 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_DLL|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="zExternalPropertySheet.props" />
+    <Import Project="igl_2022.props" />
+    <Import Project="zspace_dll.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Realease_DLL_Rh|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -421,5 +415,12 @@
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\..\..\packages\CppCheckTask.1.5.3\build\CppCheckTask.targets" Condition="Exists('..\..\..\packages\CppCheckTask.1.5.3\build\CppCheckTask.targets')" />
   </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\..\packages\CppCheckTask.1.5.3\build\CppCheckTask.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\CppCheckTask.1.5.3\build\CppCheckTask.targets'))" />
+  </Target>
 </Project>

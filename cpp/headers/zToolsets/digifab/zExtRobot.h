@@ -16,7 +16,6 @@
 
 
 #pragma once
-#include <headers/base/zSpace_External.h>
 
 #include <headers/zCore/base/zExtern.h>
 #include <headers/zInterface/functionsets/zFnMesh.h>
@@ -31,9 +30,9 @@
 
 #include<headers/zToolsets/digifab/zTsRobot.h>
 #include<headers/zToolsets/digifab/zTsRobotFab.h>
-#include<headers/zCore/
-.h>
-#include<headers/zCore/zExtMesh.h>
+
+#include "headers/base/zSpace_External.h"
+#include "headers/zCore/Geometry/zExtMesh.h"
 
 using namespace std;
 

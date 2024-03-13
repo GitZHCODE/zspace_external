@@ -21,7 +21,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;RHINO_CSHARP</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -102,7 +102,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="dllPaths.cs" />
+    <Compile Include="source\base\dllPaths.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -111,18 +111,18 @@
     </Compile>
     <Compile Include="Rhino\zDataTreeUtil.cs" />
     <Compile Include="Rhino\zSpaceRhinoUtil.cs" />
+    <Compile Include="source\base\zEnumerators.cs" />
     <Compile Include="source\base\zStatus.cs" />
-    <Compile Include="source\zCore\zEnumerators.cs" />
-    <Compile Include="source\zCore\zExtField.cs" />
-    <Compile Include="source\zCore\zExtGraph.cs" />
-    <Compile Include="source\zCore\zExtJson.cs" />
-    <Compile Include="source\zCore\zExtColor.cs" />
-    <Compile Include="source\zCore\zExtPoint.cs" />
-    <Compile Include="source\zCore\zExtTransform.cs" />
-    <Compile Include="source\zCore\zExtUSD.cs" />
-    <Compile Include="source\zCore\zExtUtilsCore.cs" />
-    <Compile Include="source\zSpaceUtil.cs" />
-    <Compile Include="source\zCore\zExtMesh.cs" />
+    <Compile Include="source\zCore\Field\zExtField.cs" />
+    <Compile Include="source\zCore\Geometry\zExtGraph.cs" />
+    <Compile Include="source\zCore\Utils\zExtJson.cs" />
+    <Compile Include="source\zCore\Base\zExtColor.cs" />
+    <Compile Include="source\zCore\Base\zExtPoint.cs" />
+    <Compile Include="source\zCore\Base\zExtTransform.cs" />
+    <Compile Include="source\zCore\Interop\zExtOV.cs" />
+    <Compile Include="source\zCore\Utils\zExtUtilsCore.cs" />
+    <Compile Include="source\base\zSpaceUtil.cs" />
+    <Compile Include="source\zCore\Geometry\zExtMesh.cs" />
     <None Include="source\zToolsets\statics\zExtVault.cs" />
   </ItemGroup>
   <ItemGroup>
