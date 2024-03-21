@@ -23,6 +23,8 @@
 
 
 #include "headers/base/zSpace_External.h"
+#include "headers/base/zStatus.h"
+
 
 #include "headers/zCore/Base/zExtPoint.h"
 #include "headers/zCore/Base/zExtTransform.h"
@@ -75,7 +77,7 @@ namespace zSpace
 		zExtMeshScalarField(zObjMeshScalarField* extField);
 		~zExtMeshScalarField();
 
-		int checkMemAlloc(bool allocateMemory = true);
+		zStatusCode checkMemAlloc(bool allocateMemory = true);
 
 		void updateAttributes();
 	};

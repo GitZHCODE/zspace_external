@@ -31,6 +31,8 @@
 
 #include "headers/base/zSpace_External.h"
 #include "headers/zCore/Utils/zExtUtilsCore.h"
+#include "headers/base/zStatus.h"
+
 
 #if defined(ZSPACE_USD_INTEROP) 
 #include <headers/zInterOp/core/zOmniCore.h>
@@ -55,7 +57,7 @@ namespace zSpace
 		zExtUSD(UsdPrim* usd);
 		~zExtUSD();
 		void updateAttributes();
-		int checkMemAlloc(bool allocateMemory = true);
+		zStatusCode checkMemAlloc(bool allocateMemory = true);
 	};
 	ZSPACE_EXTERNAL_C
 	{
@@ -69,7 +71,7 @@ namespace zSpace
 		zExtOmniClient(zOmniCore* omniCore);
 		~zExtOmniClient();
 		void updateAttributes();
-		int checkMemAlloc(bool allocateMemory = true);
+		zStatusCode checkMemAlloc(bool allocateMemory = true);
 	};
 
 	ZSPACE_EXTERNAL_C
@@ -79,64 +81,6 @@ namespace zSpace
 	}
 
 
-
-	
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		
 		struct zExtUSDStage
 	{
@@ -144,7 +88,7 @@ namespace zSpace
 		zExtUSDStage();
 		zExtUSDStage(UsdStageRefPtr* usd);
 		void updateAttributes();
-		int checkMemAlloc(bool allocateMemory = true);
+		zStatusCode checkMemAlloc(bool allocateMemory = true);
 	};
 
 	ZSPACE_EXTERNAL_C
@@ -166,7 +110,7 @@ namespace zSpace
 #if defined(ZSPACE_EXTERNAL_STATIC_LIBRARY)  || defined(ZSPACE_EXTERNAL_DYNAMIC_LIBRARY)
 // All defined OK so do nothing
 #else
-#include<source/zCore/zExtOV.cpp>
+#include<source/zCore/Interop/zExtOV.cpp>
 #endif
 
 #endif

@@ -47,19 +47,22 @@ namespace zSpace
 	{
 		try
 		{
-			if (pointer != nullptr) return zStatus(zSkip);
+			if (!pointer || pointer == nullptr)
+			{
+				if (!allocateMemory) return zMemNotAllocError;
+				pointer = new zObjMesh();
+				return zStatus(zMemAllocSuccess);
+			}
 			else
 			{
-				if (!allocateMemory) return zStatus(zMemNotAllocError);
-				pointer = new zObjMesh();
-				return zMemAllocSuccess;
-				
+				return zStatus(zSkip);
 			}
+
+			
 		}
 		catch (const std::exception&)
 		{
-			printf("\n Pointer initialization failed");
-			return zStatus(zMemNotAllocError);
+			return zStatus(zThrowError);
 		}
 	}
 
@@ -1081,7 +1084,7 @@ namespace zSpace
 				bool isFixedEdge = find(begin(fixedIndex), end(fixedIndex), eVerts[0]) != end(fixedIndex) &&
 					find(begin(fixedIndex), end(fixedIndex), eVerts[1]) != end(fixedIndex);
 
-				printf("\n edge vertecies %i - %i", eVerts[0], eVerts[1]);
+				//printf("\n edge vertecies %i - %i", eVerts[0], eVerts[1]);
 
 				if (isFixedEdge)
 				{
@@ -1448,19 +1451,22 @@ namespace zSpace
 	{
 		try
 		{
-			if (pointer != nullptr) return zStatus(zSkip);
+			if (!pointer || pointer == nullptr)
+			{
+				if (!allocateMemory) return zMemNotAllocError;
+				pointer = new zObjMeshPointerArray();
+					return zStatus(zMemAllocSuccess);
+			}
 			else
 			{
-				if (!allocateMemory) return zStatus(zMemNotAllocError);
-				pointer = new zObjMeshPointerArray();
-				return zStatus(zMemAllocSuccess);
-
+				return zStatus(zSkip);
 			}
+
+
 		}
 		catch (const std::exception&)
 		{
-			printf("\n Pointer initialization failed");
-			return zStatus(zMemNotAllocError);
+			return zStatus(zThrowError);
 		}
 	}
 
@@ -1504,7 +1510,7 @@ namespace zSpace
 		fnMesh.create(vPos, pCounts, pConnects);
 	}
 
-	ZSPACE_EXTERNAL_INLINE zStatus ext_mesh_createFromArrays(zExtPointArray& _vertexPositions, zExtIntArray& _polyCounts, zExtIntArray& _polyConnects, zExtMesh& out_mesh)
+	ZSPACE_EXTERNAL_INLINE zStatusCode ext_mesh_createFromArrays(zExtPointArray& _vertexPositions, zExtIntArray& _polyCounts, zExtIntArray& _polyConnects, zExtMesh& out_mesh)
 	{
 		try
 		{
@@ -1520,24 +1526,24 @@ namespace zSpace
 		catch (const std::exception&)
 		{
 			printf("\n Error Creating Mesh!!!");
-			return zStatus(zThrowError);
+			return zThrowError;
 		}
-		return zStatus(zSuccess);
+		return zSuccess;
 		
 	}
 
-	ZSPACE_EXTERNAL_INLINE zStatus ext_mesh_setMeshVertexColors(zExtMesh& extMesh, zExtColorArray& vertexColors)
+	ZSPACE_EXTERNAL_INLINE zStatusCode ext_mesh_setMeshVertexColors(zExtMesh& extMesh, zExtColorArray& vertexColors)
 	{
 		try
 		{
 			zStatus memoryChk = extMesh.checkMemAlloc(false);
-			if (memoryChk == zMemNotAllocError) return zStatus(zMemNotAllocError);
+			if (memoryChk == zMemNotAllocError) return zMemNotAllocError;
 			zFnMesh fnMesh(*extMesh.pointer);
 			if (vertexColors.arrayCount != fnMesh.numVertices())
 			{
 				printf("\n Error Adding colors Mesh! not equal colors and vertices: colors %i | vertex %i", vertexColors.arrayCount, fnMesh.numVertices());
 				//std::format("\n Error Adding colors Mesh! not equal colors and vertices: colors {} | vertex {}", vertexColors.arrayCount, fnMesh.numVertices());
-				return zStatus(zFail);
+				return zFail;
 			}
 			fnMesh.setVertexColors(*vertexColors.pointer, true);
 			zColorArray c;
@@ -1554,47 +1560,74 @@ namespace zSpace
 		catch (const std::exception&)
 		{
 			printf("\n Error Adding colors Mesh!!!");
-			return zStatus(zThrowError);
+			return zThrowError;
 		}
-		return zStatus(zSuccess);
+		return zSuccess;
+	}
+
+	ZSPACE_EXTERNAL_INLINE zStatusCode ext_mesh_duplicate(zExtMesh& inObject, zExtMesh& outObject)
+	{
+		try
+		{
+			
+			zStatus memoryChk = inObject.checkMemAlloc(false);
+			if (memoryChk == zMemNotAllocError) return zMemNotAllocError;
+			zFnMesh fn(*inObject.pointer);
+			outObject.checkMemAlloc();
+			*outObject.pointer = zObjMesh(*inObject.pointer);
+			outObject.updateAttributes();
+
+			return zSuccess;
+		}
+		catch (const std::exception&)
+		{
+			return zThrowError;
+		}
 	}
 
 	//--------------------------
 	//----EXCHANGE METHODS
 	//--------------------------
 
-	ZSPACE_EXTERNAL_INLINE zStatus ext_mesh_from(char* filePath, zExtMesh& outMesh)
+	ZSPACE_EXTERNAL_INLINE zStatusCode ext_mesh_from(char* filePath, zExtMesh& outMesh)
 	{
+		printf("\n from 0");
 		try
 		{
+			printf("\n from 1");
+
 			outMesh.checkMemAlloc(true);
 			zFnMesh fn(*outMesh.pointer);
 			std::string str(filePath);
 			std::string ext = str.substr(str.find_last_of(".") + 1);
 			std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
-
+			cout << endl << ext;
 			if (ext == "json") fn.from(filePath, zJSON);
 			else if (ext == "obj") fn.from(filePath, zOBJ);
 #if defined ZSPACE_USD_INTEROP
 			else if (ext == "usd" || ext == "usda") fn.from(filePath, zUSD);
 #endif
-			else return zStatus(zInvalidParameter);
+			//else return zStatus(zInvalidParameter);
+			else return zInvalidParameter;
 			outMesh.updateAttributes();
-			return zStatus(zSuccess);
+			//return zSuccess;
+
+			return zSuccess;
 		}
 		catch (const std::exception&)
 		{
-			return zStatus(zThrowError);
+			//return zThrowError;
+			return zThrowError;
 		}
 		
 	}
 
-	ZSPACE_EXTERNAL_INLINE zStatus ext_mesh_to(zExtMesh& extMesh, char* filePath)
+	ZSPACE_EXTERNAL_INLINE zStatusCode ext_mesh_to(zExtMesh& extMesh, char* filePath)
 	{
 		try
 		{
 			zStatus memoryChk = extMesh.checkMemAlloc(false);
-			if (memoryChk == zMemNotAllocError) return zStatus(zMemNotAllocError);
+			if (memoryChk == zMemNotAllocError) return zMemNotAllocError;
 
 			zFnMesh fn(*extMesh.pointer);
 			std::string str(filePath);
@@ -1606,77 +1639,77 @@ namespace zSpace
 #if defined ZSPACE_USD_INTEROP
 			else if (ext == "usd" || ext == "usda") fn.to(filePath, zUSD);
 #endif
-			else return zStatus(zInvalidParameter);
-			return zStatus(zSuccess);
+			else return zInvalidParameter;
+			return zSuccess;
 		}
 		catch (const std::exception&)
 		{
-			return zStatus(zThrowError);
+			return zThrowError;
 		}
 		
 	}
 
-	ZSPACE_EXTERNAL_INLINE zStatus ext_mesh_fromJSON(zExtJSON& extJson, zExtMesh& outMesh)
+	ZSPACE_EXTERNAL_INLINE zStatusCode ext_mesh_fromJSON(zExtJSON& extJson, zExtMesh& outMesh)
 	{
 		try
 		{
 			int memoryChk = extJson.checkMemAlloc(false);
-			if (memoryChk != 1 || memoryChk != 2) return zStatus(zMemNotAllocError);
+			if (memoryChk != 1 || memoryChk != 2) return zMemNotAllocError;
 			outMesh.checkMemAlloc();
 			zFnMesh fn(*outMesh.pointer);
 			fn.from(*extJson.pointer);
 			outMesh.updateAttributes();
-			return zStatus(zSuccess);
+			return zSuccess;
 		}
 		catch (const std::exception&)
 		{
-			return zStatus(zThrowError);
+			return zThrowError;
 		}
 	}
 
-	ZSPACE_EXTERNAL_INLINE zStatus ext_mesh_toJSON(zExtMesh& extMesh, zExtJSON& outJson)
+	ZSPACE_EXTERNAL_INLINE zStatusCode ext_mesh_toJSON(zExtMesh& extMesh, zExtJSON& outJson)
 	{
 		try
 		{
 			zStatus memoryChk = extMesh.checkMemAlloc(false);
-			if (memoryChk == zMemNotAllocError) return zStatus(zMemNotAllocError);
+			if (memoryChk == zMemNotAllocError) return zMemNotAllocError;
 			outJson.checkMemAlloc();
 			zFnMesh fn(*extMesh.pointer);
 			fn.to(*outJson.pointer);
 			outJson.updateAttributes();
-			return zStatus(zSuccess);
+			return zSuccess;
 		}
 		catch (const std::exception&)
 		{
-			return zStatus(zThrowError);
+			return zThrowError;
 		}
 	}
 
 #if defined(ZSPACE_USD_INTEROP)  
 
-	ZSPACE_EXTERNAL_INLINE zStatus ext_mesh_fromUSD(zExtUSD& extUsd, zExtMesh& outMesh)
+	ZSPACE_EXTERNAL_INLINE zStatusCode ext_mesh_fromUSD(zExtUSD& extUsd, zExtMesh& outMesh)
 	{
 		try
 		{
 			/*zStatus memoryChk = extUsd.checkMemAlloc(false);
-			if (memoryChk == zMemNotAllocError) return zStatus(zMemNotAllocError);*/
+			if (memoryChk == zMemNotAllocError) return zMemNotAllocError;*/
 			
 			int memoryChk = extUsd.checkMemAlloc(false);
-			if (memoryChk != 1 || memoryChk != 2) return zStatus(zMemNotAllocError);
+			if (memoryChk != 1 || memoryChk != 2) return zMemNotAllocError;
 			outMesh.checkMemAlloc();
 			zFnMesh fn(*outMesh.pointer);
 			fn.from(*extUsd.pointer);
 			outMesh.updateAttributes();
-			return zStatus(zSuccess);
+			return zSuccess;
 		}
 		catch (const std::exception&)
 		{
-			return zStatus(zFail);
+			return zThrowError;
 		}
 
 	}
 
-	ZSPACE_EXTERNAL_INLINE zStatus ext_mesh_toUSD(zExtMesh& extMesh, zExtUSD& extUsd)
+	ZSPACE_EXTERNAL_INLINE zStatusCode ext_mesh_toUSD(zExtMesh& extMesh, zExtUSD& extUsd)
 	{
 		try
 		{
@@ -1684,7 +1717,7 @@ namespace zSpace
 			zStatus memoryChk = extMesh.checkMemAlloc(false);
 			printf("\n tousd 1");
 
-			if (memoryChk == zMemNotAllocError) return zStatus(zMemNotAllocError);
+			if (memoryChk == zMemNotAllocError) return zMemNotAllocError;
 			printf("\n tousd 2");
 
 			extUsd.checkMemAlloc();
@@ -1699,18 +1732,18 @@ namespace zSpace
 			//extUsd.updateAttributes();
 			printf("\n tousd 6");
 
-			return zStatus(zSuccess);
+			return zSuccess;
 		}
 		catch (const std::exception&)
 		{
-			return zStatus(zThrowError);;
+			return zThrowError;;
 		}
 	}
 
 #endif
 	
 	
-	ZSPACE_EXTERNAL_INLINE zStatus ext_mesh_getMeshsFromMeshArray(zExtMeshArray& inArray, zExtMesh* outMeshes)
+	ZSPACE_EXTERNAL_INLINE zStatusCode ext_mesh_getMeshsFromMeshArray(zExtMeshArray& inArray, zExtMesh* outMeshes)
 	{
 		for (int i = 0; i < inArray.pointer->size(); i++)
 		{
@@ -1719,12 +1752,12 @@ namespace zSpace
 		}
 	}
 
-	ZSPACE_EXTERNAL_INLINE zStatus ext_mesh_getMeshsFromMeshPointerArray(zExtMeshPointerArray& inArray, zExtMesh* outMeshes)
+	ZSPACE_EXTERNAL_INLINE zStatusCode ext_mesh_getMeshsFromMeshPointerArray(zExtMeshPointerArray& inArray, zExtMesh* outMeshes)
 	{
 		try
 		{
 			zStatus memoryChk = inArray.checkMemAlloc(false);
-			if (memoryChk == zMemNotAllocError) return zStatus(zMemNotAllocError);
+			if (memoryChk == zMemNotAllocError) return zMemNotAllocError;
 			for (int i = 0; i < inArray.pointer->size(); i++)
 			{
 				outMeshes[i] = zExtMesh(inArray.pointer->at(i));
@@ -1733,54 +1766,54 @@ namespace zSpace
 		}
 		catch (const std::exception&)
 		{
-			return zStatus(zThrowError);
+			return zThrowError;
 		}
 		
 	}
 
-	ZSPACE_EXTERNAL_INLINE zStatus ext_mesh_getVertexPositions(zExtMesh& objMesh, zExtPointArray& extArray)
+	ZSPACE_EXTERNAL_INLINE zStatusCode ext_mesh_getVertexPositions(zExtMesh& objMesh, zExtPointArray& extArray)
 	{
 		try
 		{
 			zStatus memoryChk = objMesh.checkMemAlloc(false);
-			if (memoryChk == zMemNotAllocError) return zStatus(zMemNotAllocError);
+			if (memoryChk == zMemNotAllocError) return zMemNotAllocError;
 			extArray.checkMemAlloc();
 			zFnMesh fn(*objMesh.pointer);
 			fn.getVertexPositions(*extArray.pointer);
 			extArray.updateAttributes();
 
-			return zStatus(zSuccess);
+			return zSuccess;
 		}
 		catch (const std::exception&)
 		{
 			printf("\n ext_mesh_getVertexPositions failed!");
-			return zStatus(zThrowError);
+			return zThrowError;
 		}
 		
 	}
 
-	ZSPACE_EXTERNAL_INLINE zStatus ext_mesh_getMeshColors(zExtMesh& objMesh, zExtColorArray& extArray)
+	ZSPACE_EXTERNAL_INLINE zStatusCode ext_mesh_getMeshColors(zExtMesh& objMesh, zExtColorArray& extArray)
 	{
 		try
 		{
 			zStatus memoryChk = objMesh.checkMemAlloc(false);
-			if (memoryChk == zMemNotAllocError) return zStatus(zMemNotAllocError);
+			if (memoryChk == zMemNotAllocError) return zMemNotAllocError;
 			extArray.checkMemAlloc();
 
 			zFnMesh fn(*objMesh.pointer);
 			fn.getVertexColors(*extArray.pointer);
 			extArray.updateAttributes();
-			return zStatus(zSuccess);
+			return zSuccess;
 		}
 		catch (const std::exception&)
 		{
 			printf("\n ext_mesh_getMeshColors failed!");
-			return zStatus(zThrowError);
+			return zThrowError;
 		}
 			
 	}
 
-	ZSPACE_EXTERNAL_INLINE zStatus ext_mesh_getMeshPolygonDate(zExtMesh& objMesh, zExtIntArray& pCount, zExtIntArray& pConnect)
+	ZSPACE_EXTERNAL_INLINE zStatusCode ext_mesh_getMeshPolygonDate(zExtMesh& objMesh, zExtIntArray& pCount, zExtIntArray& pConnect)
 	{
 		pCount.pointer = new zIntArray();
 		pConnect.pointer = new zIntArray();
@@ -1789,38 +1822,53 @@ namespace zSpace
 		fn.getPolygonData(*pConnect.pointer, *pCount.pointer);
 		pCount.updateAttributes();
 		pConnect.updateAttributes();
-		return zStatus(zSuccess);
+		return zSuccess;
 	}
 
-	ZSPACE_EXTERNAL_INLINE zStatus ext_mesh_smoothMesh(zExtMesh& objMesh, int level, bool smoothCorner, zExtIntArray& fixedVerts, bool smoothFixedEdges)
+	ZSPACE_EXTERNAL_INLINE int ext_mesh_smoothMesh(zExtMesh& objMesh, int level, bool smoothCorner, zExtIntArray& fixedVerts, bool smoothFixedEdges)
 	{
+		printf("\n smooth 0");
+
 		try
 		{
+			printf("\n smooth 1");
+
 			zStatus memoryChk = objMesh.checkMemAlloc(false);
-			if (memoryChk == zMemNotAllocError) return zStatus(zMemNotAllocError);
+			if (memoryChk == zMemNotAllocError)
+			{
+				printf("\n smooth failed");
+
+				//return zMemNotAllocError;
+				return (int) (zMemNotAllocError);
+			}
+			printf("\n smooth 2");
 
 			auto chkArray = fixedVerts.checkMemAlloc(true);
+			printf("\n smooth 3");
 
 			objMesh.smoothMesh(level, smoothCorner, *fixedVerts.pointer, smoothFixedEdges);
+			printf("\n smooth 4");
 
 			objMesh.updateAttributes();
 			printf("\n smooth success");
 
-			return zStatus(zSuccess);
+			//return zSuccess;
+			return  (int)(zSuccess);
 		}
 		catch (const std::exception&)
 		{
 			printf("\n Catmullclark failed!");
-			return zStatus(zThrowError);
+			//return zThrowError;
+			return  (int)(zThrowError);
 		}
 	}
 
-	ZSPACE_EXTERNAL_INLINE zStatus ext_mesh_smoothMesh1D(zExtMesh& objMesh, int level, bool smoothCorner, bool flip, zExtIntArray& fixedVerts)
+	ZSPACE_EXTERNAL_INLINE zStatusCode ext_mesh_smoothMesh1D(zExtMesh& objMesh, int level, bool smoothCorner, bool flip, zExtIntArray& fixedVerts)
 	{
 		try
 		{
 			zStatus memoryChk = objMesh.checkMemAlloc(false);
-			if (memoryChk == zMemNotAllocError) return zStatus(zMemNotAllocError);
+			if (memoryChk == zMemNotAllocError) return zMemNotAllocError;
 			int chkArray = fixedVerts.checkMemAlloc(true);
 
 
@@ -1829,21 +1877,21 @@ namespace zSpace
 			objMesh.updateAttributes();
 			printf("\n smooth1d success");
 
-			return zStatus(zSuccess);
+			return zSuccess;
 		}
 		catch (const std::exception&)
 		{
 			printf("\n Smooth1D failed!");
-			return zStatus(zThrowError);
+			return zThrowError;
 		}
 	}
 
-	ZSPACE_EXTERNAL_INLINE zStatus ext_mesh_getEdgeLoops(zExtMesh& objMesh, zExtGraphArray& graphArrayU, zExtGraphArray& graphArrayV)
+	ZSPACE_EXTERNAL_INLINE zStatusCode ext_mesh_getEdgeLoops(zExtMesh& objMesh, zExtGraphArray& graphArrayU, zExtGraphArray& graphArrayV)
 	{
 		try
 		{
 			zStatus memoryChk = objMesh.checkMemAlloc(false);
-			if (memoryChk == zMemNotAllocError) return zStatus(zMemNotAllocError);
+			if (memoryChk == zMemNotAllocError) return zMemNotAllocError;
 			/*vector<zItMeshHalfEdgeArray> edgeLoopU, edgeLoopV;
 			objMesh.getEdgeLoop(*objMesh.pointer, edgeLoopU, edgeLoopV);
 
@@ -1852,21 +1900,21 @@ namespace zSpace
 			objMesh.updateAttributes();
 			printf("\n smooth1d success");*/
 
-			return zStatus(zSuccess);
+			return zSuccess;
 		}
 		catch (const std::exception&)
 		{
 			printf("\n ext_mesh_getEdgeLoops failed!");
-			return zStatus(zThrowError);
+			return zThrowError;
 		}
 	}
 
-	ZSPACE_EXTERNAL_INLINE zStatus ext_mesh_getEdgeLoopsGraph(zExtMesh& objMesh, zExtGraph& graphU, zExtGraph& graphV)
+	ZSPACE_EXTERNAL_INLINE zStatusCode ext_mesh_getEdgeLoopsGraph(zExtMesh& objMesh, zExtGraph& graphU, zExtGraph& graphV)
 	{
 		try
 		{
 			zStatus memoryChk = objMesh.checkMemAlloc(false);
-			if (memoryChk == zMemNotAllocError) return zStatus(zMemNotAllocError);
+			if (memoryChk == zMemNotAllocError) return zMemNotAllocError;
 
 			vector<zItMeshHalfEdgeArray> edgeLoopU, edgeLoopV;
 			objMesh.getEdgeLoop(*objMesh.pointer, edgeLoopU, edgeLoopV);
@@ -1877,66 +1925,61 @@ namespace zSpace
 
 			printf("\n getEdgeLoopsGraph success");
 
-			return zStatus(zSuccess);
+			return zSuccess;
 		}
 		catch (const std::exception&)
 		{
 			printf("\n getEdgeLoopsGraph failed!");
-			return zStatus(zThrowError);
+			return zThrowError;
 		}
 	}
 
-	ZSPACE_EXTERNAL_INLINE zStatus ext_mesh_checkPlanarity(zExtMesh& objMesh, float tolerance, int planarityType, bool colorFaces, zExtDoubleArray& outDeviations)
+	ZSPACE_EXTERNAL_INLINE zStatusCode ext_mesh_checkPlanarity(zExtMesh& objMesh, float tolerance, int planarityType, bool colorFaces, zExtDoubleArray& outDeviations)
 	{
 		try
 		{
 			zStatus memoryChk = objMesh.checkMemAlloc(false);
-			if (memoryChk == zMemNotAllocError) return zStatus(zMemNotAllocError);
+			if (memoryChk == zMemNotAllocError) return zMemNotAllocError;
 			outDeviations.checkMemAlloc();
 
 			zFnMesh fn(*objMesh.pointer);
 			fn.getPlanarityDeviationPerFace(*outDeviations.pointer, planarityType == 0 ? zPlanarSolverType::zQuadPlanar : zPlanarSolverType::zVolumePlanar, colorFaces, tolerance);
 			outDeviations.updateAttributes();
 			objMesh.updateAttributes();
-			return zStatus(zSuccess);
+			return zSuccess;
 		}
 		catch (const std::exception&)
 		{
 			printf("\n planarity failed!");
-			return zStatus(zThrowError);
+			return zThrowError;
 		}
 	}
 
-	ZSPACE_EXTERNAL_INLINE zStatus ext_mesh_getFaceColor(zExtMesh& objMesh, zExtColorArray& extPointArray)
+	ZSPACE_EXTERNAL_INLINE zStatusCode ext_mesh_getFaceColor(zExtMesh& objMesh, zExtColorArray& extPointArray)
 	{
 		try
 		{
 			zStatus memoryChk = objMesh.checkMemAlloc(false);
-			if (memoryChk == zMemNotAllocError) return zStatus(zMemNotAllocError);
+			if (memoryChk == zMemNotAllocError) return zMemNotAllocError;
 			extPointArray.checkMemAlloc();
 			zFnMesh fn(*objMesh.pointer);
 			fn.getFaceColors(*extPointArray.pointer);
 			extPointArray.updateAttributes();
-			return zStatus(zSuccess);
+			return zSuccess;
 		}
 		catch (const std::exception&)
 		{
 			printf("\n getFaceColor failed!");
-			return zStatus(zThrowError);
+			return zThrowError;
 		}
 	}
 
 
 
-	ZSPACE_EXTERNAL_INLINE void ext_mesh_meshTest(int outfCounts)
-	{
-		printf("\n C++ %i", outfCounts);
-
-	}
-	ZSPACE_EXTERNAL_INLINE zStatus ext_mesh_getVertexPositionsRaw(zExtMesh& objMesh, float* outVPostions, float* outVColors)
+	ZSPACE_EXTERNAL_INLINE zStatusCode ext_mesh_getVertexPositionsRaw(zExtMesh& objMesh, float* outVPostions, float* outVColors)
 	{
 		zStatus memoryChk = objMesh.checkMemAlloc(false);
-		if (memoryChk == zMemNotAllocError) return zStatus(zMemNotAllocError);
+		if (memoryChk == zMemNotAllocError) return zMemNotAllocError;
 		zFnMesh fn(*objMesh.pointer);
 		zPoint* pts = fn.getRawVertexPositions();
 		zColor* colors = fn.getRawVertexColors();
@@ -1951,14 +1994,14 @@ namespace zSpace
 			outVColors[i * 4 + 2] = colors[i].b;
 			outVColors[i * 4 + 3] = colors[i].a;
 		}
-		return zStatus(zSuccess);
+		return zSuccess;
 	}
-	ZSPACE_EXTERNAL_INLINE zStatus ext_mesh_getMeshFaceCounts(zExtMesh& objMesh, int* outfCounts)
+	ZSPACE_EXTERNAL_INLINE zStatusCode ext_mesh_getMeshFaceCounts(zExtMesh& objMesh, int* outfCounts)
 	{
 		try
 		{
 			zStatus memoryChk = objMesh.checkMemAlloc(false);
-			if (memoryChk == zMemNotAllocError) return zStatus(zMemNotAllocError);
+			if (memoryChk == zMemNotAllocError) return zMemNotAllocError;
 
 			zFnMesh fn(*objMesh.pointer);
 			zIntArray pCounts;
@@ -1968,21 +2011,21 @@ namespace zSpace
 			{
 				outfCounts[i] = pCounts[i];
 			}
-			return zStatus(zSuccess);
+			return zSuccess;
 		}
 		catch (const std::exception&)
 		{
 			printf("\n getMeshFaceCounts failed!");
-			return zStatus(zThrowError);
+			return zThrowError;
 		}
 		
 	}
-	ZSPACE_EXTERNAL_INLINE zStatus ext_mesh_getMeshFaceConnect(zExtMesh& objMesh, int* outfConnects)
+	ZSPACE_EXTERNAL_INLINE zStatusCode ext_mesh_getMeshFaceConnect(zExtMesh& objMesh, int* outfConnects)
 	{
 		try
 		{
 			zStatus memoryChk = objMesh.checkMemAlloc(false);
-			if (memoryChk == zMemNotAllocError) return zStatus(zMemNotAllocError);
+			if (memoryChk == zMemNotAllocError) return zMemNotAllocError;
 
 			zFnMesh fn(*objMesh.pointer);
 			zIntArray pCounts;
@@ -1992,22 +2035,22 @@ namespace zSpace
 			{
 				outfConnects[i] = pConnects[i];
 			}
-			return zStatus(zSuccess);
+			return zSuccess;
 		}
 		catch (const std::exception&)
 		{
 			printf("\n getFaceColor failed!");
-			return zStatus(zThrowError);
+			return zThrowError;
 		}
 		
 	}
 
-	ZSPACE_EXTERNAL_INLINE zStatus ext_mesh_getMeshCentre(zExtMesh& objMesh, float* outCentre)
+	ZSPACE_EXTERNAL_INLINE zStatusCode ext_mesh_getMeshCentre(zExtMesh& objMesh, float* outCentre)
 	{
 		try
 		{
 			zStatus memoryChk = objMesh.checkMemAlloc(false);
-			if (memoryChk == zMemNotAllocError) return zStatus(zMemNotAllocError);
+			if (memoryChk == zMemNotAllocError) return zMemNotAllocError;
 
 			zFnMesh fn(*objMesh.pointer);
 			zPoint pt = fn.getCenter();
@@ -2015,16 +2058,16 @@ namespace zSpace
 			outCentre[1] = pt.y;
 			outCentre[2] = pt.z;
 
-			return zStatus(zSuccess);
+			return zSuccess;
 		}
 		catch (const std::exception&)
 		{
 			printf("\n getFaceCentre failed!");
-			return zStatus(zThrowError);
+			return zThrowError;
 		}
 		
 	}
-	ZSPACE_EXTERNAL_INLINE zStatus ext_mesh_getPlanarityDeviationPerFace(zExtMesh& objMesh, zExtDoubleArray& outPlanarityDevs, int type, bool colorFaces , double tolerance )
+	ZSPACE_EXTERNAL_INLINE zStatusCode ext_mesh_getPlanarityDeviationPerFace(zExtMesh& objMesh, zExtDoubleArray& outPlanarityDevs, int type, bool colorFaces , double tolerance )
 	{
 		try
 		{
@@ -2045,16 +2088,16 @@ namespace zSpace
 		catch (const std::exception&)
 		{
 			printf("\n Planarity Deviation Check Failed!");
-			return zStatus(zThrowError);
+			return zThrowError;
 		}
 	}
 
-	ZSPACE_EXTERNAL_INLINE zStatus ext_mesh_getGaussianCurvature(zExtMesh& objMesh, zExtDoubleArray& outGaussianCurvature )
+	ZSPACE_EXTERNAL_INLINE zStatusCode ext_mesh_getGaussianCurvature(zExtMesh& objMesh, zExtDoubleArray& outGaussianCurvature )
 	{
 		try
 		{
 			zStatus memoryChk = objMesh.checkMemAlloc(false);
-			if (memoryChk == zMemNotAllocError) return zStatus(zMemNotAllocError);
+			if (memoryChk == zMemNotAllocError) return zMemNotAllocError;
 			zDoubleArray gaussiancurv;
 			zFnMesh fn(*objMesh.pointer);
 			fn.getGaussianCurvature(gaussiancurv);
@@ -2064,7 +2107,23 @@ namespace zSpace
 		catch (const std::exception&)
 		{
 			printf("\n Check GaussianCurvature Failed!");
-			return zStatus(zThrowError);
+			return zThrowError;
 		}
 	}
+
+	ZSPACE_EXTERNAL_INLINE zPoint ext_mesh_meshTest(int num)
+	{
+		printf("\n TEST C++ %i", num);
+		//return zStatus((zStatusCode)num);
+		return zPoint(0,0,10);
+
+	}
+	ZSPACE_EXTERNAL_INLINE int ext_mesh_meshTest2(zStatus2& num)
+	{
+		printf("\n TEST2 C++ %i", num.statusCode);
+		//return zStatus((zStatusCode)num);
+		return (int) num.statusCode;
+
+	}
+
 }

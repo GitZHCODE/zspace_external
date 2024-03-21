@@ -29,16 +29,36 @@ namespace zSpace {
 
             from(s);
         }
+        public bool isValid() {
+            return !(o_mesh == IntPtr.Zero || vCount == 0);
+           
+        }
+        /// <summary>
+        /// Creates a duplicate of the current mesh .
+        /// </summary>
+        /// <returns>The duplicated mesh.</returns>
+        public zExtMesh duplicate() {
+            zExtMesh outObject;
+            zNativeMethods.ext_mesh_duplicate(in this, out outObject);
+            return outObject;
+        }
+
         public zExtPoint[] getMeshPoints() {
             zExtPointArray mid;
            //zExtMesh mesh = this;
-            zNativeMethods.ext_mesh_getVertexPositions(ref this, out mid);
-            var items = mid.getItems();
-            //for (int i = 0; i < items.Length; i++) {
-            //    Console.WriteLine(items[i].x + ", " + items[i].y + ", " +items[i].z);
-            //    //Console.WriteLine(string.Format("{0}, {1}, {2}"), items[i].x, items[i].y, items[i].z);
-            //}
-            return items;
+            var chk = zNativeMethods.ext_mesh_getVertexPositions(ref this, out mid);
+            if (!zStatusCodeUtil.getErrorCheck(chk)) {
+                var items = mid.getItems();
+                //for (int i = 0; i < items.Length; i++) {
+                //    Console.WriteLine(items[i].x + ", " + items[i].y + ", " +items[i].z);
+                //    //Console.WriteLine(string.Format("{0}, {1}, {2}"), items[i].x, items[i].y, items[i].z);
+                //}
+                return items;
+            }
+            else {
+                throw new ArgumentException(string.Format("Failed with error {0}", zStatusCodeUtil.getCodeString(chk)));
+            }
+            
         }
         public System.Drawing.Color[] getMeshColors() {
             
@@ -128,12 +148,13 @@ namespace zSpace {
         /// <param name="_polyCounts"></param>
         /// <param name="_polyConnects"></param>
         /// <returns></returns>
-        public bool createMesh(in zExtPointArray _vertexPositions, in zExtIntArray _polyCounts, in zExtIntArray _polyConnects) {
+        public zStatusCode createMesh(in zExtPointArray _vertexPositions, in zExtIntArray _polyCounts, in zExtIntArray _polyConnects) {
             ////zExtMesh mesh = this;
             var chk = zNativeMethods.ext_mesh_createFromArrays(in _vertexPositions, in _polyCounts, in _polyConnects, ref this);
             Console.WriteLine(chk);
             Console.WriteLine(vCount);
-            return chk.getErrorCheck();
+            //return chk.getErrorCheck();
+            return chk;// chk.getErrorCheck();
         }
         /// <summary>
         /// Creat a mesh from a list of vertices, faces and colors
@@ -143,7 +164,7 @@ namespace zSpace {
         /// <param name="_polyConnects"></param>
         /// <param name="colors"></param>
         /// <returns></returns>
-        public bool createMesh(in zExtPointArray _vertexPositions, in zExtIntArray _polyCounts, in zExtIntArray _polyConnects, ref System.Drawing.Color[] colors) {
+        public zStatusCode createMesh(in zExtPointArray _vertexPositions, in zExtIntArray _polyCounts, in zExtIntArray _polyConnects, ref System.Drawing.Color[] colors) {
             //zExtMesh mesh = this;
             var chk = zNativeMethods.ext_mesh_createFromArrays(in _vertexPositions, in _polyCounts, in _polyConnects, ref this);
             //Console.WriteLine("\n ext_mesh_createFromArrays " + chk);
@@ -157,19 +178,20 @@ namespace zSpace {
                 var chk2 = zNativeMethods.ext_mesh_setMeshVertexColors(ref this, extColors);
                 //Console.WriteLine("\n ext_mesh_setMeshVertexColors " + chk2);
                 //return chk == 1 && chk2 == 1;
-                return chk.getErrorCheck() && chk2.getErrorCheck();
+                return zStatusCodeUtil.getErrorCheck(chk) && zStatusCodeUtil.getErrorCheck(chk2)? zStatusCode.zSuccess : zStatusCode.zFail;
             }
-                return chk.getErrorCheck();
+                return chk;
         }
         /// <summary>
         /// Create a mesh from a file
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns></returns>
-        public zStatus from(string filePath) {
+        public zStatusCode from(string filePath) {
             //zExtMesh mesh = this;
             
             var success = zNativeMethods.ext_mesh_from(filePath, ref this);
+            //return (int) success.getCode();
             return success;
         }
 
@@ -178,7 +200,7 @@ namespace zSpace {
         /// </summary>
         /// <param name="filePath"> The path of the file to be written </param>
         /// <returns> True if the file is written successfully </returns>
-        public zStatus to(string filePath) {
+        public zStatusCode to(string filePath) {
            //zExtMesh mesh = this;
             var success = zNativeMethods.ext_mesh_to(ref this, filePath);
             return success;
@@ -189,7 +211,7 @@ namespace zSpace {
         /// </summary>
         /// <param name="json">json object</param>
         /// <returns></returns>
-        public zStatus to(ref zExtJSON json) {
+        public zStatusCode to(ref zExtJSON json) {
            //zExtMesh mesh = this;
             var success = zNativeMethods.ext_mesh_toJSON(ref this, ref json);
             return success;
@@ -200,18 +222,18 @@ namespace zSpace {
         /// </summary>
         /// <param name="json"></param>
         /// <returns></returns>
-        public zStatus from(ref zExtJSON json) {
+        public zStatusCode from(ref zExtJSON json) {
            //zExtMesh mesh = this;
             var success = zNativeMethods.ext_mesh_fromJSON(ref json, ref this);
             return success;
         }
 
 
-        public zStatus to(ref zExtUSD usd) {
+        public zStatusCode to(ref zExtUSD usd) {
             var success = zNativeMethods.ext_mesh_toUSD(ref this, ref usd);
             return success;
         }
-        public zStatus from(ref zExtUSD usd) {
+        public zStatusCode from(ref zExtUSD usd) {
             var success = zNativeMethods.ext_mesh_fromUSD(ref usd, ref this);
             return success;
         }
@@ -247,7 +269,7 @@ namespace zSpace {
 
 
 #if RHINO_CSHARP
-        public bool to(out Mesh mesh) {
+        public zStatusCode to(out Mesh mesh) {
             mesh = new Mesh();
             try {
                 mesh.Vertices.Clear();
@@ -281,13 +303,13 @@ namespace zSpace {
                 }
 
                 mesh.RebuildNormals();
-                return true;
+                return zStatusCode.zSuccess;
             }
             catch (Exception) {
-                return false;
+                return zStatusCode.zThrowError;
             }
         }
-        public bool from(in Mesh rhinoMesh) {
+        public zStatusCode from(in Mesh rhinoMesh) {
             try {
                 this = new zExtMesh();
                 zExtPointArray extpts = new zExtPointArray();
@@ -313,12 +335,12 @@ namespace zSpace {
                 countArray.setItems(pCountList.ToArray());
                 connectArray.setItems(pConnectList.ToArray());
                 var colors = rhinoMesh.VertexColors.ToArray();
-                bool chk = createMesh(in extpts, in countArray, in connectArray, ref colors);
+                var chk = createMesh(in extpts, in countArray, in connectArray, ref colors);
 
                 return chk;
             }
             catch (Exception) {
-               return false;
+               return zStatusCode.zThrowError;
             }
         }
 
@@ -331,7 +353,7 @@ namespace zSpace {
         /// <param name="planarityDevs">Out array of deviations values</param>
         /// <param name="type">Type of planarity check to calculate. 0 for Quad diagonals method, and 1 for Volume method </param>
         /// <returns> True if the method was run successfully</returns>
-        public zStatus getPlanarityDeviationPerFace(bool colorFaces, double tolerance, out double[] planarityDevs, int type = 0) {
+        public zStatusCode getPlanarityDeviationPerFace(bool colorFaces, double tolerance, out double[] planarityDevs, int type = 0) {
             zExtDoubleArray devs = new zExtDoubleArray();
             //zExtMesh mesh = this;
             var success = zNativeMethods.ext_mesh_getPlanarityDeviationPerFace(ref this, ref devs, type, colorFaces, tolerance);
@@ -343,7 +365,7 @@ namespace zSpace {
         /// </summary>
         /// <param name="gaussianCurvature"> out array to store Gaussian curvature data  </param>
         /// <returns> True if the method was run successfully</returns>
-        public zStatus getGaussianCurvature(out double[] gaussianCurvature) {
+        public zStatusCode getGaussianCurvature(out double[] gaussianCurvature) {
             zExtDoubleArray devs = new zExtDoubleArray();
             //zExtMesh mesh = this;
             var success = zNativeMethods.ext_mesh_getGaussianCurvature(ref this, ref devs);
@@ -356,7 +378,7 @@ namespace zSpace {
         /// </summary>
         /// <param name="colors"> Out array of face colors </param>
         /// <returns> True if the method was run successfully</returns>
-        public zStatus getFaceColor(out System.Drawing.Color[] colors) {
+        public zStatusCode getFaceColor(out System.Drawing.Color[] colors) {
             zExtColorArray extColors = new zExtColorArray();
             //zExtMesh mesh = this;
             var success = zNativeMethods.ext_mesh_getMeshColors(ref this, out extColors);
@@ -369,13 +391,13 @@ namespace zSpace {
         /// <param name="level"> The number of times to smoothen the mesh</param>
         /// <param name="fixedCorner"> True to keep the corner fixed</param>
         /// <returns> True if the method was run successfully</returns>
-        public zStatus smoothMesh(int level, bool smoothCorner, in zExtIntArray fixedVerts = new zExtIntArray(), bool smoothFixedEdges = false) {
+        public zStatusCode smoothMesh(int level, bool smoothCorner, in zExtIntArray fixedVerts = new zExtIntArray(), bool smoothFixedEdges = false) {
             //zExtMesh mesh = this;
             var success = zNativeMethods.ext_mesh_smoothMesh(ref this, level, smoothCorner, fixedVerts, smoothFixedEdges);
             return success;
         }
 
-        public zStatus smoothMesh1D(int level, bool smoothCorner, bool flip, in zExtIntArray fixedVerts) {
+        public zStatusCode smoothMesh1D(int level, bool smoothCorner, bool flip, in zExtIntArray fixedVerts) {
             //zExtMesh mesh = this;
             var success = zNativeMethods.ext_mesh_smoothMesh1D(ref this, level, smoothCorner, flip, fixedVerts);
             return success;
@@ -430,115 +452,124 @@ namespace zSpace {
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         internal static extern void ext_mesh_createFromRawArrays(double[] _vertexPositions, int[] _polyCounts, int[] _polyConnects, int numVerts, int numFaces, ref zExtMesh out_mesh);
 
+        [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern zStatusCode ext_mesh_duplicate(in zExtMesh inMesh, out zExtMesh outMesh);
+
 
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern zStatus ext_mesh_getVertexPositionsRaw(zExtMesh objMesh,
+        internal static extern zStatusCode ext_mesh_getVertexPositionsRaw(zExtMesh objMesh,
             [MarshalAs(UnmanagedType.LPArray), In, Out] float[] outVPostions,
             [MarshalAs(UnmanagedType.LPArray), In, Out] float[] outVColors);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern zStatus ext_mesh_getMeshFaceCounts(zExtMesh objMesh,
+        internal static extern zStatusCode ext_mesh_getMeshFaceCounts(zExtMesh objMesh,
             [MarshalAs(UnmanagedType.LPArray), In, Out] int[] outfCounts);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern zStatus ext_mesh_getMeshFaceConnect(zExtMesh objMesh,
+        internal static extern zStatusCode ext_mesh_getMeshFaceConnect(zExtMesh objMesh,
             [MarshalAs(UnmanagedType.LPArray), In, Out] int[] outfConnects);
 
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern zStatus ext_mesh_from([MarshalAs(UnmanagedType.LPStr)] string filePath, ref zExtMesh outMesh);
+        internal static extern zStatusCode ext_mesh_from([MarshalAs(UnmanagedType.LPStr)] string filePath, ref zExtMesh outMesh);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern zStatus ext_mesh_to(ref zExtMesh extMesh, [MarshalAs(UnmanagedType.LPStr)] string filePath);
+        internal static extern zStatusCode ext_mesh_to(ref zExtMesh extMesh, [MarshalAs(UnmanagedType.LPStr)] string filePath);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern zStatus ext_mesh_fromJSON(ref zExtJSON json, ref zExtMesh outMesh);
+        internal static extern zStatusCode ext_mesh_fromJSON(ref zExtJSON json, ref zExtMesh outMesh);
 
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern zStatus ext_mesh_toJSON(ref zExtMesh extGraph, ref zExtJSON json);
+        internal static extern zStatusCode ext_mesh_toJSON(ref zExtMesh extGraph, ref zExtJSON json);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern zStatus ext_mesh_fromUSD(ref zExtUSD usd, ref zExtMesh outMesh);
+        internal static extern zStatusCode ext_mesh_fromUSD(ref zExtUSD usd, ref zExtMesh outMesh);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern zStatus ext_mesh_toUSD(ref zExtMesh extMesh, ref zExtUSD usd);
+        internal static extern zStatusCode ext_mesh_toUSD(ref zExtMesh extMesh, ref zExtUSD usd);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern zStatus ext_mesh_getMeshFaceCounts(ref zExtMesh objMesh, [MarshalAs(UnmanagedType.LPArray), In, Out] int[] outfCounts);
+        internal static extern zStatusCode ext_mesh_getMeshFaceCounts(ref zExtMesh objMesh, [MarshalAs(UnmanagedType.LPArray), In, Out] int[] outfCounts);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern zStatus ext_mesh_getVertexPositionsRaw(ref zExtMesh objMesh,
+        internal static extern zStatusCode ext_mesh_getVertexPositionsRaw(ref zExtMesh objMesh,
            [MarshalAs(UnmanagedType.LPArray), In, Out] float[] outVPostions,
            [MarshalAs(UnmanagedType.LPArray), In, Out] float[] outVColors);
 
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern zStatus ext_mesh_getMeshFaceConnect(ref zExtMesh objMesh,
+        internal static extern zStatusCode ext_mesh_getMeshFaceConnect(ref zExtMesh objMesh,
                       [MarshalAs(UnmanagedType.LPArray), In, Out] int[] outfConnects);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern zStatus ext_mesh_getMeshCentre(ref zExtMesh objMesh,
+        internal static extern zStatusCode ext_mesh_getMeshCentre(ref zExtMesh objMesh,
                                  [MarshalAs(UnmanagedType.LPArray), In, Out] float[] outCentre);
 
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern zStatus ext_mesh_getMeshsFromMeshArray(ref zExtMeshArray inArray, [MarshalAs(UnmanagedType.LPArray), In, Out] zExtMesh[] outMeshes);
+        internal static extern zStatusCode ext_mesh_getMeshsFromMeshArray(ref zExtMeshArray inArray, [MarshalAs(UnmanagedType.LPArray), In, Out] zExtMesh[] outMeshes);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern zStatus ext_mesh_getMeshsFromMeshPointerArray(ref zExtMeshPointerArray inArray, [MarshalAs(UnmanagedType.LPArray), In, Out] zExtMesh[] outMeshes);
+        internal static extern zStatusCode ext_mesh_getMeshsFromMeshPointerArray(ref zExtMeshPointerArray inArray, [MarshalAs(UnmanagedType.LPArray), In, Out] zExtMesh[] outMeshes);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern zStatus ext_mesh_getVertexPositions(ref zExtMesh objMesh, out zExtPointArray extPointArray);
+        internal static extern zStatusCode ext_mesh_getVertexPositions(ref zExtMesh objMesh, out zExtPointArray extPointArray);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern zStatus ext_mesh_getMeshColors(ref zExtMesh objMesh, out zExtColorArray extPointArray);
+        internal static extern zStatusCode ext_mesh_getMeshColors(ref zExtMesh objMesh, out zExtColorArray extPointArray);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern zStatus ext_mesh_getMeshPolygonDate(ref zExtMesh objMesh, out zExtIntArray pCount, out zExtIntArray pConnect);
+        internal static extern zStatusCode ext_mesh_getMeshPolygonDate(ref zExtMesh objMesh, out zExtIntArray pCount, out zExtIntArray pConnect);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern zStatus ext_mesh_smoothMesh(ref zExtMesh objMesh, int level, [MarshalAs(UnmanagedType.Bool)] bool smoothCorner, in zExtIntArray fixedVerts, [MarshalAs(UnmanagedType.Bool)] bool smoothFixedEdges);
+        internal static extern zStatusCode ext_mesh_smoothMesh(ref zExtMesh objMesh, int level, [MarshalAs(UnmanagedType.Bool)] bool smoothCorner, in zExtIntArray fixedVerts, [MarshalAs(UnmanagedType.Bool)] bool smoothFixedEdges);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern zStatus ext_mesh_smoothMesh1D(ref zExtMesh objMesh, int level, [MarshalAs(UnmanagedType.Bool)] bool smoothCorner, [MarshalAs(UnmanagedType.Bool)] bool flip, in zExtIntArray fixedVerts);
+        internal static extern zStatusCode ext_mesh_smoothMesh1D(ref zExtMesh objMesh, int level, [MarshalAs(UnmanagedType.Bool)] bool smoothCorner, [MarshalAs(UnmanagedType.Bool)] bool flip, in zExtIntArray fixedVerts);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern zStatus ext_mesh_getPlanarityDeviationPerFace(ref zExtMesh objMesh, ref zExtDoubleArray outPlanarityDevs, int type, [MarshalAs(UnmanagedType.Bool)] bool colorFaces, double tolerance);
+        internal static extern zStatusCode ext_mesh_getPlanarityDeviationPerFace(ref zExtMesh objMesh, ref zExtDoubleArray outPlanarityDevs, int type, [MarshalAs(UnmanagedType.Bool)] bool colorFaces, double tolerance);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern zStatus ext_mesh_getGaussianCurvature(ref zExtMesh objMesh, ref zExtDoubleArray outGaussianCurvature);
+        internal static extern zStatusCode ext_mesh_getGaussianCurvature(ref zExtMesh objMesh, ref zExtDoubleArray outGaussianCurvature);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern zStatus ext_mesh_checkPlanarity(ref zExtMesh objMesh, float tolerance, int planarityType, [MarshalAs(UnmanagedType.Bool)] bool colorFaces, ref zExtDoubleArray outDeviations);
+        internal static extern zStatusCode ext_mesh_checkPlanarity(ref zExtMesh objMesh, float tolerance, int planarityType, [MarshalAs(UnmanagedType.Bool)] bool colorFaces, ref zExtDoubleArray outDeviations);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern zStatus ext_mesh_getFaceColor(ref zExtMesh objMesh, ref zExtColorArray extPointArray);
+        internal static extern zStatusCode ext_mesh_getFaceColor(ref zExtMesh objMesh, ref zExtColorArray extPointArray);
 
 
+        [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.AsAny)]
+        public static extern zExtPoint ext_mesh_meshTest(int num);
+
+        [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int ext_mesh_meshTest2(ref zStatus2 s);
 
     }
 
     #region External methods for array
     static partial class zNativeMethods {
         //[DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        //internal static extern zStatus ext_mesh_getVertexPositions(ref zExtMesh objMesh, out zExtPointArray pointArray);
+        //internal static extern zStatusCode ext_mesh_getVertexPositions(ref zExtMesh objMesh, out zExtPointArray pointArray);
 
         //[DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        //internal static extern zStatus ext_mesh_getMeshColors(ref zExtMesh objMesh, out zExtColorArray colorArray);
+        //internal static extern zStatusCode ext_mesh_getMeshColors(ref zExtMesh objMesh, out zExtColorArray colorArray);
 
         //[DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        //internal static extern zStatus ext_mesh_getMeshPolygonDate(ref zExtMesh objMesh, out zExtIntArray pCount, out zExtIntArray pConnect);
+        //internal static extern zStatusCode ext_mesh_getMeshPolygonDate(ref zExtMesh objMesh, out zExtIntArray pCount, out zExtIntArray pConnect);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern zStatus ext_mesh_createFromArrays(in zExtPointArray _vertexPositions, in zExtIntArray _polyCounts, in zExtIntArray _polyConnects, ref zExtMesh out_mesh);
+        internal static extern zStatusCode ext_mesh_createFromArrays(in zExtPointArray _vertexPositions, in zExtIntArray _polyCounts, in zExtIntArray _polyConnects, ref zExtMesh out_mesh);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern zStatus ext_mesh_setMeshVertexColors(ref zExtMesh objMesh, in zExtColorArray colorArray);
+        internal static extern zStatusCode ext_mesh_setMeshVertexColors(ref zExtMesh objMesh, in zExtColorArray colorArray);
 
         //[DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        //internal static extern zStatus ext_mesh_checkPlanarity(ref zExtMesh objMesh, float tolerance, int planarityType,
+        //internal static extern zStatusCode ext_mesh_checkPlanarity(ref zExtMesh objMesh, float tolerance, int planarityType,
         //    [MarshalAs(UnmanagedType.Bool)] bool colorFaces, 
         //    ref zExtDoubleArray outDeviations);
 

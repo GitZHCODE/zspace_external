@@ -120,6 +120,8 @@ namespace zSpace {
             zNativeMethods.ext_graph_from(path, ref this);
         }
 
+
+
 #if RHINO_CSHARP
         public zExtGraph(Line[] lines, System.Drawing.Color[] eColors = null) {
             this._ptr = new IntPtr();
@@ -187,6 +189,17 @@ namespace zSpace {
 
         }
 #endif
+
+        /// <summary>
+        /// Creates a duplicate of the current mesh .
+        /// </summary>
+        /// <returns>The duplicated mesh.</returns>
+        public zExtGraph duplicate() {
+            zExtGraph outObject;
+            zNativeMethods.ext_graph_duplicate(in this, out outObject);
+            return outObject;
+        }
+
 
         /// <summary>
         /// Gets the count of vertices in the graph.
@@ -535,6 +548,9 @@ namespace zSpace {
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         internal static extern int ext_graph_updateGraph(ref zExtGraph extGraph);
 
+
+        [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern zStatusCode ext_graph_duplicate(in zExtGraph inMesh, out zExtGraph outMesh);
 
 
     }

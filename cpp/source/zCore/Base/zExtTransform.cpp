@@ -44,31 +44,24 @@ namespace zSpace
 		pointer = nullptr;
 	}
 
-	ZSPACE_EXTERNAL_INLINE int zExtTransform::checkMemAlloc(bool allocateMemory)
+	ZSPACE_EXTERNAL_INLINE zStatusCode zExtTransform::checkMemAlloc(bool allocateMemory)
 	{
 		try
 		{
-			if (pointer != nullptr) return 1;
+			if (!pointer || pointer == nullptr)
+			{
+				if (!allocateMemory) return zMemNotAllocError;
+				pointer = new zTransform();
+				return zMemAllocSuccess;
+			}
 			else
 			{
-				if (!allocateMemory) return 0;
-				pointer = new zTransform();
-				for (int i = 0; i < 4; i++)
-				{
-					(*pointer)(0, i) = row0[i];
-					(*pointer)(1, i) = row1[i];
-					(*pointer)(2, i) = row2[i];
-					(*pointer)(3, i) = row3[i];
-					//array[i] = (*pointer)(i / 4, i % 4);
-				}
-				return 2;
-
+				return zSkip;
 			}
 		}
 		catch (const std::exception&)
 		{
-			printf("\n Pointer initialization failed");
-			return 404;
+			return zMemNotAllocError;
 		}
 		
 	}
@@ -137,23 +130,24 @@ namespace zSpace
 
 	}
 
-	ZSPACE_EXTERNAL_INLINE int zExtTransformArray::checkMemAlloc(bool allocateMemory)
+	ZSPACE_EXTERNAL_INLINE zStatusCode zExtTransformArray::checkMemAlloc(bool allocateMemory)
 	{
 		try
 		{
-			if (pointer != nullptr) return 1;
+			if (!pointer || pointer == nullptr)
+			{
+				if (!allocateMemory) return zMemNotAllocError;
+				pointer = new vector<zTransform>();
+				return zMemAllocSuccess;
+			}
 			else
 			{
-				if (!allocateMemory) return 0;
-				pointer = new vector<zTransform>();
-				return 2;
-
+				return zSkip;
 			}
 		}
 		catch (const std::exception&)
 		{
-			printf("\n Pointer initialization failed");
-			return 404;
+			return zMemNotAllocError;
 		}
 		
 	}

@@ -1,20 +1,20 @@
 import ctypes
-
-import 
-Module
 import DLLConfigModule
 import zExtTransformModule
 import zExtPointModule
 import zExtUtilsCoreModule
 import zExtColorModule
+import zStatusModule
 
 from zExtTransformModule import zExtTransform
 from DLLConfigModule import DLLConfig
+from zStatusModule import zStatus
 from zExtPointModule import zExtPoint, zExtPointArray
 from zExtColorModule import zExtColor, zExtColorArray
 from zExtUtilsCoreModule import zExtIntArray, zExtIntArray2D
 from zExtUtilsCoreModule import zExtFloatArray, zExtFloatArray2D
 from zExtUtilsCoreModule import zExtBoolArray, zExtBoolArray2D
+
 
 
 DLLFile = DLLConfig.zExternalDLLFile
@@ -49,26 +49,62 @@ ext_meshUtil_createMeshOBJFromRawArray = DLLFile.ext_meshUtil_createMeshOBJFromR
 ext_meshUtil_createMeshOBJFromRawArray.restype = None
 ext_meshUtil_createMeshOBJFromRawArray.argtypes = [ctypes.POINTER(ctypes.c_double), ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int), ctypes.c_int, ctypes.c_int, ctypes.POINTER(zExtMesh)]
 
-ext_meshUtil_createMeshOBJFromArray = DLLFile.ext_meshUtil_createMeshOBJFromArray
-ext_meshUtil_createMeshOBJFromArray.restype = ctypes.c_int
+ext_meshUtil_createMeshOBJFromArray = DLLFile.ext_mesh_createFromArrays
+ext_meshUtil_createMeshOBJFromArray.restype = zStatus
 ext_meshUtil_createMeshOBJFromArray.argtypes = [ctypes.POINTER(zExtPointArray), ctypes.POINTER(zExtIntArray), ctypes.POINTER(zExtIntArray), ctypes.POINTER(zExtMesh)]
 
 ext_meshUtil_setMeshVertexColors = DLLFile.ext_meshUtil_setMeshVertexColors
-ext_meshUtil_setMeshVertexColors.restype = ctypes.c_int
+ext_meshUtil_setMeshVertexColors.restype = zStatus
 ext_meshUtil_setMeshVertexColors.argtypes = [ctypes.POINTER(zExtMesh), ctypes.POINTER(zExtColorArray)]
 
-ext_meshUtil_createMeshFromFile = DLLFile.ext_meshUtil_createMeshFromFile
-ext_meshUtil_createMeshFromFile.restype = None
-ext_meshUtil_createMeshFromFile.argtypes = [ctypes.c_char_p, ctypes.POINTER(zExtMesh)]
 
+ext_mesh_from = DLLFile.ext_mesh_from
+ext_mesh_from.restype = zStatus
+ext_mesh_from.argtypes = [
+    ctypes.c_char_p,
+    zExtMesh
+]
 
-ext_meshUtil_exportToJson = DLLFile.ext_meshUtil_exportToJson
-ext_meshUtil_exportToJson.restype = None
-ext_meshUtil_exportToJson.argtypes = [ctypes.POINTER(zExtMesh), ctypes.c_char_p]
+ext_mesh_to = DLLFile.ext_mesh_to
+ext_mesh_to.restype = zStatus
+ext_mesh_to.argtypes = [
+    zExtMesh,
+    ctypes.c_char_p
+]
+
+ext_mesh_fromJSON = DLLFile.ext_mesh_fromJSON
+ext_mesh_fromJSON.restype = zStatus
+ext_mesh_fromJSON.argtypes = [
+    zExtJSON,
+    zExtMesh
+]
+
+ext_mesh_toJSON = DLLFile.ext_mesh_toJSON
+ext_mesh_toJSON.restype = zStatus
+ext_mesh_toJSON.argtypes = [
+    zExtMesh,
+    zExtJSON
+]
+
+# Define functions for USD interop if ZSPACE_USD_INTEROP is defined
+
+ext_mesh_fromUSD = DLLFile.ext_mesh_fromUSD
+ext_mesh_fromUSD.restype = zStatus
+ext_mesh_fromUSD.argtypes = [
+    zExtUSD,
+    zExtMesh
+]
+
+ext_mesh_toUSD = DLLFile.ext_mesh_toUSD
+ext_mesh_toUSD.restype = zStatus
+ext_mesh_toUSD.argtypes = [
+    zExtMesh,
+    zExtUSD
+]
 
 #---GET METHODS
 ext_meshUtil_getMeshFaceCount = DLLFile.ext_meshUtil_getMeshFaceCount
-ext_meshUtil_getMeshFaceCount.restype = ctypes.c_int
+ext_meshUtil_getMeshFaceCount.restype = zStatus
 ext_meshUtil_getMeshFaceCount.argtypes = [ctypes.POINTER(zExtMesh), ctypes.POINTER(ctypes.c_int)]
 
 ext_meshUtil_getVertexPositionsRaw = DLLFile.ext_meshUtil_getVertexPositionsRaw

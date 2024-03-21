@@ -24,7 +24,7 @@ namespace zSpace {
         }
 
         public void setItems(int[] input) {
-            zNativeMethods.ext_int_setItemsFromArray(ref this, input, input.Length);
+            zNativeMethods.ext_int_array_setItems(ref this, input, input.Length);
         }
 
         public int getArrayCount() { return arrayCount; }
@@ -304,7 +304,7 @@ namespace zSpace {
         [MarshalAs(UnmanagedType.LPArray), In, Out] int[] outItems);
         
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void ext_int_setItemsFromArray(ref zExtIntArray array,
+        public static extern void ext_int_array_setItems(ref zExtIntArray array,
         [MarshalAs(UnmanagedType.LPArray), In] int[] outItems, int count);
         #endregion
         #region Int Array 2D

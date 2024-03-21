@@ -6,11 +6,7 @@ using System.Threading.Tasks;
 using Rhino;
 using Rhino.Geometry;
 using System.Threading;
-using Grasshopper;
-using Grasshopper;
-using Grasshopper.Kernel;
-using Grasshopper.Kernel.Data;
-using Grasshopper.Kernel.Types;
+
 using Rhino.Geometry.Intersect;
 using System.Drawing;
 

@@ -20,6 +20,8 @@
 
 
 #include <headers/zCore/base/zExtern.h>
+#include "headers/base/zStatus.h"
+
 #include <headers/zInterface/functionsets/zFnMesh.h>
 #include <headers/zInterface/functionsets/zFnGraph.h>
 
@@ -87,7 +89,7 @@ namespace zSpace
 		zExtColorArray(zColorArray* a);
 		~zExtColorArray();
 
-		int checkMemAlloc(bool allocateMemory = true);
+		zStatusCode checkMemAlloc(bool allocateMemory = true);
 		/**
 		 * \brief Updates the attributes of the external object
 		 */
@@ -118,7 +120,7 @@ namespace zSpace
 #if defined(ZSPACE_EXTERNAL_STATIC_LIBRARY)  || defined(ZSPACE_EXTERNAL_DYNAMIC_LIBRARY)
 // All defined OK so do nothing
 #else
-#include<source/zCore/zExtColor.cpp>
+#include<source/zCore/Base/zExtColor.cpp>
 #endif
 
 #endif

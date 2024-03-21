@@ -26,6 +26,8 @@
 
 #include "headers/base/zSpace_External.h"
 #include "headers/zCore/Utils/zExtUtilsCore.h"
+#include "headers/base/zStatus.h"
+
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -55,7 +57,7 @@ namespace zSpace
 		zExtJSON(const string& filePath);
 
 		~zExtJSON();
-		int checkMemAlloc(bool allocateMemory = true);
+		zStatusCode checkMemAlloc(bool allocateMemory = true);
 		void updateAttributes();
 		zStringArray GetAllAttributeTypes();
 		zStringArray GetAllAttributeNames();

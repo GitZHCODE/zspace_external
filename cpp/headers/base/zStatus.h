@@ -56,9 +56,11 @@ namespace zSpace
 
 	struct ZSPACE_EXTERNAL zStatus
 	{
-	//public:
+	public:
 		zStatusCode statusCode;
-		char* errorMessage;
+		//char* statusMessage;
+		//string statusMessage;
+		zStatus();
 		zStatus(zStatusCode code);
 		zStatus(zStatusCode code, string error);
 		~zStatus();
@@ -67,6 +69,18 @@ namespace zSpace
 		void clearError();
 		bool operator==(const zStatus& item);
 		bool operator==(const zStatusCode& code);
+
+	};
+
+	struct ZSPACE_EXTERNAL zStatus2
+	{
+	public:
+		int statusCode;
+		zStatus2();
+		
+		~zStatus2();
+
+		
 
 	};
 

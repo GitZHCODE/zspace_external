@@ -13,12 +13,12 @@ class zExtIntArray(ctypes.Structure):
 
     def getItems(self):
         items = (ctypes.c_int * self.arrayCount)()
-        ext_int_getItemsFromArray(ctypes.byref(self), items)
+        ext_int_array_getItems(ctypes.byref(self), items)
         return list(items)
 
     def setItems(self, input):
         input = (ctypes.c_int * len(input))(*input)
-        ext_int_setItemsFromArray(ctypes.byref(self), input, len(input))
+        ext_int_array_setItems(ctypes.byref(self), input, len(input))
 
     def getArrayCount(self):
         return self.arrayCount
@@ -42,7 +42,7 @@ class zExtIntArray2D(ctypes.Structure):
         temp = (zExtIntArray * len(input))()
         for i in range(len(input)):
             temp[i].setItems(input[i])
-        ext_int_setItemsFromArray2D(ctypes.byref(self), temp, len(input))
+        ext_int_array_setItems2D(ctypes.byref(self), temp, len(input))
 
     def getArrayCount(self):
         return self.arrayCount
@@ -239,17 +239,17 @@ class zExtBoolArray2D(ctypes.Structure):
 
 
 # zExtIntArray
-ext_int_getItemsFromArray = DLLFile.ext_int_getItemsFromArray
-ext_int_getItemsFromArray.restype = None
-ext_int_getItemsFromArray.argtypes = [
+ext_int_array_getItems = DLLFile.ext_int_getItemsFromArray
+ext_int_array_getItems.restype = None
+ext_int_array_getItems.argtypes = [
     zExtIntArray,
     ctypes.POINTER(ctypes.c_int)
 ]
 
 
-ext_int_setItemsFromArray = DLLFile.ext_int_setItemsFromArray
-ext_int_setItemsFromArray.restype = None
-ext_int_setItemsFromArray.argtypes = [
+ext_int_array_setItems = DLLFile.ext_int_array_setItems
+ext_int_array_setItems.restype = None
+ext_int_array_setItems.argtypes = [
     zExtIntArray,
     ctypes.POINTER(ctypes.c_int), 
     ctypes.c_int
@@ -264,9 +264,9 @@ ext_int_getItemsFromArray2D.argtypes = [
 ]
 
 
-ext_int_setItemsFromArray2D = DLLFile.ext_int_setItemsFromArray2D
-ext_int_setItemsFromArray2D.restype = None
-ext_int_setItemsFromArray2D.argtypes = [
+ext_int_array_setItems2D = DLLFile.ext_int_array_setItems2D
+ext_int_array_setItems2D.restype = None
+ext_int_array_setItems2D.argtypes = [
     zExtIntArray2D,
     ctypes.POINTER(zExtIntArray),
      ctypes.c_int

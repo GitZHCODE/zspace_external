@@ -37,22 +37,24 @@ namespace zSpace
 		delete pointer;
 		pointer = nullptr;
 	}
-	ZSPACE_EXTERNAL_INLINE int zExtGraph::checkMemAlloc(bool allocateMemory)
+	ZSPACE_EXTERNAL_INLINE zStatusCode zExtGraph::checkMemAlloc(bool allocateMemory)
 	{
 		try
 		{
-			if (pointer != nullptr) return 1;
+			if (!pointer || pointer == nullptr)
+			{
+				if (!allocateMemory) return zMemNotAllocError;
+				pointer = new zObjGraph();
+				return zMemAllocSuccess;
+			}
 			else
 			{
-				if (!allocateMemory) return 0;
-				pointer = new zObjGraph();
-				return 2;
+				return zSkip;
 			}
 		}
 		catch (const std::exception&)
 		{
-			printf("\n Graph Pointer initialization failed");
-			return 404;
+			return zThrowError;
 		}
 
 	}
@@ -60,7 +62,6 @@ namespace zSpace
 	{
 		zFnGraph g(*pointer);
 		
-		printf("\n updateAttributes 0");
 		try
 		{
 			g.numEdges();
@@ -181,23 +182,24 @@ namespace zSpace
 		pointer = nullptr;
 	}
 
-	ZSPACE_EXTERNAL_INLINE int zExtGraphArray::checkMemAlloc(bool allocateMemory)
+	ZSPACE_EXTERNAL_INLINE zStatusCode zExtGraphArray::checkMemAlloc(bool allocateMemory)
 	{
 		try
 		{
-			if (pointer != nullptr) return 1;
+			if (!pointer || pointer == nullptr)
+			{
+				if (!allocateMemory) return zMemNotAllocError;
+				pointer = new zObjGraphArray();
+				return zMemAllocSuccess;
+			}
 			else
 			{
-				if (!allocateMemory) return 0;
-				pointer = new zObjGraphArray();
-				return 2;
-
+				return zSkip;
 			}
 		}
 		catch (const std::exception&)
 		{
-			printf("\n GraphArray Pointer initialization failed");
-			return 404;
+			return zThrowError;
 		}
 	}
 
@@ -521,6 +523,26 @@ namespace zSpace
 		//	}
 		//}
 		//
+	}
+
+	ZSPACE_EXTERNAL_INLINE zStatusCode ext_graph_duplicate(zExtGraph& inObject, zExtGraph& outObject)
+	{
+		try
+		{
+
+			zStatus memoryChk = inObject.checkMemAlloc(false);
+			if (memoryChk == zMemNotAllocError) return zMemNotAllocError;
+			zFnGraph fn(*inObject.pointer);
+			outObject.checkMemAlloc();
+			*outObject.pointer = zObjGraph(*inObject.pointer);
+			outObject.updateAttributes();
+
+			return zSuccess;
+		}
+		catch (const std::exception&)
+		{
+			return zThrowError;
+		}
 	}
 	
 }

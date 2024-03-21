@@ -109,7 +109,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Rhino\zDataTreeUtil.cs" />
+    <None Include="Rhino\zDataTreeUtil.cs" />
     <Compile Include="Rhino\zSpaceRhinoUtil.cs" />
     <Compile Include="source\base\zEnumerators.cs" />
     <Compile Include="source\base\zStatus.cs" />
@@ -141,6 +141,14 @@
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>IF "$(SolutionName)" == "zSpace_external" (xcopy "$(SolutionDir)cpp\compiled\dll\*.dll" "$(TargetDir)" /E /Y)
+IF "$(SolutionName)" == "zSpace_external" (xcopy "$(SolutionDir)cpp\compiled\dll\*.lib" "$(TargetDir)" /E /Y)</PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
   <Import Project="..\..\..\packages\RhinoCommon.7.0.20314.3001\build\RhinoCommon.targets" Condition="Exists('..\..\..\packages\RhinoCommon.7.0.20314.3001\build\RhinoCommon.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -151,13 +159,5 @@
     <Error Condition="!Exists('..\..\..\packages\RhinoWindows.7.0.20314.3001\build\RhinoWindows.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\RhinoWindows.7.0.20314.3001\build\RhinoWindows.targets'))" />
   </Target>
   <Import Project="..\..\..\packages\Grasshopper.7.0.20314.3001\build\Grasshopper.targets" Condition="Exists('..\..\..\packages\Grasshopper.7.0.20314.3001\build\Grasshopper.targets')" />
-  <PropertyGroup>
-    <PreBuildEvent>REM IF "$(SolutionName)" == "zSpace_external" (xcopy "$(SolutionDir)cpp\compiled\dll\*.dll" "$(TargetDir)" /E /Y)
-REM IF "$(SolutionName)" == "zSpace_external" (xcopy "$(SolutionDir)cpp\compiled\dll\*.lib" "$(TargetDir)" /E /Y)</PreBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
-  </PropertyGroup>
   <Import Project="..\..\..\packages\RhinoWindows.7.0.20314.3001\build\RhinoWindows.targets" Condition="Exists('..\..\..\packages\RhinoWindows.7.0.20314.3001\build\RhinoWindows.targets')" />
 </Project>

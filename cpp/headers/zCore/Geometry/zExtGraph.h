@@ -18,6 +18,7 @@
 #pragma once
 
 #include "headers/base/zSpace_External.h"
+#include "headers/base/zStatus.h"
 #include "headers/zCore/Base/zExtPoint.h"
 #include "headers/zCore/Base/zExtColor.h"
 #include "headers/zCore/Utils/zExtUtilsCore.h"
@@ -25,7 +26,6 @@
 #include "headers/zCore/Interop/zExtOV.h"
 
 #include <headers/zCore/base/zExtern.h>
-#include <headers/zInterface/functionsets/zFnMesh.h>
 #include <headers/zInterface/functionsets/zFnGraph.h>
 
 
@@ -83,7 +83,7 @@ namespace zSpace
 		~zExtGraph();
 		zExtGraph();
 		zExtGraph(zObjGraph* g);
-		int checkMemAlloc(bool allocateMemory = true);
+		zStatusCode checkMemAlloc(bool allocateMemory = true);
 		/*! \brief update the attributes of the ExtGraph object.
 		* \return void
 		*/
@@ -95,7 +95,7 @@ namespace zSpace
 		zObjGraphArray* pointer = nullptr;
 		~zExtGraphArray();
 		int arrayCount;
-		int checkMemAlloc(bool allocateMemory = true);
+		zStatusCode checkMemAlloc(bool allocateMemory = true);
 		void updateAttributes();
 	};
 	struct ZSPACE_EXTERNAL zExtGraphPointerArray
@@ -198,6 +198,12 @@ namespace zSpace
 						//ZSPACE_EXTERNAL void ext_graph_getGraphCounts2(zObjGraph* graph, int& outvCount, int& outeCount);
 						//ZSPACE_EXTERNAL void ext_graph_getGraphData2(zObjGraph* graph, float* outVPostions, float* outvColors, int* outePair, float* outeColors);
 
+
+		/*! \brief Set colors of mesh vertices.
+		 *  \param [in]		inObject						-Mesh to duplicate
+		 *  \param [out]	outObject						-Duplicated mesh
+		 */
+		ZSPACE_EXTERNAL zStatusCode ext_graph_duplicate(zExtGraph& inObject, zExtGraph& outObject);
 
 	}
 

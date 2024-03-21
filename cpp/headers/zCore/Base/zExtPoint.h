@@ -21,6 +21,8 @@
 
 
 #include <headers/zCore/base/zExtern.h>
+#include "headers/base/zStatus.h"
+
 #include <headers/zInterface/functionsets/zFnMesh.h>
 #include <headers/zInterface/functionsets/zFnGraph.h>
 
@@ -94,7 +96,7 @@ namespace zSpace
 		zExtPointArray(zPointArray* a);
 		~zExtPointArray();
 
-		int checkMemAlloc(bool allocateMemory = true);
+		zStatusCode checkMemAlloc(bool allocateMemory = true);
 		/**
 		 * \brief Updates the attributes of the external object
 		 */
@@ -122,7 +124,7 @@ namespace zSpace
 		/**
 		 * \brief get items from array
 		 */
-		int checkMemAlloc(bool allocateMemory = true);
+		zStatusCode checkMemAlloc(bool allocateMemory = true);
 		void getItems(zExtPointArray* items);
 		void setItems(zExtPointArray* items, int count);
 	};
@@ -145,7 +147,7 @@ namespace zSpace
 #if defined(ZSPACE_EXTERNAL_STATIC_LIBRARY)  || defined(ZSPACE_EXTERNAL_DYNAMIC_LIBRARY)
 // All defined OK so do nothing
 #else
-#include<source/zCore/zExtPoint.cpp>
+#include<source/zCore/Base/zExtPoint.cpp>
 #endif
 
 #endif

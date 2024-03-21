@@ -18,12 +18,47 @@ namespace zSpace {
 		zRunning,           ///<The operation is RUNNING
 		zSkip               ///<The operation is skipped due to internal condition
 	};
+	public static class zStatusCodeUtil {
+		/// <summary>
+		/// check if the status is an error
+		/// </summary>
+		/// <param name="code"></param>
+		/// <returns>TRUE if an error occured</returns>
+		public static bool getErrorCheck(zStatusCode code) {
+			switch (code) {
+				case zStatusCode.zFail: return true;
+				case zStatusCode.zSuccess: return false;
+				case zStatusCode.zMemAllocSuccess: return false;
+				case zStatusCode.zMemNotAllocError: return true;
+				case zStatusCode.zThrowError: return true;
+				case zStatusCode.zInvalidParameter: return true;
+				case zStatusCode.zPathNotFound: return true;
+				case zStatusCode.zRunning: return false;
 
+				default: return false;
+			}
+		}
+		public static string getCodeString(zStatusCode code) {
+			switch (code) {
+				case zStatusCode.zFail: return "Process failed";
+				case zStatusCode.zSuccess: return "Process success";
+				case zStatusCode.zMemAllocSuccess: return "Process success: Memory allocation success";
+				case zStatusCode.zMemNotAllocError: return "Process failed: Memory allocation error";
+				case zStatusCode.zThrowError: return "Process failed: Unknown error";
+				case zStatusCode.zInvalidParameter: return "Process failed: Invalid input parameter";
+				case zStatusCode.zPathNotFound: return "Process failed: Path/Directory is not found";
+				case zStatusCode.zRunning: return "Process is running";
+				case zStatusCode.zSkip: return "Process is skipped";
+
+				default: return "code value is invalid/not set";
+			}
+		}
+	};
 	[StructLayout(LayoutKind.Sequential)]
 	public struct zStatus {
 		zStatusCode statusCode;
-		[MarshalAs(UnmanagedType.LPStr)]
-		string statusMessage;
+		//[MarshalAs(UnmanagedType.LPWStr)]
+		//string statusMessage;
 
 		// Overloading == operator
 		public static bool operator ==(zStatus left, zStatus right) {
@@ -36,8 +71,27 @@ namespace zSpace {
 		public bool getErrorCheck() {
 			return zNativeMethods.ext_status_getErrorCheck(in this);
 		}
+		public zStatusCode getCode() {
+			return statusCode;
+        }
+		public string getMessage() {
+			return "";
+			//return statusMessage;
+        }
 
 	}
+
+	[StructLayout(LayoutKind.Sequential)]
+	public struct zStatus2 {
+		public int statusCode;
+		//public zStatus2() {
+		//	statusCode = 10;
+
+		//}
+	}
+
+
+
 	#region External methods for array
 	static partial class zNativeMethods {
 		[DllImport(path, CallingConvention = CallingConvention.Cdecl)]

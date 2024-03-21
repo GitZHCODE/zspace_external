@@ -18,21 +18,28 @@ namespace zSpace
 	ZSPACE_EXTERNAL_INLINE zStatus::zStatus(zStatusCode code)
 	{
 		statusCode = code;
+		cout << endl << "zSatus code " << statusCode <<" " << zStatusCodeUtil::getCodeString(statusCode);
 
-		string error = zStatusCodeUtil::getCodeString(code);
-		errorMessage = new char[error.length() + 1];
-		strcpy(errorMessage, error.c_str());
+		//string error = zStatusCodeUtil::getCodeString(code);
+		//statusMessage = new char[error.length() + 1];
+		//strcpy(statusMessage, error.c_str());
 	}
 	ZSPACE_EXTERNAL_INLINE zStatus::zStatus(zStatusCode code, string error)
 	{
 		statusCode = code;
-		errorMessage = new char[error.length() + 1];
-		strcpy(errorMessage, error.c_str());
+		//statusMessage = new char[error.length() + 1];
+		//strcpy(statusMessage, error.c_str());
 	}
 	ZSPACE_EXTERNAL_INLINE zStatus::~zStatus()
 	{
-		delete[] errorMessage;
+		//delete[] statusMessage;
 	}
+	
+	ZSPACE_EXTERNAL_INLINE zStatus::zStatus()
+	{
+		statusCode = zStatusCode::zFail;
+	}
+
 	ZSPACE_EXTERNAL_INLINE bool zStatus::getErrorCheck()
 	{
 		switch (statusCode)
@@ -125,5 +132,14 @@ namespace zSpace
 
 
 	
+
+	ZSPACE_EXTERNAL_INLINE zStatus2::zStatus2()
+	{
+		statusCode = 10;
+	}
+
+	ZSPACE_EXTERNAL_INLINE zStatus2::~zStatus2()
+	{
+	}
 
 }

@@ -31,23 +31,24 @@ namespace zSpace
 	ZSPACE_EXTERNAL_INLINE void zExtUSD::updateAttributes()
 	{
 	}
-	ZSPACE_EXTERNAL_INLINE int zExtUSD::checkMemAlloc(bool allocateMemory)
+	ZSPACE_EXTERNAL_INLINE zStatusCode zExtUSD::checkMemAlloc(bool allocateMemory)
 	{
 		try
 		{
-			if (pointer != nullptr) return 1;
+			if (!pointer || pointer == nullptr)
+			{
+				if (!allocateMemory) return zMemNotAllocError;
+				pointer = new UsdPrim();
+				return zMemAllocSuccess;
+			}
 			else
 			{
-				if (!allocateMemory) return 0;
-				pointer = new UsdPrim();
-				return 2;
-
+				return zSkip;
 			}
 		}
 		catch (const std::exception&)
 		{
-			printf("\n Pointer initialization failed");
-			return 404;
+			return zThrowError;
 		}
 	}
 
@@ -129,23 +130,25 @@ namespace zSpace
 	{
 	}
 
-	ZSPACE_EXTERNAL_INLINE int zExtOmniClient::checkMemAlloc(bool allocateMemory)
+	ZSPACE_EXTERNAL_INLINE zStatusCode zExtOmniClient::checkMemAlloc(bool allocateMemory)
 	{
+		
 		try
 		{
-			if (pointer != nullptr) return 1;
+			if (!pointer || pointer == nullptr)
+			{
+				if (!allocateMemory) return zMemNotAllocError;
+				pointer = new zOmniCore();
+				return zMemAllocSuccess;
+			}
 			else
 			{
-				if (!allocateMemory) return 0;
-				pointer = new zOmniCore();
-				return 2;
-
+				return zSkip;
 			}
 		}
 		catch (const std::exception&)
 		{
-			printf("\n Pointer initialization failed");
-			return 404;
+			return zThrowError;
 		}
 	}
 

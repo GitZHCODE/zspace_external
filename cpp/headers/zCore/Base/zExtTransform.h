@@ -19,7 +19,10 @@
 
 #include <headers/zInterface/functionsets/zFnGraph.h>
 
+
 #include "headers/base/zSpace_External.h"
+#include "headers/base/zStatus.h"
+
 
 
 #include <stdlib.h>
@@ -68,7 +71,7 @@ namespace zSpace
 		zExtTransform(zTransform* t, bool transpose = false);
 		zExtTransform(zTransform t);
 		~zExtTransform();
-		int checkMemAlloc(bool allocateMemory = true);
+		zStatusCode checkMemAlloc(bool allocateMemory = true);
 		int initPointer(zTransform t);
 
 		void updateAttributes(zTransform* transform, bool transpose = false);
@@ -101,7 +104,7 @@ namespace zSpace
 		int arrayCount; /**< The number of graphs in the array */
 
 
-		int checkMemAlloc(bool allocateMemory = true);
+		zStatusCode checkMemAlloc(bool allocateMemory = true);
 		~zExtTransformArray();
 		/**
 		 * \brief Updates the attributes of the zExtGraphArray object
@@ -153,7 +156,7 @@ namespace zSpace
 #if defined(ZSPACE_EXTERNAL_STATIC_LIBRARY)  || defined(ZSPACE_EXTERNAL_DYNAMIC_LIBRARY)
 // All defined OK so do nothing
 #else
-#include<source/zCore/zExtTransform.cpp>
+#include<source/zCore/Base/zExtTransform.cpp>
 #endif
 
 #endif

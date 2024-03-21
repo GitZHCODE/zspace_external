@@ -21,23 +21,24 @@ namespace zSpace
 		delete pointer;
 		pointer = nullptr;
 	}
-	ZSPACE_EXTERNAL_INLINE int zExtMeshScalarField::checkMemAlloc(bool allocateMemory)
+	ZSPACE_EXTERNAL_INLINE zStatusCode zExtMeshScalarField::checkMemAlloc(bool allocateMemory)
 	{
 		try
 		{
-			if (pointer != nullptr) return 1;
+			if (!pointer || pointer == nullptr)
+			{
+				if (!allocateMemory) return zMemNotAllocError;
+				pointer = new zObjMeshScalarField();
+				return zMemAllocSuccess;
+			}
 			else
 			{
-				if (!allocateMemory) return 0;
-				pointer = new zObjMeshScalarField();
-				return 2;
-
+				return zSkip;
 			}
 		}
 		catch (const std::exception&)
 		{
-			printf("\n Pointer initialization failed");
-			return 404;
+			return zMemNotAllocError;
 		}
 	}
 

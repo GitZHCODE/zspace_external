@@ -11,7 +11,7 @@
 //
 
 
-#include<headers/zCore/Utils/zExtUtilsCore.h>
+#include"headers/zCore/Utils/zExtUtilsCore.h"
 
 
 namespace zSpace
@@ -44,23 +44,25 @@ namespace zSpace
 		delete pointer;
 		pointer = nullptr;
 	}
-	ZSPACE_EXTERNAL_INLINE int zExtIntArray::checkMemAlloc(bool allocateMemory)
+	ZSPACE_EXTERNAL_INLINE zStatusCode zExtIntArray::checkMemAlloc(bool allocateMemory)
 	{
+	
 		try
 		{
-			if (pointer != nullptr) return 1;
+			if (!pointer || pointer == nullptr)
+			{
+				if (!allocateMemory) return zMemNotAllocError;
+				pointer = new vector<int>();
+				return zMemAllocSuccess;
+			}
 			else
 			{
-				if (!allocateMemory) return 0;
-				pointer = new vector<int>();
-				return 2;
-
+				return zSkip;
 			}
 		}
 		catch (const std::exception&)
 		{
-			printf("\n Pointer initialization failed");
-			return 404;
+			return zThrowError;
 		}
 		
 	}
@@ -92,7 +94,7 @@ namespace zSpace
 	{
 		extArray.getItems(outArray);
 	}
-	ZSPACE_EXTERNAL_INLINE void ext_int_setItemsFromArray(zExtIntArray& extArray, int* inArray, int count)
+	ZSPACE_EXTERNAL_INLINE void ext_int_array_setItems(zExtIntArray& extArray, int* inArray, int count)
 	{
 		extArray.setItems(inArray, count);
 	}
@@ -121,23 +123,25 @@ namespace zSpace
 		delete pointer;
 		pointer = nullptr;
 	}
-	ZSPACE_EXTERNAL_INLINE int zExtIntArray2D::checkMemAlloc(bool allocateMemory)
+	ZSPACE_EXTERNAL_INLINE zStatusCode zExtIntArray2D::checkMemAlloc(bool allocateMemory)
 	{
+		
 		try
 		{
-			if (pointer != nullptr) return 1;
+			if (!pointer || pointer == nullptr)
+			{
+				if (!allocateMemory) return zMemNotAllocError;
+				pointer = new vector<zIntArray>();
+				return zMemAllocSuccess;
+			}
 			else
 			{
-				if (!allocateMemory) return 0;
-				pointer = new vector<zIntArray>();
-				return 2;
-
+				return zSkip;
 			}
 		}
 		catch (const std::exception&)
 		{
-			printf("\n Pointer initialization failed");
-			return 404;
+			return zThrowError;
 		}
 	}
 	// Methods
@@ -207,23 +211,24 @@ namespace zSpace
 		delete pointer;
 		pointer = nullptr;
 	}
-	ZSPACE_EXTERNAL_INLINE int zExtFloatArray::checkMemAlloc(bool allocateMemory)
+	ZSPACE_EXTERNAL_INLINE zStatusCode zExtFloatArray::checkMemAlloc(bool allocateMemory)
 	{
 		try
 		{
-			if (pointer != nullptr) return 1;
+			if (!pointer || pointer == nullptr)
+			{
+				if (!allocateMemory) return zMemNotAllocError;
+				pointer  = new vector<float>();
+				return zMemAllocSuccess;
+			}
 			else
 			{
-				if (!allocateMemory) return 0;
-				pointer = new vector<float>();
-				return 2;
-
+				return zSkip;
 			}
 		}
 		catch (const std::exception&)
 		{
-			printf("\n Pointer initialization failed");
-			return 404;
+			return zThrowError;
 		}
 	}
 	// Methods
@@ -289,23 +294,25 @@ namespace zSpace
 	{
 		arrayCount = pointer->size();
 	}
-	ZSPACE_EXTERNAL_INLINE int zExtFloatArray2D::checkMemAlloc(bool allocateMemory)
+	ZSPACE_EXTERNAL_INLINE zStatusCode zExtFloatArray2D::checkMemAlloc(bool allocateMemory)
 	{
+		
 		try
 		{
-			if (pointer != nullptr) return 1;
+			if (!pointer || pointer == nullptr)
+			{
+				if (!allocateMemory) return zMemNotAllocError;
+				pointer =new vector<zFloatArray>(); 
+				return zMemAllocSuccess;
+			}
 			else
 			{
-				if (!allocateMemory) return 0;
-				pointer = new vector<zFloatArray>();
-				return 2;
-
+				return zSkip;
 			}
 		}
 		catch (const std::exception&)
 		{
-			printf("\n Pointer initialization failed");
-			return 404;
+			return zThrowError;
 		}
 	}
 
@@ -371,23 +378,25 @@ namespace zSpace
 	{
 		arrayCount = pointer->size();
 	}
-	ZSPACE_EXTERNAL_INLINE int zExtDoubleArray::checkMemAlloc(bool allocateMemory)
+	ZSPACE_EXTERNAL_INLINE zStatusCode zExtDoubleArray::checkMemAlloc(bool allocateMemory)
 	{
+		
 		try
 		{
-			if (pointer != nullptr) return 1;
+			if (!pointer || pointer == nullptr)
+			{
+				if (!allocateMemory) return zMemNotAllocError;
+				pointer = new vector<double>();
+				return zMemAllocSuccess;
+			}
 			else
 			{
-				if (!allocateMemory) return 0;
-				pointer = new vector<double>();
-				return 2;
-
+				return zSkip;
 			}
 		}
 		catch (const std::exception&)
 		{
-			printf("\n Pointer initialization failed");
-			return 404;
+			return zThrowError;
 		}
 	}
 	ZSPACE_EXTERNAL_INLINE void zExtDoubleArray::getItems(double* items)
@@ -450,23 +459,25 @@ namespace zSpace
 	{
 		arrayCount = pointer->size();
 	}
-	ZSPACE_EXTERNAL_INLINE int zExtDoubleArray2D::checkMemAlloc(bool allocateMemory)
+	ZSPACE_EXTERNAL_INLINE zStatusCode zExtDoubleArray2D::checkMemAlloc(bool allocateMemory)
 	{
+		
 		try
 		{
-			if (pointer != nullptr) return 1;
+			if (!pointer || pointer == nullptr)
+			{
+				if (!allocateMemory) return zMemNotAllocError;
+				pointer = new vector<zDoubleArray>();
+				return zMemAllocSuccess;
+			}
 			else
 			{
-				if (!allocateMemory) return 0;
-				pointer = new vector<zDoubleArray>();
-				return 2;
-
+				return zSkip;
 			}
 		}
 		catch (const std::exception&)
 		{
-			printf("\n Pointer initialization failed");
-			return 404;
+			return zThrowError;
 		}
 	}
 	ZSPACE_EXTERNAL_INLINE void zExtDoubleArray2D::getItems(zExtDoubleArray* items)
@@ -512,23 +523,25 @@ namespace zSpace
 	{
 		stringLength = pointer->size();
 	}
-	ZSPACE_EXTERNAL_INLINE int zExtString::checkMemAlloc(bool allocateMemory)
+	ZSPACE_EXTERNAL_INLINE zStatusCode zExtString::checkMemAlloc(bool allocateMemory)
 	{
+		
 		try
 		{
-			if (pointer != nullptr) return 1;
+			if (!pointer || pointer == nullptr)
+			{
+				if (!allocateMemory) return zMemNotAllocError;
+				pointer = new string();
+				return zMemAllocSuccess;
+			}
 			else
 			{
-				if (!allocateMemory) return 0;
-				pointer = new string();
-				return 2;
-
+				return zSkip;
 			}
 		}
 		catch (const std::exception&)
 		{
-			printf("\n Pointer initialization failed");
-			return 404;
+			return zThrowError;
 		}
 	}
 	ZSPACE_EXTERNAL_INLINE void zExtString::getCharecters(char* outString)
@@ -632,23 +645,24 @@ namespace zSpace
 	{
 		arrayCount = pointer->size();
 	}
-	ZSPACE_EXTERNAL_INLINE int zExtStringArray::checkMemAlloc(bool allocateMemory)
+	ZSPACE_EXTERNAL_INLINE zStatusCode zExtStringArray::checkMemAlloc(bool allocateMemory)
 	{
 		try
 		{
-			if (pointer != nullptr) return 1;
+			if (!pointer || pointer == nullptr)
+			{
+				if (!allocateMemory) return zMemNotAllocError;
+				pointer = new vector<string>();
+				return zMemAllocSuccess;
+			}
 			else
 			{
-				if (!allocateMemory) return 0;
-				pointer = new vector<string>();
-				return 2;
-
+				return zSkip;
 			}
 		}
 		catch (const std::exception&)
 		{
-			printf("\n Pointer initialization failed");
-			return 404;
+			return zThrowError;
 		}
 	}
 	ZSPACE_EXTERNAL_INLINE void zExtStringArray::getItems(string* items)
@@ -750,23 +764,25 @@ namespace zSpace
 	{
 		arrayCount = pointer->size();
 	}
-	ZSPACE_EXTERNAL_INLINE int zExtStringArray2D::checkMemAlloc(bool allocateMemory)
+	ZSPACE_EXTERNAL_INLINE zStatusCode zExtStringArray2D::checkMemAlloc(bool allocateMemory)
 	{
+		
 		try
 		{
-			if (pointer != nullptr) return 1;
+			if (!pointer || pointer == nullptr)
+			{
+				if (!allocateMemory) return zMemNotAllocError;
+				pointer = new vector<zStringArray>();
+				return zMemAllocSuccess;
+			}
 			else
 			{
-				if (!allocateMemory) return 0;
-				pointer = new vector<zStringArray>();
-				return 2;
-
+				return zSkip;
 			}
 		}
 		catch (const std::exception&)
 		{
-			printf("\n Pointer initialization failed");
-			return 404;
+			return zThrowError;
 		}
 	}
 	ZSPACE_EXTERNAL_INLINE void zExtStringArray2D::getItems(zExtStringArray* items)
@@ -829,23 +845,25 @@ namespace zSpace
 	{
 		arrayCount = pointer->size();
 	}
-	ZSPACE_EXTERNAL_INLINE int zExtBoolArray::checkMemAlloc(bool allocateMemory)
+	ZSPACE_EXTERNAL_INLINE zStatusCode zExtBoolArray::checkMemAlloc(bool allocateMemory)
 	{
+		
 		try
 		{
-			if (pointer != nullptr) return 1;
+			if (!pointer || pointer == nullptr)
+			{
+				if (!allocateMemory) return zMemNotAllocError;
+				pointer = new vector<bool>();
+				return zMemAllocSuccess;
+			}
 			else
 			{
-				if (!allocateMemory) return 0;
-				pointer = new vector<bool>();
-				return 2;
-
+				return zSkip;
 			}
 		}
 		catch (const std::exception&)
 		{
-			printf("\n Pointer initialization failed");
-			return 404;
+			return zThrowError;
 		}
 	}
 	ZSPACE_EXTERNAL_INLINE void zExtBoolArray::getItems(bool* items)
@@ -907,23 +925,25 @@ namespace zSpace
 	{
 		arrayCount = pointer->size();
 	}
-	ZSPACE_EXTERNAL_INLINE int zExtBoolArray2D::checkMemAlloc(bool allocateMemory)
+	ZSPACE_EXTERNAL_INLINE zStatusCode zExtBoolArray2D::checkMemAlloc(bool allocateMemory)
 	{
+		
 		try
 		{
-			if (pointer != nullptr) return 1;
+			if (!pointer || pointer == nullptr)
+			{
+				if (!allocateMemory) return zMemNotAllocError;
+				pointer = new vector<zBoolArray>();
+				return zMemAllocSuccess;
+			}
 			else
 			{
-				if (!allocateMemory) return 0;
-				pointer = new vector<zBoolArray>();
-				return 2;
-
+				return zSkip;
 			}
 		}
 		catch (const std::exception&)
 		{
-			printf("\n Pointer initialization failed");
-			return 404;
+			return zThrowError;
 		}
 	}
 	ZSPACE_EXTERNAL_INLINE void zExtBoolArray2D::getItems(zExtBoolArray* items)

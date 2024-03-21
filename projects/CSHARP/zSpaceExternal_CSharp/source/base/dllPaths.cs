@@ -25,8 +25,10 @@ namespace zSpace
     public static partial class zNativeMethods {
         const string path = dllPaths.tsPath;
 
+        public static bool dependsLoaded = false;
+
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool SetDllDirectory(string lpPathName);
+        public static extern bool SetDllDirectory(string lpPathName);
     }
 }

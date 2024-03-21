@@ -24,6 +24,7 @@
 
 
 #include "headers/base/zSpace_External.h"
+#include "headers/base/zStatus.h"
 
 
 #include <stdlib.h>
@@ -48,7 +49,7 @@ namespace zSpace
 		/**
 		 * \brief Updates the attributes of the external object
 		 */
-		int checkMemAlloc(bool allocateMemory = true);
+		zStatusCode checkMemAlloc(bool allocateMemory = true);
 		void updateAttributes();
 		/**
 		 * \brief get items from array
@@ -66,7 +67,7 @@ namespace zSpace
 		zExtIntArray2D(zInt2DArray* a);
 		~zExtIntArray2D();
 
-		int checkMemAlloc(bool allocateMemory = true);
+		zStatusCode checkMemAlloc(bool allocateMemory = true);
 
 		/**
 		 * \brief Updates the attributes of the external object
@@ -89,7 +90,7 @@ namespace zSpace
 		/**
 		 * \brief Updates the attributes of the external object
 		 */
-		int checkMemAlloc(bool allocateMemory = true);
+		zStatusCode checkMemAlloc(bool allocateMemory = true);
 		void updateAttributes();
 		/**
 		 * \brief get items from array
@@ -112,7 +113,7 @@ namespace zSpace
 		 * \brief Updates the attributes of the external object
 		 */
 		void updateAttributes();
-		int checkMemAlloc(bool allocateMemory = true);
+		zStatusCode checkMemAlloc(bool allocateMemory = true);
 		/**
 		 * \brief get items from array
 		 */
@@ -132,7 +133,7 @@ namespace zSpace
 		 * \brief Updates the attributes of the external object
 		 */
 		void updateAttributes();
-		int checkMemAlloc(bool allocateMemory = true);
+		zStatusCode checkMemAlloc(bool allocateMemory = true);
 		/**
 		 * \brief get items from array
 		 */
@@ -153,7 +154,7 @@ namespace zSpace
 		 * \brief Updates the attributes of the external object
 		 */
 		void updateAttributes();
-		int checkMemAlloc(bool allocateMemory = true);
+		zStatusCode checkMemAlloc(bool allocateMemory = true);
 		/**
 		 * \brief get items from array
 		 */
@@ -169,7 +170,7 @@ namespace zSpace
 		 * \brief Updates the attributes of the external object
 		 */
 		void updateAttributes();
-		int checkMemAlloc(bool allocateMemory = true);
+		zStatusCode checkMemAlloc(bool allocateMemory = true);
 
 		///**
 		// * \brief Gets items from the array
@@ -194,7 +195,7 @@ namespace zSpace
 		 * \brief Updates the attributes of the external object
 		 */
 		void updateAttributes();
-		int checkMemAlloc(bool allocateMemory = true);
+		zStatusCode checkMemAlloc(bool allocateMemory = true);
 
 		/**
 		 * \brief Gets items from the array
@@ -217,7 +218,7 @@ namespace zSpace
 		 * \brief Updates the attributes of the external object
 		 */
 		void updateAttributes();
-		int checkMemAlloc(bool allocateMemory = true);
+		zStatusCode checkMemAlloc(bool allocateMemory = true);
 
 		/**
 		 * \brief Gets items from the array
@@ -240,7 +241,7 @@ namespace zSpace
 		 * \brief Updates the attributes of the external object
 		 */
 		void updateAttributes();
-		int checkMemAlloc(bool allocateMemory = true);
+		zStatusCode checkMemAlloc(bool allocateMemory = true);
 
 		/**
 		 * \brief Gets items from the array
@@ -263,7 +264,7 @@ namespace zSpace
 		 * \brief Updates the attributes of the external object
 		 */
 		void updateAttributes();
-		int checkMemAlloc(bool allocateMemory = true);
+		zStatusCode checkMemAlloc(bool allocateMemory = true);
 
 		/**
 		 * \brief Gets items from the array
@@ -276,7 +277,7 @@ namespace zSpace
 	{
 
 		ZSPACE_EXTERNAL void ext_int_array_getItems(zExtIntArray & extArray, int* outArray);
-		ZSPACE_EXTERNAL void ext_int_setItemsFromArray(zExtIntArray& extArray, int* inArray, int count);
+		ZSPACE_EXTERNAL void ext_int_array_setItems(zExtIntArray& extArray, int* inArray, int count);
 		ZSPACE_EXTERNAL void ext_int_array2D_getItems(zExtIntArray2D& extArray, zExtIntArray* outArray);
 		ZSPACE_EXTERNAL void ext_int_array2D_setItems(zExtIntArray2D& extArray, zExtIntArray* inArray, int count);
 		ZSPACE_EXTERNAL void ext_float_array_getItems(zExtFloatArray& extArray, float* outArray);

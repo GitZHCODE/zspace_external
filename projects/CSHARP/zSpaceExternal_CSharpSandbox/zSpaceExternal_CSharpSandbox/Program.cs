@@ -29,12 +29,18 @@ namespace zSpace {
             //testMeshUSD1();
             //smoothMesh();
 
-            string temppath = "";
-            zExtMesh m = new zExtMesh();
-            var chk = m.from(temppath);
-            Console.WriteLine(chk);
+            //string temppath = "";
+            //zExtMesh m = new zExtMesh();
+            //var chk = m.from(temppath);
+            //Console.WriteLine(chk);
 
-            runOmniverse();
+            testMeshUSD1();
+            
+            zExtJSON j1;
+            //test5(out j1, 444);
+
+            //runOmniverse();
+
 
             Console.WriteLine("\n Press any key to exit...");
             Console.ReadKey();
@@ -429,30 +435,37 @@ namespace zSpace {
 
         static void testMeshUSD1() {
 
-            string readPath = "data/cube.obj";
+            //string readPath = "data/cube.obj";
+            string readPath = "C:/Users/heba.eiz/Downloads/fdm_01.json";
             var mesh = new zExtMesh();
-            mesh.from(readPath);
+            var output1 = mesh.from(readPath);
+            zExtPoint[] pts = mesh.getMeshPoints();
+            //Console.WriteLine("\n 2_ mesh" + " _ " + output1);
 
-            //export to USD
-            string exportPath = "data/testMesh.usda";
-            mesh.to(exportPath);
-            Console.WriteLine("\n 1_ mesh exported usda ");
+            ////export to USD
+            //string exportPath = "data/testMesh.usda";
+            //mesh.to(exportPath);
+            //Console.WriteLine("\n 1_ mesh exported usda ");
 
-            zExtUSD usd = new zExtUSD();
-            zStatus chk = mesh.to(ref usd);
-            Console.WriteLine("\n 1_ mesh.to(ref usd) ");
-            Console.WriteLine("\n 1_ chk0 = " + chk.ToString() + "\n");
+            //zExtUSD usd = new zExtUSD();
+            //zStatus chk = mesh.to(ref usd);
+            //Console.WriteLine("\n 1_ mesh.to(ref usd) ");
+            //Console.WriteLine("\n 1_ chk0 = " + chk.ToString() + "\n");
 
 
             Console.WriteLine("\n 2_ mesh" + " _ " + mesh.getVCount());
 
             //zExtIntArray fixedv = new zExtIntArray(new int[] { });
             // bool smoothChk = mesh.smoothMesh(1, true, fixedv);
-            zStatus smoothChk = mesh.smoothMesh(1, true);
-            Console.WriteLine("\n 2_ mesh.smooth " + smoothChk.ToString() + " _ " +mesh.getVCount());
+            //var smoothChk = mesh.smoothMesh(1, true);
+           // Console.WriteLine("\n 2_ mesh.smooth " + smoothChk.ToString() + " _ " +mesh.getVCount());
 
+            
+            //zStatus2 sss = new zStatus2();
+            //sss.statusCode = 15;
+            //var stat2 = zNativeMethods.ext_mesh_meshTest2(ref sss);
 
-
+            //var stat = zNativeMethods.ext_mesh_meshTest(2);
 
             //var mesh2 = new zExtMesh();
             //int chk1 = mesh2.from(ref usd);
