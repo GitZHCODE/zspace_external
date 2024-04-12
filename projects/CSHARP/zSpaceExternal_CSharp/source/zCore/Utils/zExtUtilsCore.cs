@@ -387,10 +387,10 @@ namespace zSpace {
         #region Bool Array 1D
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         public static extern void ext_bool_array_getItems(ref zExtBoolArray array,
-            [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Bool), In, Out] bool[] outItems);
+            [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U1), In, Out] bool[] outItems);
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         public static extern void ext_bool_setItemsFromArray(ref zExtBoolArray array,
-            [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Bool), In] bool[] outItems, int count);
+            [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U1), In] bool[] outItems, int count);
         #endregion
         #region Bool Array 2D
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]

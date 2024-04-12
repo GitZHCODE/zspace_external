@@ -18,28 +18,8 @@ namespace zSpace {
             Console.WriteLine("C# sandbox");
 
             testEnv();
-            //var loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies();
 
-            //foreach (var assembly in loadedAssemblies) {
-            //    Console.WriteLine($"Loaded Assembly: {assembly.FullName}");
-            //}
-
-            //testMesh1();
-
-            //testMeshUSD1();
-            //smoothMesh();
-
-            //string temppath = "";
-            //zExtMesh m = new zExtMesh();
-            //var chk = m.from(temppath);
-            //Console.WriteLine(chk);
-
-            testMeshUSD1();
-            
-            zExtJSON j1;
-            //test5(out j1, 444);
-
-            //runOmniverse();
+            testJSON();
 
 
             Console.WriteLine("\n Press any key to exit...");
@@ -203,7 +183,7 @@ namespace zSpace {
             zExtMesh newmesh = new zExtMesh();
             newmesh.createMesh(ptarray, counts, connects);
 
-            Console.WriteLine("\n  newMesh count = " +  newmesh.getVCount());
+            Console.WriteLine("\n  newMesh count = " +  newmesh.getVertexCount());
 
             zExtJSON j2 = new zExtJSON();
             j2.createJson();
@@ -453,7 +433,7 @@ namespace zSpace {
             //Console.WriteLine("\n 1_ chk0 = " + chk.ToString() + "\n");
 
 
-            Console.WriteLine("\n 2_ mesh" + " _ " + mesh.getVCount());
+            Console.WriteLine("\n 2_ mesh" + " _ " + mesh.getVertexCount());
 
             //zExtIntArray fixedv = new zExtIntArray(new int[] { });
             // bool smoothChk = mesh.smoothMesh(1, true, fixedv);
@@ -524,10 +504,11 @@ namespace zSpace {
             //foreach (DictionaryEntry de in Environment.GetEnvironmentVariables())
             //    Console.WriteLine("  {0} = {1}", de.Key, de.Value);
 
-            SetDllDirectory("zspace");
+            SetDllDirectory("depends");
 
 
             string usdFolderPath = "lib_omniverse";
+            //string usdFolderPath = "C:/Users/heba.eiz/source/repos/GitZHCODE/zspace_external/projects/CSHARP/zSpaceExternal_CSharpSandbox/zSpaceExternal_CSharpSandbox/bin/Release/lib_omniverse";
             SetDllDirectory(usdFolderPath);
         }
 
@@ -574,44 +555,99 @@ namespace zSpace {
             //Console.WriteLine("\n program 4");
         }
 
-        static void testGraphJson() {
+        static void testGraph1() {
             zExtGraph g = new zExtGraph();
-            string path2 = "C:/Users/heba.eiz/source/repos/GitZHCODE/zspace_alice/ALICE_PLATFORM/x64/Release/EXE/data/NatPower/testing1/inputCenterMeshes/medialGraph/oMedialGraph.json";
-            bool check1 = g.from(path2);
-            Console.WriteLine(string.Format("\n c# graph count {0} {1}", check1, g.getVertexPositions().getCount()));
-            Line[] lines = zExtRhinoUtil.GraphUtil.toRhinoLines(g);
-            //zExtGraph g2 = new zExtGraph();
-            Color[] colors = new Color[lines.Length];
-            for (int i = 0; i < colors.Length; i++) {
-                colors[i] = Color.Green;
-            }
-            zExtGraph g2 = zExtRhinoUtil.GraphUtil.toExtGraph(lines, colors);
-            //zExtGraph g2 = new zExtGraph(lines, colors);
-            Console.WriteLine(string.Format("\n c# graph2 count {0} {1}", g2.getVertexPositions().getCount(), g2.getEdgePairs().Length));
+            string path = "C:/Users/heba.eiz/Downloads/extGraph.json";
+            g.from(path);
+            Console.WriteLine("\n graph imported");
 
-            Console.WriteLine(g2.getEdgePairs()[0]);
+            //add colors
+            var vpos = g.getVertexPositions().getItems();
+            var epair = g.getEdgePairs();
 
-            string path3 = "C:/Users/heba.eiz/source/repos/GitZHCODE/zspace_alice/ALICE_PLATFORM/x64/Release/EXE/data/NatPower/testing1/inputCenterMeshes/medialGraph/tempexternalCOut.json";
+            Color[] ec = new Color[2];
+            ec[0] = Color.Aqua;
+            ec[1] = Color.Red;
 
-            g2.to(path3);
-
-            zExtJSON j1 = new zExtJSON();
-            bool check = g.to(path3);
-            Console.WriteLine("\n program 5" + check.ToString());
-
-            zExtJSON j2 = new zExtJSON();
-            j2.createJson();
-            //j2.ReadJsonFile(path3);
-
-            //g2.to(j2);
-
-            check = j2.ExportJsonFile(path3);
-            //Console.WriteLine("\n program 6" + check.ToString());
+            zExtColorArray eColors = new zExtColorArray(ec);
+            zExtColorArray vColors = new zExtColorArray(ec);
 
 
-            //Mesh rhinoMesh = new Mesh();// = (zExtRhinoUtil.MeshUtil.toRhinoMesh(extMesh));
+            zExtGraph g2 = new zExtGraph(vpos, epair, ec, ec);
+
+            var c0 = ec[0];
+            var c = g2.getEdgeColors()[0];
+            Console.WriteLine("\n color ___ " + c0.R + c0.G + c0.B);
+            Console.WriteLine("\n color ___ " + c.R + c.G + c.B);
+
+
+
 
         }
+
+        static void testJSON() {
+            zExtJSON json = new zExtJSON();
+            json.createJson();
+            var input = new bool[] {true, true, false, false};
+            string key = "test";
+            json.WriteJSONAttribute(key, input);
+
+            string path = "C:\\Users\\heba.eiz\\Downloads\\test2.json";
+            //json.ExportJsonFile(path);
+            json.ReadJsonFile(path);
+            var types = json.AttributeTypes;
+            int index = Array.IndexOf(json.AttributeKeys, key);
+            Type t = json.getType(types[index]);
+
+            Console.WriteLine("\n type " + t.ToString());
+
+            bool[] output;
+            json.ReadJSONAttribute(key, out output);
+            
+            foreach (var item in output) {
+                Console.WriteLine("\n" + item);
+
+            }
+
+        }
+        //static void testGraphJson() {
+        //    zExtGraph g = new zExtGraph();
+        //    string path2 = "C:/Users/heba.eiz/source/repos/GitZHCODE/zspace_alice/ALICE_PLATFORM/x64/Release/EXE/data/NatPower/testing1/inputCenterMeshes/medialGraph/oMedialGraph.json";
+        //    bool check1 = g.from(path2);
+        //    Console.WriteLine(string.Format("\n c# graph count {0} {1}", check1, g.getVertexPositions().getCount()));
+        //    Line[] lines = zExtRhinoUtil.GraphUtil.toRhinoLines(g);
+        //    //zExtGraph g2 = new zExtGraph();
+        //    Color[] colors = new Color[lines.Length];
+        //    for (int i = 0; i < colors.Length; i++) {
+        //        colors[i] = Color.Green;
+        //    }
+        //    zExtGraph g2 = zExtRhinoUtil.GraphUtil.toExtGraph(lines, colors);
+        //    //zExtGraph g2 = new zExtGraph(lines, colors);
+        //    Console.WriteLine(string.Format("\n c# graph2 count {0} {1}", g2.getVertexPositions().getCount(), g2.getEdgePairs().Length));
+
+        //    Console.WriteLine(g2.getEdgePairs()[0]);
+
+        //    string path3 = "C:/Users/heba.eiz/source/repos/GitZHCODE/zspace_alice/ALICE_PLATFORM/x64/Release/EXE/data/NatPower/testing1/inputCenterMeshes/medialGraph/tempexternalCOut.json";
+
+        //    g2.to(path3);
+
+        //    zExtJSON j1 = new zExtJSON();
+        //    var check = g.to(path3);
+        //    Console.WriteLine("\n program 5" + check.ToString());
+
+        //    zExtJSON j2 = new zExtJSON();
+        //    j2.createJson();
+        //    //j2.ReadJsonFile(path3);
+
+        //    //g2.to(j2);
+
+        //    check = j2.ExportJsonFile(path3);
+        //    //Console.WriteLine("\n program 6" + check.ToString());
+
+
+        //    //Mesh rhinoMesh = new Mesh();// = (zExtRhinoUtil.MeshUtil.toRhinoMesh(extMesh));
+
+        //}
 
         
 

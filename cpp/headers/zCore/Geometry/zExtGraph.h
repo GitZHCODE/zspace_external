@@ -147,7 +147,7 @@ namespace zSpace
 		* \return 1 if the file was read successfully, 0 if the file was not read successfully.
 		*/
 
-		ZSPACE_EXTERNAL int ext_graph_fromJSON(zExtJSON& json, zExtGraph& outGraph);
+		ZSPACE_EXTERNAL zStatusCode ext_graph_fromJSON(zExtJSON& json, zExtGraph& outGraph);
 
 		/*! \brief Export zExtGraph
 		* \param[in] extGraph The input zExtGraph object.
@@ -162,7 +162,7 @@ namespace zSpace
 				* \param[in] json The output zExtJSON object.
 				* \return 1 if the file was written successfully, 0 if the file was not written successfully.
 				*/
-		ZSPACE_EXTERNAL int ext_graph_toJSON(zExtGraph& extGraph, zExtJSON& json);
+		ZSPACE_EXTERNAL zStatusCode ext_graph_toJSON(zExtGraph& extGraph, zExtJSON& json);
 
 #if defined(ZSPACE_USD_INTEROP)  
 		/*! \brief Creates a new zExtMesh object from a JSON object.

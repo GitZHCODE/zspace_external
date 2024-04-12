@@ -25,7 +25,9 @@ namespace zSpace {
             attributesTypes = new zExtStringArray();
             createJson();
         }
-
+        public bool isValid() {
+            return !(pointer == IntPtr.Zero);
+        }
         // Other constructors, destructor, and methods
 
         //public void WriteAttribute<T>(string attributeKey, T inAttributeValue) {
@@ -697,6 +699,9 @@ namespace zSpace {
             return false;
         }
 
+        
+
+
         public Type xxgetType(string typeName) {
             switch (typeName) {
                 case nameof(Int32):
@@ -784,7 +789,15 @@ namespace zSpace {
                 case nameof(Double) + "[][]":
                 case "double[][]":
                     return typeof(double[][]);
-                
+                case "bool":
+                    return typeof(bool);
+                case nameof(Boolean) + "[]":
+                case "bool[]":
+                    return typeof(bool[]);
+                case nameof(Boolean) + "[][]":
+                case "bool[][]":
+                    return typeof(bool[][]);
+
                 case nameof(String):
                 case "string":
                     return typeof(string);
@@ -795,14 +808,7 @@ namespace zSpace {
                 case "string[][]":
                     return typeof(string[][]);
 
-                case "bool":
-                    return typeof(bool);
-                case nameof(Boolean) + "[]":
-                case "bool[]":
-                    return typeof(bool[]);
-                case nameof(Boolean) + "[][]":
-                case "bool[][]":
-                    return typeof(bool[][]);
+               
 
             }
             return null;
@@ -813,7 +819,7 @@ namespace zSpace {
         /// Creates a deep copy of the zExtJSON object.
         /// </summary>
         /// <returns>A new zExtJSON object that is a deep copy of the original.</returns>
-        public zExtJSON copy() {
+        public zExtJSON duplicate() {
             zExtJSON outjson;
             zNativeMethods.ext_json_createJsonDeepCopy(ref this, out outjson);
             return outjson;
@@ -978,7 +984,7 @@ namespace zSpace {
         public static extern int ext_json_readJSONAttributeBool(
             ref zExtJSON extJSON,
             [MarshalAs(UnmanagedType.LPStr)] string attributeKey,
-            [MarshalAs(UnmanagedType.Bool)] out bool outAttributeValue);
+            [MarshalAs(UnmanagedType.U1)] out bool outAttributeValue);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         public static extern int ext_json_readJSONAttributeBoolArray(
@@ -1074,7 +1080,7 @@ namespace zSpace {
         public static extern int ext_json_writeJSONAttributeBool(
             ref zExtJSON extJSON,
             [MarshalAs(UnmanagedType.LPStr)] string attributeKey,
-            [MarshalAs(UnmanagedType.Bool)] bool inAttributeValue);
+            [MarshalAs(UnmanagedType.U1)] bool inAttributeValue);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         public static extern int ext_json_writeJSONAttributeBoolArray(

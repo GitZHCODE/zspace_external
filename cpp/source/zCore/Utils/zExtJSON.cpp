@@ -138,36 +138,68 @@ namespace zSpace
 			{
 				if (!it.value().is_null())
 				{
-					//int
-					if (it.value().is_number_integer()) 
-						type = "int";
-					else if (it.value().is_array() && it.value().size() > 0 && it.value()[0].is_number_integer())
-						type = "int[]";
-					else if (it.value().is_array() && it.value().size() > 0 && it.value()[0].is_array() && it.value()[0].size() > 0 && it.value()[0][0].is_number_integer())
-						type = "int[][]";
-					//float
-					else if (it.value().is_number_float())
-						type = "float";
-					else if (it.value().is_array() && it.value().size() > 0 && it.value()[0].is_number_float())
-						type = "float[]";
-					else if (it.value().is_array() && it.value().size() > 0 && it.value()[0].is_array() && it.value()[0].size() > 0 && it.value()[0][0].is_number_float())
-						type = "float[][]";
-					else if (it.value().is_array() && it.value().size() > 0 && it.value()[0].is_array() && it.value()[0].size() > 0 && it.value()[0][0].is_array(), it.value()[0][0][0].is_number_float())
-						type = "zExtJSON";
-					//bool
-					else if (it.value().is_boolean())
-						type = "bool";
-					else if (it.value().is_array() && it.value().size() > 0 && it.value()[0].is_boolean())
-						type = "bool[]";
-					else if (it.value().is_array() && it.value().size() > 0 && it.value()[0].is_array() && it.value()[0].size() > 0 && it.value()[0][0].is_boolean())
-						type = "bool[][]";
-					//string
-					else if (it.value().is_string())
-						type = "string";
-					else if (it.value().is_array())
-						type = "string[]";
-					else if (it.value().is_array() && it.value().size() > 0 && it.value()[0].is_array())
-						type = "string[][]";
+					
+					if (!it.value().is_array())
+					{
+						auto v = it.value();
+						if (v.is_number_integer()) type = "int";
+						else if (v.is_number_float()) type = "float";
+						else if (v.is_boolean()) type = "bool";
+						else if (v.is_string()) type = "string";
+					}
+					else if (it.value().is_array() && it.value().size() > 0)
+					{
+						auto v = it.value()[0];
+						if (v.is_number_integer()) type = "int[]";
+						else if (v.is_number_float()) type = "float[]";
+						else if (v.is_boolean()) type = "bool[]";
+						else if (v.is_string()) type = "string[]";
+					}
+					else if (it.value().is_array() && it.value().size() > 0 && it.value()[0].is_array() && it.value()[0].size() > 0)
+					{
+						auto v = it.value()[0][0];
+						if (v.is_number_integer()) type = "int[][]";
+						else if (v.is_number_float()) type = "float[][]";
+						else if (v.is_boolean()) type = "bool[][]";
+						else if (v.is_string()) type = "string[][]";
+					}
+					
+
+
+					////int
+					//if (it.value().is_number_integer())
+					//	type = "int";
+					//else if (it.value().is_array() && it.value().size() > 0 && it.value()[0].is_number_integer())
+					//	type = "int[]";
+					//else if (it.value().is_array() && it.value().size() > 0 && it.value()[0].is_array() && it.value()[0].size() > 0 && it.value()[0][0].is_number_integer())
+					//	type = "int[][]";
+					////float
+					//else if (it.value().is_number_float())
+					//	type = "float";
+					//else if (it.value().is_array() && it.value().size() > 0 && it.value()[0].is_number_float())
+					//	type = "float[]";
+					//else if (it.value().is_array() && it.value().size() > 0 && it.value()[0].is_array() && it.value()[0].size() > 0 && it.value()[0][0].is_number_float())
+					//	type = "float[][]";
+					//else if (it.value().is_array() && it.value().size() > 0 && it.value()[0].is_array() && it.value()[0].size() > 0 && it.value()[0][0].is_array(), it.value()[0][0][0].is_number_float())
+					//	type = "zExtJSON";
+					////bool
+					//else if (it.value().is_boolean())
+					//	type = "bool";
+					//else if (it.value().is_array() && it.value().size() > 0 && it.value()[0].is_boolean())
+					//{
+					//	printf("\n \n IT is is_boolean %d ", it.value()[0].is_boolean());
+
+					//	type = "bool[]";
+					//}
+					//else if (it.value().is_array() && it.value().size() > 0 && it.value()[0].is_array() && it.value()[0].size() > 0 && it.value()[0][0].is_boolean())
+					//	type = "bool[][]";
+					////string
+					//else if (it.value().is_string())
+					//	type = "string";
+					//else if (it.value().is_array(), it.value()[0].is_string())
+					//	type = "string[]";
+					//else if (it.value().is_array() && it.value().size() > 0 && it.value()[0].is_array())
+					//	type = "string[][]";
 				}
 			}
 			catch (const json::exception&)
@@ -306,6 +338,9 @@ namespace zSpace
 	// JSON - Read Attributes
 	ZSPACE_EXTERNAL_INLINE int ext_json_readJSONAttributeInt			(zExtJSON& extJSON, char* attributeKey, int& outAttributeValue)
 	{
+		zStatusCode memoryChk = extJSON.checkMemAlloc(false);
+		if (memoryChk == zMemNotAllocError) return zMemNotAllocError;
+
 		string attributeKeySt(attributeKey);
 		zUtilsCore core;
 		json j = *extJSON.pointer;
@@ -318,26 +353,37 @@ namespace zSpace
 	}
 	ZSPACE_EXTERNAL_INLINE int ext_json_readJSONAttributeIntArray		(zExtJSON& extJSON, char* attributeKey, zExtIntArray& outAttributeValue)
 	{
+		zStatusCode memoryChk = extJSON.checkMemAlloc(false);
+		printf("\n memChk JSON ");
+		if (memoryChk == zMemNotAllocError) return zMemNotAllocError;
+		printf("\n memChk JSON 2 ");
+
 		string attributeKeySt(attributeKey);
 		zUtilsCore core;
 		json j = *extJSON.pointer;
-			try
-			{
-				outAttributeValue = zExtIntArray(j[attributeKeySt].get<zIntArray>());
-				//outAttributeValue.pointer = &j[attributeKeySt].get<zIntArray>();
-				outAttributeValue.updateAttributes();
-				return 1;
-			}
-			catch (const exception&) { return 0; }
+
+		try
+		{
+			outAttributeValue.checkMemAlloc(true);
+			core.json_readAttribute(j, attributeKeySt, *outAttributeValue.pointer);
+			outAttributeValue.updateAttributes();
+
+			return 1;
+		}
+		catch (const exception&) { return 0; }
 	}
 	ZSPACE_EXTERNAL_INLINE int ext_json_readJSONAttributeIntArray2D		(zExtJSON& extJSON, char* attributeKey, zExtIntArray2D& outAttributeValue)
 	{
+		zStatusCode memoryChk = extJSON.checkMemAlloc(false);
+		if (memoryChk == zMemNotAllocError) return zMemNotAllocError;
+
 		string attributeKeySt(attributeKey);
 		zUtilsCore core;
 		json j = *extJSON.pointer;
 		try
 		{
-			outAttributeValue = zExtIntArray2D(j[attributeKeySt].get<zInt2DArray>());
+			outAttributeValue.checkMemAlloc(true);
+			core.json_readAttribute(j, attributeKeySt, *outAttributeValue.pointer);
 			outAttributeValue.updateAttributes();
 			return 1;
 		}
@@ -345,31 +391,41 @@ namespace zSpace
 	}
 	ZSPACE_EXTERNAL_INLINE int ext_json_readJSONAttributeFloat			(zExtJSON& extJSON, char* attributeKey, float& outAttributeValue)
 	{
+		zStatusCode memoryChk = extJSON.checkMemAlloc(false);
+		if (memoryChk == zMemNotAllocError) return zMemNotAllocError;
+
 		string attributeKeySt(attributeKey);
 		zUtilsCore core;
 		json j = *extJSON.pointer;
 			try
 			{
-				outAttributeValue = j[attributeKeySt].get<float>();
+				core.json_readAttribute(j, attributeKeySt, outAttributeValue);
 				return 1;
 			}
 			catch (const exception&) { return 0; };
 	}
 	ZSPACE_EXTERNAL_INLINE int ext_json_readJSONAttributeFloatArray		(zExtJSON& extJSON, char* attributeKey, zExtFloatArray& outAttributeValue)
 	{
+		zStatusCode memoryChk = extJSON.checkMemAlloc(false);
+		if (memoryChk == zMemNotAllocError) return zMemNotAllocError;
+
 		printf("\n ext_json_readJSONAttributeFloatArray 0");
 		string attributeKeySt(attributeKey);
 		zUtilsCore core;
 		json j = *extJSON.pointer;
 			try
 			{
-				printf("\n ext_json_readJSONAttributeFloatArray 1");
+				//zFloatArray arr;
+				//outAttributeValue = zExtFloatArray();
+				outAttributeValue.checkMemAlloc(true);
 
-				outAttributeValue = zExtFloatArray(j[attributeKeySt].get<zFloatArray>());
-				printf("\n ext_json_readJSONAttributeFloatArray 2");
+				core.json_readAttribute(j, attributeKeySt, *outAttributeValue.pointer);
+				//core.json_readAttribute(j, attributeKeySt, arr);
 
 				outAttributeValue.updateAttributes();
-				printf("\n ext_json_readJSONAttributeFloatArray 3");
+
+				printf("\n float[] %i %i %f", outAttributeValue.pointer->size(), outAttributeValue.arrayCount, outAttributeValue.pointer->at(0));
+				//printf("\n 2float[] %i %f", arr.size(), arr[0]);
 
 				return 1;
 			}
@@ -377,12 +433,16 @@ namespace zSpace
 	}
 	ZSPACE_EXTERNAL_INLINE int ext_json_readJSONAttributeFloatArray2D	(zExtJSON& extJSON, char* attributeKey, zExtFloatArray2D& outAttributeValue)
 	{
+		zStatusCode memoryChk = extJSON.checkMemAlloc(false);
+		if (memoryChk == zMemNotAllocError) return zMemNotAllocError;
+
 		string attributeKeySt(attributeKey);
 		zUtilsCore core;
 		json j = *extJSON.pointer;
 			try
 			{
-				outAttributeValue = zExtFloatArray2D(j[attributeKeySt].get<vector<zFloatArray>>());
+				outAttributeValue.checkMemAlloc(true);
+				core.json_readAttribute(j, attributeKeySt, *outAttributeValue.pointer);
 				outAttributeValue.updateAttributes();
 				return 1;
 			}
@@ -390,24 +450,31 @@ namespace zSpace
 	}
 	ZSPACE_EXTERNAL_INLINE int ext_json_readJSONAttributeDouble			(zExtJSON& extJSON, char* attributeKey, double& outAttributeValue)
 	{
+		zStatusCode memoryChk = extJSON.checkMemAlloc(false);
+		if (memoryChk == zMemNotAllocError) return zMemNotAllocError;
+
 		string attributeKeySt(attributeKey);
 		zUtilsCore core;
 		json j = *extJSON.pointer;
 		try
 		{
-			outAttributeValue = j[attributeKeySt].get<double>();
+			core.json_readAttribute(j, attributeKeySt, outAttributeValue);
 			return 1;
 		}
 		catch (const exception&) { return 0; };
 	}
 	ZSPACE_EXTERNAL_INLINE int ext_json_readJSONAttributeDoubleArray	(zExtJSON& extJSON, char* attributeKey, zExtDoubleArray& outAttributeValue)
 	{
+		zStatusCode memoryChk = extJSON.checkMemAlloc(false);
+		if (memoryChk == zMemNotAllocError) return zMemNotAllocError;
+
 		string attributeKeySt(attributeKey);
 		zUtilsCore core;
 		json j = *extJSON.pointer;
 		try
 		{
-			outAttributeValue = zExtDoubleArray(j[attributeKeySt].get<zDoubleArray>());
+			outAttributeValue.checkMemAlloc(true);
+			core.json_readAttribute(j, attributeKeySt, *outAttributeValue.pointer);
 			outAttributeValue.updateAttributes();
 			return 1;
 		}
@@ -415,12 +482,16 @@ namespace zSpace
 	}
 	ZSPACE_EXTERNAL_INLINE int ext_json_readJSONAttributeDoubleArray2D	(zExtJSON& extJSON, char* attributeKey, zExtDoubleArray2D& outAttributeValue)
 	{
+		zStatusCode memoryChk = extJSON.checkMemAlloc(false);
+		if (memoryChk == zMemNotAllocError) return zMemNotAllocError;
+
 		string attributeKeySt(attributeKey);
 		zUtilsCore core;
 		json j = *extJSON.pointer;
 		try
 		{
-			outAttributeValue = zExtDoubleArray2D(j[attributeKeySt].get<vector<zDoubleArray>>());
+			outAttributeValue.checkMemAlloc(true);
+			core.json_readAttribute(j, attributeKeySt, *outAttributeValue.pointer);
 			outAttributeValue.updateAttributes();
 			return 1;
 		}
@@ -428,34 +499,43 @@ namespace zSpace
 	}
 	ZSPACE_EXTERNAL_INLINE int ext_json_readJSONAttributeString			(zExtJSON& extJSON, char* attributeKey, zExtString& outAttributeValue)
 	{
+		zStatusCode memoryChk = extJSON.checkMemAlloc(false);
+		if (memoryChk == zMemNotAllocError) return zMemNotAllocError;
+
 		string attributeKeySt(attributeKey);
 		zUtilsCore core;
 		json j = *extJSON.pointer;
 			try
 			{
-				outAttributeValue = zExtString();
-				//string st = j[attributeKeySt].get<string>();
-				outAttributeValue.pointer = new string(j[attributeKeySt].get<string>());
-				//outAttributeValue.pointer = new string(st);
-				//*outAttributeValue.pointer = j[attributeKeySt].get<string>();
+				outAttributeValue.checkMemAlloc(true);
+				core.json_readAttribute(j, attributeKeySt, *outAttributeValue.pointer);
 				outAttributeValue.updateAttributes();
-				/*for (int i = 0; i < st.empty(); i++)
-				{
-					outAttributeValue[i] = st[i];
-				}*/
-				//outAttributeValue = j[attributeKeySt].get<string>().c_str();
+				//outAttributeValue = zExtString();
+				////string st = j[attributeKeySt].get<string>();
+				//outAttributeValue.pointer = new string(j[attributeKeySt].get<string>());
+				////outAttributeValue.pointer = new string(st);
+				////*outAttributeValue.pointer = j[attributeKeySt].get<string>();
+				//outAttributeValue.updateAttributes();
+				///*for (int i = 0; i < st.empty(); i++)
+				//{
+				//	outAttributeValue[i] = st[i];
+				//}*/
+				////outAttributeValue = j[attributeKeySt].get<string>().c_str();
 				return 1;
 			}
 			catch (const exception& ){ return 0; }
 	}
 	ZSPACE_EXTERNAL_INLINE int ext_json_readJSONAttributeStringArray	(zExtJSON& extJSON, char* attributeKey, zExtStringArray& outAttributeValue)
 	{
+		zStatusCode memoryChk = extJSON.checkMemAlloc(false);
+		if (memoryChk == zMemNotAllocError) return zMemNotAllocError;
 		string attributeKeySt(attributeKey);
 		zUtilsCore core;
 		json j = *extJSON.pointer;
 			try
 			{
-				outAttributeValue = zExtStringArray(j[attributeKeySt].get<zStringArray>());
+				outAttributeValue.checkMemAlloc(true);
+				core.json_readAttribute(j, attributeKeySt, *outAttributeValue.pointer);
 				outAttributeValue.updateAttributes();
 				return 1;
 			}
@@ -463,12 +543,15 @@ namespace zSpace
 	}
 	ZSPACE_EXTERNAL_INLINE int ext_json_readJSONAttributeStringArray2D	(zExtJSON& extJSON, char* attributeKey, zExtStringArray2D& outAttributeValue)
 	{
+		zStatusCode memoryChk = extJSON.checkMemAlloc(false);
+		if (memoryChk == zMemNotAllocError) return zMemNotAllocError;
 		string attributeKeySt(attributeKey);
 		zUtilsCore core;
 		json j = *extJSON.pointer;
 		try
 		{
-			outAttributeValue = zExtStringArray2D(j[attributeKeySt].get<vector<zStringArray>>());
+			outAttributeValue.checkMemAlloc(true);
+			core.json_readAttribute(j, attributeKeySt, *outAttributeValue.pointer);
 			outAttributeValue.updateAttributes();
 			return 1;
 		}
@@ -476,14 +559,16 @@ namespace zSpace
 	}
 	ZSPACE_EXTERNAL_INLINE int ext_json_readJSONAttributeBool			(zExtJSON& extJSON, char* attributeKey, bool& outAttributeValue)
 	{
+		zStatusCode memoryChk = extJSON.checkMemAlloc(false);
+		if (memoryChk == zMemNotAllocError) return zMemNotAllocError;
 		string attributeKeySt(attributeKey);
 		zUtilsCore core;
 		json j = *extJSON.pointer;
 		try
 		{
-			outAttributeValue = j[attributeKeySt].get<bool>();
+			//outAttributeValue = j[attributeKeySt].get<bool>();
 
-			//outAttributeValue = j[attributeKeySt];
+			core.json_readAttribute(j, attributeKeySt, outAttributeValue);
 
 			return 1;
 		}
@@ -491,12 +576,15 @@ namespace zSpace
 	}
 	ZSPACE_EXTERNAL_INLINE int ext_json_readJSONAttributeBoolArray		(zExtJSON& extJSON, char* attributeKey, zExtBoolArray& outAttributeValue)
 	{
+		zStatusCode memoryChk = extJSON.checkMemAlloc(false);
+		if (memoryChk == zMemNotAllocError) return zMemNotAllocError;
 		string attributeKeySt(attributeKey);
 		zUtilsCore core;
 		json j = *extJSON.pointer;
 		try
 		{
-			outAttributeValue = zExtBoolArray(j[attributeKeySt].get<zBoolArray>());
+			outAttributeValue.checkMemAlloc(true);
+			core.json_readAttribute(j, attributeKeySt, *outAttributeValue.pointer);
 			outAttributeValue.updateAttributes();
 			return 1;
 		}
@@ -504,12 +592,15 @@ namespace zSpace
 	}
 	ZSPACE_EXTERNAL_INLINE int ext_json_readJSONAttributeBoolArray2D	(zExtJSON& extJSON, char* attributeKey, zExtBoolArray2D& outAttributeValue)
 	{
+		zStatusCode memoryChk = extJSON.checkMemAlloc(false);
+		if (memoryChk == zMemNotAllocError) return zMemNotAllocError;
 		string attributeKeySt(attributeKey);
 		zUtilsCore core;
 		json j = *extJSON.pointer;
 		try
 		{
-			outAttributeValue = zExtBoolArray2D(j[attributeKeySt].get<vector<zBoolArray>>());
+			outAttributeValue.checkMemAlloc(true);
+			core.json_readAttribute(j, attributeKeySt, *outAttributeValue.pointer);
 			outAttributeValue.updateAttributes();
 			return 1;
 		}
@@ -521,6 +612,8 @@ namespace zSpace
 		printf("\n cpp json write int");
 		try
 		{
+			extJSON.checkMemAlloc(true);
+
 			extJSON.AddAttribute(attributeKey, inAttributeValue);
 			if(updateExtAttributes) extJSON.updateAttributes();
 			return 1;
@@ -529,8 +622,11 @@ namespace zSpace
 	}
 	ZSPACE_EXTERNAL_INLINE int ext_json_writeJSONAttributeIntArray		(zExtJSON& extJSON, char* attributeKey, zExtIntArray& inAttributeValue,			bool updateExtAttributes)
 	{
+
 		try
 		{
+			extJSON.checkMemAlloc(true);
+
 			extJSON.AddAttribute(attributeKey, *inAttributeValue.pointer);
 			if (updateExtAttributes) extJSON.updateAttributes();
 			return 1;
@@ -541,6 +637,8 @@ namespace zSpace
 	{
 		try
 		{
+			extJSON.checkMemAlloc(true);
+
 			extJSON.AddAttribute(attributeKey, *inAttributeValue.pointer);
 			if (updateExtAttributes) extJSON.updateAttributes();
 			return 1;
@@ -551,6 +649,8 @@ namespace zSpace
 	{
 		try
 		{
+			extJSON.checkMemAlloc(true);
+
 			extJSON.AddAttribute(attributeKey, inAttributeValue);
 			if (updateExtAttributes) extJSON.updateAttributes();
 			return 1;
@@ -561,6 +661,8 @@ namespace zSpace
 	{
 		try
 		{
+			extJSON.checkMemAlloc(true);
+
 			extJSON.AddAttribute(attributeKey, *inAttributeValue.pointer);
 			if (updateExtAttributes) extJSON.updateAttributes();
 			return 1;
@@ -571,6 +673,8 @@ namespace zSpace
 	{
 		try
 		{
+			extJSON.checkMemAlloc(true);
+
 			extJSON.AddAttribute(attributeKey, *inAttributeValue.pointer);
 			if (updateExtAttributes) extJSON.updateAttributes();
 			return 1;
@@ -581,6 +685,8 @@ namespace zSpace
 	{
 		try
 		{
+			extJSON.checkMemAlloc(true);
+
 			extJSON.AddAttribute(attributeKey, inAttributeValue);
 			if (updateExtAttributes) extJSON.updateAttributes();
 			return 1;
@@ -591,6 +697,8 @@ namespace zSpace
 	{
 		try
 		{
+			extJSON.checkMemAlloc(true);
+
 			extJSON.AddAttribute(attributeKey, *inAttributeValue.pointer);
 			if (updateExtAttributes) extJSON.updateAttributes();
 			return 1;
@@ -601,6 +709,8 @@ namespace zSpace
 	{
 		try
 		{
+			extJSON.checkMemAlloc(true);
+
 			extJSON.AddAttribute(attributeKey, *inAttributeValue.pointer);
 			if (updateExtAttributes) extJSON.updateAttributes();
 			return 1;
@@ -611,6 +721,8 @@ namespace zSpace
 	{
 		try
 		{
+			extJSON.checkMemAlloc(true);
+
 			extJSON.AddAttribute(attributeKey, inAttributeValue);
 			if (updateExtAttributes) extJSON.updateAttributes();
 			return 1;
@@ -621,6 +733,8 @@ namespace zSpace
 	{
 		try
 		{
+			extJSON.checkMemAlloc(true);
+
 			extJSON.AddAttribute(attributeKey, *inAttributeValue.pointer);
 			if (updateExtAttributes) extJSON.updateAttributes();
 			return 1;
@@ -631,6 +745,8 @@ namespace zSpace
 	{
 		try
 		{
+			extJSON.checkMemAlloc(true);
+
 			extJSON.AddAttribute(attributeKey, *inAttributeValue.pointer);
 			if (updateExtAttributes) extJSON.updateAttributes();
 			return 1;
@@ -641,6 +757,8 @@ namespace zSpace
 	{
 		try
 		{
+			extJSON.checkMemAlloc(true);
+
 			extJSON.AddAttribute(attributeKey, inAttributeValue);
 			if (updateExtAttributes) extJSON.updateAttributes();
 			return 1;
@@ -651,6 +769,8 @@ namespace zSpace
 	{
 		try
 		{
+			extJSON.checkMemAlloc(true);
+
 			extJSON.AddAttribute(attributeKey, *inAttributeValue.pointer);
 			if (updateExtAttributes) extJSON.updateAttributes();
 			return 1;
@@ -661,6 +781,8 @@ namespace zSpace
 	{
 		try
 		{
+			extJSON.checkMemAlloc(true);
+
 			extJSON.AddAttribute(attributeKey, *inAttributeValue.pointer);
 			if (updateExtAttributes) extJSON.updateAttributes();
 			return 1;
@@ -671,6 +793,8 @@ namespace zSpace
 	{
 		try
 		{
+			extJSON.checkMemAlloc(true);
+
 			extJSON.AddAttribute(attributeKey, *inAttributeValue.pointer);
 			//zUtilsCore util;
 			//util.writeJSONAttribute(*extJSON.pointer, attributeKey, *inAttributeValue.pointer);
@@ -686,8 +810,8 @@ namespace zSpace
 	
 	ZSPACE_EXTERNAL_INLINE void ext_json_createJson(zExtJSON& extJSON)
 	{
-		extJSON.pointer = new json();// = zExtJSON();
-
+		//extJSON.pointer = new json();// = zExtJSON();
+		extJSON.checkMemAlloc(true);
 		extJSON.updateAttributes();
 
 	}
@@ -802,6 +926,9 @@ namespace zSpace
 		string filePathSt(filePath);
 		try
 		{
+			zStatusCode memoryChk = extJSON.checkMemAlloc(false);
+			if (memoryChk == zMemNotAllocError) return zMemNotAllocError;
+
 			extJSON.ExportJsonFile(filePathSt);
 			return 1;
 		}

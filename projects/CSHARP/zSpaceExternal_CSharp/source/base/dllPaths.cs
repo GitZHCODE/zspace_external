@@ -16,6 +16,7 @@ namespace zSpace
 
 
         public const string tsPath = "zSpace_External.dll";
+        //public const string tsPath = "C:/Users/heba.eiz/source/repos/GitZHCODE/zspace_external/projects/CSHARP/zSpaceExternal_CSharpSandbox/zSpaceExternal_CSharpSandbox/bin/Release/zspace/zSpace_External.dll";
         //public const string tsPath = "zspace/zSpace_External.dll";
         //public const string tsPath = "C:/Users/heba.eiz/source/repos/GitZHCODE/zspace_external/projects/CSHARP/zSpaceExternal_CSharpSandbox/zSpaceExternal_CSharpSandbox/bin/Release/zspace/zSpace_External.dll";
 

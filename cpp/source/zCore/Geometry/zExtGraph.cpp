@@ -312,8 +312,8 @@ namespace zSpace
 	{
 		try
 		{
-			int memoryChk = extGraph.checkMemAlloc(false);
-			if (memoryChk != 1) return memoryChk;
+			zStatusCode memoryChk = extGraph.checkMemAlloc(false);
+			if (memoryChk == zMemNotAllocError) return zMemNotAllocError;
 
 			zFnGraph fn(*extGraph.pointer);
 			std::string str(filePath);
@@ -334,40 +334,41 @@ namespace zSpace
 		}
 	}
 
-	ZSPACE_EXTERNAL_INLINE int ext_graph_fromJSON(zExtJSON& extJson, zExtGraph& outGraph)
+	ZSPACE_EXTERNAL_INLINE zStatusCode ext_graph_fromJSON(zExtJSON& extJson, zExtGraph& outGraph)
 	{
 		try
 		{
-			int memoryChk = extJson.checkMemAlloc(false);
-			if (memoryChk != 1) return memoryChk;
+			zStatusCode memoryChk = extJson.checkMemAlloc(false);
+			if (memoryChk == zMemNotAllocError) return zMemNotAllocError;
 			outGraph.checkMemAlloc();
 			zFnGraph fn(*outGraph.pointer);
 			fn.from(*extJson.pointer);
 			outGraph.updateAttributes();
-			return 1;
+			return zStatusCode::zSuccess;
+
 		}
 		catch (const std::exception&)
 		{
-			return 404;
+			return zStatusCode::zThrowError;
 		}
 	}
 
 
-	ZSPACE_EXTERNAL_INLINE int ext_graph_toJSON(zExtGraph& extGraph, zExtJSON& outJson)
+	ZSPACE_EXTERNAL_INLINE zStatusCode ext_graph_toJSON(zExtGraph& extGraph, zExtJSON& outJson)
 	{
 		try
 		{
-			int memoryChk = extGraph.checkMemAlloc(false);
-			if (memoryChk != 1) return memoryChk;
+			zStatusCode memoryChk = extGraph.checkMemAlloc(false);
+			if (memoryChk == zMemNotAllocError) return zMemNotAllocError;
 			outJson.checkMemAlloc();
 			zFnGraph fn(*extGraph.pointer);
 			fn.to(*outJson.pointer);
 			outJson.updateAttributes();
-			return 1;
+			return zStatusCode::zSuccess;
 		}
 		catch (const std::exception&)
 		{
-			return 404;
+			return zStatusCode::zThrowError;
 		}
 	}
 
@@ -377,8 +378,8 @@ namespace zSpace
 	{
 		try
 		{
-			int memoryChk = extUsd.checkMemAlloc(false);
-			if (memoryChk != 1) return memoryChk;
+			zStatusCode memoryChk = extUsd.checkMemAlloc(false);
+			if (memoryChk == zMemNotAllocError) return zMemNotAllocError;
 			outGraph.checkMemAlloc();
 			zFnGraph fn(*outGraph.pointer);
 			fn.from(*extUsd.pointer);
@@ -396,8 +397,8 @@ namespace zSpace
 	{
 		try
 		{
-			int memoryChk = extGraph.checkMemAlloc(false);
-			if (memoryChk != 1) return memoryChk;
+			zStatusCode memoryChk = extGraph.checkMemAlloc(false);
+			if (memoryChk == zMemNotAllocError) return zMemNotAllocError;
 			extUsd.checkMemAlloc();
 			zFnGraph fn(*extGraph.pointer);
 			fn.to(*extUsd.pointer);
@@ -420,7 +421,7 @@ namespace zSpace
 			extGraph.checkMemAlloc();
 			if (extGraph.vPositions.pointer->size() == 0 || extGraph.ePair.pointer->size() == 0)
 			{
-				printf("\n graph update failed");
+				printf("\n graph update failed %i _ %i", extGraph.vPositions.pointer->size(), extGraph.ePair.pointer->size());
 				return 0;
 			}
 			zFnGraph fnGraph(*extGraph.pointer);
@@ -429,25 +430,32 @@ namespace zSpace
 			printf("\n \n graph update %i %i", extGraph.vPositions.pointer->size(), extGraph.ePair.pointer->size());
 
 			
+			
 
-			if (extGraph.eColors.arrayCount == extGraph.ePair.arrayCount/2)
+			//if (extGraph.eColors.arrayCount == extGraph.ePair.arrayCount/2)
+			printf("\n \n edge color %i %i", extGraph.eColors.arrayCount, fnGraph.numEdges());
+			printf("\n \n vector color %i %i", extGraph.vColors.arrayCount, fnGraph.numVertices());
+
+			if (extGraph.eColors.arrayCount == fnGraph.numEdges())
 			{
-				printf("\n set edge color");
-				fnGraph.setEdgeColors(*extGraph.eColors.pointer, extGraph.vColors.arrayCount == 0);
+				printf("\n set edge color " + extGraph.eColors.arrayCount);
+				//fnGraph.setEdgeColors(*extGraph.eColors.pointer, extGraph.vColors.arrayCount == 0);
+				fnGraph.setEdgeColors(*extGraph.eColors.pointer, false);
 			}
-			if (extGraph.vColors.arrayCount == extGraph.vPositions.arrayCount && extGraph.vColors.arrayCount != 0)
+			if (extGraph.vColors.arrayCount == fnGraph.numVertices() && extGraph.vColors.arrayCount != 0)
 			{
 				printf("\n set vertex color");
 
-				fnGraph.setVertexColors(*extGraph.vColors.pointer, extGraph.eColors.arrayCount == 0);
+				//fnGraph.setVertexColors(*extGraph.vColors.pointer, extGraph.eColors.arrayCount == 0);
+				fnGraph.setVertexColors(*extGraph.vColors.pointer, false);
 			}
 			printf("\n graph update %i %i \n", extGraph.vPositions.pointer->size(), extGraph.ePair.pointer->size());
 
 			extGraph.updateAttributes();
-			zColorArray c;
-			fnGraph.getEdgeColors(c);
+			//zColorArray c;
+			//fnGraph.getEdgeColors(c);
 			//cout << c[0].r << c[0].g << c[0].b << c[0].a << endl;
-			printf("edgeColor %f %f %f %f", c[0].r, c[0].g, c[0].b, c[0].a);
+			//printf("edgeColor %f %f %f %f", c[4].r, c[4].g, c[4].b, c[4].a);
 			//printf("\n %i %i \n", c[0]);
 
 			return 1;

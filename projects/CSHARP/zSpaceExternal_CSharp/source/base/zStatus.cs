@@ -95,15 +95,15 @@ namespace zSpace {
 	#region External methods for array
 	static partial class zNativeMethods {
 		[DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-		[return: MarshalAs(UnmanagedType.Bool)]
+		[return: MarshalAs(UnmanagedType.U1)]
 		public static extern bool ext_status_operator_equal(in zStatus item, in zStatus item2);
 
 		[DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-		[return: MarshalAs(UnmanagedType.Bool)]
+		[return: MarshalAs(UnmanagedType.U1)]
 		public static extern bool ext_status_operator_equalCode(in zStatus item, in zStatusCode code);
 		
 		[DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-		[return: MarshalAs(UnmanagedType.Bool)]
+		[return: MarshalAs(UnmanagedType.U1)]
 		public static extern bool ext_status_getErrorCheck(in zStatus item);
 	}
 

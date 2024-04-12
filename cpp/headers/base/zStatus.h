@@ -36,7 +36,7 @@ namespace zSpace
 	*	\brief	Data types for error handling and returns.
 	*/
 	enum ZSPACE_EXTERNAL zStatusCode {
-		zFail,				///<The operation failed
+		zFail = 300,		///<The operation failed
 		zSuccess, 			///<The operation was successful.
 		zMemAllocSuccess,	///<Memory allocation successful. 
 		zMemNotAllocError,	///<The operation failed due to memory not allocated.

@@ -22,7 +22,36 @@ namespace zSpace{
             }
             return result;
         }
-    
+
+        public static List<T> matchList<T>(List<T> list, int targetSize) {
+            if (list.Count == targetSize) {
+                return list;
+            }
+            List<T> result = new List<T>();
+
+            for (int i = 0; i < targetSize; i++) {
+                result.Add(i < list.Count? list[i] : list[list.Count - 1]);
+                //if (i < list.Count) {
+                //    resutlt.Add(list[i]);
+                //}
+                //else {
+                //    resutlt.Add(list[list.Count - 1]);
+                //}
+            }
+            return result;
+        }
+        public static T[] matchList<T>(T[] list, int targetSize) {
+            if (list.Length == targetSize) {
+                return list;
+            }
+            var result = new T[targetSize];
+            for (int i = 0; i < targetSize; i++) {
+                result[i] = i < list.Length ? list[i] : list[list.Length - 1];
+            }
+            return result;
+        }
+
+
 
     }
 }

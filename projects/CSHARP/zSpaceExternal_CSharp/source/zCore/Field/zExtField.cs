@@ -446,8 +446,8 @@ namespace zSpace {
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         public static extern int ext_meshField_createMeshScalarField(ref zExtMeshScalarField extField, in zExtPoint minBB, in zExtPoint maxBB, int resX, int resY, int numNeighbors,
-            [MarshalAs(UnmanagedType.Bool)] bool setValuesperVertex,
-            [MarshalAs(UnmanagedType.Bool)] bool triMesh);
+            [MarshalAs(UnmanagedType.U1)] bool setValuesperVertex,
+            [MarshalAs(UnmanagedType.U1)] bool triMesh);
 
         //		ZSPACE_EXTERNAL int ext_meshField_setFieldValues(zExtMeshScalarField& extField, zExtFloatArray& fValues);
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
@@ -463,23 +463,23 @@ namespace zSpace {
 
         //ZSPACE_EXTERNAL int ext_meshField_getScalarsAsVertexDistance_1(zExtMeshScalarField& extField, zExtFloatArray& outExtScalars, zExtPointArray& inPositions, float offset, bool normalise = true);
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int ext_meshField_getScalarsAsVertexDistance_1(ref zExtMeshScalarField extField, out zExtFloatArray outExtScalars, in zExtPointArray inPositions, float offset, [MarshalAs(UnmanagedType.Bool)] bool normalise);
+        public static extern int ext_meshField_getScalarsAsVertexDistance_1(ref zExtMeshScalarField extField, out zExtFloatArray outExtScalars, in zExtPointArray inPositions, float offset, [MarshalAs(UnmanagedType.U1)] bool normalise);
 
         //ZSPACE_EXTERNAL int ext_meshField_getScalarsAsVertexDistance_4(zExtMeshScalarField& extField, zExtFloatArray& outExtScalars, zExtMesh& inMeshObj, float offset, bool normalise = true);
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int ext_meshField_getScalarsAsVertexDistance_4(ref zExtMeshScalarField extField, out zExtFloatArray outExtScalars, in zExtMesh inMeshObj, float offset, [MarshalAs(UnmanagedType.Bool)] bool normalise);
+        public static extern int ext_meshField_getScalarsAsVertexDistance_4(ref zExtMeshScalarField extField, out zExtFloatArray outExtScalars, in zExtMesh inMeshObj, float offset, [MarshalAs(UnmanagedType.U1)] bool normalise);
 
         //ZSPACE_EXTERNAL int ext_meshField_getScalarsAsVertexDistance_5(zExtMeshScalarField& extField, zExtFloatArray& outExtScalars, zExtGraph& inGraphObj, float offset, bool normalise = true);
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int ext_meshField_getScalarsAsVertexDistance_5(ref zExtMeshScalarField extField, out zExtFloatArray outExtScalars, in zExtGraph inGraphObj, float offset, [MarshalAs(UnmanagedType.Bool)] bool normalise);
+        public static extern int ext_meshField_getScalarsAsVertexDistance_5(ref zExtMeshScalarField extField, out zExtFloatArray outExtScalars, in zExtGraph inGraphObj, float offset, [MarshalAs(UnmanagedType.U1)] bool normalise);
 
         //ZSPACE_EXTERNAL int ext_meshField_getScalarsAsEdgeDistance_0(zExtMeshScalarField& extField, zExtFloatArray& outExtScalars, zExtMesh& inMeshObj, float offset, bool normalise = true);
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int ext_meshField_getScalarsAsEdgeDistance_0(ref zExtMeshScalarField extField, out zExtFloatArray outExtScalars, in zExtMesh inMeshObj, float offset, [MarshalAs(UnmanagedType.Bool)] bool normalise);
+        public static extern int ext_meshField_getScalarsAsEdgeDistance_0(ref zExtMeshScalarField extField, out zExtFloatArray outExtScalars, in zExtMesh inMeshObj, float offset, [MarshalAs(UnmanagedType.U1)] bool normalise);
 
         //ZSPACE_EXTERNAL int ext_meshField_getScalarsAsEdgeDistance_1(zExtMeshScalarField& extField, zExtFloatArray& outExtScalars, zExtGraph& inGraphObj, float offset, bool normalise = true);
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int ext_meshField_getScalarsAsEdgeDistance_1(ref zExtMeshScalarField extField, out zExtFloatArray outExtScalars, in zExtGraph inGraphObj, float offset, [MarshalAs(UnmanagedType.Bool)] bool normalise);
+        public static extern int ext_meshField_getScalarsAsEdgeDistance_1(ref zExtMeshScalarField extField, out zExtFloatArray outExtScalars, in zExtGraph inGraphObj, float offset, [MarshalAs(UnmanagedType.U1)] bool normalise);
 
 
 
@@ -490,35 +490,35 @@ namespace zSpace {
 
         //ZSPACE_EXTERNAL int ext_meshField_getScalars_Polygon	(zExtMeshScalarField& extField, zExtFloatArray& outExtScalars, zExtGraph& inGraphObj, bool normalise = true);
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int ext_meshField_getScalars_Polygon(ref zExtMeshScalarField extField, out zExtFloatArray outExtScalars, in zExtGraph inGraphObj, [MarshalAs(UnmanagedType.Bool)] bool normalise);
+        public static extern int ext_meshField_getScalars_Polygon(ref zExtMeshScalarField extField, out zExtFloatArray outExtScalars, in zExtGraph inGraphObj, [MarshalAs(UnmanagedType.U1)] bool normalise);
 
 
         //ZSPACE_EXTERNAL int ext_meshField_getScalars_Circle		(zExtMeshScalarField& extField, zExtFloatArray& outExtScalars, zVector& cen, float r, double annularVal = 0, bool normalise = true);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int ext_meshField_getScalars_Circle(ref zExtMeshScalarField extField, out zExtFloatArray outExtScalars, in zExtPoint cen, float r, double annularVal, [MarshalAs(UnmanagedType.Bool)] bool normalise);
+        public static extern int ext_meshField_getScalars_Circle(ref zExtMeshScalarField extField, out zExtFloatArray outExtScalars, in zExtPoint cen, float r, double annularVal, [MarshalAs(UnmanagedType.U1)] bool normalise);
 
         //ZSPACE_EXTERNAL int ext_meshField_getScalars_Ellipse	(zExtMeshScalarField& extField, zExtFloatArray& outExtScalars, zVector& cen, float a, float b, double annularVal = 0, bool normalise = true);
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int ext_meshField_getScalars_Ellipse(ref zExtMeshScalarField extField, out zExtFloatArray outExtScalars, in zExtPoint cen, float a, float b, double annularVal, [MarshalAs(UnmanagedType.Bool)] bool normalise);
+        public static extern int ext_meshField_getScalars_Ellipse(ref zExtMeshScalarField extField, out zExtFloatArray outExtScalars, in zExtPoint cen, float a, float b, double annularVal, [MarshalAs(UnmanagedType.U1)] bool normalise);
 
         //ZSPACE_EXTERNAL int ext_meshField_getScalars_Line		(zExtMeshScalarField& extField, zExtFloatArray& outExtScalars, zVector& v0, zVector& v1, double annularVal = 0, bool normalise = true);
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int ext_meshField_getScalars_Line(ref zExtMeshScalarField extField, out zExtFloatArray outExtScalars, in zExtPoint v0, in zExtPoint v1, double annularVal, [MarshalAs(UnmanagedType.Bool)] bool normalise);
+        public static extern int ext_meshField_getScalars_Line(ref zExtMeshScalarField extField, out zExtFloatArray outExtScalars, in zExtPoint v0, in zExtPoint v1, double annularVal, [MarshalAs(UnmanagedType.U1)] bool normalise);
 
         //ZSPACE_EXTERNAL int ext_meshField_getScalars_Triangle	(zExtMeshScalarField& extField, zExtFloatArray& outExtScalars, zPoint& p0, zPoint& p1, zPoint& p2, double annularVal = 0, bool normalise = true);
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int ext_meshField_getScalars_Triangle(ref zExtMeshScalarField extField, out zExtFloatArray outExtScalars, in zExtPoint p0, in zExtPoint p1, in zExtPoint p2, double annularVal, [MarshalAs(UnmanagedType.Bool)] bool normalise);
+        public static extern int ext_meshField_getScalars_Triangle(ref zExtMeshScalarField extField, out zExtFloatArray outExtScalars, in zExtPoint p0, in zExtPoint p1, in zExtPoint p2, double annularVal, [MarshalAs(UnmanagedType.U1)] bool normalise);
 
 
         //ZSPACE_EXTERNAL int ext_meshField_getScalars_Square		(zExtMeshScalarField& extField, zExtFloatArray& outExtScalars, zVector& cen, zVector& dimensions, float annularVal = 0, bool normalise = true);
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int ext_meshField_getScalars_Square(ref zExtMeshScalarField extField, out zExtFloatArray outExtScalars, in zExtPoint cen, in zExtPoint dimensions, float annularVal, [MarshalAs(UnmanagedType.Bool)] bool normalise);
+        public static extern int ext_meshField_getScalars_Square(ref zExtMeshScalarField extField, out zExtFloatArray outExtScalars, in zExtPoint cen, in zExtPoint dimensions, float annularVal, [MarshalAs(UnmanagedType.U1)] bool normalise);
 
 
         //ZSPACE_EXTERNAL int ext_meshField_getScalars_Trapezoid	(zExtMeshScalarField& extField, zExtFloatArray& outExtScalars, float r1, float r2, float he, float annularVal = 0, bool normalise = true);
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int ext_meshField_getScalars_Trapezoid(ref zExtMeshScalarField extField, out zExtFloatArray outExtScalars, float r1, float r2, float he, float annularVal, [MarshalAs(UnmanagedType.Bool)] bool normalise);
+        public static extern int ext_meshField_getScalars_Trapezoid(ref zExtMeshScalarField extField, out zExtFloatArray outExtScalars, float r1, float r2, float he, float annularVal, [MarshalAs(UnmanagedType.U1)] bool normalise);
 
 
         //ZSPACE_EXTERNAL int ext_meshField_smoothField							(zExtMeshScalarField& extField, zExtFloatArray& outExtScalars, int numSmooth, double diffuseDamp = 1.0, int type = 0);
@@ -539,19 +539,19 @@ namespace zSpace {
 
         //ZSPACE_EXTERNAL int ext_meshField_boolean_union(zExtMeshScalarField& extField, zExtFloatArray& scalars0, zExtFloatArray& scalars1, zExtFloatArray& scalarsResult, bool normalise = true);
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int ext_meshField_boolean_union(ref zExtMeshScalarField extField, in zExtFloatArray scalars0, in zExtFloatArray scalars1, out zExtFloatArray scalarsResult, [MarshalAs(UnmanagedType.Bool)] bool normalise);
+        public static extern int ext_meshField_boolean_union(ref zExtMeshScalarField extField, in zExtFloatArray scalars0, in zExtFloatArray scalars1, out zExtFloatArray scalarsResult, [MarshalAs(UnmanagedType.U1)] bool normalise);
 
 
 
         //ZSPACE_EXTERNAL int ext_meshField_boolean_subtract(zExtMeshScalarField& extField, zExtFloatArray& fieldValues_A, zExtFloatArray& fieldValues_B, zExtFloatArray& fieldValues_Result, bool normalise = true);
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int ext_meshField_boolean_subtract(ref zExtMeshScalarField extField, in zExtFloatArray fieldValues_A, in zExtFloatArray fieldValues_B, out zExtFloatArray fieldValues_Result, [MarshalAs(UnmanagedType.Bool)] bool normalise);
+        public static extern int ext_meshField_boolean_subtract(ref zExtMeshScalarField extField, in zExtFloatArray fieldValues_A, in zExtFloatArray fieldValues_B, out zExtFloatArray fieldValues_Result, [MarshalAs(UnmanagedType.U1)] bool normalise);
 
 
 
         //      ZSPACE_EXTERNAL int ext_meshField_boolean_intersect(zExtMeshScalarField& extField, zExtFloatArray& fieldValues_A, zExtFloatArray& fieldValues_B, zExtFloatArray& fieldValues_Result, bool normalise = true);
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int ext_meshField_boolean_intersect(ref zExtMeshScalarField extField, in zExtFloatArray fieldValues_A, in zExtFloatArray fieldValues_B, out zExtFloatArray fieldValues_Result, [MarshalAs(UnmanagedType.Bool)] bool normalise);
+        public static extern int ext_meshField_boolean_intersect(ref zExtMeshScalarField extField, in zExtFloatArray fieldValues_A, in zExtFloatArray fieldValues_B, out zExtFloatArray fieldValues_Result, [MarshalAs(UnmanagedType.U1)] bool normalise);
         
 
 
@@ -569,7 +569,7 @@ namespace zSpace {
         /// <param name="normalise">true if the scalars need to mapped between -1 and 1. generally used for contouring.</param>
         /// <returns>return 1 if the method is executed successfully, 0 otherwise.</returns>
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int ext_meshField_boolean_difference(ref zExtMeshScalarField extField, in zExtFloatArray fieldValues_A, in zExtFloatArray fieldValues_B, out zExtFloatArray fieldValues_Result, [MarshalAs(UnmanagedType.Bool)] bool normalise);
+        public static extern int ext_meshField_boolean_difference(ref zExtMeshScalarField extField, in zExtFloatArray fieldValues_A, in zExtFloatArray fieldValues_B, out zExtFloatArray fieldValues_Result, [MarshalAs(UnmanagedType.U1)] bool normalise);
 
 
 
@@ -645,7 +645,7 @@ namespace zSpace {
 
         //ZSPACE_EXTERNAL int ext_meshField_getIsolineMesh(zExtMeshScalarField& extField, zExtMesh& outCoutourMeshObj, float inThreshold = 0.5, bool invertMesh = false);
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int ext_meshField_getIsolineMesh(ref zExtMeshScalarField extField, out zExtMesh outCoutourMeshObj, float inThreshold, [MarshalAs(UnmanagedType.Bool)] bool invertMesh);
+        public static extern int ext_meshField_getIsolineMesh(ref zExtMeshScalarField extField, out zExtMesh outCoutourMeshObj, float inThreshold, [MarshalAs(UnmanagedType.U1)] bool invertMesh);
 
 
         //ZSPACE_EXTERNAL int ext_meshField_getIsobandMesh(zExtMeshScalarField& extField, zExtMesh& outCoutourMeshObj, float inThresholdLow = 0.2, float inThresholdHigh = 0.5);

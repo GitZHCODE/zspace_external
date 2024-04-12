@@ -123,7 +123,7 @@ namespace zSpace {
         /// Get the number of vertices of mesh
         /// </summary>
         /// <returns></returns>
-        public int getVCount() {
+        public int getVertexCount() {
             return vCount;
         }
         /// <summary>
@@ -524,19 +524,19 @@ namespace zSpace {
         internal static extern zStatusCode ext_mesh_getMeshPolygonDate(ref zExtMesh objMesh, out zExtIntArray pCount, out zExtIntArray pConnect);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern zStatusCode ext_mesh_smoothMesh(ref zExtMesh objMesh, int level, [MarshalAs(UnmanagedType.Bool)] bool smoothCorner, in zExtIntArray fixedVerts, [MarshalAs(UnmanagedType.Bool)] bool smoothFixedEdges);
+        internal static extern zStatusCode ext_mesh_smoothMesh(ref zExtMesh objMesh, int level, [MarshalAs(UnmanagedType.U1)] bool smoothCorner, in zExtIntArray fixedVerts, [MarshalAs(UnmanagedType.U1)] bool smoothFixedEdges);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern zStatusCode ext_mesh_smoothMesh1D(ref zExtMesh objMesh, int level, [MarshalAs(UnmanagedType.Bool)] bool smoothCorner, [MarshalAs(UnmanagedType.Bool)] bool flip, in zExtIntArray fixedVerts);
+        internal static extern zStatusCode ext_mesh_smoothMesh1D(ref zExtMesh objMesh, int level, [MarshalAs(UnmanagedType.U1)] bool smoothCorner, [MarshalAs(UnmanagedType.U1)] bool flip, in zExtIntArray fixedVerts);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern zStatusCode ext_mesh_getPlanarityDeviationPerFace(ref zExtMesh objMesh, ref zExtDoubleArray outPlanarityDevs, int type, [MarshalAs(UnmanagedType.Bool)] bool colorFaces, double tolerance);
+        internal static extern zStatusCode ext_mesh_getPlanarityDeviationPerFace(ref zExtMesh objMesh, ref zExtDoubleArray outPlanarityDevs, int type, [MarshalAs(UnmanagedType.U1)] bool colorFaces, double tolerance);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         internal static extern zStatusCode ext_mesh_getGaussianCurvature(ref zExtMesh objMesh, ref zExtDoubleArray outGaussianCurvature);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern zStatusCode ext_mesh_checkPlanarity(ref zExtMesh objMesh, float tolerance, int planarityType, [MarshalAs(UnmanagedType.Bool)] bool colorFaces, ref zExtDoubleArray outDeviations);
+        internal static extern zStatusCode ext_mesh_checkPlanarity(ref zExtMesh objMesh, float tolerance, int planarityType, [MarshalAs(UnmanagedType.U1)] bool colorFaces, ref zExtDoubleArray outDeviations);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         internal static extern zStatusCode ext_mesh_getFaceColor(ref zExtMesh objMesh, ref zExtColorArray extPointArray);

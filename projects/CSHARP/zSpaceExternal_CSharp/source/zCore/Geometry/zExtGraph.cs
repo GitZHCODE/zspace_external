@@ -29,7 +29,7 @@ namespace zSpace {
         /// <param name="vColors">An array of vertex colors.</param>
         /// <param name="ePairs">An array of edge pairs.</param>
         /// <param name="eColors">An array of edge colors.</param>
-        public zExtGraph(zExtPoint[] vPositions, Color[] vColors, int[] ePairs, Color[] eColors) {
+        private zExtGraph(zExtPoint[] vPositions, Color[] vColors, int[] ePairs, Color[] eColors) {
             _ptr = new IntPtr();
             this.vCount = vPositions.Length;
             this.eCount = ePairs.Length;
@@ -46,18 +46,38 @@ namespace zSpace {
         /// <param name="vPositions">An array of vertex positions.</param>
         /// <param name="ePairs">An array of edge pairs.</param>
         /// 
-        public zExtGraph(zExtPoint[] vPositions, int[] ePairs, Color[] eColors = null) {
+        public zExtGraph(zExtPoint[] vPositions, int[] ePairs, Color[] eColors = null, Color[] vColors = null) {
             _ptr = new IntPtr();
             this.vCount = vPositions.Length;
-            this.eCount = ePairs.Length;
+            this.eCount = ePairs.Length/2;
             this.vPositions = new zExtPointArray(vPositions);
             this.ePair = new zExtIntArray(ePairs);
-            //this.eColors = eColors==null? new zExtColorArray(): new zExtColorArray(eColors);
-            Console.WriteLine(string.Format("\n \n zExtGraphcolors is null {0} \n \n", eColors == null));
-            this.eColors = eColors==null? new zExtColorArray(): new zExtColorArray(eColors);
 
-            this.vColors = new zExtColorArray();
-            //Console.WriteLine(string.Format("\n \n zExtGraph before ext_graph_updateGraph to {0} {1} \n \n", vPositions.Length, this.eColors.getItems()[0]));
+            
+
+            //if (eColors != null && eColors.Length > 0) {
+
+            //    var eC = zSpaceUtil.matchList(eColors, this.eCount);
+            //    var eV = zSpaceUtil.matchList(vColors, this.vCount);
+
+            //    //for (int i = 0; i < eC.Length; i++) {
+            //    //    eC[i] = Color.BlueViolet;
+            //    //    Color colorLast = eColors[eColors.Length - 1];
+            //    //    eC[i] = i < eColors.Length ? eColors[i] : eColors[eColors.Length - 1];
+            //    //}
+            //}
+            
+
+            //Console.WriteLine("\n constructor eC " + eC.Length + "_" + this.eCount);
+
+            //Console.WriteLine("\n constructor " + eColors[0].ToKnownColor().ToString());
+            //Console.WriteLine("\n constructor " + eC[0].ToKnownColor().ToString());
+
+            this.eColors = eColors!=null && eColors.Length > 0? new zExtColorArray(zSpaceUtil.matchList(eColors, this.eCount)) : new zExtColorArray();
+            this.vColors = vColors!=null && vColors.Length > 0? new zExtColorArray(zSpaceUtil.matchList(vColors, this.vCount)) : new zExtColorArray();
+
+            //this.eColors = eColors==null? new zExtColorArray(): new zExtColorArray(eColors);
+            //this.vColors = vColors==null? new zExtColorArray(): new zExtColorArray(vColors);
             zNativeMethods.ext_graph_updateGraph(ref this);
         }
 
@@ -123,7 +143,7 @@ namespace zSpace {
 
 
 #if RHINO_CSHARP
-        public zExtGraph(Line[] lines, System.Drawing.Color[] eColors = null) {
+        public zExtGraph(Line[] lines, System.Drawing.Color[] eColors = null, System.Drawing.Color[] vColors = null) {
             this._ptr = new IntPtr();
             this.vCount = 0;
             this.eCount = 0;
@@ -179,7 +199,7 @@ namespace zSpace {
                 var extPts = PointUtil.toExtPoint(vrts.ToArray());
                 //var extEdges = new zExtIntArray();
                 //extEdges.setItems(edges);
-                this = new zExtGraph(extPts, edges, eColors);
+                this = new zExtGraph(extPts, edges, eColors, vColors);
                 //zNativeMethods.ext_graph_updateGraph(ref this);
             }
             catch (Exception) {
@@ -188,7 +208,13 @@ namespace zSpace {
             }
 
         }
+
+
+
 #endif
+        public bool isValid() {
+            return !(_ptr == IntPtr.Zero || vCount == 0);
+        }
 
         /// <summary>
         /// Creates a duplicate of the current mesh .
@@ -266,17 +292,17 @@ namespace zSpace {
             zNativeMethods.ext_graph_updateGraph(ref this);
         }
       
-        public bool to(string path) {
-            return zNativeMethods.ext_graph_to(ref this, path) == 1;
+        public int to(string path) {
+            return zNativeMethods.ext_graph_to(ref this, path);// == 1;
         }
         public bool from(string path) {
             return zNativeMethods.ext_graph_from(path, ref this) == 1;
         }
-        private bool from(ref zExtJSON json) {
-            return zNativeMethods.ext_graph_fromJSON(ref json, ref this) == 1;
+        public zStatusCode from(ref zExtJSON json) {
+            return zNativeMethods.ext_graph_fromJSON(ref json, ref this);
         }
-        private bool to(ref zExtJSON json) {
-            return zNativeMethods.ext_graph_toJSON(ref this, ref json) == 1;
+        public zStatusCode to(ref zExtJSON json) {
+            return zNativeMethods.ext_graph_toJSON(ref this, ref json);
         }
 
 #if RHINO_CSHARP
@@ -340,62 +366,89 @@ namespace zSpace {
 
 
 
-        public bool from(Line[] lines, System.Drawing.Color[] eColors = null) {
+        public zStatusCode from(Line[] lines, System.Drawing.Color[] eColors = null) {
             try {
+                this = new zExtGraph(lines,eColors);
+                return zStatusCode.zSuccess;
 
-                List<Point3d> vrts = new List<Point3d>();
-                var edges = new int[lines.Length * 2];
-                double tolerance = 0.0000001;
-                for (int i = 0; i < lines.Length; i++) {
-                    Point3d start = lines[i].From;
-                    Point3d end = lines[i].To;
-                    int startId = -1; int endId = -1;
-
-
-                    for (int j = 0; j < vrts.Count; j++) {
-
-                        Point3d p1 = vrts[j];
-                        Point3d p2 = start;
-                        bool chk = Math.Abs(p1.X - p2.X) < tolerance && Math.Abs(p1.Y - p2.Y) < tolerance && Math.Abs(p1.Z - p2.Z) < tolerance;
-
-                        if (chk) {
-                            startId = j;
-                            break;
-                        }
-                    }
-                    if (startId == -1) {
-                        vrts.Add(start);
-                        startId = vrts.Count - 1;
-                    }
-
-                    for (int k = 0; k < vrts.Count; k++) {
-                        Point3d p1 = vrts[k];
-                        Point3d p2 = end;
-                        bool chk = Math.Abs(p1.X - p2.X) < tolerance && Math.Abs(p1.Y - p2.Y) < tolerance && Math.Abs(p1.Z - p2.Z) < tolerance;
-
-                        if (chk) {
-                            endId = k;
-                            break;
-                        }
-                    }
-                    if (endId == -1) {
-                        vrts.Add(end);
-                        endId = vrts.Count - 1;
-                    }
-                }
-                Console.WriteLine(string.Format("\n zExtGraph to {0} {1}", vrts.Count, edges.Length));
-                var extPts = PointUtil.toExtPoint(vrts.ToArray());
-                //var extEdges = new zExtIntArray();
-                //extEdges.setItems(edges);
-                this = new zExtGraph(extPts, edges, eColors);
-                return true;
             }
             catch (Exception) {
-                return false;
-                //throw;
+                return zStatusCode.zThrowError;
+                throw;
             }
+
+            //try {
+
+            //    List<Point3d> vrts = new List<Point3d>();
+            //    var edges = new int[lines.Length * 2];
+            //    double tolerance = 0.0000001;
+            //    for (int i = 0; i < lines.Length; i++) {
+            //        Point3d start = lines[i].From;
+            //        Point3d end = lines[i].To;
+            //        int startId = -1; int endId = -1;
+
+
+            //        for (int j = 0; j < vrts.Count; j++) {
+
+            //            Point3d p1 = vrts[j];
+            //            Point3d p2 = start;
+            //            bool chk = Math.Abs(p1.X - p2.X) < tolerance && Math.Abs(p1.Y - p2.Y) < tolerance && Math.Abs(p1.Z - p2.Z) < tolerance;
+
+            //            if (chk) {
+            //                startId = j;
+            //                break;
+            //            }
+            //        }
+            //        if (startId == -1) {
+            //            vrts.Add(start);
+            //            startId = vrts.Count - 1;
+            //        }
+
+            //        for (int k = 0; k < vrts.Count; k++) {
+            //            Point3d p1 = vrts[k];
+            //            Point3d p2 = end;
+            //            bool chk = Math.Abs(p1.X - p2.X) < tolerance && Math.Abs(p1.Y - p2.Y) < tolerance && Math.Abs(p1.Z - p2.Z) < tolerance;
+
+            //            if (chk) {
+            //                endId = k;
+            //                break;
+            //            }
+            //        }
+            //        if (endId == -1) {
+            //            vrts.Add(end);
+            //            endId = vrts.Count - 1;
+            //        }
+            //    }
+            //    Console.WriteLine(string.Format("\n zExtGraph to {0} {1}", vrts.Count, edges.Length));
+            //    var extPts = PointUtil.toExtPoint(vrts.ToArray());
+            //    //var extEdges = new zExtIntArray();
+            //    //extEdges.setItems(edges);
+            //    this = new zExtGraph(extPts, edges, eColors);
+            //    return zStatusCode.zSuccess; ;
+            //}
+            //catch (Exception) {
+            //    return zStatusCode.zThrowError;
+            //    //throw;
+            //}
             
         }
+
+        public zStatusCode to(out Line[] lines) {
+            lines = new Line[this.getEdgeCount()];
+            try {
+                var pts = PointUtil.toRhinoPoint(this.getVertexPositions().getItems());
+                var edges = this.getEdgePairs();
+                for (int i = 0; i < lines.Length; i++) {
+                    lines[i] = new Line(pts[edges[i * 2]], pts[edges[i * 2 + 1]]);
+                }
+                return zStatusCode.zSuccess;
+            }
+            catch (Exception) {
+                return zStatusCode.zThrowError;
+            }
+
+        }
+
         //private bool tox(Line[] lines) {
         //    try {
 
@@ -407,7 +460,7 @@ namespace zSpace {
         //            Point3d end = lines[i].To;
         //            int startId, endId;
         //            if (!vrts.Contains(start)) {
-                        
+
         //                vrts.Add(start);
         //                startId = vrts.Count - 1;
         //            }
@@ -443,7 +496,7 @@ namespace zSpace {
         //        return false;
         //        throw;
         //    }
-            
+
         //}
 
 
@@ -515,11 +568,11 @@ namespace zSpace {
 
         //ZSPACE_EXTERNAL int ext_graph_fromJSON(zExtJSON& json, zExtGraph& outGraph);
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int ext_graph_fromJSON(ref zExtJSON json, ref zExtGraph outGraph);
+        internal static extern zStatusCode ext_graph_fromJSON(ref zExtJSON json, ref zExtGraph outGraph);
 
         //ZSPACE_EXTERNAL int ext_graph_toJSON(zExtGraph& graph, zExtJSON& outJSON);
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int ext_graph_toJSON(ref zExtGraph graph, ref zExtJSON outJSON);
+        internal static extern zStatusCode ext_graph_toJSON(ref zExtGraph graph, ref zExtJSON outJSON);
 
 
         //ZSPACE_EXTERNAL void ext_graph_getGraphData(zExtGraph extGraph, float* vPositions, float* vColors, int* ePairs, float* eColors);

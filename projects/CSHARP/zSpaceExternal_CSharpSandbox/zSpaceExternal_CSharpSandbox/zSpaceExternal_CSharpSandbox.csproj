@@ -131,7 +131,9 @@
   <Import Project="..\..\..\..\packages\Grasshopper.7.0.20314.3001\build\Grasshopper.targets" Condition="Exists('..\..\..\..\packages\Grasshopper.7.0.20314.3001\build\Grasshopper.targets')" />
   <Import Project="..\..\..\..\packages\RhinoWindows.7.0.20314.3001\build\RhinoWindows.targets" Condition="Exists('..\..\..\..\packages\RhinoWindows.7.0.20314.3001\build\RhinoWindows.targets')" />
   <PropertyGroup>
-    <PreBuildEvent>xcopy "$(SolutionDir)cpp\compiled\dll\*.dll" "$(TargetDir)"  /E /Y
-xcopy "$(SolutionDir)cpp\compiled\dll\*.lib" "$(TargetDir)"  /E /Y</PreBuildEvent>
+    <PreBuildEvent>REM xcopy "$(SolutionDir)cpp\compiled\dll\*.dll" "$(TargetDir)"  /E /Y
+REM xcopy "$(SolutionDir)cpp\compiled\dll\*.lib" "$(TargetDir)"  /E /Y
+xcopy "$(SolutionDir)projects\CSHARP\zSpaceExternal_CSharp\compiled\dll\Release\*.dll" "$(TargetDir)"  /E /Y
+xcopy "$(SolutionDir)projects\CSHARP\zSpaceExternal_CSharp\compiled\dll\Release\*.lib" "$(TargetDir)"  /E /Y</PreBuildEvent>
   </PropertyGroup>
 </Project>

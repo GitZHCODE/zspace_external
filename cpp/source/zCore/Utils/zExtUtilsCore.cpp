@@ -29,7 +29,8 @@ namespace zSpace
 	ZSPACE_EXTERNAL_INLINE zExtIntArray::zExtIntArray()
 	{
 		//delete pointer;
-		pointer = new zIntArray();
+		checkMemAlloc(true);
+
 		updateAttributes();
 	}
 	ZSPACE_EXTERNAL_INLINE zExtIntArray::zExtIntArray(zIntArray a)
@@ -194,9 +195,9 @@ namespace zSpace
 	}
 	ZSPACE_EXTERNAL_INLINE zExtFloatArray::zExtFloatArray(zFloatArray a)
 	{
-		//delete pointer;
-		//pointer = new zFloatArray(a);
-		checkMemAlloc();
+		delete pointer;
+		pointer = new zFloatArray(a);
+		//checkMemAlloc();
 
 		updateAttributes();
 	}
@@ -434,7 +435,8 @@ namespace zSpace
 	ZSPACE_EXTERNAL_INLINE zExtDoubleArray2D::zExtDoubleArray2D()
 	{
 		//delete pointer;
-		pointer = new vector<zDoubleArray>();
+		checkMemAlloc(true);
+		//pointer = new vector<zDoubleArray>();
 		updateAttributes();
 	}
 	ZSPACE_EXTERNAL_INLINE zExtDoubleArray2D::zExtDoubleArray2D(vector<zDoubleArray> a)
