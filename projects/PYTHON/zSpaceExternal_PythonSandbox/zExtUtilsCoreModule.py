@@ -165,7 +165,7 @@ class zExtStringArray(ctypes.Structure):
         return items
 
     def setItems(self, input):
-        ext_string_setItemsFromArray(ctypes.byref(self), input, len(input))
+        ext_string_array_setItems(ctypes.byref(self), input, len(input))
 
     def getArrayCount(self):
         return self.arrayCount
@@ -189,7 +189,7 @@ class zExtStringArray2D(ctypes.Structure):
         temp = (zExtStringArray * len(input))()
         for i in range(len(input)):
             temp[i].setItems(input[i])
-        ext_string_setItemsFromArray2D(ctypes.byref(self), temp, len(input))
+        ext_string_array_setItems2D(ctypes.byref(self), temp, len(input))
 
     def getArrayCount(self):
         return self.arrayCount
@@ -364,10 +364,10 @@ ext_string_getItemsFromArray.argtypes = [
     zExtStringArray,
     ctypes.POINTER(zExtString)
 ]
-ext_string_setItemsFromArray = DLLFile.ext_string_setItemsFromArray
-ext_string_setItemsFromArray.restype = None
+ext_string_array_setItems = DLLFile.ext_string_array_setItems
+ext_string_array_setItems.restype = None
 
-ext_string_setItemsFromArray.argtypes = [
+ext_string_array_setItems.argtypes = [
     zExtStringArray,
     ctypes.POINTER(zExtString),
     ctypes.c_int
@@ -391,9 +391,9 @@ ext_string_getItemsFromArray2D.argtypes = [
 ]
 
 
-ext_string_setItemsFromArray2D = DLLFile.ext_string_setItemsFromArray2D
-ext_string_setItemsFromArray2D.restype = None
-ext_string_setItemsFromArray2D.argtypes = [
+ext_string_array_setItems2D = DLLFile.ext_string_array_setItems2D
+ext_string_array_setItems2D.restype = None
+ext_string_array_setItems2D.argtypes = [
     zExtStringArray2D,
     ctypes.POINTER(zExtStringArray),
     ctypes.c_int

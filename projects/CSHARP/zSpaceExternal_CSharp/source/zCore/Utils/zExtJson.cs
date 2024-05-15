@@ -616,6 +616,7 @@ namespace zSpace {
         /// <param name="attributeValue">The value of the attribute to be written.</param>
         /// <returns>True if the attribute is successfully written, otherwise false.</returns>
         public bool WriteJSONAttribute<T>(string attributeKey, T attributeValue) {
+            Console.WriteLine("\n writeJSON " + typeof(T).Name);
             switch (typeof(T).Name) {
                 case nameof(Int32):
                 case nameof(Int64):
@@ -663,7 +664,11 @@ namespace zSpace {
                     int doubleArray2DSuccess = zNativeMethods.ext_json_writeJSONAttributeDoubleArray2D(ref this, attributeKey, doubleArray2DOutput);
                     return doubleArray2DSuccess == 1;
                 case nameof(String):
+                    //string stringValue = Convert.ToString(attributeValue);
                     string stringValue = Convert.ToString(attributeValue);
+                    Console.WriteLine("\n c# string " + stringValue);
+                    //zExtString stringValue = new zExtString();
+                    //stringValue.setString(Convert.ToString(attributeValue));
                     int stringSuccess = zNativeMethods.ext_json_writeJSONAttributeString(ref this, attributeKey, stringValue);
                     return stringSuccess == 1;
                 case nameof(String) + "[]":
@@ -1063,6 +1068,12 @@ namespace zSpace {
             ref zExtJSON extJSON,
             [MarshalAs(UnmanagedType.LPStr)] string attributeKey,
             [MarshalAs(UnmanagedType.LPStr)] string inAttributeValue);
+
+        //[DllImport(path, CallingConvention = CallingConvention.Cdecl)]
+        //public static extern int ext_json_writeJSONAttributeString(
+        //    ref zExtJSON extJSON,
+        //    [MarshalAs(UnmanagedType.LPStr)] string attributeKey,
+        //     zExtString inAttributeValue);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         public static extern int ext_json_writeJSONAttributeStringArray(

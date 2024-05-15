@@ -1545,9 +1545,9 @@ namespace zSpace
 				//std::format("\n Error Adding colors Mesh! not equal colors and vertices: colors {} | vertex {}", vertexColors.arrayCount, fnMesh.numVertices());
 				return zFail;
 			}
-			fnMesh.setVertexColors(*vertexColors.pointer, true);
-			zColorArray c;
-			fnMesh.getVertexColors(c);
+			fnMesh.setVertexColors(*vertexColors.pointer, false);
+			//zColorArray c;
+			//fnMesh.getVertexColors(c);
 
 			/*for (int i = 0; i < c.size(); i++)
 			{
@@ -1555,6 +1555,30 @@ namespace zSpace
 				printf(" \n mesh set colors output	r %f g %f b %f", c.at(i).r, c.at(i).g, c.at(i).b);
 
 			}*/
+			extMesh.updateAttributes();
+		}
+		catch (const std::exception&)
+		{
+			printf("\n Error Adding colors Mesh!!!");
+			return zThrowError;
+		}
+		return zSuccess;
+	}
+
+	ZSPACE_EXTERNAL_INLINE zStatusCode ext_mesh_setMeshFaceColors(zExtMesh& extMesh, zExtColorArray& faceColors)
+	{
+		try
+		{
+			zStatus memoryChk = extMesh.checkMemAlloc(false);
+			if (memoryChk == zMemNotAllocError) return zMemNotAllocError;
+			zFnMesh fnMesh(*extMesh.pointer);
+			if (faceColors.arrayCount != fnMesh.numPolygons())
+			{
+				printf("\n Error Adding colors Mesh! not equal colors and faces: colors %i | faces %i", faceColors.arrayCount, fnMesh.numVertices());
+				//std::format("\n Error Adding colors Mesh! not equal colors and vertices: colors {} | vertex {}", vertexColors.arrayCount, fnMesh.numVertices());
+				return zFail;
+			}
+			fnMesh.setFaceColors(*faceColors.pointer, false);
 			extMesh.updateAttributes();
 		}
 		catch (const std::exception&)
@@ -1653,9 +1677,10 @@ namespace zSpace
 	{
 		try
 		{
-			int memoryChk = extJson.checkMemAlloc(false);
-			if (memoryChk != 1 || memoryChk != 2) return zMemNotAllocError;
-			outMesh.checkMemAlloc();
+			zStatusCode memoryChk = extJson.checkMemAlloc(false);
+			if (memoryChk == zMemNotAllocError) return zMemNotAllocError;
+			zStatus memoryChk2 = outMesh.checkMemAlloc(true);
+			if (memoryChk2 == zMemNotAllocError) return zMemNotAllocError;
 			zFnMesh fn(*outMesh.pointer);
 			fn.from(*extJson.pointer);
 			outMesh.updateAttributes();

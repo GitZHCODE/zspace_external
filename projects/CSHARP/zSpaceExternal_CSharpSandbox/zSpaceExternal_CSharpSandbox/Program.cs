@@ -588,26 +588,36 @@ namespace zSpace {
         static void testJSON() {
             zExtJSON json = new zExtJSON();
             json.createJson();
-            var input = new bool[] {true, true, false, false};
+           // var input = new bool[] {true, true, false, false};
+            var input = new string[] {"m1", "m2"};
+            var input2 = "singleString2";
             string key = "test";
-            json.WriteJSONAttribute(key, input);
+            string key2 = "test2";
+            //json.WriteJSONAttribute(key2, input2);
+
+            //json.WriteJSONAttribute(key, input);
+           //json.WriteJSONAttribute(key2, input);
+           json.WriteJSONAttribute(key2, input2);
 
             string path = "C:\\Users\\heba.eiz\\Downloads\\test2.json";
-            //json.ExportJsonFile(path);
+            json.ExportJsonFile(path);
             json.ReadJsonFile(path);
             var types = json.AttributeTypes;
             int index = Array.IndexOf(json.AttributeKeys, key);
             Type t = json.getType(types[index]);
 
-            Console.WriteLine("\n type " + t.ToString());
+            //Console.WriteLine("\n type " + t.ToString());
 
-            bool[] output;
+            //bool[] output;
+            //string[] output;
+            string output;
             json.ReadJSONAttribute(key, out output);
-            
-            foreach (var item in output) {
-                Console.WriteLine("\n" + item);
+             //Console.WriteLine("\n" + output);
 
-            }
+            //foreach (var item in output) {
+            //    Console.WriteLine("\n" + item);
+
+            //}
 
         }
         //static void testGraphJson() {
@@ -649,7 +659,7 @@ namespace zSpace {
 
         //}
 
-        
+
 
     }
 }

@@ -555,6 +555,7 @@ namespace zSpace
 	}
 	ZSPACE_EXTERNAL_INLINE void zExtString::setItems(char* items, int count)
 	{
+		//checkMemAlloc(true);
 		pointer = new string(items, count);
 		//cout << endl << "extstring " << items;
 		//printf("\n zExtString %s", pointer->c_str());
@@ -563,6 +564,8 @@ namespace zSpace
 		{
 			pointer->push_back(items[i]);
 		}*/
+
+		//cout << string(items, count);
 		updateAttributes();
 	}
 	// External Methods
@@ -718,21 +721,38 @@ namespace zSpace
 
 		}
 	}
-	ZSPACE_EXTERNAL_INLINE void ext_string_setItemsFromArray(zExtStringArray& extArray, zExtString* inArray, int count)
+	ZSPACE_EXTERNAL_INLINE void ext_string_array_setItems(zExtStringArray& extArray, zExtString* inArray, int count)
 	{
-		//printf("\n ext_string_setItemsFromArray  count %i", count);
-		vector<string> st;
+		////printf("\n ext_string_array_setItems  count %i", count);
+		//vector<string> st;
+		//string* items;
+		////items->assign("", count);
+		//for (int i = 0; i < count; i++)
+		//{
+		//	//bool chk = inArray[i].pointer->c_str() != nullptr;
+		//	//printf("\n %i zExtString %d - %i", i, chk, inArray[i].stringLength);
+
+		//	//cout << endl << *inArray[i].pointer << endl;
+		//	st.push_back(*inArray[i].pointer);
+		//	items[i] = *inArray[i].pointer;
+		//}
+		//extArray = zExtStringArray(st);
+		//extArray.checkMemAlloc(true);
+		////extArray.setItems(items, count);
+		//extArray.updateAttributes();
+		////extArray.setItems(inArray->pointer, count);
+
+		//zExtStringArray.pointer = new vector<zDoubleArray>;
+		extArray.checkMemAlloc(true);
 		for (int i = 0; i < count; i++)
 		{
-			//bool chk = inArray[i].pointer->c_str() != nullptr;
-			//printf("\n %i zExtString %d - %i", i, chk, inArray[i].stringLength);
-
-			//cout << endl << *inArray[i].pointer << endl;
-			st.push_back(*inArray[i].pointer);
+			//extArray.pointer->push_back(*(items[i].pointer));
+			extArray.pointer->push_back(*(inArray[i].pointer));
 		}
-		extArray = zExtStringArray(st);
 		extArray.updateAttributes();
-		//extArray.setItems(inArray->pointer, count);
+
+
+
 	}
 	//	------------------------------	//
 	//	-----	String Array 2D	------	//

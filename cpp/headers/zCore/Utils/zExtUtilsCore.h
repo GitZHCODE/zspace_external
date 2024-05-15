@@ -291,7 +291,7 @@ namespace zSpace
 		ZSPACE_EXTERNAL int ext_string_getCharArrayFromExtString(zExtString& extString, char* outString);
 		ZSPACE_EXTERNAL int ext_string_setExtStringFromCharArray(zExtString& extString, char* inString, int count);
 		ZSPACE_EXTERNAL void ext_string_array_getItems(zExtStringArray& extArray, zExtString* outArray);
-		ZSPACE_EXTERNAL void ext_string_setItemsFromArray(zExtStringArray& extArray, zExtString* inArray, int count);
+		ZSPACE_EXTERNAL void ext_string_array_setItems(zExtStringArray& extArray, zExtString* inArray, int count);
 		ZSPACE_EXTERNAL void ext_string_array2D_getItems(zExtStringArray2D& extArray, zExtStringArray* outArray);
 		ZSPACE_EXTERNAL void ext_string_array2D_setItems(zExtStringArray2D& extArray, zExtStringArray* inArray, int count);
 		ZSPACE_EXTERNAL void ext_bool_array_getItems(zExtBoolArray& extArray, bool* outArray);

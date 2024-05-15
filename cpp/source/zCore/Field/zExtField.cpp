@@ -134,7 +134,10 @@ namespace zSpace
 	ZSPACE_EXTERNAL_INLINE int ext_meshField_getFieldMesh(zExtMeshScalarField& extField, zExtMesh& outMesh)
 	{
 		try {
-			outMesh = zExtMesh(extField.pointer);
+			outMesh.checkMemAlloc(true);
+			outMesh.pointer = extField.pointer;
+			outMesh.updateAttributes();
+			//outMesh = zExtMesh(extField.pointer);
 			return 1;
 		}
 		catch (const std::exception&)
@@ -329,6 +332,7 @@ namespace zSpace
 	{
 		try
 		{
+			
 			zFnMeshScalarField fn(*extField.pointer);
 			outExtScalars.checkMemAlloc();
 			fn.getScalars_Triangle(*outExtScalars.pointer, p0, p1, p2, annularVal, normalise);

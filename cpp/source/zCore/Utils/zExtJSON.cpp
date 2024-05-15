@@ -263,8 +263,19 @@ namespace zSpace
 	ZSPACE_EXTERNAL_INLINE void zExtJSON::AddAttribute(const string& attributeName, const json& attributeValue)
 	{
 		//printf("\n cpp add atribute");
+		zUtilsCore core;
+		//json j = *pointer;
+		//try
+		//{
+		//	/*outAttributeValue.checkMemAlloc(true);
+		//	core.json_readAttribute(j, attributeKeySt, *outAttributeValue.pointer);
+		//	outAttributeValue.updateAttributes();*/
+		//	return 1;
+		//}
 
-		(*pointer)[attributeName] = attributeValue;
+		core.json_writeAttribute(*pointer, attributeName, attributeValue);
+
+		//(*pointer)[attributeName] = attributeValue;
 		
 		
 	}
@@ -721,21 +732,53 @@ namespace zSpace
 	{
 		try
 		{
+			string val(inAttributeValue);
+			string key(attributeKey);
 			extJSON.checkMemAlloc(true);
-
-			extJSON.AddAttribute(attributeKey, inAttributeValue);
+			//extJSON.AddAttribute(attributeKey, inAttributeValue);
+			//extJSON.AddAttribute(attributeKey, val);
+			//(*extJSON.pointer)[key] = val;
+			//printf("\n write string %s", val);
+			(*extJSON.pointer)[attributeKey] = inAttributeValue;
+			//(*extJSON.pointer)[key] = val;
+			//(*extJSON.pointer)["ttt"] = "vvv";
+			
 			if (updateExtAttributes) extJSON.updateAttributes();
 			return 1;
 		}
 		catch (const exception&) { return 0; };
 	}
+	//ZSPACE_EXTERNAL_INLINE int ext_json_writeJSONAttributeString		(zExtJSON& extJSON, char* attributeKey, zExtString inAttributeValue,			bool updateExtAttributes)
+	//{
+	//	try
+	//	{
+	//		//string val(inAttributeValue);
+	//		extJSON.checkMemAlloc(true);
+	//		//extJSON.AddAttribute(attributeKey, inAttributeValue);
+	//		printf("\n c++ write string");
+	//		cout << *inAttributeValue.pointer;
+	//		extJSON.AddAttribute(attributeKey, *inAttributeValue.pointer);
+	//		if (updateExtAttributes) extJSON.updateAttributes();
+	//		return 1;
+	//	}
+	//	catch (const exception&) { return 0; };
+	//}
 	ZSPACE_EXTERNAL_INLINE int ext_json_writeJSONAttributeStringArray	(zExtJSON& extJSON, char* attributeKey, zExtStringArray& inAttributeValue,		bool updateExtAttributes)
 	{
 		try
 		{
+			//printf("\n stringArray 0");
+			zStatus memoryChk = inAttributeValue.checkMemAlloc(false);
+			if (memoryChk == zMemNotAllocError) return zMemNotAllocError;
+			//printf("\n stringArray 1");
+
+
 			extJSON.checkMemAlloc(true);
+			//printf("\n stringArray 2 %i", inAttributeValue.arrayCount);
 
 			extJSON.AddAttribute(attributeKey, *inAttributeValue.pointer);
+			//printf("\n stringArray 3");
+
 			if (updateExtAttributes) extJSON.updateAttributes();
 			return 1;
 		}
@@ -825,16 +868,17 @@ namespace zSpace
 	{
 		try
 		{
+			extJSON.checkMemAlloc(true);
 			string pathSt(inputPath);
 			extJSON.ReadJsonFile(pathSt); 	
+			extJSON.updateAttributes();
+			//for (auto& element : extJSON.pointer->items())
+			//{
+			//	const auto& key = element.key();
+			//	string k = element.key();
+			//	//printf("\n %s", k.c_str());
 
-			for (auto& element : extJSON.pointer->items())
-			{
-				const auto& key = element.key();
-				string k = element.key();
-				//printf("\n %s", k.c_str());
-
-			}
+			//}
 			return 1;
 		}
 	catch (const exception&) { return 0; }

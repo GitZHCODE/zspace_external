@@ -146,6 +146,12 @@ namespace zSpace
 		 *  \param [in]		vertexColors				-Array of colors for each vertex.
 		 */
 		ZSPACE_EXTERNAL zStatusCode ext_mesh_setMeshVertexColors(zExtMesh& extMesh, zExtColorArray& vertexColors);
+
+		/*! \brief Set colors of mesh vertices.
+		*  \param [in]		extMesh						-Reference to the zExtMesh object to be created.
+		*  \param [in]		faceColors					-Array of colors for each face.
+		*/
+		ZSPACE_EXTERNAL zStatusCode ext_mesh_setMeshFaceColors(zExtMesh& extMesh, zExtColorArray& faceColors);
 		
 		/*! \brief Set colors of mesh vertices.
 		 *  \param [in]		inMesh						-Mesh to duplicate

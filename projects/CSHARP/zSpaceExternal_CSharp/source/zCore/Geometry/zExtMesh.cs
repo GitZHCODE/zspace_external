@@ -403,6 +403,16 @@ namespace zSpace {
             return success;
         }
 
+
+        public zStatusCode setFaceColors(System.Drawing.Color[] colors) {
+            var extColors = new zExtColorArray(zSpaceUtil.matchList(colors, this.fCount));
+            var chk = zNativeMethods.ext_mesh_setMeshFaceColors(ref this, extColors);
+            return chk;
+            
+        }
+
+
+
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -455,6 +465,12 @@ namespace zSpace {
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         internal static extern zStatusCode ext_mesh_duplicate(in zExtMesh inMesh, out zExtMesh outMesh);
 
+        [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern zStatusCode ext_mesh_setMeshVertexColors(ref zExtMesh objMesh, in zExtColorArray colorArray);
+
+
+        [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern zStatusCode ext_mesh_setMeshFaceColors(ref zExtMesh objMesh, in zExtColorArray colorArray);
 
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
@@ -565,8 +581,7 @@ namespace zSpace {
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         internal static extern zStatusCode ext_mesh_createFromArrays(in zExtPointArray _vertexPositions, in zExtIntArray _polyCounts, in zExtIntArray _polyConnects, ref zExtMesh out_mesh);
 
-        [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern zStatusCode ext_mesh_setMeshVertexColors(ref zExtMesh objMesh, in zExtColorArray colorArray);
+
 
         //[DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         //internal static extern zStatusCode ext_mesh_checkPlanarity(ref zExtMesh objMesh, float tolerance, int planarityType,

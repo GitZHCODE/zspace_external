@@ -154,13 +154,14 @@ namespace zSpace {
             try {
 
                 List<Point3d> vrts = new List<Point3d>();
+                List<Color> vrtsColor = new List<Color>();
                 var edges = new int[lines.Length * 2];
                 double tolerance = 0.0000001;
                 for (int i = 0; i < lines.Length; i++) {
                     Point3d start = lines[i].From;
                     Point3d end = lines[i].To;
                     int startId = -1; int endId = -1;
-
+                    
 
                     for (int j = 0; j < vrts.Count; j++) {
 
@@ -291,7 +292,17 @@ namespace zSpace {
             this.eColors = new zExtColorArray(eColors);
             zNativeMethods.ext_graph_updateGraph(ref this);
         }
-      
+        public void setVColors(Color[] vColors) {
+            //this.eColors = eColors != null && eColors.Length > 0 ? new zExtColorArray(zSpaceUtil.matchList(eColors, this.eCount)) : new zExtColorArray();
+            this.vColors = vColors != null && vColors.Length > 0 ? new zExtColorArray(zSpaceUtil.matchList(vColors, this.vCount)) : new zExtColorArray();
+            zNativeMethods.ext_graph_updateGraph(ref this);
+        }
+        public void setEColors(Color[] eColors) {
+            this.eColors = eColors != null && eColors.Length > 0 ? new zExtColorArray(zSpaceUtil.matchList(eColors, this.eCount)) : new zExtColorArray();
+            //this.vColors = vColors != null && vColors.Length > 0 ? new zExtColorArray(zSpaceUtil.matchList(vColors, this.vCount)) : new zExtColorArray();
+            zNativeMethods.ext_graph_updateGraph(ref this);
+        }
+
         public int to(string path) {
             return zNativeMethods.ext_graph_to(ref this, path);// == 1;
         }

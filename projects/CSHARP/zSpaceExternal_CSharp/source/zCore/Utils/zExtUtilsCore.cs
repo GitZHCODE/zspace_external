@@ -213,9 +213,9 @@ namespace zSpace {
                 mid[i] = new zExtString();
                 mid[i].setString(input[i]);
             }
-            //Console.WriteLine("array 1 + " + input.Length);
+            Console.WriteLine("array 1 + " + input.Length + mid[0].getString());
             
-            zNativeMethods.ext_string_setItemsFromArray(ref this, mid, input.Length);
+            zNativeMethods.ext_string_array_setItems(ref this, mid, input.Length);
             //Console.WriteLine("array 2");
 
         }
@@ -371,7 +371,7 @@ namespace zSpace {
         //[MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr .LPWStr), In, Out] string[] outItems);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void ext_string_setItemsFromArray(ref zExtStringArray array,
+        public static extern void ext_string_array_setItems(ref zExtStringArray array,
             [MarshalAs(UnmanagedType.LPArray), In] zExtString[] inItems, int count);
             //[MarshalAs(UnmanagedType.LPArray), In] string[] inItems, int count);
         #endregion

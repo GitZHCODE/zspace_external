@@ -107,6 +107,7 @@ namespace zSpace
 		ZSPACE_EXTERNAL int ext_json_writeJSONAttributeDoubleArray	(zExtJSON& extJSON, char* attributeKey, zExtDoubleArray& inAttributeValue,		bool updateExtAttributes = true);
 		ZSPACE_EXTERNAL int ext_json_writeJSONAttributeDoubleArray2D(zExtJSON& extJSON, char* attributeKey, zExtDoubleArray2D& inAttributeValue,	bool updateExtAttributes = true);
 		ZSPACE_EXTERNAL int ext_json_writeJSONAttributeString		(zExtJSON& extJSON, char* attributeKey, char* inAttributeValue,					bool updateExtAttributes = true);
+		//ZSPACE_EXTERNAL int ext_json_writeJSONAttributeString		(zExtJSON& extJSON, char* attributeKey, zExtString inAttributeValue,					bool updateExtAttributes = true);
 		ZSPACE_EXTERNAL int ext_json_writeJSONAttributeStringArray	(zExtJSON& extJSON, char* attributeKey, zExtStringArray& inAttributeValue,		bool updateExtAttributes = true);
 		ZSPACE_EXTERNAL int ext_json_writeJSONAttributeStringArray2D(zExtJSON& extJSON, char* attributeKey, zExtStringArray2D& inAttributeValue,	bool updateExtAttributes = true);
 		ZSPACE_EXTERNAL int ext_json_writeJSONAttributeBool			(zExtJSON& extJSON, char* attributeKey, bool inAttributeValue,					bool updateExtAttributes = true);
