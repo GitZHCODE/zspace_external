@@ -126,8 +126,6 @@ namespace zSpace
 			}
 		}
 
-		printf("\n vArray.size() - %i", vArray.size());
-
 		if (vArray.size() == 2)
 		{
 			zItGraphHalfEdge he = vArray[0].getHalfEdge();
@@ -171,7 +169,7 @@ namespace zSpace
 			} while (he != startHe);
 		}
 
-		printf("\n num of vertices : num of sequence ---- %i : %i \n ", fnGraph.numVertices(), sequence.size());
+		//printf("\n num of vertices : num of sequence ---- %i : %i \n ", fnGraph.numVertices(), sequence.size());
 
 		return sequence;
 	}
@@ -294,7 +292,11 @@ namespace zSpace
 			std::string ext = str.substr(str.find_last_of(".") + 1);
 			std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
 
-			if (ext == "json") fn.from(filePath, zJSON);
+			if (ext == "json")
+			{
+				fn.from(filePath, zJSON);
+
+			}
 			else if (ext == "obj") fn.from(filePath, zOBJ);
 #if defined ZSPACE_USD_INTEROP
 			else if (ext == "usd" || ext == "usda") fn.from(filePath, zUSD);
@@ -427,29 +429,28 @@ namespace zSpace
 			zFnGraph fnGraph(*extGraph.pointer);
 
 			fnGraph.create(*extGraph.vPositions.pointer, *extGraph.ePair.pointer);
-			printf("\n \n graph update %i %i", extGraph.vPositions.pointer->size(), extGraph.ePair.pointer->size());
 
 			
 			
 
 			//if (extGraph.eColors.arrayCount == extGraph.ePair.arrayCount/2)
-			printf("\n \n edge color %i %i", extGraph.eColors.arrayCount, fnGraph.numEdges());
-			printf("\n \n vector color %i %i", extGraph.vColors.arrayCount, fnGraph.numVertices());
+			//printf("\n \n edge color %i %i", extGraph.eColors.arrayCount, fnGraph.numEdges());
+			//printf("\n \n vector color %i %i", extGraph.vColors.arrayCount, fnGraph.numVertices());
 
 			if (extGraph.eColors.arrayCount == fnGraph.numEdges())
 			{
-				printf("\n set edge color " + extGraph.eColors.arrayCount);
+				//printf("\n set edge color " + extGraph.eColors.arrayCount);
 				//fnGraph.setEdgeColors(*extGraph.eColors.pointer, extGraph.vColors.arrayCount == 0);
 				fnGraph.setEdgeColors(*extGraph.eColors.pointer, false);
 			}
 			if (extGraph.vColors.arrayCount == fnGraph.numVertices() && extGraph.vColors.arrayCount != 0)
 			{
-				printf("\n set vertex color");
+				//printf("\n set vertex color");
 
 				//fnGraph.setVertexColors(*extGraph.vColors.pointer, extGraph.eColors.arrayCount == 0);
 				fnGraph.setVertexColors(*extGraph.vColors.pointer, false);
 			}
-			printf("\n graph update %i %i \n", extGraph.vPositions.pointer->size(), extGraph.ePair.pointer->size());
+			//printf("\n graph update %i %i \n", extGraph.vPositions.pointer->size(), extGraph.ePair.pointer->size());
 
 			extGraph.updateAttributes();
 			//zColorArray c;

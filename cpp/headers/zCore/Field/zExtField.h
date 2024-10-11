@@ -96,7 +96,7 @@ namespace zSpace
 		*	\param		[in]	fValues		- input container of field value.
 		*	\since version 0.0.2
 		*/
-		ZSPACE_EXTERNAL int ext_meshField_setFieldValues(zExtMeshScalarField& extField, zExtFloatArray& fValues);
+		ZSPACE_EXTERNAL int ext_meshField_setFieldValues(zExtMeshScalarField& extField, zExtFloatArray& fValues, zFieldColorType type, float sdfWidth);
 
 
 
@@ -350,6 +350,8 @@ namespace zSpace
 
 
 
+
+
 		//--------------------------
 		//----  BLEND METHODS
 		//--------------------------
@@ -409,6 +411,8 @@ namespace zSpace
 
 
 
+
+
 	}
 
 
@@ -421,7 +425,7 @@ namespace zSpace
 #if defined(ZSPACE_EXTERNAL_STATIC_LIBRARY)  || defined(ZSPACE_EXTERNAL_DYNAMIC_LIBRARY)
 // All defined OK so do nothing
 #else
-#include<source/zCore/zExtField.cpp>
+#include<source/zCore/Field/zExtField.cpp>
 #endif
 
 #endif

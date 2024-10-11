@@ -19,9 +19,10 @@ namespace zSpace {
 
             testEnv();
 
-            testJSON();
-
-
+            //testGraph1();
+            //testField();
+            testMesh1();
+            //testJSON();
             Console.WriteLine("\n Press any key to exit...");
             Console.ReadKey();
         }
@@ -355,59 +356,49 @@ namespace zSpace {
 
         static void testMesh1() {
 
-            //string path = "C:/Users/heba.eiz/source/repos/GitZHCODE/zspace_alice/ALICE_PLATFORM/x64/Release/EXE/data/cube-2.obj";
-            //zExtMesh mesh = new zExtMesh();
-            //bool s = mesh.from(path);
-            //Console.WriteLine(string.Format("mesh read {0}", s));
 
-
-            //zExtPoint[] pts = new zExtPoint[4];
-            //pts[0] = new zExtPoint(0, 0, 0);
-            //pts[1] = new zExtPoint(0, 1, 0);
-            //pts[2] = new zExtPoint(1, 1, 0);
-            //pts[3] = new zExtPoint(1, 0, 1);
-
-            //zExtPointArray ptarray = new zExtPointArray(pts);
-
-            //zExtIntArray counts = new zExtIntArray();
-            //counts.setItems(new int[] { 4 });
-
-            //zExtIntArray connects = new zExtIntArray();
-            //connects.setItems(new int[] { 0, 1, 2, 3 });
-
-            //zExtMesh newmesh = new zExtMesh();
-            //newmesh.createMesh(ptarray, counts, connects);
-            //newmesh.smoothMesh(2, true);
-
-            ////Console.WriteLine("\n  newMesh count = " + newmesh.getVCount());
-
-            //zExtIntArray fixedVerts = new zExtIntArray();
-            //fixedVerts.setItems(new int[] { 0, 1 });
-            //newmesh.smoothMesh1D(2, false, false, fixedVerts);
-
-            // Console.WriteLine("\n  newMesh smooth count = " + newmesh.getVCount());
 
             string readPath = "data/cube.obj";
+            //string readPath = "//zaha-hadid.com/Data/Projects/4071_NatPower/4071_Production/user_sketch/MW_4071/Model/IO/240625_HandOver/tempMesh.json";
             var newmesh = new zExtMesh();
             newmesh.from(readPath);
 
+            newmesh.smoothMesh(1, false);
 
-            //export to USD
-            string exportPath = "data/testMesh.usda";
-            newmesh.to(exportPath);
+            zExtPoint  avg = new zExtPoint(0,0,0);
 
-            Console.WriteLine("\n  newMesh exported ");
+            var pts = newmesh.getMeshPoints();
+            for (int i = 0; i < pts.Length; i++) {
+                avg.x += pts[i].x;
+                avg.y += pts[i].y;
+                avg.z += pts[i].z;
+            }
+            avg.x /= pts.Length;
+            avg.y /= pts.Length;
+            avg.z /= pts.Length;
+
+            zExtPoint normal  = new zExtPoint(0, 0, 1);
+            zExtGraph graph;
+            newmesh.getPlaneIntersection(avg, normal, out graph);
+
+            Console.WriteLine("\n graph eCount: " + graph.getEdgeCount());
 
 
 
+            
 
-            double[] devs;
-            //newmesh.getPlanarityDeviationPerFace(0.01f, 0, false, out devs);
+            //double[] vals;
+            //newmesh.getGaussianCurvature(out vals);
+            //Console.WriteLine("\n \n c# \n ");
 
-            //foreach (var item in devs) {
-            //    Console.WriteLine(item);
+            //foreach (var p in vals) {
+            //    Console.Write("_ " + p);
             //}
 
+            ////zExtPoint p = new zExtPoint();
+            ////    p = zSpace.zNativeMethods.ext_mesh_meshTest(5);
+
+            ////Console.WriteLine(vals);
 
 
 
@@ -549,16 +540,26 @@ namespace zSpace {
 
             //zExtMesh extMesh;
             //field.getMesh(out extMesh);
-            //zExtGraph graph;
-            //field.getIsoContour(out graph, 0, 6, 0.000001f);
+            zExtGraph graph;
+            field.getIsoContour(out graph, 0, 6, 0.000001f);
+
+            Console.WriteLine("\n program 3 - graph eCount: " + graph.getEdgeCount());
+
+
 
             //Console.WriteLine("\n program 4");
         }
 
         static void testGraph1() {
             zExtGraph g = new zExtGraph();
-            string path = "C:/Users/heba.eiz/Downloads/extGraph.json";
-            g.from(path);
+            //string path = "C:/Users/heba.eiz/Downloads/extGraph.json";
+            //string path = "C:/Users/heba.eiz/source/repos/GitZHCODE/zspace_alice/ALICE_PLATFORM/x64/Release/EXE/data/NatPower/testSliceMesh/Block_10/section_000.json";
+            //string path = "C:/Users/heba.eiz/source/repos/GitZHCODE/zspace_alice/ALICE_PLATFORM/x64/Release/EXE/data/NatPower/testSliceMesh/Block_0/section_0.json";
+            string path = "C:/Users/heba.eiz/source/repos/GitZHCODE/0_APPS/Natpower_stereotomy/V1/Data/natpower/outFolder/V14_4/shared/blocks/exported/Block_32/section_000.json";
+
+            zExtJSON json = new zExtJSON();
+            json.ReadJsonFile(path);
+            g.from(ref json);
             Console.WriteLine("\n graph imported");
 
             //add colors
@@ -590,14 +591,25 @@ namespace zSpace {
             json.createJson();
            // var input = new bool[] {true, true, false, false};
             var input = new string[] {"m1", "m2"};
-            var input2 = "singleString2";
+            var input2 = new string[] {"mm3"};
+            var input3 = new string[] {"m3", "m4"};
+
             string key = "test";
             string key2 = "test2";
-            //json.WriteJSONAttribute(key2, input2);
 
-            //json.WriteJSONAttribute(key, input);
-           //json.WriteJSONAttribute(key2, input);
-           json.WriteJSONAttribute(key2, input2);
+           json.WriteJSONAttribute(key, input);
+
+            zExtJSON subJson = new zExtJSON();
+            subJson.createJson();
+            subJson.WriteJSONAttribute(key, input3);
+            json.AppendJSONAttribute(key, subJson, true);
+
+            subJson.WriteJSONAttribute(key2, input2);
+            json.AppendJSONAttribute(key, subJson, false);
+
+
+
+
 
             string path = "C:\\Users\\heba.eiz\\Downloads\\test2.json";
             json.ExportJsonFile(path);

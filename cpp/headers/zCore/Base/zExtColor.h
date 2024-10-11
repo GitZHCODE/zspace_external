@@ -60,25 +60,6 @@ namespace zSpace
 /** @}*/
 
 /** @}*/
-	//struct zExtColor
-	//{
-	//	//zColor* pointer = nullptr;
-	//	float r; ///< red component
-	//	float g; ///< green component
-	//	float b; ///< blue component
-	//	float a; ///< alpha component
-
-
-	//	zExtColor();
-	//	zExtColor(zColor* t);
-	//	zExtColor(zColor t);
-	//	zExtColor(float R, float G, float B, float A);
-
-	//	void updateAttributes(zColor* t);
-	//	void updateAttributes(zColor t);
-	//	void updateAttributes(float R, float G, float B, float A );
-	//};
-
 	typedef zColor zExtColor;
 
 	struct ZSPACE_EXTERNAL zExtColorArray

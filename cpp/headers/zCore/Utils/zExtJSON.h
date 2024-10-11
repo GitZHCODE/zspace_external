@@ -115,6 +115,9 @@ namespace zSpace
 		ZSPACE_EXTERNAL int ext_json_writeJSONAttributeBoolArray2D	(zExtJSON& extJSON, char* attributeKey, zExtBoolArray2D& inAttributeValue,		bool updateExtAttributes = true);
 		ZSPACE_EXTERNAL int ext_json_writeJSONAttributeJSON(zExtJSON& extJSON, char* attributeKey, zExtJSON& inAttributeValue, bool updateExtAttributes = true);
 
+
+		ZSPACE_EXTERNAL int ext_json_AppendJSONAttributeJSON(zExtJSON& extJSON, char* attributeKey, zExtJSON& inAttributeValue, bool includeSubKeys, bool updateExtAttributes = true);
+
 	
 		ZSPACE_EXTERNAL void ext_json_createJson		(zExtJSON& extJSON);
 		ZSPACE_EXTERNAL void ext_json_createJsonDeepCopy(zExtJSON& inJSON, zExtJSON& outJSON);
@@ -140,7 +143,7 @@ namespace zSpace
 #if defined(ZSPACE_EXTERNAL_STATIC_LIBRARY)  || defined(ZSPACE_EXTERNAL_DYNAMIC_LIBRARY)
 // All defined OK so do nothing
 #else
-#include<source/zCore/zExtJSON.cpp>
+#include<source/zCore/Utils/zExtJSON.cpp>
 #endif
 
 #endif

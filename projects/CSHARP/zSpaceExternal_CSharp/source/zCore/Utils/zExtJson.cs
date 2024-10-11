@@ -704,7 +704,98 @@ namespace zSpace {
             return false;
         }
 
-        
+
+
+        public bool AppendJSONAttribute<T>(string attributeKey, T attributeValue, bool includeAttName) {
+            Console.WriteLine("\n writeJSON " + typeof(T).Name);
+            switch (typeof(T).Name) {
+                //case nameof(Int32):
+                //case nameof(Int64):
+                //    int intValue = Convert.ToInt32(attributeValue);
+                //    int intSuccess = zNativeMethods.ext_json_writeJSONAttributeInt(ref this, attributeKey, intValue);
+                //    return intSuccess == 1;
+                //case nameof(Int32) + "[]":
+                //case nameof(Int64) + "[]":
+                //    var intArrayOutput = new zExtIntArray();
+                //    intArrayOutput.setItems(attributeValue as int[]);
+                //    int intArraySuccess = zNativeMethods.ext_json_writeJSONAttributeIntArray(ref this, attributeKey, intArrayOutput);
+                //    return intArraySuccess == 1;
+                //case nameof(Int32) + "[][]":
+                //case nameof(Int64) + "[][]":
+                //    var intArray2DOutput = new zExtIntArray2D();
+                //    intArray2DOutput.setItems(attributeValue as int[][]);
+                //    int intArray2DSuccess = zNativeMethods.ext_json_writeJSONAttributeIntArray2D(ref this, attributeKey, intArray2DOutput);
+                //    return intArray2DSuccess == 1;
+                //case nameof(Single):
+                //    float floatValue = Convert.ToSingle(attributeValue);
+                //    int floatSuccess = zNativeMethods.ext_json_writeJSONAttributeFloat(ref this, attributeKey, floatValue);
+                //    return floatSuccess == 1;
+                //case nameof(Single) + "[]":
+                //    var floatArrayOutput = new zExtFloatArray();
+                //    floatArrayOutput.setItems(attributeValue as float[]);
+                //    int floatArraySuccess = zNativeMethods.ext_json_writeJSONAttributeFloatArray(ref this, attributeKey, floatArrayOutput);
+                //    return floatArraySuccess == 1;
+                //case nameof(Single) + "[][]":
+                //    var floatArray2DOutput = new zExtFloatArray2D();
+                //    floatArray2DOutput.setItems(attributeValue as float[][]);
+                //    int floatArray2DSuccess = zNativeMethods.ext_json_writeJSONAttributeFloatArray2D(ref this, attributeKey, floatArray2DOutput);
+                //    return floatArray2DSuccess == 1;
+                //case nameof(Double):
+                //    double doubleValue = Convert.ToDouble(attributeValue);
+                //    int doubleSuccess = zNativeMethods.ext_json_writeJSONAttributeDouble(ref this, attributeKey, doubleValue);
+                //    return doubleSuccess == 1;
+                //case nameof(Double) + "[]":
+                //    var doubleArrayOutput = new zExtDoubleArray();
+                //    doubleArrayOutput.setItems(attributeValue as double[]);
+                //    int doubleArraySuccess = zNativeMethods.ext_json_writeJSONAttributeDoubleArray(ref this, attributeKey, doubleArrayOutput);
+                //    return doubleArraySuccess == 1;
+                //case nameof(Double) + "[][]":
+                //    var doubleArray2DOutput = new zExtDoubleArray2D();
+                //    doubleArray2DOutput.setItems(attributeValue as double[][]);
+                //    int doubleArray2DSuccess = zNativeMethods.ext_json_writeJSONAttributeDoubleArray2D(ref this, attributeKey, doubleArray2DOutput);
+                //    return doubleArray2DSuccess == 1;
+                //case nameof(String):
+                //    //string stringValue = Convert.ToString(attributeValue);
+                //    string stringValue = Convert.ToString(attributeValue);
+                //    Console.WriteLine("\n c# string " + stringValue);
+                //    //zExtString stringValue = new zExtString();
+                //    //stringValue.setString(Convert.ToString(attributeValue));
+                //    int stringSuccess = zNativeMethods.ext_json_writeJSONAttributeString(ref this, attributeKey, stringValue);
+                //    return stringSuccess == 1;
+                //case nameof(String) + "[]":
+                //    var stringArrayOutput = new zExtStringArray();
+                //    stringArrayOutput.setItems(attributeValue as string[]);
+                //    int stringArraySuccess = zNativeMethods.ext_json_writeJSONAttributeStringArray(ref this, attributeKey, stringArrayOutput);
+                //    return stringArraySuccess == 1;
+                //case nameof(String) + "[][]":
+                //    var stringArray2DOutput = new zExtStringArray2D();
+                //    stringArray2DOutput.setItems(attributeValue as string[][]);
+                //    int stringArray2DSuccess = zNativeMethods.ext_json_writeJSONAttributeStringArray2D(ref this, attributeKey, stringArray2DOutput);
+                //    return stringArray2DSuccess == 1;
+                //case nameof(Boolean):
+                //    bool boolValue = Convert.ToBoolean(attributeValue);
+                //    int boolSuccess = zNativeMethods.ext_json_writeJSONAttributeBool(ref this, attributeKey, boolValue);
+                //    return boolSuccess == 1;
+                //case nameof(Boolean) + "[]":
+                //    var boolArrayOutput = new zExtBoolArray();
+                //    boolArrayOutput.setItems(attributeValue as bool[]);
+                //    int boolArraySuccess = zNativeMethods.ext_json_writeJSONAttributeBoolArray(ref this, attributeKey, boolArrayOutput);
+                //    return boolArraySuccess == 1;
+                //case nameof(Boolean) + "[][]":
+                //    var boolArray2DOutput = new zExtBoolArray2D();
+                //    boolArray2DOutput.setItems(attributeValue as bool[][]);
+                //    int boolArray2DSuccess = zNativeMethods.ext_json_writeJSONAttributeBoolArray2D(ref this, attributeKey, boolArray2DOutput);
+                //    return boolArray2DSuccess == 1;
+                case nameof(zExtJSON):
+                    zExtJSON json = (zExtJSON)(object)attributeValue;
+                    int success = zNativeMethods.ext_json_AppendJSONAttributeJSON(ref this, attributeKey, json, includeAttName);
+                    return success == 1;
+            }
+
+            return false;
+        }
+
+
 
 
         public Type xxgetType(string typeName) {
@@ -1104,12 +1195,25 @@ namespace zSpace {
             ref zExtJSON extJSON,
             [MarshalAs(UnmanagedType.LPStr)] string attributeKey,
             in zExtBoolArray2D inAttributeValue);
+        //		ZSPACE_EXTERNAL int ext_json_writeJSONAttributeJSON(zExtJSON& extJSON, char* attributeKey, zExtJSON& inAttributeValue, bool updateExtAttributes = true);
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         public static extern int ext_json_writeJSONAttributeJSON(
             ref zExtJSON extJSON,
             [MarshalAs(UnmanagedType.LPStr)] string attributeKey,
             in zExtJSON inAttributeValue);
+
+        //		ZSPACE_EXTERNAL int ext_json_AppendJSONAttributeJSON(zExtJSON& extJSON, char* attributeKey, zExtJSON& inAttributeValue, bool updateExtAttributes = true);
+        [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int ext_json_AppendJSONAttributeJSON(
+           ref zExtJSON extJSON,
+           [MarshalAs(UnmanagedType.LPStr)] string attributeKey,
+           in zExtJSON inAttributeValue,
+           [MarshalAs(UnmanagedType.U1)] bool includeSubKeys,
+           [MarshalAs(UnmanagedType.U1)] bool updateExtAttributes = true
+           );
+
+
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         public static extern void ext_json_createJson(ref zExtJSON extJSON);        

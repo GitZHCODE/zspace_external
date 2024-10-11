@@ -112,6 +112,7 @@ namespace zSpace {
 
         public double[] getItems() {
             double[] items = new double[arrayCount];
+            Console.WriteLine("\n items size" + arrayCount);
             zNativeMethods.ext_double_array_getItems(ref this, items);
             return items;
         }

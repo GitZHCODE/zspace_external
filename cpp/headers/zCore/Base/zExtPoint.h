@@ -17,8 +17,6 @@
 
 #pragma once
 
-//#include <headers/zToolsets/geometry/zTsSDFSlicer.h>
-
 
 #include <headers/zCore/base/zExtern.h>
 #include "headers/base/zStatus.h"
@@ -65,26 +63,6 @@ namespace zSpace
 /** @}*/
 
 
-	
-	//struct zExtPoint
-	//{
-	//	//zPoint* pointer = nullptr;
-	//	float x;
-	//	float y;
-	//	float z;
-
-	//	zExtPoint();
-	//	zExtPoint(float X, float Y, float Z);
-	//	zExtPoint(zPoint t);
-	//	//zExtPoint(zPoint* t);
-
-	//	//void updateAttributes(zPoint* t);
-	//	//void updateAttributes();
-	//	void updateAttributes(float X, float Y, float Z);
-	//	void updateAttributes(zPoint t);
-	//};
-	
-	
 	typedef zPoint zExtPoint;
 	
 	
@@ -132,8 +110,6 @@ namespace zSpace
 
 	ZSPACE_EXTERNAL_C
 	{
-		//ZSPACE_EXTERNAL void ext_point_create(float x, float y, float z, zExtPoint& refPoint);
-		//ZSPACE_EXTERNAL int ext_point_create(float x, float y, float z, zExtPoint& refPoint);
 		ZSPACE_EXTERNAL void ext_point_array_getItems(zExtPointArray & extArray, zExtPoint * outArray);
 		ZSPACE_EXTERNAL int ext_point_setItemsFromArray(zExtPointArray & extArray, zExtPoint * inArray, int count);
 		ZSPACE_EXTERNAL void ext_point_testAdd(zPoint& point1, zPoint& point2);

@@ -31,11 +31,11 @@ namespace zSpace {
         /// <summary>
         /// Sets the field values using the provided array of floating-point values.
         /// </summary>
-        /// <param name="fValues">Array of field values.</param>
+        /// <param name="fValues">Array of field values.</param> zFieldColorType::zFieldRegular, float sdfWidth = 0.1
         /// <returns>True if the field values were set successfully; otherwise, false.</returns>
-        public bool setFieldValues(float[] fValues) {
+        public bool setFieldValues(float[] fValues, zFieldColorType type = zFieldColorType.zFieldRegular, float sdfWidth = 0.1f ) {
             zExtFloatArray inExtScalars = new zExtFloatArray(fValues);
-            int success = zNativeMethods.ext_meshField_setFieldValues(ref this, in inExtScalars);
+            int success = zNativeMethods.ext_meshField_setFieldValues(ref this, in inExtScalars, type, sdfWidth);
             return success == 1;
         }
         
@@ -70,7 +70,6 @@ namespace zSpace {
             zExtFloatArray outExtScalars;
             bool success = zNativeMethods.ext_meshField_getScalarsAsVertexDistance_1(ref this, out outExtScalars, in inPositions, offset, normalise) == 1;
             outScalars = (success) ? outExtScalars.getItems() : new float[0];
-
             return success;
         }
 
@@ -86,7 +85,6 @@ namespace zSpace {
             zExtFloatArray outExtScalars;
             bool success = zNativeMethods.ext_meshField_getScalarsAsVertexDistance_4(ref this, out outExtScalars, in inMeshObj, offset, normalise) == 1;
             outScalars = (success) ? outExtScalars.getItems() : new float[0];
-
             return success;
         }
 
@@ -451,7 +449,7 @@ namespace zSpace {
 
         //		ZSPACE_EXTERNAL int ext_meshField_setFieldValues(zExtMeshScalarField& extField, zExtFloatArray& fValues);
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int ext_meshField_setFieldValues(ref zExtMeshScalarField extField, in zExtFloatArray fValues);
+        public static extern int ext_meshField_setFieldValues(ref zExtMeshScalarField extField, in zExtFloatArray fValues, zFieldColorType type, float sdfWidth);
 
         //	ZSPACE_EXTERNAL_INLINE int ext_meshField_getFieldMesh(zExtMeshScalarField& extField, zExtMesh& outMesh)
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]

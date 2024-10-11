@@ -24,6 +24,7 @@
 #include "headers/zCore/Utils/zExtJSON.h"
 #include "headers/zCore/Interop/zExtOV.h"
 #include "headers/zCore/Geometry/zExtGraph.h"
+#include "headers/zCore/Base/zExtTransform.h"
 
 
 #include <headers/zCore/base/zExtern.h>
@@ -321,7 +322,7 @@ namespace zSpace
 		 *  \param [in]  fixedVerts		-Array of fixed vertices.
 		 *  \return 1 on success, 0 on failure.
 		 */
-		ZSPACE_EXTERNAL int ext_mesh_smoothMesh(zExtMesh& objMesh, int level, bool smoothCorner, zExtIntArray& fixedVerts, bool smoothFixedEdges);
+		ZSPACE_EXTERNAL zStatusCode ext_mesh_smoothMesh(zExtMesh& objMesh, int level, bool smoothCorner, zExtIntArray& fixedVerts, bool smoothFixedEdges);
 
 		/*! \brief Smooths a zExtMesh object in 1 Direction.
 		 *  \param [in]  objMesh		-The zExtMesh object to smooth.
@@ -332,6 +333,12 @@ namespace zSpace
 		 *  \return 1 on success, 0 on failure.
 		 */
 		ZSPACE_EXTERNAL zStatusCode ext_mesh_smoothMesh1D(zExtMesh& objMesh, int level, bool smoothCorner, bool flip, zExtIntArray& fixedVerts);
+
+
+		ZSPACE_EXTERNAL zStatusCode ext_mesh_meshPlaneIntersection(zExtMesh& inMesh, zExtPoint& origin, zExtPoint& normal, zExtGraph& outGraph, int inPres);
+
+
+
 
 		ZSPACE_EXTERNAL zPoint ext_mesh_meshTest(int num);
 		ZSPACE_EXTERNAL int ext_mesh_meshTest2(zStatus2& num);
@@ -371,7 +378,7 @@ namespace zSpace
 #if defined(ZSPACE_EXTERNAL_STATIC_LIBRARY)  || defined(ZSPACE_EXTERNAL_DYNAMIC_LIBRARY)
 // All defined OK so do nothing
 #else
-#include<source/zCore/zExtMesh.cpp>
+#include<source/zCore/Geometry/zExtMesh.cpp>
 #endif
 
 #endif

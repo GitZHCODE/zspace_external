@@ -10,160 +10,165 @@ namespace zSpace {
 *	\brief	Data types of a halfedge data structure.
 *	\since	version 0.0.1
 */
-	enum zHEData { zVertexData = 0, zHalfEdgeData, zEdgeData, zFaceData };
+	public enum zHEData { zVertexData = 0, zHalfEdgeData, zEdgeData, zFaceData };
 
 	/*! \enum	zScalarfieldData
 	*	\brief	Algorithm types for field navigation.
 	*	\since	version 0.0.1
 	*/
-	enum zScalarfieldData { zGradientDescent = 30, zGradientAscent };
+	public enum zScalarfieldData { zGradientDescent = 30, zGradientAscent };
 
 	/*! \enum	zColourData
 	*	\brief	Data types of color.
 	*	\since	version 0.0.1
 	*/
-	enum zColorType { zRGB = 40, zHSV };
+	public enum zColorType { zRGB = 40, zHSV };
 
 
 	/*! \enum	zIntergrationType
 	*	\brief	Integration types.
 	*	\since	version 0.0.1
 	*/
-	enum zIntergrationType { zEuler = 60, zRK4, zPixel };
+	public enum zIntergrationType { zEuler = 60, zRK4, zPixel };
 
 	/*! \enum	zDiffusionType
 	*	\brief	Diffusion or averaging types.
 	*	\since	version 0.0.1
 	*/
-	enum zDiffusionType { zLaplacian = 70, zAverage, zLaplacianAdjacent };
+	public enum zDiffusionType { zLaplacian = 70, zAverage, zLaplacianAdjacent };
 
 	/*! \enum	zSlimeParameter
 	*	\brief	Slime mold parameters.
 	*	\since	version 0.0.1
 	*/
-	enum zSlimeParameter { zSO = 80, zSA, zRA, zdepT };
+	public enum zSlimeParameter { zSO = 80, zSA, zRA, zdepT };
 
 
 	/*! \enum	zSQLCommand
 	*	\brief SQLite database command types.
 	*	\since	version 0.0.1
 	*/
-	enum zSQLCommand { zCreate = 90, zInsert, zSelect, zSelectExists, zSelectCreate, zSelectCount, zUpdate, zDrop, zExportCSV };
+	public enum zSQLCommand { zCreate = 90, zInsert, zSelect, zSelectExists, zSelectCreate, zSelectCount, zUpdate, zDrop, zExportCSV };
 
 	/*! \enum	zDataLevel
 	*	\brief	Grid levels for data in London.
 	*	\since	version 0.0.1
 	*/
-	enum zDataLevel { zLsoaData = 50, zMsoaData, zPostcodeData };
+	public enum zDataLevel { zLsoaData = 50, zMsoaData, zPostcodeData };
 
 
 	/*! \enum	zDataBuilding
 	*	\brief	Grid levels for data in London.
 	*	\since	version 0.0.1
 	*/
-	enum zDataBuilding { zCommercialBuilding = 100, zResidentialBuilding, zPublicBuilding, zUniversityBuilding, zUndefinedBuilding };
+	public enum zDataBuilding { zCommercialBuilding = 100, zResidentialBuilding, zPublicBuilding, zUniversityBuilding, zUndefinedBuilding };
 
 	/*! \enum	zDataStreet
 	*	\brief	Grid levels for data in London.
 	*	\since	version 0.0.1
 	*/
-	enum zDataStreet { zTrunkStreet = 20, zPrimaryStreet, zSecondaryStreet, zTertiaryStreet, zResidentialStreet, zPedestrianStreet, zCycleStreet, zServiceStreet, zUndefinedStreet };
+	public enum zDataStreet { zTrunkStreet = 20, zPrimaryStreet, zSecondaryStreet, zTertiaryStreet, zResidentialStreet, zPedestrianStreet, zCycleStreet, zServiceStreet, zUndefinedStreet };
 
 	/*! \enum	zDatatypes
 	*	\brief	Grid levels for data in London.
 	*	\since	version 0.0.1
 	*/
-	enum zDatatypes { zInt = 110, zFloat, zDouble, zString };
+	public enum zDatatypes { zInt = 110, zFloat, zDouble, zString };
 
 	/*! \enum	zWalkTypes
 	*	\brief	walk types for Shortest Path Trees.
 	*	\since	version 0.0.1
 	*/
-	enum zWalkType { zEdgePath = 120, zEdgeVisited };
+	public enum zWalkType { zEdgePath = 120, zEdgeVisited };
 
 	/*! \enum	zFieldValueType
 	*	\brief	field value sampling types.
 	*	\since	version 0.0.1
 	*/
-	enum zFieldValueType { zFieldIndex = 130, zFieldNeighbourWeighted, zFieldAdjacentWeighted, zFieldContainedWeighted };
+	public enum zFieldValueType { zFieldIndex = 130, zFieldNeighbourWeighted, zFieldAdjacentWeighted, zFieldContainedWeighted };
 
 	/*! \enum	zFieldStreamType
 	*	\brief	field stream sampling types.
 	*	\since	version 0.0.1
 	*/
-	enum zFieldStreamType { zForward = 140, zBackward, zForwardBackward };
+	public enum zFieldStreamType { zForward = 140, zBackward, zForwardBackward };
 
 	/*! \enum	zFileTpye
 	*	\brief	input and ouput file types.
 	*	\since	version 0.0.2
 	*/
-	enum zFileTpye { zJSON = 150, zUSD, zOBJ, zTXT, zMAYATXT, zCSV, zBMP, zPNG, zJPEG, zMESH, zGRAPH };
+	public enum zFileTpye { zJSON = 150, zUSD, zOBJ, zTXT, zMAYATXT, zCSV, zBMP, zPNG, zJPEG, zMESH, zGRAPH };
 
 	/*! \enum	zFnType
 	*	\brief	functionset types.
 	*	\since	version 0.0.2
 	*/
-	enum zFnType { zInvalidFn = 160, zPointsFn, zMeshFn, zGraphFn, zMeshFieldFn, zPointFieldFn, zParticleFn, zMeshDynamicsFn, zGraphDynamicsFn, zComputeMeshFn, zNurbsCurveFn, zArcFn, zPlaneFn };
+	public enum zFnType { zInvalidFn = 160, zPointsFn, zMeshFn, zGraphFn, zMeshFieldFn, zPointFieldFn, zParticleFn, zMeshDynamicsFn, zGraphDynamicsFn, zComputeMeshFn, zNurbsCurveFn, zArcFn, zPlaneFn };
 
 	/*! \enum	zDiagramType
 	*	\brief	diagram types for vaults.
 	*	\since	version 0.0.2
 	*/
-	enum zDiagramType { zFormDiagram = 190, zForceDiagram, zResultDiagram };
+	public enum zDiagramType { zFormDiagram = 190, zForceDiagram, zResultDiagram };
 
 	/*! \enum	zRobotType
 	*	\brief	robot types.
 	*	\since	version 0.0.2
 	*/
-	enum zRobotType { zRobotABB = 200, zRobotKuka, zRobotNachi };
+	public enum zRobotType { zRobotABB = 200, zRobotKuka, zRobotNachi };
 
 	/*! \enum	zRobotRotationType
 	*	\brief	robot rotation types.
 	*	\since	version 0.0.2
 	*/
-	enum zRobotRotationType { zJoint = 210, zJointHome, zJointMinimum, zJointMaximum };
+	public enum zRobotRotationType { zJoint = 210, zJointHome, zJointMinimum, zJointMaximum };
 
 	/*! \enum	zRobotMoveType
 	*	\brief	robot move types.
 	*	\since	version 0.0.2
 	*/
-	enum zRobotMoveType { zMoveLinear = 220, zMoveJoint };
+	public enum zRobotMoveType { zMoveLinear = 220, zMoveJoint };
 
 	/*! \enum	zRobotEEControlType
 	*	\brief	robot end effector control types.
 	*	\since	version 0.0.2
 	*/
-	enum zRobotEEControlType { zEEOn = 230, zEEOff, zEENeutral };
+	public enum zRobotEEControlType { zEEOn = 230, zEEOff, zEENeutral };
 
 	/*! \enum	zSpectralVertexType
 	*	\brief	spectral processing vertex types.
 	*	\since	version 0.0.2
 	*/
-	enum zSpectralVertexType { zRegular = 240, zMinima, zMaxima, zSaddle };
+	public enum zSpectralVertexType { zRegular = 240, zMinima, zMaxima, zSaddle };
 
 	/*! \enum	zConnectivityType
 	*	\brief	connectivty matrix types.
 	*	\since	version 0.0.4
 	*/
-	enum zConnectivityType { zVertexVertex = 250, zVertexEdge, zFaceVertex, zFaceEdge };
+	public enum zConnectivityType { zVertexVertex = 250, zVertexEdge, zFaceVertex, zFaceEdge };
 
 	/*! \enum	zPlanarSolverType
 	*	\brief	Types of planarisation solver.
 	*	\since	version 0.0.4
 	*/
-	enum zPlanarSolverType { zQuadPlanar = 260, zVolumePlanar };
+	public enum zPlanarSolverType { zQuadPlanar = 260, zVolumePlanar };
 
 	/*! \enum	zMSSolverType
 	*	\brief	Types of planarisation.
 	*	\since	version 0.0.4
 	*/
-	enum zMSSolverType { zMinimiseArea = 270, zRestlength };
+	public enum zMSSolverType { zMinimiseArea = 270, zRestlength };
 
 	/*! \enum	zMSSolverType
 	*	\brief	Types of planarisation.
 	*	\since	version 0.0.4
 	*/
-	enum zSolverForceConstraints { zConstraintFree = 280, zConstraintXY, zConstraintYZ, zConstraintZX, zConstraintX, zConstraintY, zConstraintZ };
+	public enum zSolverForceConstraints { zConstraintFree = 280, zConstraintXY, zConstraintYZ, zConstraintZX, zConstraintX, zConstraintY, zConstraintZ };
 
+	/*! \enum	zFieldColorType
+	*	\brief	Types of coloring for the field.
+	*	\since	version 0.0.4
+	*/
+	public enum zFieldColorType { zFieldRegular = 290, zFieldSDF, zFieldSlime };
 
 }

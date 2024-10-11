@@ -209,7 +209,7 @@ namespace zSpace
 
 			}
 
-			printf("\n item key and type %s - %s", it.key().c_str(), type);
+			//printf("\n item key and type %s - %s", it.key().c_str(), type);
 			types.push_back(type);
 		}
 
@@ -842,6 +842,34 @@ namespace zSpace
 			//zUtilsCore util;
 			//util.writeJSONAttribute(*extJSON.pointer, attributeKey, *inAttributeValue.pointer);
 			//extJSON.AddAttribute(attributeKey, inAttributeValue.pointer);
+			if (updateExtAttributes) extJSON.updateAttributes();
+			return 1;
+		}
+		catch (const exception&) { return 0; };
+	}
+
+	ZSPACE_EXTERNAL int ext_json_AppendJSONAttributeJSON(zExtJSON& extJSON, char* attributeKey, zExtJSON& inAttributeValue, bool includeSubKeys, bool updateExtAttributes)
+	{
+		try	{
+			extJSON.checkMemAlloc(true);
+			zStatus memChk = inAttributeValue.checkMemAlloc(false);
+			if (memChk == zMemNotAllocError) return 0;
+
+			string attributeName(attributeKey);
+			//(*extJSON.pointer)[attributeName].insert((*inAttributeValue.pointer).end(), *inAttributeValue.pointer);
+			if (includeSubKeys)
+			{
+				(*extJSON.pointer)[attributeName].push_back(*inAttributeValue.pointer);
+			}
+			else
+			{
+				zStringArray attNames = inAttributeValue.GetAllAttributeNames();
+				for (int i = 0; i < attNames.size(); i++)
+				{
+					(*extJSON.pointer)[attributeName].push_back((*inAttributeValue.pointer)[attNames[i]]);
+				}
+			}
+
 			if (updateExtAttributes) extJSON.updateAttributes();
 			return 1;
 		}

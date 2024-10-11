@@ -126,7 +126,9 @@ namespace zSpace
 		zDoubleArray* pointer = nullptr; /**< A pointer to the array object */
 		int arrayCount; /**< The number of items in the array */
 		zExtDoubleArray();
-		zExtDoubleArray(zDoubleArray a);
+		//zExtDoubleArray(const zExtDoubleArray& a);
+		//zExtDoubleArray( zExtDoubleArray&& a);
+		zExtDoubleArray(zDoubleArray& a);
 		zExtDoubleArray(zDoubleArray* a);
 		~zExtDoubleArray();
 		/**
@@ -139,6 +141,7 @@ namespace zSpace
 		 */
 		void getItems(double* items);
 		void setItems(double* items, int count);
+		void setItems(zDoubleArray& a);
 	};
 
 	struct ZSPACE_EXTERNAL zExtDoubleArray2D
@@ -313,7 +316,7 @@ namespace zSpace
 #if defined(ZSPACE_EXTERNAL_STATIC_LIBRARY)  || defined(ZSPACE_EXTERNAL_DYNAMIC_LIBRARY)
 // All defined OK so do nothing
 #else
-#include<source/zCore/zExtUtilsCore.cpp>
+#include<source/zCore/Utils/zExtUtilsCore.cpp>
 #endif
 
 #endif

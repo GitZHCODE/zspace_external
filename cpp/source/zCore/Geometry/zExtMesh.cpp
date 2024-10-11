@@ -1080,6 +1080,7 @@ namespace zSpace
 				zVector newPos;
 				vector<int> eVerts;
 				e.getVertices(eVerts);
+				
 				// Check if both vertices of the edge are fixed
 				bool isFixedEdge = find(begin(fixedIndex), end(fixedIndex), eVerts[0]) != end(fixedIndex) &&
 					find(begin(fixedIndex), end(fixedIndex), eVerts[1]) != end(fixedIndex);
@@ -1850,41 +1851,43 @@ namespace zSpace
 		return zSuccess;
 	}
 
-	ZSPACE_EXTERNAL_INLINE int ext_mesh_smoothMesh(zExtMesh& objMesh, int level, bool smoothCorner, zExtIntArray& fixedVerts, bool smoothFixedEdges)
+	ZSPACE_EXTERNAL_INLINE zStatusCode ext_mesh_smoothMesh(zExtMesh& objMesh, int level, bool smoothCorner, zExtIntArray& fixedVerts, bool smoothFixedEdges)
 	{
-		printf("\n smooth 0");
+		//printf("\n smooth 0");
 
 		try
 		{
-			printf("\n smooth 1");
+			//printf("\n smooth 1");
 
 			zStatus memoryChk = objMesh.checkMemAlloc(false);
 			if (memoryChk == zMemNotAllocError)
 			{
-				printf("\n smooth failed");
+				//printf("\n smooth failed");
 
 				//return zMemNotAllocError;
-				return (int) (zMemNotAllocError);
+				return (zMemNotAllocError);
 			}
-			printf("\n smooth 2");
+			//printf("\n smooth 2");
 
 			auto chkArray = fixedVerts.checkMemAlloc(true);
-			printf("\n smooth 3");
+			//printf("\n smooth 3");
 
 			objMesh.smoothMesh(level, smoothCorner, *fixedVerts.pointer, smoothFixedEdges);
-			printf("\n smooth 4");
+			//zFnMesh fn(*objMesh.pointer);
+			//fn.smoothMesh(level, smoothCorner);
+			//printf("\n smooth 4");
 
 			objMesh.updateAttributes();
-			printf("\n smooth success");
+			//printf("\n smooth success");
 
 			//return zSuccess;
-			return  (int)(zSuccess);
+			return  (zSuccess);
 		}
 		catch (const std::exception&)
 		{
 			printf("\n Catmullclark failed!");
 			//return zThrowError;
-			return  (int)(zThrowError);
+			return  (zThrowError);
 		}
 	}
 
@@ -1901,6 +1904,53 @@ namespace zSpace
 
 			objMesh.updateAttributes();
 			printf("\n smooth1d success");
+
+			return zSuccess;
+		}
+		catch (const std::exception&)
+		{
+			printf("\n Smooth1D failed!");
+			return zThrowError;
+		}
+	}
+
+	ZSPACE_EXTERNAL_INLINE zStatusCode ext_mesh_meshPlaneIntersection(zExtMesh& inMesh, zExtPoint& origin, zExtPoint& normal, zExtGraph& outGraph, int inPres)
+	{
+		try
+		{
+			zStatus memoryChk = inMesh.checkMemAlloc(false);
+			if (memoryChk == zMemNotAllocError) return zMemNotAllocError;
+
+			zUtilsCore core;
+
+			zScalarArray scalars;
+
+
+			for (zItMeshVertex v(*inMesh.pointer); !v.end(); v++)
+			{
+				zPoint P = v.getPosition();
+				float minDist_Plane = core.minDist_Point_Plane(P, origin, normal);
+				scalars.push_back(minDist_Plane);
+			}
+
+			zFnMesh fn_sliceMesh(*inMesh.pointer);
+			zPointArray positions;
+			zIntArray edgeConnects;
+			zColorArray vColors;
+			fn_sliceMesh.getIsoContour(scalars, 0.0, positions, edgeConnects, vColors, inPres, pow(10, -1 * inPres));
+			printf("\n extGraph %i %i", positions.size(), edgeConnects.size());
+			outGraph.checkMemAlloc(true);
+			zFnGraph tempFn(*outGraph.pointer);
+			// create graphs
+			tempFn.create(positions, edgeConnects);
+			tempFn.setVertexColors(vColors, false);
+
+			outGraph.updateAttributes();
+
+			printf("\n extGraph %i %i \n", tempFn.numVertices(), tempFn.numEdges());
+
+
+			
 
 			return zSuccess;
 		}
@@ -2108,7 +2158,8 @@ namespace zSpace
 				solverType = zPlanarSolverType::zVolumePlanar;
 			}
 			fn.getPlanarityDeviationPerFace(devs, solverType, colorFaces, tolerance);
-			outPlanarityDevs = zExtDoubleArray(devs);
+			//outPlanarityDevs = zExtDoubleArray(devs);
+			outPlanarityDevs.setItems(devs);
 		}
 		catch (const std::exception&)
 		{
@@ -2126,7 +2177,35 @@ namespace zSpace
 			zDoubleArray gaussiancurv;
 			zFnMesh fn(*objMesh.pointer);
 			fn.getGaussianCurvature(gaussiancurv);
-			outGaussianCurvature = zDoubleArray(gaussiancurv);
+
+			//outGaussianCurvature.checkMemAlloc();
+
+
+			//outGaussianCurvature = zExtDoubleArray(gaussiancurv);
+			 
+			//outGaussianCurvature.checkMemAlloc();
+			//outGaussianCurvature.pointer->clear();
+			//for (auto& p : gaussiancurv)
+			//{
+			//	//printf("_ %f", p);
+			//	outGaussianCurvature.pointer->push_back(p);
+			//}
+			
+			//outGaussianCurvature.updateAttributes();
+
+			outGaussianCurvature.setItems(gaussiancurv);
+
+			printf("\n outGaussianCurvature pointer size = %i | %i - %i \n", gaussiancurv.size(), outGaussianCurvature.pointer->size(), outGaussianCurvature.arrayCount);
+
+
+
+			//for (auto& p : gaussiancurv)
+			//{
+			//	//printf("_ %f", p);
+			//}
+
+			printf(" \n ext_mesh_getGaussianCurvature success ");
+			return zSuccess;
 		}
 
 		catch (const std::exception&)

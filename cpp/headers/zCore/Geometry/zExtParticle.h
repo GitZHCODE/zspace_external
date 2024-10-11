@@ -90,7 +90,7 @@ namespace zSpace
 #if defined(ZSPACE_EXTERNAL_STATIC_LIBRARY)  || defined(ZSPACE_EXTERNAL_DYNAMIC_LIBRARY)
 // All defined OK so do nothing
 #else
-#include<source/zCore/zExtParticle.cpp>
+#include<source/zCore/Geometry/zExtParticle.cpp>
 #endif
 
 #endif

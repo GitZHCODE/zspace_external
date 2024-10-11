@@ -7,6 +7,8 @@ using System.Runtime.InteropServices;
 using System.Collections;
 using Rhino.Geometry;
 using static zSpace.zExtRhinoUtil;
+using Grasshopper.Kernel.Geometry;
+//using Rhino.Render.ChangeQueue;
 
 namespace zSpace {
     [StructLayout(LayoutKind.Sequential)]
@@ -202,6 +204,7 @@ namespace zSpace {
         /// <returns> True if the file is written successfully </returns>
         public zStatusCode to(string filePath) {
            //zExtMesh mesh = this;
+
             var success = zNativeMethods.ext_mesh_to(ref this, filePath);
             return success;
         }
@@ -359,6 +362,7 @@ namespace zSpace {
             var success = zNativeMethods.ext_mesh_getPlanarityDeviationPerFace(ref this, ref devs, type, colorFaces, tolerance);
             planarityDevs = devs.getItems();
             return success;
+
         }
         /// <summary>
         /// Get the Gaussian curvature for a zExtMesh object.
@@ -369,7 +373,10 @@ namespace zSpace {
             zExtDoubleArray devs = new zExtDoubleArray();
             //zExtMesh mesh = this;
             var success = zNativeMethods.ext_mesh_getGaussianCurvature(ref this, ref devs);
+
             gaussianCurvature = devs.getItems();
+            //gaussianCurvature = new double[0];
+
             return success;
         }
 
@@ -403,6 +410,11 @@ namespace zSpace {
             return success;
         }
 
+        public zStatusCode getPlaneIntersection(zExtPoint origin, zExtPoint normal, out zExtGraph outGraph, int inPres = 3) {
+            //zExtMesh mesh = this;
+            var success = zNativeMethods.ext_mesh_meshPlaneIntersection(ref this, ref origin, ref normal, out outGraph, inPres);
+            return success;
+        }
 
         public zStatusCode setFaceColors(System.Drawing.Color[] colors) {
             var extColors = new zExtColorArray(zSpaceUtil.matchList(colors, this.fCount));
@@ -556,6 +568,10 @@ namespace zSpace {
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         internal static extern zStatusCode ext_mesh_getFaceColor(ref zExtMesh objMesh, ref zExtColorArray extPointArray);
+
+        [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern zStatusCode ext_mesh_meshPlaneIntersection(ref zExtMesh inMesh, ref zExtPoint origin , ref zExtPoint normal, out zExtGraph outGraph, int inPres);
+
 
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]

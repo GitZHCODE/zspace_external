@@ -35,6 +35,23 @@ namespace zSpace {
             this.y = y;
             this.z = z;
         }
+#if RHINO_CSHARP
+        public zExtPoint(Rhino.Geometry.Point3d pt) {
+            x = (float)pt.X;
+            y = (float)pt.Y;
+            z = (float)pt.Z;
+        }
+        public zExtPoint(Rhino.Geometry.Vector3d pt) {
+            x = (float)pt.X;
+            y = (float)pt.Y;
+            z = (float)pt.Z;
+        }
+
+        public Rhino.Geometry.Point3d toRhinoPt() {
+            return new Rhino.Geometry.Point3d(x, y, z);
+        }
+
+#endif
     }
 
     [StructLayout(LayoutKind.Sequential)]

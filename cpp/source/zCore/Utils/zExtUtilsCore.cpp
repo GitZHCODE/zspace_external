@@ -195,15 +195,13 @@ namespace zSpace
 	}
 	ZSPACE_EXTERNAL_INLINE zExtFloatArray::zExtFloatArray(zFloatArray a)
 	{
-		delete pointer;
-		pointer = new zFloatArray(a);
-		//checkMemAlloc();
 
+		if (!pointer) pointer = new zFloatArray(a);
+		else *pointer = a;
 		updateAttributes();
 	}
 	ZSPACE_EXTERNAL_INLINE zExtFloatArray::zExtFloatArray(zFloatArray* a)
 	{
-		//delete pointer;
 		pointer = a;
 		updateAttributes();
 	}
@@ -270,14 +268,15 @@ namespace zSpace
 	// Constructor
 	ZSPACE_EXTERNAL_INLINE zExtFloatArray2D::zExtFloatArray2D()
 	{
-		//delete pointer;
-		pointer = new vector<zFloatArray>();
+		
+		checkMemAlloc();
 		updateAttributes();
 	}
 	ZSPACE_EXTERNAL_INLINE zExtFloatArray2D::zExtFloatArray2D(vector<zFloatArray> a)
 	{
-		//delete pointer;
-		pointer = new vector<zFloatArray>(a);
+		if (!pointer) pointer = new vector<zFloatArray>(a);
+		else *pointer = a;
+
 		updateAttributes();
 	}
 	ZSPACE_EXTERNAL_INLINE zExtFloatArray2D::zExtFloatArray2D(vector<zFloatArray>* a)
@@ -353,16 +352,34 @@ namespace zSpace
 	// Constructor
 	ZSPACE_EXTERNAL_INLINE zExtDoubleArray::zExtDoubleArray()
 	{
-		//delete pointer;
-		pointer = new zDoubleArray();
+		checkMemAlloc();
 		updateAttributes();
 	}
-	ZSPACE_EXTERNAL_INLINE zExtDoubleArray::zExtDoubleArray(zDoubleArray a)
+	ZSPACE_EXTERNAL_INLINE zExtDoubleArray::zExtDoubleArray(zDoubleArray& a)
 	{
 		//delete pointer;
+		checkMemAlloc();
+		pointer->clear();
+		for (int i = 0; i < a.size(); i++)
+		{
+			pointer->push_back(a[i]);
+		}
+		/*if (!pointer)
+		{
+			pointer = new zDoubleArray();
+			pointer->clear();
+			printf("\n a size %i ", a.size());
+			for (int i = 0; i < a.size(); i++)
+			{
+				pointer->push_back(a[i]);
+			}
+		}
+		else *pointer = a;*/
 
-		pointer = new zDoubleArray(a);
 		updateAttributes();
+
+		//printf("\n a size %i | %i | %i \n ", a.size(), pointer->size(), arrayCount);
+
 	}
 	ZSPACE_EXTERNAL_INLINE zExtDoubleArray::zExtDoubleArray(zDoubleArray* a)
 	{
@@ -371,6 +388,7 @@ namespace zSpace
 	}
 	ZSPACE_EXTERNAL_INLINE zExtDoubleArray::~zExtDoubleArray()
 	{
+		//printf("\n destructor %i", arrayCount);
 		delete pointer;
 		pointer = nullptr;
 	}
@@ -402,6 +420,7 @@ namespace zSpace
 	}
 	ZSPACE_EXTERNAL_INLINE void zExtDoubleArray::getItems(double* items)
 	{
+		//printf("\n zExtDoubleArray::getItems pointer size = %i \n", pointer->size());
 		for (int i = 0; i < pointer->size(); i++)
 		{
 			items[i] = pointer->at(i);
@@ -410,10 +429,20 @@ namespace zSpace
 	ZSPACE_EXTERNAL_INLINE void zExtDoubleArray::setItems(double* items, int count)
 	{
 		//delete pointer;
-		pointer = new zDoubleArray;
+		//pointer = new zDoubleArray;
+		checkMemAlloc();
 		for (int i = 0; i < count; i++)
 		{
 			pointer->push_back(items[i]);
+		}
+		updateAttributes();
+	}
+	ZSPACE_EXTERNAL_INLINE void zExtDoubleArray::setItems(zDoubleArray& a)
+	{
+		checkMemAlloc();
+		for (int i = 0; i < a.size(); i++)
+		{
+			pointer->push_back(a[i]);
 		}
 		updateAttributes();
 	}
@@ -442,7 +471,8 @@ namespace zSpace
 	ZSPACE_EXTERNAL_INLINE zExtDoubleArray2D::zExtDoubleArray2D(vector<zDoubleArray> a)
 	{
 		//delete pointer;
-		pointer = new vector<zDoubleArray>();
+		if (!pointer) pointer = new vector<zDoubleArray>(a);
+		else *pointer = a;
 		updateAttributes();
 	}
 	ZSPACE_EXTERNAL_INLINE zExtDoubleArray2D::zExtDoubleArray2D(vector<zDoubleArray>* a)
@@ -600,8 +630,7 @@ namespace zSpace
 	// Constructor
 	ZSPACE_EXTERNAL_INLINE zExtStringArray::zExtStringArray()
 	{
-		//delete pointer;
-		pointer = new zStringArray();
+		checkMemAlloc();
 		updateAttributes();
 	}
 	ZSPACE_EXTERNAL_INLINE zExtStringArray::zExtStringArray(zStringArray a)
@@ -625,9 +654,14 @@ namespace zSpace
 
 		}
 		
+		if (!pointer) pointer = new zStringArray(a);
+		else *pointer = a;
+
+
+
 		//printf("\n string 1");
 
-		pointer = new zStringArray(a);
+		//pointer = new zStringArray(a);
 		//printf("\n string 2");
 
 		updateAttributes();
@@ -681,7 +715,7 @@ namespace zSpace
 	}
 	ZSPACE_EXTERNAL_INLINE void zExtStringArray::setItems(string* items, int count)
 	{
-		printf("\n zExtStringArray::setItems");
+		//printf("\n zExtStringArray::setItems");
 		//delete pointer;
 		//pointer = new zStringArray();
 		pointer = new vector<string>();
@@ -691,7 +725,7 @@ namespace zSpace
 		{
 			bool chk = items[i].c_str() != nullptr;
 			// Use %s format specifier for strings
-			printf("\n %i zExtString %d - %i", i, chk, items[i]);
+			//printf("\n %i zExtString %d - %i", i, chk, items[i]);
 
 			// Use cout for printing the content
 			//cout << endl << items[i] << endl;
@@ -760,14 +794,14 @@ namespace zSpace
 	// Constructor
 	ZSPACE_EXTERNAL_INLINE zExtStringArray2D::zExtStringArray2D()
 	{
-		//delete pointer;
-		pointer = new vector<zStringArray>();
+		checkMemAlloc();
 		updateAttributes();
 	}
 	ZSPACE_EXTERNAL_INLINE zExtStringArray2D::zExtStringArray2D(vector<zStringArray> a)
 	{
 		//delete pointer;
-		pointer = new vector<zStringArray>(a);
+		if (!pointer) pointer = new vector<zStringArray>(a);
+		else *pointer = a;
 		updateAttributes();
 	}
 	ZSPACE_EXTERNAL_INLINE zExtStringArray2D::zExtStringArray2D(vector<zStringArray>* a)
@@ -842,13 +876,14 @@ namespace zSpace
 	ZSPACE_EXTERNAL_INLINE zExtBoolArray::zExtBoolArray()
 	{
 		//delete pointer;
-		pointer = new zBoolArray();
+		checkMemAlloc();
 		updateAttributes();
 	}
 	ZSPACE_EXTERNAL_INLINE zExtBoolArray::zExtBoolArray(zBoolArray a)
 	{
-		//delete pointer;
-		pointer = new zBoolArray(a);
+		if (!pointer) pointer = new zBoolArray(a);
+		else *pointer = a;
+
 		updateAttributes();
 	}
 	ZSPACE_EXTERNAL_INLINE zExtBoolArray::zExtBoolArray(zBoolArray* a)
@@ -922,13 +957,13 @@ namespace zSpace
 	ZSPACE_EXTERNAL_INLINE zExtBoolArray2D::zExtBoolArray2D()
 	{
 		//delete pointer;
-		pointer = new vector<zBoolArray>();
+		checkMemAlloc();
 		updateAttributes();
 	}
 	ZSPACE_EXTERNAL_INLINE zExtBoolArray2D::zExtBoolArray2D(vector<zBoolArray> a)
 	{
-		//delete pointer;
-		pointer = new vector<zBoolArray>(a);
+		if (!pointer) pointer = new vector<zBoolArray>(a);
+		else *pointer = a;
 		updateAttributes();
 	}
 	ZSPACE_EXTERNAL_INLINE zExtBoolArray2D::zExtBoolArray2D(vector<zBoolArray>* a)

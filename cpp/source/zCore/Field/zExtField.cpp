@@ -96,7 +96,7 @@ namespace zSpace
 		}
 	}
 
-	ZSPACE_EXTERNAL_INLINE int ext_meshField_setFieldValues(zExtMeshScalarField& extField, zExtFloatArray& fValues)
+	ZSPACE_EXTERNAL_INLINE int ext_meshField_setFieldValues(zExtMeshScalarField& extField, zExtFloatArray& fValues, zFieldColorType type, float sdfWidth)
 	{
 		try
 		{
@@ -107,18 +107,18 @@ namespace zSpace
 				printf("\n outExtScalars.arrayCount != extField.meshPointer->field.fieldValues.size()");
 				return 0;
 			}
-
+			extField.checkMemAlloc();
 			zFnMeshScalarField fn(*extField.pointer);
 			printf("\n setFieldValues fValues.meshPointer->size() %i", fValues.pointer->size());
 
 
 
-			fn.setFieldValues(*fValues.pointer);
+			fn.setFieldValues(*fValues.pointer, type, sdfWidth);
 
-			//zObjGraph oGraph;
-			//fn.getIsocontour(oGraph, 0);
-			//zFnGraph fnGraph(oGraph);
-			//printf("\n setFieldValues graph numEdge %i", fnGraph.numEdges());
+			/*zObjGraph oGraph;
+			fn.getIsocontour(oGraph, 0);
+			zFnGraph fnGraph(oGraph);
+			printf("\n setFieldValues graph numEdge %i", fnGraph.numEdges());*/
 
 			extField.updateAttributes();
 			return 1;
@@ -628,50 +628,23 @@ namespace zSpace
 		try
 		{
 			zFnMeshScalarField fn(*extField.pointer);
-
-			//zScalarArray circle;
-			//zPoint circleCenter(0, 0, 0);
-
-			//float radius = 2.0;
-			//fn.getScalars_Circle(circle, circleCenter, radius, 0.0, false);
-			//
-			////fnFields.getIsocontour(oGraphs[0], 0);
-			//zObjGraph oGraph;
-			//fn.setFieldValues(circle);
-			//fn.getIsocontour(oGraph, 0);
-			//zFnGraph fnGraph(oGraph);
-			//printf("\n getIsocontour graph numEdge %i", fnGraph.numEdges());
-
-
-			
-
-
-			//zFnMeshScalarField fn(*extField.pointer);
 			printf("\n num numFieldValues %i", fn.numFieldValues());
+
+			//> FOR SOME REASON, we need to set the field value inside this method in order to get the isoContour! 
 			zFloatArray fValues;
 			fn.getFieldValues(fValues);
 			fn.setFieldValues(fValues);
-			/*for (auto& f : fValues)
-			{
-				printf(" _ %f", f);
-			}*/
 			
-
-			outCoutourGraphObj.checkMemAlloc();
-			//zObjGraph graph;
-			//fn.getIsocontour(graph, 0);
+			outCoutourGraphObj.checkMemAlloc(true);
 			fn.getIsocontour(*outCoutourGraphObj.pointer, inThreshold, precision, distTolerance);
+			outCoutourGraphObj.updateAttributes();
 
 			extField.updateAttributes();
-
-			/*zFnGraph fng(graph);
-			printf("\n num edges %i", fng.numEdges());
-			fng = zFnGraph(*outCoutourGraphObj.pointer);
-
-			printf("\n num edges %i", fng.numEdges());*/
+			
+			zFnGraph fng (*outCoutourGraphObj.pointer);
+			printf("\n num edges pointer  %i", fng.numEdges());
 
 
-			outCoutourGraphObj.updateAttributes();
 			return 1;
 		}
 		catch (const std::exception&)

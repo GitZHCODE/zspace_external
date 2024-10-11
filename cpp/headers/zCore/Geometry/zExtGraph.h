@@ -215,7 +215,7 @@ namespace zSpace
 #if defined(ZSPACE_EXTERNAL_STATIC_LIBRARY)  || defined(ZSPACE_EXTERNAL_DYNAMIC_LIBRARY)
 // All defined OK so do nothing
 #else
-#include<source/zCore/zExtGraph.cpp>
+#include<source/zCore/Geometry/zExtGraph.cpp>
 #endif
 
 #endif
