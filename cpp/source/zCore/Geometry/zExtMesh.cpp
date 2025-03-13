@@ -2397,4 +2397,9 @@ namespace zSpace
 
 	}
 
+	ZSPACE_EXTERNAL_INLINE zStatusCode zExtMesh::computeGeodesicContour(zExtGraphArray& outContours, zExtIntArray& startVerts, zExtIntArray& endVerts, int totalGraphs)
+	{
+		return ext_mesh_computeGeodesicContours(*this, startVerts, endVerts, totalGraphs, outContours);
+	}
+
 }

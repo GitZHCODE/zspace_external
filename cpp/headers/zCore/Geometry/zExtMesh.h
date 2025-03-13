@@ -86,6 +86,15 @@ namespace zSpace
 		void getEdgeLoop(zObjMesh& mesh, vector<zItMeshHalfEdgeArray>& outUDirection, vector<zItMeshHalfEdgeArray>& outVDirection);
 		void smoothMesh(int numDivisions, bool smoothCorner, zIntArray fixedIndex = zIntArray(), bool smoothFixedEdges = false);
 		void smoothMesh1D( int numDivisions, bool flip = false, bool smoothCorner = true, zIntArray fixedIndex = zIntArray());
+		
+		/*! \brief Computes geodesic contours on the mesh.
+		 *  \param outContours Output graph array containing the contours.
+		 *  \param startVerts Array of start vertex indices.
+		 *  \param endVerts Array of end vertex indices.
+		 *  \param totalGraphs Number of contour graphs to generate.
+		 *  \return Status code indicating success or failure.
+		 */
+		zStatusCode computeGeodesicContour(zExtGraphArray& outContours, zExtIntArray& startVerts, zExtIntArray& endVerts, int totalGraphs);
 
 	private:
 		void createMedialGraph(vector<zItMeshHalfEdgeArray>& meshHalfEdges, zObjGraph& outGraph);
@@ -306,9 +315,9 @@ namespace zSpace
 		ZSPACE_EXTERNAL zStatusCode ext_mesh_checkPlanarity(zExtMesh& objMesh, float tolerance, int planarityType, bool colorFaces, zExtDoubleArray& outDeviations);
 
 		/*! \brief Gets the face color data for a given zExtMesh object.
-		•	\param [in]  objMesh    -The zExtMesh object to retrieve face color data from.
-		•	\param [out] extColorArray  -Pointer to an array to store the face color data.
-		•	\return 1 on success, 0 on failure.
+		*	\param [in]  objMesh    -The zExtMesh object to retrieve face color data from.
+		*	\param [out] extColorArray  -Pointer to an array to store the face color data.
+		*	\return 1 on success, 0 on failure.
 		*/
 		ZSPACE_EXTERNAL zStatusCode ext_mesh_getFaceColor(zExtMesh& objMesh, zExtColorArray& extPointArray);
 
