@@ -29,6 +29,7 @@
 
 #include <headers/zCore/base/zExtern.h>
 #include <headers/zInterface/functionsets/zFnMesh.h>
+#include<headers/zToolsets/geometry/zTsMeshParameterization.h>
 
 
 #include <stdlib.h>
@@ -338,7 +339,7 @@ namespace zSpace
 		ZSPACE_EXTERNAL zStatusCode ext_mesh_meshPlaneIntersection(zExtMesh& inMesh, zExtPoint& origin, zExtPoint& normal, zExtGraph& outGraph, int inPres);
 
 
-
+		ZSPACE_EXTERNAL zStatusCode ext_mesh_computeGeodesicContours(zExtMesh& mesh, zExtIntArray& startVerts, zExtIntArray& endVerts, int totalGraphs, zExtGraphArray& outContours);
 
 		ZSPACE_EXTERNAL zPoint ext_mesh_meshTest(int num);
 		ZSPACE_EXTERNAL int ext_mesh_meshTest2(zStatus2& num);

@@ -2,17 +2,17 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <codeRepoDir>C:\Users\heba.eiz\source\repos\GitZHCODE</codeRepoDir>
+    <codeRepoDir>C:\Users\taizhong_chen\source\repos\GitZHCODE</codeRepoDir>
     <zspaceIncludeDir>$(SolutionDir)cpp/depends</zspaceIncludeDir>
     <zSpaceCoreLibDir>$(SolutionDir)cpp/depends\zspace_core</zSpaceCoreLibDir>
     <zSpaceToolsetsLibDir>$(SolutionDir)cpp/depends\zspace_toolset</zSpaceToolsetsLibDir>
     <RhinoDir>C:\Program Files\Rhino 7 SDK</RhinoDir>
     <MayaDir>C:\Program Files\Autodesk\Maya2017</MayaDir>
     <CudaCommonDir>C:\ProgramData\NVIDIA Corporation\CUDA Samples\v10.2\common\inc</CudaCommonDir>
-    <zspaceDeployDir>C:\Users\heba.eiz\source\repos\GitZHCODE\zspace_alice\ALICE_PLATFORM\src\zspace</zspaceDeployDir>
+    <zspaceDeployDir>C:\Users\taizhong_chen\source\repos\GitZHCODE\zspace_alice\ALICE_PLATFORM\src\zspace</zspaceDeployDir>
     <zspacecoreDir>$(codeRepoDir)\zspace_core</zspacecoreDir>
     <zspacetoolsetsDir>$(codeRepoDir)\zspace_toolsets</zspacetoolsetsDir>
-    <zspaceCSharpDeployDir>C:\Users\heba.eiz\source\repos\GitZHCODE\zspace_external\projects\CSHARP\zSpaceExternal_CSharp\bin</zspaceCSharpDeployDir>
+    <zspaceCSharpDeployDir>C:\Users\taizhong_chen\source\repos\GitZHCODE\zspace_external\projects\CSHARP\zSpaceExternal_CSharp\bin</zspaceCSharpDeployDir>
   </PropertyGroup>
   <PropertyGroup />
   <ItemDefinitionGroup>

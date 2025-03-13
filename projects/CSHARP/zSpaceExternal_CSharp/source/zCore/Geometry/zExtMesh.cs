@@ -424,7 +424,11 @@ namespace zSpace {
         }
 
 
-
+        public zStatusCode computeGeodesicContour(out zExtGraphArray outContours, in zExtIntArray startVerts = new zExtIntArray(), in zExtIntArray endVerts = new zExtIntArray(), int totalGraphs = 20)
+        {
+            var chk = zNativeMethods.ext_mesh_computeGeodesicContours(ref this, startVerts, endVerts, totalGraphs, out outContours);
+            return chk;
+        }
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -580,6 +584,9 @@ namespace zSpace {
 
         [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
         public static extern int ext_mesh_meshTest2(ref zStatus2 s);
+
+        [DllImport(path, CallingConvention = CallingConvention.Cdecl)]
+        public static extern zStatusCode ext_mesh_computeGeodesicContours(ref zExtMesh mesh, in zExtIntArray startVerts, in zExtIntArray endVerts, int totalGraphs, out zExtGraphArray outContours);
 
     }
 
