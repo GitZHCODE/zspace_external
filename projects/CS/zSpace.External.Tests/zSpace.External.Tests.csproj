@@ -1,0 +1,82 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <IsPackable>false</IsPackable>
+    <Platforms>x64</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="2.2.8" />
+    <PackageReference Include="MSTest.TestFramework" Version="2.2.8" />
+    <PackageReference Include="coverlet.collector" Version="3.1.2" />
+    <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="6.0.0" />
+    <PackageReference Include="System.Collections.Immutable" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\zSpace.External\zSpace.External.csproj" />
+  </ItemGroup>
+
+  <!-- Copy native DLLs to output directory -->
+  <Target Name="CopyNativeDlls" AfterTargets="Build">
+    <PropertyGroup>
+      <NativeBinPath>$(MSBuildThisFileDirectory)..\..\..\bin\x64\$(Configuration)</NativeBinPath>
+      <ZSpaceCompiledDllPath>C:\Users\taizhong_chen\source\repos\GitZHCODE\zspace_core\cpp\compiled\Release_DLL</ZSpaceCompiledDllPath>
+      <VCRedistPath>C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Redist\MSVC\14.35.32215\x64\Microsoft.VC143.CRT</VCRedistPath>
+    </PropertyGroup>
+    
+    <Message Text="Looking for native DLLs in: $(NativeBinPath)" Importance="high" />
+    <Message Text="Looking for zSpace Core dependencies in: $(ZSpaceCompiledDllPath)" Importance="high" />
+    
+    <!-- Copy our native DLL -->
+    <ItemGroup>
+      <NativeDlls Include="$(NativeBinPath)\*.dll" />
+      <NativeDlls Include="$(NativeBinPath)\*.pdb" />
+    </ItemGroup>
+    <Copy SourceFiles="@(NativeDlls)" DestinationFolder="$(OutputPath)" SkipUnchangedFiles="true" />
+    <Message Text="Copied native DLLs: @(NativeDlls)" Importance="high" />
+    
+    <!-- Copy all zSpace Core compiled DLLs -->
+    <ItemGroup Condition="Exists('$(ZSpaceCompiledDllPath)')">
+      <ZSpaceCompiledDlls Include="$(ZSpaceCompiledDllPath)\*.dll" />
+    </ItemGroup>
+    <Copy 
+      SourceFiles="@(ZSpaceCompiledDlls)" 
+      DestinationFolder="$(OutputPath)" 
+      SkipUnchangedFiles="true" 
+      Condition="Exists('$(ZSpaceCompiledDllPath)')" />
+    <Message 
+      Text="Copied zSpace Core compiled DLLs: @(ZSpaceCompiledDlls)" 
+      Importance="high" 
+      Condition="Exists('$(ZSpaceCompiledDllPath)')" />
+    <Message 
+      Text="zSpace Core compiled DLL path not found at: $(ZSpaceCompiledDllPath)" 
+      Importance="high" 
+      Condition="!Exists('$(ZSpaceCompiledDllPath)')" />
+    
+    <!-- Copy VC++ Runtime DLLs if available -->
+    <ItemGroup Condition="Exists('$(VCRedistPath)')">
+      <VCRuntimeDlls Include="$(VCRedistPath)\*.dll" />
+    </ItemGroup>
+    <Copy 
+      SourceFiles="@(VCRuntimeDlls)" 
+      DestinationFolder="$(OutputPath)" 
+      SkipUnchangedFiles="true" 
+      Condition="Exists('$(VCRedistPath)')" />
+    <Message 
+      Text="Copied VC++ Runtime DLLs: @(VCRuntimeDlls)" 
+      Importance="high" 
+      Condition="Exists('$(VCRedistPath)')" />
+  </Target>
+  
+  <!-- Run dependency walker to diagnose DLL dependencies -->
+  <Target Name="DiagnoseDllDependencies" AfterTargets="Build" Condition="Exists('$(OutputPath)zSpace_External.dll')">
+    <Message Text="Analyzing DLL dependencies for $(OutputPath)zSpace_External.dll" Importance="high" />
+    <Exec Command="dumpbin /dependents &quot;$(OutputPath)zSpace_External.dll&quot;" ContinueOnError="true" />
+  </Target>
+
+</Project> 

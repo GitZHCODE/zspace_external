@@ -4,18 +4,18 @@
   <PropertyGroup Label="UserMacros">
     <codeRepoDir>C:\Users\taizhong_chen\source\repos\GitZHCODE</codeRepoDir>
     <iglDir>$(codeRepoDir)\zspace_core\cpp\depends\igl</iglDir>
+    <localFreeglutDir>$(ProjectDir)..\..\..\cpp\depends\freeglut</localFreeglutDir>
   </PropertyGroup>
   <PropertyGroup>
     <_PropertySheetDisplayName>IGL_2022</_PropertySheetDisplayName>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>($codeRepoDir);$(iglDir)/headers;$(iglDir)/build/_deps/eigen-src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(codeRepoDir);$(iglDir)/headers;$(iglDir)/build/_deps/eigen-src;$(localFreeglutDir)/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>IGL_STATIC_LIBRARY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>$(iglDir)/build/lib/igl.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(iglDir)/build/lib/igl.lib;freeglut.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -25,6 +25,10 @@
     </BuildMacro>
     <BuildMacro Include="iglDir">
       <Value>$(iglDir)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+    <BuildMacro Include="localFreeglutDir">
+      <Value>$(localFreeglutDir)</Value>
       <EnvironmentVariable>true</EnvironmentVariable>
     </BuildMacro>
   </ItemGroup>

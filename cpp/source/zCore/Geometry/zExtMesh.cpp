@@ -21,8 +21,8 @@ zExtMesh::zExtMesh() : m_mesh(new zObjMesh()), m_vertexCount(0), m_faceCount(0) 
 
 zExtMesh::zExtMesh(zObjMesh* mesh) : m_mesh(mesh), m_vertexCount(0), m_faceCount(0) {
     if (m_mesh) {
-        updateAttributes();
-    }
+		updateAttributes();
+	}
 }
 
 zExtMesh::zExtMesh(const zExtMesh& other) : m_vertexCount(other.m_vertexCount), m_faceCount(other.m_faceCount) {
@@ -93,8 +93,8 @@ bool zExtMesh::createTestCube(double size) {
         fnMesh.create(positions, polyCounts, polyConnections);
         bool success = true;
         if (success) {
-            updateAttributes();
-            return true;
+		updateAttributes();
+		return true;
         } else {
             // Reset mesh in case of failure
             m_mesh.reset(new zObjMesh());
@@ -107,8 +107,8 @@ bool zExtMesh::createTestCube(double size) {
         m_mesh.reset(new zObjMesh());
         m_vertexCount = 0;
         m_faceCount = 0;
-        return false;
-    }
+			return false;
+		}
 }
 
 void zExtMesh::updateAttributes() {
