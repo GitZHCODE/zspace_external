@@ -34,19 +34,12 @@ namespace zSpace.External.Demo
 
                 // Create a mesh
                 Console.WriteLine("Creating mesh...");
-                using (var mesh = new Mesh())
+                using (var mesh = new zExtMesh())
                 {
                     Console.WriteLine("Mesh created successfully.");
                     Console.WriteLine($"Initial vertex count: {mesh.VertexCount}");
                     Console.WriteLine($"Initial face count: {mesh.FaceCount}");
                     
-                    // Create a test cube
-                    Console.WriteLine("\nCreating test cube...");
-                    mesh.CreateTestCube(1.0);
-                    
-                    Console.WriteLine("Test cube created successfully.");
-                    Console.WriteLine($"Vertex count after cube creation: {mesh.VertexCount}");
-                    Console.WriteLine($"Face count after cube creation: {mesh.FaceCount}");
                 }
                 
                 Console.WriteLine("\nDemo completed successfully!");

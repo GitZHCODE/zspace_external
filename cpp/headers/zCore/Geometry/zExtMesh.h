@@ -74,12 +74,21 @@ public:
     int getFaceCount() const;
     
     /**
-     * Create a simple cube mesh for testing purposes.
+     * Create a mesh from the given vertex positions and face data.
      * 
-     * @param size Size of the cube.
+     * @param vertexPositions Array of vertex positions (x1, y1, z1, x2, y2, z2, ...)
+     * @param vertexCount Number of vertices (vertexPositions.length / 3)
+     * @param polyCounts Array specifying number of vertices per face
+     * @param polyCountsSize Size of the polyCounts array
+     * @param polyConnections Array of vertex indices for each face
+     * @param polyConnectionsSize Size of the polyConnections array
      * @return True if successful, false otherwise.
      */
-    bool createTestCube(double size = 1.0);
+    bool createMesh(
+        const double* vertexPositions, int vertexCount,
+        const int* polyCounts, int polyCountsSize,
+        const int* polyConnections, int polyConnectionsSize
+    );
     
 private:
     /**

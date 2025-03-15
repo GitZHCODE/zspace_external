@@ -8,7 +8,7 @@ namespace zSpace.External
     /// <summary>
     /// Provides a C# wrapper for the zSpace External native library.
     /// </summary>
-    public static class ZSpaceExternal
+    public static class zSpaceExternal
     {
         // Name of the native DLL
         private const string DllName = "zSpace_External";
@@ -98,7 +98,7 @@ namespace zSpace.External
         /// <summary>
         /// Represents a mesh in the zSpace External library.
         /// </summary>
-        public class Mesh : IDisposable
+        public class zExtMesh : IDisposable
         {
             private IntPtr _handle;
             private bool _disposed = false;
@@ -106,7 +106,7 @@ namespace zSpace.External
             /// <summary>
             /// Creates a new empty mesh.
             /// </summary>
-            public Mesh()
+            public zExtMesh()
             {
                 _handle = zext_mesh_create();
                 ThrowIfFailed(_handle != IntPtr.Zero, "Failed to create mesh");
@@ -115,7 +115,7 @@ namespace zSpace.External
             /// <summary>
             /// Finalizer to ensure resources are freed.
             /// </summary>
-            ~Mesh()
+            ~zExtMesh()
             {
                 Dispose(false);
             }
@@ -203,7 +203,7 @@ namespace zSpace.External
             {
                 if (_disposed)
                 {
-                    throw new ObjectDisposedException(nameof(Mesh));
+                    throw new ObjectDisposedException(nameof(zExtMesh));
                 }
             }
         }

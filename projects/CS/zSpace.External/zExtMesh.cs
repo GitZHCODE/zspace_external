@@ -7,7 +7,7 @@ namespace zSpace.External
     /// <summary>
     /// Represents a 3D mesh for use with zSpace.
     /// </summary>
-    public class Mesh : IDisposable
+    public class zExtMesh : IDisposable
     {
         private IntPtr _handle;
         private bool _disposed;
@@ -55,7 +55,7 @@ namespace zSpace.External
         /// <summary>
         /// Creates a new, empty mesh.
         /// </summary>
-        public Mesh()
+        public zExtMesh()
         {
             try
             {
@@ -84,21 +84,36 @@ namespace zSpace.External
         }
 
         /// <summary>
-        /// Creates a simple cube mesh with the specified size.
+        /// Creates a mesh from vertex positions and face data.
         /// </summary>
-        /// <param name="size">The size of the cube (default is 1.0)</param>
+        /// <param name="vertexPositions">Array of vertex positions (x1, y1, z1, x2, y2, z2, ...)</param>
+        /// <param name="polyCounts">Array specifying number of vertices per face</param>
+        /// <param name="polyConnections">Array of vertex indices for each face</param>
         /// <exception cref="ZSpaceExternalException">Thrown if the operation fails.</exception>
-        public void CreateTestCube(double size = 1.0)
+        /// <exception cref="ArgumentNullException">Thrown if any array is null.</exception>
+        /// <exception cref="ArgumentException">Thrown if any array has invalid length.</exception>
+        public void CreateMesh(double[] vertexPositions, int[] polyCounts, int[] polyConnections)
         {
             ThrowIfDisposed();
             
-            Debug.WriteLine($"Creating test cube with size {size}...");
-            if (!NativeMethods.zext_mesh_create_test_cube(_handle, size))
+            if (vertexPositions == null) throw new ArgumentNullException(nameof(vertexPositions));
+            if (polyCounts == null) throw new ArgumentNullException(nameof(polyCounts));
+            if (polyConnections == null) throw new ArgumentNullException(nameof(polyConnections));
+            
+            if (vertexPositions.Length % 3 != 0)
+                throw new ArgumentException("Vertex positions array length must be divisible by 3.", nameof(vertexPositions));
+            
+            int vertexCount = vertexPositions.Length / 3;
+            
+            Debug.WriteLine($"Creating mesh with {vertexCount} vertices and {polyCounts.Length} faces...");
+            if (!NativeMethods.zext_mesh_create_mesh(_handle, vertexPositions, vertexCount, 
+                                                   polyCounts, polyCounts.Length, 
+                                                   polyConnections, polyConnections.Length))
             {
-                ThrowLastError("Failed to create test cube");
+                ThrowLastError("Failed to create mesh");
             }
             
-            Debug.WriteLine("Test cube created successfully");
+            Debug.WriteLine("Mesh created successfully");
         }
 
         /// <summary>
@@ -132,7 +147,7 @@ namespace zSpace.External
         /// <summary>
         /// Finalizer to clean up native resources if the object is not disposed.
         /// </summary>
-        ~Mesh()
+        ~zExtMesh()
         {
             Dispose(false);
         }
@@ -144,7 +159,7 @@ namespace zSpace.External
         {
             if (_disposed)
             {
-                throw new ObjectDisposedException(nameof(Mesh), "Cannot access a disposed mesh.");
+                throw new ObjectDisposedException(nameof(zExtMesh), "Cannot access a disposed mesh.");
             }
         }
 

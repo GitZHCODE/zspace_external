@@ -78,4 +78,19 @@ ZSPACE_EXTERNAL_API int zext_mesh_create_test_cube(zExtMeshHandle mesh_handle, d
     , 0)
 }
 
+ZSPACE_EXTERNAL_API int zext_mesh_create_mesh(zExtMeshHandle mesh_handle, 
+                                          const double* vertexPositions, int vertexCount,
+                                          const int* polyCounts, int polyCountsSize,
+                                          const int* polyConnections, int polyConnectionsSize) {
+    TRY_CATCH_RETURN(
+        if (!mesh_handle) {
+            zSpace::SetError("Invalid mesh handle");
+            return 0;
+        }
+        
+        auto* mesh = static_cast<zSpace::zExtMesh*>(mesh_handle);
+        return mesh->createMesh(vertexPositions, vertexCount, polyCounts, polyCountsSize, polyConnections, polyConnectionsSize) ? 1 : 0;
+    , 0)
+}
+
 } // extern "C" 

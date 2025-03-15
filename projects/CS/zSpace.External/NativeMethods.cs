@@ -65,10 +65,17 @@ namespace zSpace.External
         public static extern int zext_mesh_get_face_count(IntPtr mesh_handle);
         
         /// <summary>
-        /// Creates a test cube mesh with the specified size.
+        /// Creates a mesh from vertex positions and face data.
         /// </summary>
         [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.I1)]
-        public static extern bool zext_mesh_create_test_cube(IntPtr mesh_handle, double size);
+        public static extern bool zext_mesh_create_mesh(
+            IntPtr mesh_handle, 
+            [MarshalAs(UnmanagedType.LPArray)] double[] vertexPositions, 
+            int vertexCount,
+            [MarshalAs(UnmanagedType.LPArray)] int[] polyCounts, 
+            int polyCountsSize,
+            [MarshalAs(UnmanagedType.LPArray)] int[] polyConnections, 
+            int polyConnectionsSize);
     }
 } 

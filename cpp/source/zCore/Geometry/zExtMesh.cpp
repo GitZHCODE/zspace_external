@@ -47,7 +47,21 @@ int zExtMesh::getFaceCount() const {
     return m_faceCount;
 }
 
-bool zExtMesh::createTestCube(double size) {
+void zExtMesh::updateAttributes() {
+    if (m_mesh) {
+        m_vertexCount = static_cast<int>(m_mesh->mesh.n_v);
+        m_faceCount = static_cast<int>(m_mesh->mesh.n_f);
+    } else {
+        m_vertexCount = 0;
+        m_faceCount = 0;
+    }
+}
+
+bool zExtMesh::createMesh(
+    const double* vertexPositions, int vertexCount,
+    const int* polyCounts, int polyCountsSize,
+    const int* polyConnections, int polyConnectionsSize
+) {
     try {
         if (!m_mesh) {
             m_mesh.reset(new zObjMesh());
@@ -59,42 +73,40 @@ bool zExtMesh::createTestCube(double size) {
         // Clear existing mesh
         fnMesh.clear();
 
-        // Create vertex positions for a cube
+        // Convert vertex positions to zPoint array
         zPointArray positions;
-        double halfSize = size / 2.0;
+        positions.reserve(vertexCount);
 
-        // Bottom face
-        positions.push_back(zPoint(-halfSize, -halfSize, -halfSize));  // 0
-        positions.push_back(zPoint(halfSize, -halfSize, -halfSize));   // 1
-        positions.push_back(zPoint(halfSize, halfSize, -halfSize));    // 2
-        positions.push_back(zPoint(-halfSize, halfSize, -halfSize));   // 3
+        for (int i = 0; i < vertexCount; i++) {
+            int baseIndex = i * 3; // Each vertex has 3 components (x, y, z)
+            positions.push_back(zPoint(
+                vertexPositions[baseIndex],
+                vertexPositions[baseIndex + 1],
+                vertexPositions[baseIndex + 2]
+            ));
+        }
 
-        // Top face
-        positions.push_back(zPoint(-halfSize, -halfSize, halfSize));   // 4
-        positions.push_back(zPoint(halfSize, -halfSize, halfSize));    // 5
-        positions.push_back(zPoint(halfSize, halfSize, halfSize));     // 6
-        positions.push_back(zPoint(-halfSize, halfSize, halfSize));    // 7
+        // Convert polygon counts to zIntArray
+        zIntArray polyCountsArray;
+        polyCountsArray.reserve(polyCountsSize);
+        for (int i = 0; i < polyCountsSize; i++) {
+            polyCountsArray.push_back(polyCounts[i]);
+        }
 
-        // Create the polygon indices for faces
-        zIntArray polyCounts = { 4, 4, 4, 4, 4, 4 }; // 6 faces, each with 4 vertices
-        zIntArray polyConnections = {
-            // Bottom face
-            0, 1, 2, 3,
-            // Top face
-            4, 7, 6, 5,
-            // 4 side faces
-            0, 4, 5, 1,  // Front
-            1, 5, 6, 2,  // Right
-            2, 6, 7, 3,  // Back
-            3, 7, 4, 0   // Left
-        };
+        // Convert polygon connections to zIntArray
+        zIntArray polyConnectionsArray;
+        polyConnectionsArray.reserve(polyConnectionsSize);
+        for (int i = 0; i < polyConnectionsSize; i++) {
+            polyConnectionsArray.push_back(polyConnections[i]);
+        }
 
-        // Use zFnMesh create method to properly create the mesh
-        fnMesh.create(positions, polyCounts, polyConnections);
-        bool success = true;
-        if (success) {
-		updateAttributes();
-		return true;
+        // Create the mesh
+        fnMesh.create(positions, polyCountsArray, polyConnectionsArray);
+
+        // Check if creation was successful
+        if (fnMesh.numVertices() > 0) {
+            updateAttributes();
+            return true;
         } else {
             // Reset mesh in case of failure
             m_mesh.reset(new zObjMesh());
@@ -107,18 +119,8 @@ bool zExtMesh::createTestCube(double size) {
         m_mesh.reset(new zObjMesh());
         m_vertexCount = 0;
         m_faceCount = 0;
-			return false;
-		}
-}
-
-void zExtMesh::updateAttributes() {
-    //if (m_mesh) {
-    //    m_vertexCount = static_cast<int>(m_mesh->vertices.size());
-    //    m_faceCount = static_cast<int>(m_mesh->faces.size());
-    //} else {
-    //    m_vertexCount = 0;
-    //    m_faceCount = 0;
-    //}
+        return false;
+    }
 }
 
 } // namespace zSpace 

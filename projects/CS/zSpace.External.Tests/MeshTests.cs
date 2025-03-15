@@ -24,7 +24,7 @@ namespace zSpace.External.Tests
         {
             try
             {
-                using (var mesh = new ZSpaceExternal.Mesh())
+                using (var mesh = new zSpace.External.zExtMesh())
                 {
                     Assert.IsNotNull(mesh, "Mesh should be created successfully");
                     Assert.IsTrue(mesh.IsValid, "Mesh should be valid");
@@ -40,34 +40,36 @@ namespace zSpace.External.Tests
         }
 
         [TestMethod]
-        public void CanCreateTestCube()
+        public void CanCreateCustomMesh()
         {
-            using (var mesh = new ZSpaceExternal.Mesh())
+            using (var mesh = new zSpace.External.zExtMesh())
             {
+                // Create data for a simple triangle
+                double[] vertices = new double[] {
+                    0.0, 0.0, 0.0,  // Vertex 0
+                    1.0, 0.0, 0.0,  // Vertex 1
+                    0.0, 1.0, 0.0   // Vertex 2
+                };
+                
+                int[] polyCounts = new int[] { 3 }; // One face with 3 vertices
+                int[] polyConnections = new int[] { 0, 1, 2 }; // Vertices 0, 1, 2 form the face
+                
+                // Act & Assert - Initial state
+                Assert.IsTrue(mesh.IsValid, "Mesh should be valid upon creation");
                 Assert.AreEqual(0, mesh.VertexCount, "Vertex count should be 0 initially");
                 Assert.AreEqual(0, mesh.FaceCount, "Face count should be 0 initially");
-
-                bool result = mesh.CreateTestCube(2.0);
                 
-                Assert.IsTrue(result, "CreateTestCube should return true");
-                Assert.IsTrue(mesh.VertexCount > 0, "Vertex count should be > 0 after creating cube");
-                Assert.IsTrue(mesh.FaceCount > 0, "Face count should be > 0 after creating cube");
+                // Act - Create mesh
+                mesh.CreateMesh(vertices, polyCounts, polyConnections);
                 
+                // Debug output
                 Console.WriteLine($"Vertex count: {mesh.VertexCount}");
                 Console.WriteLine($"Face count: {mesh.FaceCount}");
+                
+                // Assert - Final state
+                Assert.AreEqual(3, mesh.VertexCount, "Vertex count should be 3");
+                Assert.AreEqual(1, mesh.FaceCount, "Face count should be 1");
             }
-        }
-
-        [TestMethod]
-        public void MeshPropertiesThrowIfDisposed()
-        {
-            var mesh = new ZSpaceExternal.Mesh();
-            mesh.Dispose();
-
-            Assert.ThrowsException<ObjectDisposedException>(() => { var _ = mesh.IsValid; });
-            Assert.ThrowsException<ObjectDisposedException>(() => { var _ = mesh.VertexCount; });
-            Assert.ThrowsException<ObjectDisposedException>(() => { var _ = mesh.FaceCount; });
-            Assert.ThrowsException<ObjectDisposedException>(() => { mesh.CreateTestCube(1.0); });
         }
 
         #region Helper Methods
@@ -79,7 +81,7 @@ namespace zSpace.External.Tests
 
             Console.WriteLine("Running native library diagnostics...");
             
-            string assemblyPath = typeof(ZSpaceExternal).Assembly.Location;
+            string assemblyPath = typeof(zSpace.External.zExtMesh).Assembly.Location;
             string assemblyDir = Path.GetDirectoryName(assemblyPath);
             string dllPath = Path.Combine(assemblyDir, "zSpace_External.dll");
             

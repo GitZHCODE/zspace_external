@@ -86,6 +86,23 @@ ZSPACE_EXTERNAL_API int zext_mesh_get_face_count(zExtMeshHandle mesh_handle);
  */
 ZSPACE_EXTERNAL_API int zext_mesh_create_test_cube(zExtMeshHandle mesh_handle, double size);
 
+/**
+ * Create a mesh from vertex positions and face data.
+ * 
+ * @param mesh_handle Handle to the mesh.
+ * @param vertexPositions Array of vertex positions (x1, y1, z1, x2, y2, z2, ...).
+ * @param vertexCount Number of vertices (vertexPositions.length / 3).
+ * @param polyCounts Array specifying number of vertices per face.
+ * @param polyCountsSize Size of the polyCounts array.
+ * @param polyConnections Array of vertex indices for each face.
+ * @param polyConnectionsSize Size of the polyConnections array.
+ * @return 1 if successful, 0 if an error occurred.
+ */
+ZSPACE_EXTERNAL_API int zext_mesh_create_mesh(zExtMeshHandle mesh_handle, 
+                                              const double* vertexPositions, int vertexCount,
+                                              const int* polyCounts, int polyCountsSize,
+                                              const int* polyConnections, int polyConnectionsSize);
+
 #ifdef __cplusplus
 }
 #endif

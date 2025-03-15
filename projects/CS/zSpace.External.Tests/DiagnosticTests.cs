@@ -30,7 +30,7 @@ namespace zSpace.External.Tests
             Console.WriteLine("=== Assembly Information ===");
 
             var currentAssembly = Assembly.GetExecutingAssembly();
-            var libAssembly = typeof(ZSpaceExternal).Assembly;
+            var libAssembly = typeof(zSpaceExternal).Assembly;
 
             DisplayAssemblyInfo("Current Assembly", currentAssembly);
             DisplayAssemblyInfo("Library Assembly", libAssembly);
@@ -60,7 +60,7 @@ namespace zSpace.External.Tests
         {
             Console.WriteLine("=== Native DLL Check ===");
             
-            string assemblyPath = typeof(ZSpaceExternal).Assembly.Location;
+            string assemblyPath = typeof(zSpaceExternal).Assembly.Location;
             string assemblyDir = Path.GetDirectoryName(assemblyPath);
             string dllPath = Path.Combine(assemblyDir, "zSpace_External.dll");
             
