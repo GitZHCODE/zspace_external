@@ -66,18 +66,6 @@ ZSPACE_EXTERNAL_API int zext_mesh_get_face_count(zExtMeshHandle mesh_handle) {
     , -1)
 }
 
-ZSPACE_EXTERNAL_API int zext_mesh_create_test_cube(zExtMeshHandle mesh_handle, double size) {
-    TRY_CATCH_RETURN(
-        if (!mesh_handle) {
-            zSpace::SetError("Invalid mesh handle");
-            return 0;
-        }
-        
-        auto* mesh = static_cast<zSpace::zExtMesh*>(mesh_handle);
-        return mesh->createTestCube(size) ? 1 : 0;
-    , 0)
-}
-
 ZSPACE_EXTERNAL_API int zext_mesh_create_mesh(zExtMeshHandle mesh_handle, 
                                           const double* vertexPositions, int vertexCount,
                                           const int* polyCounts, int polyCountsSize,

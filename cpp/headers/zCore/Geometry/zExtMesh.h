@@ -109,7 +109,6 @@ private:
     friend int zext_mesh_is_valid(zExtMeshHandle);
     friend int zext_mesh_get_vertex_count(zExtMeshHandle);
     friend int zext_mesh_get_face_count(zExtMeshHandle);
-    friend int zext_mesh_create_test_cube(zExtMeshHandle, double);
 };
 
 } // namespace zSpace
