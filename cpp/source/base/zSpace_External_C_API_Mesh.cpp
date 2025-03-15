@@ -81,4 +81,28 @@ ZSPACE_EXTERNAL_API int zext_mesh_create_mesh(zExtMeshHandle mesh_handle,
     , 0)
 }
 
+ZSPACE_EXTERNAL_API int zext_mesh_compute_geodesic_heat(zExtMeshHandle mesh_handle, 
+                                                    const int* source_vertex_ids, int source_vertex_count,
+                                                    float* out_geodesic_scalars) {
+    TRY_CATCH_RETURN(
+        if (!mesh_handle) {
+            zSpace::SetError("Invalid mesh handle");
+            return 0;
+        }
+        
+        if (!source_vertex_ids || source_vertex_count <= 0) {
+            zSpace::SetError("Invalid source vertices");
+            return 0;
+        }
+        
+        if (!out_geodesic_scalars) {
+            zSpace::SetError("Invalid output array");
+            return 0;
+        }
+        
+        auto* mesh = static_cast<zSpace::zExtMesh*>(mesh_handle);
+        return mesh->computeGeodesicHeat(source_vertex_ids, source_vertex_count, out_geodesic_scalars) ? 1 : 0;
+    , 0)
+}
+
 } // extern "C" 

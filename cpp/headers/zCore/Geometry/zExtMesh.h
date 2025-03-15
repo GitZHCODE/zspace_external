@@ -89,7 +89,15 @@ public:
         const int* polyCounts, int polyCountsSize,
         const int* polyConnections, int polyConnectionsSize
     );
-
+    
+    /**
+     * Compute geodesic distances using the heat method.
+     * 
+     * @param sourceVIds Array of source vertex indices
+     * @param sourceVCount Number of source vertices
+     * @param out_geodesicScalars Output array for computed geodesic distances (pre-allocated with size equal to vertex count)
+     * @return True if successful, false otherwise.
+     */
     bool computeGeodesicHeat(
         const int* sourceVIds, int sourceVCount,
         float* out_geodesicScalars
@@ -114,6 +122,7 @@ private:
     friend int zext_mesh_is_valid(zExtMeshHandle);
     friend int zext_mesh_get_vertex_count(zExtMeshHandle);
     friend int zext_mesh_get_face_count(zExtMeshHandle);
+    friend int zext_mesh_compute_geodesic_heat(zExtMeshHandle, const int*, int, float*);
 };
 
 } // namespace zSpace

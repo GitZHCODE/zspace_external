@@ -117,6 +117,36 @@ namespace zSpace.External
         }
 
         /// <summary>
+        /// Computes geodesic distances from source vertices using the heat method.
+        /// </summary>
+        /// <param name="sourceVertexIds">Array of source vertex indices</param>
+        /// <param name="outGeodesicDistances">Pre-allocated array that will be filled with geodesic distances (must be of length VertexCount)</param>
+        /// <exception cref="ZSpaceExternalException">Thrown if the operation fails.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if any array is null.</exception>
+        /// <exception cref="ArgumentException">Thrown if any array has invalid length or if there are no source vertices.</exception>
+        public void ComputeGeodesicHeat(int[] sourceVertexIds, float[] outGeodesicDistances)
+        {
+            ThrowIfDisposed();
+            
+            if (sourceVertexIds == null) throw new ArgumentNullException(nameof(sourceVertexIds));
+            if (outGeodesicDistances == null) throw new ArgumentNullException(nameof(outGeodesicDistances));
+            
+            if (sourceVertexIds.Length == 0)
+                throw new ArgumentException("Source vertex IDs array cannot be empty.", nameof(sourceVertexIds));
+            
+            if (outGeodesicDistances.Length < VertexCount)
+                throw new ArgumentException($"Output array must have at least {VertexCount} elements (one per vertex).", nameof(outGeodesicDistances));
+            
+            Debug.WriteLine($"Computing geodesic distances from {sourceVertexIds.Length} source vertices...");
+            if (!NativeMethods.zext_mesh_compute_geodesic_heat(_handle, sourceVertexIds, sourceVertexIds.Length, outGeodesicDistances))
+            {
+                ThrowLastError("Failed to compute geodesic distances");
+            }
+            
+            Debug.WriteLine("Geodesic distances computed successfully");
+        }
+
+        /// <summary>
         /// Disposes the mesh resources.
         /// </summary>
         public void Dispose()

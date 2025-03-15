@@ -127,43 +127,57 @@ bool zExtMesh::createMesh(
 bool zExtMesh::computeGeodesicHeat(
     const int* sourceVIds, int sourceVCount,
     float* out_geodesicScalars
-	)
+)
 {
-	zTsMeshParam myMeshParam;
-	myMeshParam.o_TriMesh = *m_mesh;
+    // Setup mesh parameterization
+    zTsMeshParam myMeshParam;
+    myMeshParam.o_TriMesh = *m_mesh;
+    
+    zFnMesh fnMesh(myMeshParam.o_TriMesh);
+    fnMesh.computeMeshNormals();
+    fnMesh.getMatrices_trimesh(myMeshParam.triMesh_V, myMeshParam.triMesh_FTris);
 
-	zDomainFloat outMinMax(0, 1);
+    // Compute geodesic heat
+    zDomainFloat outMinMax(0, 1);
 
-	vector<float> geodesicsScalars;
+    vector<int> sourceVertices;
+    sourceVertices.reserve(sourceVCount);
+    for (int i = 0; i < sourceVCount; i++) {
+        sourceVertices.push_back(sourceVIds[i]);
+    }
 
-	if (sourceVCount > 0)
-	{
-		myMeshParam.computeGeodesics_Exact(sourceVIds, geodesicsScalars);
-		zDomainFloat startMinMax(myMeshParam.coreUtils.zMin(geodesicsScalars), myMeshParam.coreUtils.zMax(geodesicsScalars));
-		for (auto& v : geodesicsScalars)
-			v = myMeshParam.coreUtils.ofMap(v, startMinMax, outMinMax);
+    vector<float> geodesicsScalars;
 
-		cout << "start min:" << myMeshParam.coreUtils.zMin(geodesicsScalars) << endl;
-		cout << "start max:" << myMeshParam.coreUtils.zMax(geodesicsScalars) << endl;
-	}
+    if (sourceVCount > 0)
+    {
+        myMeshParam.computeGeodesics_Heat(sourceVertices, geodesicsScalars);
+        zDomainFloat startMinMax(myMeshParam.coreUtils.zMin(geodesicsScalars), myMeshParam.coreUtils.zMax(geodesicsScalars));
+        for (auto& v : geodesicsScalars)
+            v = myMeshParam.coreUtils.ofMap(v, startMinMax, outMinMax);
+    }
 
+    // Copy results to output array
+    if (geodesicsScalars.size() > 0) {
+        for (int i = 0; i < min((int)geodesicsScalars.size(), m_vertexCount); i++) {
+            out_geodesicScalars[i] = geodesicsScalars[i];
+        }
+    }
 
-	// color mesh
-	zFnMesh fnMesh(*m_mesh);
-	zColor* mesh_vColors = fnMesh.getRawVertexColors();
+    // color mesh
+    zColor* mesh_vColors = fnMesh.getRawVertexColors();
 
-	zScalar minScalar = myMeshParam.coreUtils.zMin(geodesicsScalars);
-	zScalar maxScalar = myMeshParam.coreUtils.zMax(geodesicsScalars);
+    zScalar minScalar = myMeshParam.coreUtils.zMin(geodesicsScalars);
+    zScalar maxScalar = myMeshParam.coreUtils.zMax(geodesicsScalars);
 
-	zDomainFloat distanceDomain(minScalar, maxScalar);
-	zDomainColor colDomain(zColor(1, 0, 0, 1), zColor(0, 1, 0, 1));
+    zDomainFloat distanceDomain(minScalar, maxScalar);
+    zDomainColor colDomain(zColor(1, 0, 0, 1), zColor(0, 1, 0, 1));
 
-	for (int i = 0; i < fnMesh.numVertices(); i++)
-	{
-		mesh_vColors[i] = myMeshParam.coreUtils.blendColor(geodesicsScalars[i], distanceDomain, colDomain, zRGB);
-	}
+    for (int i = 0; i < fnMesh.numVertices(); i++)
+    {
+        mesh_vColors[i] = myMeshParam.coreUtils.blendColor(geodesicsScalars[i], distanceDomain, colDomain, zRGB);
+    }
 
-	fnMesh.computeFaceColorfromVertexColor();
+    fnMesh.computeFaceColorfromVertexColor();
 
     if (geodesicsScalars.size() > 0) return true;
     else return false;

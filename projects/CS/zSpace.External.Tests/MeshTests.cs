@@ -72,6 +72,87 @@ namespace zSpace.External.Tests
             }
         }
 
+        [TestMethod]
+        public void CanComputeGeodesicHeat()
+        {
+            using (var mesh = new zSpace.External.zExtMesh())
+            {
+                // Create a simple quad mesh
+                double[] vertices = new double[] {
+                    // Front face vertices
+                    -1.0, -1.0, 0.0,  // Vertex 0
+                    1.0, -1.0, 0.0,  // Vertex 1
+                    1.0, 1.0, 0.0,  // Vertex 2
+                    -1.0, 1.0, 0.0,  // Vertex 3
+                    0.0, 0.0, 0.0,  // Vertex 4
+                };
+                
+                // Each face has 4 vertices (quad faces)
+                int[] polyCounts = new int[] { 
+                    3, 3, 3, 3  // 4 tri faces
+                };
+                
+                // Face vertex indices
+                int[] polyConnections = new int[] { 
+                    0, 1, 4,
+                    1, 2, 4,
+                    2, 3, 4,
+                    3, 0, 4
+                };
+                
+                // Create the mesh
+                mesh.CreateMesh(vertices, polyCounts, polyConnections);
+                
+                // Validate mesh creation
+                Assert.AreEqual(5, mesh.VertexCount, "Vertex count should be 8");
+                Assert.AreEqual(4, mesh.FaceCount, "Face count should be 6");
+                
+                // Set source vertex (vertex 0 at corner)
+                int[] sourceVertices = new int[] { 0 };
+                
+                // Pre-allocate result array (one float per vertex)
+                float[] geodesicDistances = new float[mesh.VertexCount];
+                
+                // Compute geodesic distances
+                mesh.ComputeGeodesicHeat(sourceVertices, geodesicDistances);
+
+                // Basic validation
+                Assert.IsTrue(geodesicDistances.Length == mesh.VertexCount, "GeodesicDistances should have equal number of values as mesh vertices");
+
+                // Output results for inspection
+                Console.WriteLine("Geodesic distances from vertex 0:");
+                for (int i = 0; i < geodesicDistances.Length; i++)
+                {
+                    Console.WriteLine($"Vertex {i}: {geodesicDistances[i]}");
+                }
+                
+                // Basic validation
+                // Distance to source vertex should be 0 (or very close to it)
+                Assert.IsTrue(geodesicDistances[0] < 0.001f, "Distance to source vertex should be near zero");
+                
+                // All distances should be non-negative
+                for (int i = 0; i < geodesicDistances.Length; i++)
+                {
+                    Assert.IsTrue(geodesicDistances[i] >= 0, $"Distance at vertex {i} should be non-negative");
+                }
+                
+                // Diagonal vertex (6) should have the largest distance
+                float maxDistance = 0;
+                int maxDistanceIndex = 0;
+                for (int i = 0; i < geodesicDistances.Length; i++)
+                {
+                    if (geodesicDistances[i] > maxDistance)
+                    {
+                        maxDistance = geodesicDistances[i];
+                        maxDistanceIndex = i;
+                    }
+                }
+                
+                // Verify maximum distance is at the diagonally opposite vertex
+                Console.WriteLine($"Maximum distance {maxDistance} is at vertex {maxDistanceIndex}");
+            }
+        }
+
         #region Helper Methods
 
         private static void DiagnoseNativeLibrary()

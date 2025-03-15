@@ -103,6 +103,19 @@ ZSPACE_EXTERNAL_API int zext_mesh_create_mesh(zExtMeshHandle mesh_handle,
                                               const int* polyCounts, int polyCountsSize,
                                               const int* polyConnections, int polyConnectionsSize);
 
+/**
+ * Compute geodesic distances on the mesh using the heat method.
+ * 
+ * @param mesh_handle Handle to the mesh.
+ * @param source_vertex_ids Array of source vertex indices.
+ * @param source_vertex_count Number of source vertices.
+ * @param out_geodesic_scalars Output array for computed geodesic distances (pre-allocated with size equal to vertex count).
+ * @return 1 if successful, 0 if an error occurred.
+ */
+ZSPACE_EXTERNAL_API int zext_mesh_compute_geodesic_heat(zExtMeshHandle mesh_handle,
+                                                      const int* source_vertex_ids, int source_vertex_count,
+                                                      float* out_geodesic_scalars);
+
 #ifdef __cplusplus
 }
 #endif

@@ -77,5 +77,16 @@ namespace zSpace.External
             int polyCountsSize,
             [MarshalAs(UnmanagedType.LPArray)] int[] polyConnections, 
             int polyConnectionsSize);
+            
+        /// <summary>
+        /// Computes geodesic distances on the mesh using the heat method.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool zext_mesh_compute_geodesic_heat(
+            IntPtr mesh_handle,
+            [MarshalAs(UnmanagedType.LPArray)] int[] sourceVertexIds,
+            int sourceVertexCount,
+            [MarshalAs(UnmanagedType.LPArray)] float[] outGeodesicScalars);
     }
 } 
