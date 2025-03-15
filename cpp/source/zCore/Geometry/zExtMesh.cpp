@@ -10,6 +10,7 @@
 // Include zspace_core headers
 #include <headers/zInterface/functionsets/zFnMesh.h>
 #include <headers/zInterface/objects/zObjMesh.h>
+#include <headers/zToolsets/geometry/zTsMeshParameterization.h>
 
 #include <algorithm>
 #include <stdexcept>
@@ -121,6 +122,51 @@ bool zExtMesh::createMesh(
         m_faceCount = 0;
         return false;
     }
+}
+
+bool zExtMesh::computeGeodesicHeat(
+    const int* sourceVIds, int sourceVCount,
+    float* out_geodesicScalars
+	)
+{
+	zTsMeshParam myMeshParam;
+	myMeshParam.o_TriMesh = *m_mesh;
+
+	zDomainFloat outMinMax(0, 1);
+
+	vector<float> geodesicsScalars;
+
+	if (sourceVCount > 0)
+	{
+		myMeshParam.computeGeodesics_Exact(sourceVIds, geodesicsScalars);
+		zDomainFloat startMinMax(myMeshParam.coreUtils.zMin(geodesicsScalars), myMeshParam.coreUtils.zMax(geodesicsScalars));
+		for (auto& v : geodesicsScalars)
+			v = myMeshParam.coreUtils.ofMap(v, startMinMax, outMinMax);
+
+		cout << "start min:" << myMeshParam.coreUtils.zMin(geodesicsScalars) << endl;
+		cout << "start max:" << myMeshParam.coreUtils.zMax(geodesicsScalars) << endl;
+	}
+
+
+	// color mesh
+	zFnMesh fnMesh(*m_mesh);
+	zColor* mesh_vColors = fnMesh.getRawVertexColors();
+
+	zScalar minScalar = myMeshParam.coreUtils.zMin(geodesicsScalars);
+	zScalar maxScalar = myMeshParam.coreUtils.zMax(geodesicsScalars);
+
+	zDomainFloat distanceDomain(minScalar, maxScalar);
+	zDomainColor colDomain(zColor(1, 0, 0, 1), zColor(0, 1, 0, 1));
+
+	for (int i = 0; i < fnMesh.numVertices(); i++)
+	{
+		mesh_vColors[i] = myMeshParam.coreUtils.blendColor(geodesicsScalars[i], distanceDomain, colDomain, zRGB);
+	}
+
+	fnMesh.computeFaceColorfromVertexColor();
+
+    if (geodesicsScalars.size() > 0) return true;
+    else return false;
 }
 
 } // namespace zSpace 

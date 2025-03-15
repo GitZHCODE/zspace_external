@@ -89,6 +89,11 @@ public:
         const int* polyCounts, int polyCountsSize,
         const int* polyConnections, int polyConnectionsSize
     );
+
+    bool computeGeodesicHeat(
+        const int* sourceVIds, int sourceVCount,
+        float* out_geodesicScalars
+    );
     
 private:
     /**

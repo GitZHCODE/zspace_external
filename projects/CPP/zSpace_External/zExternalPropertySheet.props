@@ -4,6 +4,8 @@
   <PropertyGroup Label="UserMacros">
     <zSpaceCoreDir>C:\Users\taizhong_chen\source\repos\GitZHCODE\zspace_core</zSpaceCoreDir>
     <zSpaceCoreCompiledDir>$(zSpaceCoreDir)\cpp\compiled\Release_DLL</zSpaceCoreCompiledDir>
+    <zSpaceToolsetsDir>C:\Users\taizhong_chen\source\repos\GitZHCODE\zspace_toolsets</zSpaceToolsetsDir>
+    <zSpaceToolsetsCompiledDir>$(zSpaceToolsetsDir)\cpp\compiled\Release_DLL</zSpaceToolsetsCompiledDir>
     <zSpaceDepends>C:\Users\taizhong_chen\source\repos\GitZHCODE\zspace_core\cpp\depends</zSpaceDepends>
     <zSpaceLocalDepends>$(ProjectDir)..\..\..\cpp\depends</zSpaceLocalDepends>
   </PropertyGroup>
@@ -17,11 +19,13 @@
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PreBuildEvent>
-      <Command>if exist "$(zSpaceCoreCompiledDir)\*.dll" xcopy /Y /D "$(zSpaceCoreCompiledDir)\*.dll" "$(OutDir)"
-if exist "$(zSpaceCoreCompiledDir)\*.lib" xcopy /Y /D "$(zSpaceCoreCompiledDir)\*.lib" "$(OutDir)"
-if exist "$(zSpaceCoreCompiledDir)\*.pdb" xcopy /Y /D "$(zSpaceCoreCompiledDir)\*.pdb" "$(OutDir)"
-if exist "$(zSpaceLocalDepends)\*.dll" xcopy /Y /D "$(zSpaceLocalDepends)\*.dll" "$(OutDir)"
-if exist "$(zSpaceLocalDepends)\*.lib" xcopy /Y /D "$(zSpaceLocalDepends)\*.lib" "$(OutDir)"
+      <Command>
+      if exist "$(zSpaceCoreCompiledDir)\*.dll" xcopy /Y /D "$(zSpaceCoreCompiledDir)\*.dll" "$(OutDir)"
+      if exist "$(zSpaceCoreCompiledDir)\*.lib" xcopy /Y /D "$(zSpaceCoreCompiledDir)\*.lib" "$(OutDir)"
+      if exist "$(zSpaceToolsetsCompiledDir)\*.dll" xcopy /Y /D "$(zSpaceToolsetsCompiledDir)\*.dll" "$(OutDir)"
+      if exist "$(zSpaceToolsetsCompiledDir)\*.lib" xcopy /Y /D "$(zSpaceToolsetsCompiledDir)\*.lib" "$(OutDir)"
+      if exist "$(zSpaceLocalDepends)\*.dll" xcopy /Y /D "$(zSpaceLocalDepends)\*.dll" "$(OutDir)"
+      if exist "$(zSpaceLocalDepends)\*.lib" xcopy /Y /D "$(zSpaceLocalDepends)\*.lib" "$(OutDir)"
       </Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
