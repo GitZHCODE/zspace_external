@@ -2,92 +2,25 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <codeRepoDir>C:\Users\taizhong_chen\source\repos\GitZHCODE</codeRepoDir>
-    <zspaceIncludeDir>$(SolutionDir)cpp/depends</zspaceIncludeDir>
-    <zSpaceCoreLibDir>$(SolutionDir)cpp/depends\zspace_core</zSpaceCoreLibDir>
-    <zSpaceToolsetsLibDir>$(SolutionDir)cpp/depends\zspace_toolset</zSpaceToolsetsLibDir>
-    <RhinoDir>C:\Program Files\Rhino 7 SDK</RhinoDir>
-    <MayaDir>C:\Program Files\Autodesk\Maya2017</MayaDir>
-    <CudaCommonDir>C:\ProgramData\NVIDIA Corporation\CUDA Samples\v10.2\common\inc</CudaCommonDir>
-    <zspaceDeployDir>C:\Users\taizhong_chen\source\repos\GitZHCODE\zspace_alice\ALICE_PLATFORM\src\zspace</zspaceDeployDir>
-    <zspacecoreDir>$(codeRepoDir)\zspace_core</zspacecoreDir>
-    <zspacetoolsetsDir>$(codeRepoDir)\zspace_toolsets</zspacetoolsetsDir>
-    <zspaceCSharpDeployDir>C:\Users\taizhong_chen\source\repos\GitZHCODE\zspace_external\projects\CSHARP\zSpaceExternal_CSharp\bin</zspaceCSharpDeployDir>
+    <zSpaceCoreDir>C:\Users\taizhong_chen\source\repos\GitZHCODE\zspace_core\cpp</zSpaceCoreDir>
+    <zSpaceDepends>C:\Users\taizhong_chen\source\repos\GitZHCODE\zspace_core\cpp\depends</zSpaceDepends>
   </PropertyGroup>
   <PropertyGroup />
   <ItemDefinitionGroup>
-    <PostBuildEvent>
-      <Command>CALL "$(SolutionDir)scripts\"zspace_libdeploy.bat "$(outDir)" "$(zspaceDeployDir)\lib"
-CALL "$(SolutionDir)scripts\"zspace_dlldeploy.bat "$(outDir)" "$(aliceEXEDir)"
-CALL "$(SolutionDir)scripts\"zspace_includedeploy.bat "$(SolutionDir)\cpp\headers" "$(zspaceDeployDir)\headers"
-REM CALL "$(SolutionDir)scripts\"zspace_includedeploy.bat "$(SolutionDir)\cpp\depends" "$(zspaceDeployDir)\depends"
-
-xcopy /Y "$(zSpaceCoreLibDir)\$(Configuration)\*.lib" "$(zspaceCSharpDeployDir)\$(Configuration)\"
-xcopy /Y "$(zSpaceCoreLibDir)\$(Configuration)\*.dll" "$(zspaceCSharpDeployDir)\$(Configuration)\"
-
-
-xcopy /Y "$(zSpaceToolsetsLibDir)\$(Configuration)\*.lib" "$(zspaceCSharpDeployDir)\$(Configuration)\"
-xcopy /Y "$(zSpaceToolsetsLibDir)\$(Configuration)\*.dll" "$(zspaceCSharpDeployDir)\$(Configuration)\"</Command>
-    </PostBuildEvent>
-    <PreBuildEvent>
-      <Command>xcopy /Y "$(zspacecoreDir)\cpp\compiled\$(Configuration)\*.lib" "$(zSpaceCoreLibDir)\$(Configuration)\"
-xcopy /Y "$(zspacecoreDir)\cpp\compiled\$(Configuration)\*.dll" "$(zSpaceCoreLibDir)\$(Configuration)\"
-
-xcopy /Y "$(zspacetoolsetsDir)\cpp\compiled\Release_DLL\*.lib" "$(zSpaceToolsetsLibDir)\$(Configuration)\"
-xcopy /Y "$(zspacetoolsetsDir)\cpp\compiled\Release_DLL\*.dll" "$(zSpaceToolsetsLibDir)\$(Configuration)\"
-
-xcopy /Y "$(zspacecoreDir)\cpp\compiled\$(Configuration)\*.lib" "$(SolutionDir)cpp\compiled\dll\"
-xcopy /Y "$(zspacecoreDir)\cpp\compiled\$(Configuration)\*.dll" "$(SolutionDir)cpp\compiled\dll\"
-
-xcopy /Y "$(zspacetoolsetsDir)\cpp\compiled\Release_DLL\*.lib" "$(SolutionDir)cpp\compiled\dll\"
-xcopy /Y "$(zspacetoolsetsDir)\cpp\compiled\Release_DLL\*.dll" "$(SolutionDir)cpp\compiled\dll\"
-
-REM CALL "$(SolutionDir)scripts\"zspace_includedeploy.bat "$(zspacecoreDir)\cpp\depends" "$(SolutionDir)cpp\depends\zspace"</Command>
-    </PreBuildEvent>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(zSpaceCoreDir);$(zSpaceDepends);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>$(CoreLibraryDependencies);$(zSpaceCoreDir)\depends\freeglut\freeglut.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <BuildMacro Include="codeRepoDir">
-      <Value>$(codeRepoDir)</Value>
+    <BuildMacro Include="zSpaceCoreDir">
+      <Value>$(zSpaceCoreDir)</Value>
       <EnvironmentVariable>true</EnvironmentVariable>
     </BuildMacro>
-    <BuildMacro Include="zspaceIncludeDir">
-      <Value>$(zspaceIncludeDir)</Value>
-      <EnvironmentVariable>true</EnvironmentVariable>
-    </BuildMacro>
-    <BuildMacro Include="zSpaceCoreLibDir">
-      <Value>$(zSpaceCoreLibDir)</Value>
-      <EnvironmentVariable>true</EnvironmentVariable>
-    </BuildMacro>
-    <BuildMacro Include="zSpaceToolsetsLibDir">
-      <Value>$(zSpaceToolsetsLibDir)</Value>
-      <EnvironmentVariable>true</EnvironmentVariable>
-    </BuildMacro>
-    <BuildMacro Include="RhinoDir">
-      <Value>$(RhinoDir)</Value>
-      <EnvironmentVariable>true</EnvironmentVariable>
-    </BuildMacro>
-    <BuildMacro Include="MayaDir">
-      <Value>$(MayaDir)</Value>
-      <EnvironmentVariable>true</EnvironmentVariable>
-    </BuildMacro>
-    <BuildMacro Include="CudaCommonDir">
-      <Value>$(CudaCommonDir)</Value>
-      <EnvironmentVariable>true</EnvironmentVariable>
-    </BuildMacro>
-    <BuildMacro Include="zspaceDeployDir">
-      <Value>$(zspaceDeployDir)</Value>
-      <EnvironmentVariable>true</EnvironmentVariable>
-    </BuildMacro>
-    <BuildMacro Include="zspacecoreDir">
-      <Value>$(zspacecoreDir)</Value>
-      <EnvironmentVariable>true</EnvironmentVariable>
-    </BuildMacro>
-    <BuildMacro Include="zspacetoolsetsDir">
-      <Value>$(zspacetoolsetsDir)</Value>
-      <EnvironmentVariable>true</EnvironmentVariable>
-    </BuildMacro>
-    <BuildMacro Include="zspaceCSharpDeployDir">
-      <Value>$(zspaceCSharpDeployDir)</Value>
+    <BuildMacro Include="zSpaceDepends">
+      <Value>$(zSpaceDepends)</Value>
       <EnvironmentVariable>true</EnvironmentVariable>
     </BuildMacro>
   </ItemGroup>
