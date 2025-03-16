@@ -16,14 +16,8 @@ namespace zSpace.External
         /// Gets the last error code from the native library.
         /// </summary>
         [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int zext_get_last_error();
-        
-        /// <summary>
-        /// Gets the last error message from the native library.
-        /// </summary>
-        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.LPStr)]
-        public static extern string zext_get_last_error_message();
+        public static extern string zext_get_last_error();
         
         /// <summary>
         /// Clears the last error in the native library.
@@ -87,6 +81,20 @@ namespace zSpace.External
             IntPtr mesh_handle,
             [MarshalAs(UnmanagedType.LPArray)] int[] sourceVertexIds,
             int sourceVertexCount,
+            [MarshalAs(UnmanagedType.LPArray)] float[] outGeodesicScalars);
+            
+        /// <summary>
+        /// Computes interpolated geodesic distances between two sets of vertices using the heat method.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool zext_mesh_compute_geodesic_heat_interpolated(
+            IntPtr mesh_handle,
+            [MarshalAs(UnmanagedType.LPArray)] int[] startVertexIds,
+            int startVertexCount,
+            [MarshalAs(UnmanagedType.LPArray)] int[] endVertexIds,
+            int endVertexCount,
+            float weight,
             [MarshalAs(UnmanagedType.LPArray)] float[] outGeodesicScalars);
     }
 } 

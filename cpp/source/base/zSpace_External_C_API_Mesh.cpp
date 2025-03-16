@@ -105,4 +105,43 @@ ZSPACE_EXTERNAL_API int zext_mesh_compute_geodesic_heat(zExtMeshHandle mesh_hand
     , 0)
 }
 
+ZSPACE_EXTERNAL_API int zext_mesh_compute_geodesic_heat_interpolated(zExtMeshHandle mesh_handle,
+                                                                 const int* start_vertex_ids, int start_vertex_count,
+                                                                 const int* end_vertex_ids, int end_vertex_count,
+                                                                 float weight,
+                                                                 float* out_geodesic_scalars) {
+    TRY_CATCH_RETURN(
+        if (!mesh_handle) {
+            zSpace::SetError("Invalid mesh handle");
+            return 0;
+        }
+        
+        if (!start_vertex_ids || start_vertex_count <= 0) {
+            zSpace::SetError("Invalid start vertices");
+            return 0;
+        }
+        
+        if (!end_vertex_ids || end_vertex_count <= 0) {
+            zSpace::SetError("Invalid end vertices");
+            return 0;
+        }
+        
+        if (weight <= 0.0f || weight >= 1.0f) {
+            zSpace::SetError("Invalid weight value (must be between 0 and 1 exclusive)");
+            return 0;
+        }
+        
+        if (!out_geodesic_scalars) {
+            zSpace::SetError("Invalid output array");
+            return 0;
+        }
+        
+        auto* mesh = static_cast<zSpace::zExtMesh*>(mesh_handle);
+        return mesh->computeGeodesicHeat(start_vertex_ids, start_vertex_count, 
+                                        end_vertex_ids, end_vertex_count, 
+                                        weight, 
+                                        out_geodesic_scalars) ? 1 : 0;
+    , 0)
+}
+
 } // extern "C" 

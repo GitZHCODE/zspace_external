@@ -153,6 +153,126 @@ namespace zSpace.External.Tests
             }
         }
 
+
+        [TestMethod]
+        public void CanComputeGeodesicHeatInterpolated()
+        {
+            try
+            {
+                using (var mesh = new zSpace.External.zExtMesh())
+                {
+                    // Create a simple cube
+                    double[] vertices = new double[] {
+                        // Front face vertices
+                        -1.0, -1.0, 0.0,  // Vertex 0
+                        1.0, -1.0, 0.0,  // Vertex 1
+                        1.0, 1.0, 0.0,  // Vertex 2
+                        -1.0, 1.0, 0.0,  // Vertex 3
+                        0.0, 0.0, 0.0,  // Vertex 4
+                    };
+                    
+                    // Each face has 3 vertices (tri faces)
+                    int[] polyCounts = new int[] { 
+                        3, 3, 3, 3  // 4 tri faces
+                    };
+                    
+                    // Face vertex indices
+                    int[] polyConnections = new int[] { 
+                        0, 1, 4,
+                        1, 2, 4,
+                        2, 3 ,4,
+                        3, 0 ,4
+                    };
+                    
+                    Console.WriteLine("Creating poke mesh...");
+                    mesh.CreateMesh(vertices, polyCounts, polyConnections);
+                    
+                    Console.WriteLine($"Poke mesh created with {mesh.VertexCount} vertices and {mesh.FaceCount} faces");
+                    Assert.AreEqual(5, mesh.VertexCount, "Vertex count should be 8");
+                    Assert.AreEqual(4, mesh.FaceCount, "Face count should be 6");
+                    
+                    // Start vertices (vertex 0 - front bottom left)
+                    int[] startVertices = new int[] { 0 };
+                    
+                    // End vertices (vertex 6 - back top right)
+                    int[] endVertices = new int[] { 2 };
+                    
+                    // Pre-allocate result array (one float per vertex)
+                    float[] geodesicDistances = new float[mesh.VertexCount];
+                    // Initialize all values to -1.0f
+                    for (int i = 0; i < geodesicDistances.Length; i++)
+                    {
+                        geodesicDistances[i] = -1.0f;
+                    }
+                    
+                    Console.WriteLine("Computing forward geodesic distances...");
+                    try
+                    {
+                        // Forward interpolation
+                        mesh.ComputeGeodesicHeatInterpolated(startVertices, endVertices, 0.1f, geodesicDistances);
+                        Console.WriteLine("Forward geodesic computation completed successfully");
+                        
+                        // Output results
+                        Console.WriteLine("Forward geodesic distances between vertex 0 and vertex 2:");
+                        for (int i = 0; i < geodesicDistances.Length; i++)
+                        {
+                            Console.WriteLine($"Vertex {i}: {geodesicDistances[i]}");
+                        }
+                        
+                        // Basic validation - all distances should be between 0 and 1
+                        for (int i = 0; i < geodesicDistances.Length; i++)
+                        {
+                            Assert.IsTrue(geodesicDistances[i] >= 0 && geodesicDistances[i] <= 1.0f, 
+                                $"Distance at vertex {i} should be between 0 and 1");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Exception during forward geodesic computation: {ex.GetType().Name}");
+                        Console.WriteLine($"Message: {ex.Message}");
+                        Console.WriteLine($"Stack Trace: {ex.StackTrace}");
+                        throw;
+                    }
+
+                    Console.WriteLine("Computing inversed geodesic distances...");
+                    try
+                    {
+                        // Forward interpolation
+                        mesh.ComputeGeodesicHeatInterpolated(startVertices, endVertices, 0.9f, geodesicDistances);
+                        Console.WriteLine("Inversed geodesic computation completed successfully");
+
+                        // Output results
+                        Console.WriteLine("Inversed geodesic distances between vertex 0 and vertex 2:");
+                        for (int i = 0; i < geodesicDistances.Length; i++)
+                        {
+                            Console.WriteLine($"Vertex {i}: {geodesicDistances[i]}");
+                        }
+
+                        // Basic validation - all distances should be between 0 and 1
+                        for (int i = 0; i < geodesicDistances.Length; i++)
+                        {
+                            Assert.IsTrue(geodesicDistances[i] >= 0 && geodesicDistances[i] <= 1.0f,
+                                $"Distance at vertex {i} should be between 0 and 1");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Exception during inversed geodesic computation: {ex.GetType().Name}");
+                        Console.WriteLine($"Message: {ex.Message}");
+                        Console.WriteLine($"Stack Trace: {ex.StackTrace}");
+                        throw;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception in interpolated test: {ex.GetType().Name}");
+                Console.WriteLine($"Message: {ex.Message}");
+                Console.WriteLine($"Stack Trace: {ex.StackTrace}");
+                throw;
+            }
+        }
+
         #region Helper Methods
 
         private static void DiagnoseNativeLibrary()

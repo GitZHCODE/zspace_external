@@ -103,6 +103,24 @@ public:
         float* out_geodesicScalars
     );
     
+    /**
+     * Compute interpolated geodesic distances between two sets of source vertices using the heat method.
+     * 
+     * @param startVIds Array of start vertex indices
+     * @param startCount Number of start vertices
+     * @param endVIds Array of end vertex indices
+     * @param endCount Number of end vertices
+     * @param weight Interpolation weight value (0 to 1)
+     * @param out_geodesicScalars Output array for computed geodesic distances (pre-allocated with size equal to vertex count)
+     * @return True if successful, false otherwise.
+     */
+    bool computeGeodesicHeat(
+        const int* startVIds, int startCount,
+        const int* endVIds, int endCount,
+        float weight,
+        float* out_geodesicScalars
+    );
+    
 private:
     /**
      * Update internal attributes (vertex and face counts).
@@ -123,6 +141,7 @@ private:
     friend int zext_mesh_get_vertex_count(zExtMeshHandle);
     friend int zext_mesh_get_face_count(zExtMeshHandle);
     friend int zext_mesh_compute_geodesic_heat(zExtMeshHandle, const int*, int, float*);
+    friend int zext_mesh_compute_geodesic_heat_interpolated(zExtMeshHandle, const int*, int, const int*, int, int, float*);
 };
 
 } // namespace zSpace

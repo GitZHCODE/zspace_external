@@ -15,7 +15,7 @@ namespace zSpace.External
         /// </summary>
         public static string GetLastError()
         {
-            string errorMessage = NativeMethods.zext_get_last_error_message();
+            string errorMessage = NativeMethods.zext_get_last_error();
             if (string.IsNullOrEmpty(errorMessage))
                 return string.Empty;
                 
@@ -29,7 +29,6 @@ namespace zSpace.External
         {
             if (!condition)
             {
-                int errorCode = NativeMethods.zext_get_last_error();
                 string errorMessage = GetLastError();
                 
                 if (string.IsNullOrEmpty(errorMessage) && !string.IsNullOrEmpty(message))
@@ -37,7 +36,7 @@ namespace zSpace.External
                     errorMessage = message;
                 }
                 
-                throw new ZSpaceExternalException(errorMessage, errorCode);
+                throw new ZSpaceExternalException(errorMessage, -1);
             }
         }
 

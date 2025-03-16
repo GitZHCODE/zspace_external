@@ -232,4 +232,60 @@ bool zExtMesh::computeGeodesicHeat(
     }
 }
 
+bool zExtMesh::computeGeodesicHeat(
+    const int* startVIds, int startCount,
+    const int* endVIds, int endCount,
+    float weight,
+    float* out_geodesicScalars
+) {
+    try {
+        if (!m_mesh || !out_geodesicScalars || !startVIds || !endVIds || startCount <= 0 || endCount <= 0 || weight <= 0 || weight >= 1) {
+            // Initialize the output array to zeros in case of error
+            if (out_geodesicScalars && m_vertexCount > 0) {
+                for (int i = 0; i < m_vertexCount; i++) {
+                    out_geodesicScalars[i] = 0.0f;
+                }
+            }
+            return false;
+        }
+
+        // Allocate memory for the start and end geodesic distances
+        std::vector<float> geodesicStart(m_vertexCount, 0.0f);
+        std::vector<float> geodesicEnd(m_vertexCount, 0.0f);
+
+        // Compute geodesic distances from start and end vertices
+        if (!computeGeodesicHeat(startVIds, startCount, geodesicStart.data())) {
+            return false;
+        }
+
+        if (!computeGeodesicHeat(endVIds, endCount, geodesicEnd.data())) {
+            return false;
+        }
+
+        // Interpolate between the start and end geodesic distances
+        for (int j = 0; j < m_vertexCount; j++) {
+            out_geodesicScalars[j] = weight * geodesicStart[j] + (1.0f - weight) * geodesicEnd[j];
+        }
+
+        return true;
+    }
+    catch (const std::exception& e) {
+        // Initialize the output array to zeros in case of error
+        if (out_geodesicScalars && m_vertexCount > 0) {
+            for (int i = 0; i < m_vertexCount; i++) {
+                out_geodesicScalars[i] = 0.0f;
+            }
+        }
+        return false;
+    }
+    catch (...) {
+        // Initialize the output array to zeros in case of error
+        if (out_geodesicScalars && m_vertexCount > 0) {
+            for (int i = 0; i < m_vertexCount; i++) {
+                out_geodesicScalars[i] = 0.0f;
+            }
+        }
+        return false;
+    }
+}
 } // namespace zSpace 

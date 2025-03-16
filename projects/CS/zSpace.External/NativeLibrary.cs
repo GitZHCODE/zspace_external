@@ -51,11 +51,10 @@ namespace zSpace.External
             try
             {
                 // Make a simple API call to force the library to load
-                int errorCode = NativeMethods.zext_get_last_error();
-                if (errorCode != 0)
+                string errorMessage = NativeMethods.zext_get_last_error();
+                if (!string.IsNullOrEmpty(errorMessage))
                 {
                     // Clear any error
-                    string errorMsg = NativeMethods.zext_get_last_error_message();
                     NativeMethods.zext_clear_last_error();
                 }
                 

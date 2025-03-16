@@ -116,6 +116,24 @@ ZSPACE_EXTERNAL_API int zext_mesh_compute_geodesic_heat(zExtMeshHandle mesh_hand
                                                       const int* source_vertex_ids, int source_vertex_count,
                                                       float* out_geodesic_scalars);
 
+/**
+ * Compute interpolated geodesic distances between two sets of vertices using the heat method.
+ * 
+ * @param mesh_handle Handle to the mesh.
+ * @param start_vertex_ids Array of start vertex indices.
+ * @param start_vertex_count Number of start vertices.
+ * @param end_vertex_ids Array of end vertex indices.
+ * @param end_vertex_count Number of end vertices.
+ * @param weight Interpolation weight between 0 and 1.
+ * @param out_geodesic_scalars Output array for computed geodesic distances (pre-allocated with size equal to vertex count).
+ * @return 1 if successful, 0 if an error occurred.
+ */
+ZSPACE_EXTERNAL_API int zext_mesh_compute_geodesic_heat_interpolated(zExtMeshHandle mesh_handle,
+                                                                  const int* start_vertex_ids, int start_vertex_count,
+                                                                  const int* end_vertex_ids, int end_vertex_count,
+                                                                  float weight,
+                                                                  float* out_geodesic_scalars);
+
 #ifdef __cplusplus
 }
 #endif

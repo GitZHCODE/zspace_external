@@ -147,6 +147,53 @@ namespace zSpace.External
         }
 
         /// <summary>
+        /// Computes interpolated geodesic distances between two sets of vertices using the heat method.
+        /// </summary>
+        /// <param name="startVertexIds">Array of start vertex indices</param>
+        /// <param name="endVertexIds">Array of end vertex indices</param>
+        /// <param name="weight">Interpolation weight (0 to 1)</param>
+        /// <param name="outGeodesicDistances">Pre-allocated array that will be filled with geodesic distances (must be of length VertexCount)</param>
+        /// <exception cref="ZSpaceExternalException">Thrown if the operation fails.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if any array is null.</exception>
+        /// <exception cref="ArgumentException">Thrown if any array has invalid length or if there are no vertices.</exception>
+        public void ComputeGeodesicHeatInterpolated(int[] startVertexIds, int[] endVertexIds, float weight, float[] outGeodesicDistances)
+        {
+            ThrowIfDisposed();
+            
+            if (startVertexIds == null) throw new ArgumentNullException(nameof(startVertexIds));
+            if (endVertexIds == null) throw new ArgumentNullException(nameof(endVertexIds));
+            if (outGeodesicDistances == null) throw new ArgumentNullException(nameof(outGeodesicDistances));
+            
+            if (startVertexIds.Length == 0)
+                throw new ArgumentException("Start vertex IDs array cannot be empty.", nameof(startVertexIds));
+                
+            if (endVertexIds.Length == 0)
+                throw new ArgumentException("End vertex IDs array cannot be empty.", nameof(endVertexIds));
+                
+            if (weight <= 0.0f)
+                throw new ArgumentException("Steps must be greater than zero.", nameof(weight));
+
+            if (weight >= 1.0f)
+                throw new ArgumentException("Steps must be less than one.", nameof(weight));
+
+            if (outGeodesicDistances.Length < VertexCount)
+                throw new ArgumentException($"Output array must have at least {VertexCount} elements (one per vertex).", nameof(outGeodesicDistances));
+            
+            Debug.WriteLine($"Computing interpolated geodesic distances between {startVertexIds.Length} start vertices and {endVertexIds.Length} end vertices...");
+            if (!NativeMethods.zext_mesh_compute_geodesic_heat_interpolated(
+                _handle, 
+                startVertexIds, startVertexIds.Length, 
+                endVertexIds, endVertexIds.Length, 
+                weight, 
+                outGeodesicDistances))
+            {
+                ThrowLastError("Failed to compute interpolated geodesic distances");
+            }
+            
+            Debug.WriteLine("Interpolated geodesic distances computed successfully");
+        }
+
+        /// <summary>
         /// Disposes the mesh resources.
         /// </summary>
         public void Dispose()
@@ -199,13 +246,12 @@ namespace zSpace.External
         /// <param name="message">The error message prefix.</param>
         private void ThrowLastError(string message)
         {
-            int errorCode = NativeMethods.zext_get_last_error();
-            string errorMessage = NativeMethods.zext_get_last_error_message();
+            string errorMessage = NativeMethods.zext_get_last_error();
             NativeMethods.zext_clear_last_error();
 
-            string fullMessage = $"{message}: {errorMessage} (Error code: {errorCode})";
+            string fullMessage = $"{message}: {errorMessage}";
             Debug.WriteLine($"ERROR: {fullMessage}");
-            throw new ZSpaceExternalException(fullMessage, errorCode);
+            throw new ZSpaceExternalException(fullMessage, -1);
         }
     }
 } 
