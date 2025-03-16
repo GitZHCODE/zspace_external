@@ -100,9 +100,12 @@ namespace zSpace.External
         /// <summary>
         /// Computes geodesic contours on the mesh.
         /// 
-        /// Can be called in two ways:
-        /// 1. First call with outContours=null and maxContours=0 to get the count of contours.
-        /// 2. Then call again with an appropriately sized array to retrieve the contours.
+        /// This method can be called in two ways:
+        /// 1. With outContours=null and maxContours=0 to just get the count in outContourCount.
+        /// 2. With an array of appropriate size to retrieve the contours. 
+        /// 
+        /// For efficient usage, pre-allocate an array with a reasonable capacity and pass that capacity
+        /// as maxContours. The actual number of contours will be returned in outContourCount.
         /// </summary>
         [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.I1)]
@@ -119,9 +122,12 @@ namespace zSpace.External
         /// <summary>
         /// Computes interpolated geodesic contours on the mesh between two sets of vertices.
         /// 
-        /// Can be called in two ways:
-        /// 1. First call with outContours=null and maxContours=0 to get the count of contours.
-        /// 2. Then call again with an appropriately sized array to retrieve the contours.
+        /// This method can be called in two ways:
+        /// 1. With outContours=null and maxContours=0 to just get the count in outContourCount.
+        /// 2. With an array of appropriate size to retrieve the contours.
+        /// 
+        /// For efficient usage, pre-allocate an array with a reasonable capacity and pass that capacity
+        /// as maxContours. The actual number of contours will be returned in outContourCount.
         /// </summary>
         [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.I1)]
