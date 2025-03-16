@@ -84,6 +84,33 @@ namespace zSpace.External
         }
 
         /// <summary>
+        /// Creates a graph from an existing handle (for internal use).
+        /// </summary>
+        /// <param name="handle">Handle to an existing graph.</param>
+        internal zExtGraph(IntPtr handle)
+        {
+            try
+            {
+                Debug.WriteLine("Initializing native library...");
+                NativeLibrary.Initialize();
+                
+                if (handle == IntPtr.Zero)
+                {
+                    throw new ArgumentException("Invalid graph handle", nameof(handle));
+                }
+                
+                _handle = handle;
+                Debug.WriteLine($"Graph created from existing handle: {_handle}");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error creating graph from handle: {ex.Message}");
+                _handle = IntPtr.Zero;
+                throw;
+            }
+        }
+
+        /// <summary>
         /// Creates a graph from vertex positions and edge data.
         /// </summary>
         /// <param name="vertexPositions">Array of vertex positions (x1, y1, z1, x2, y2, z2, ...)</param>
@@ -114,43 +141,6 @@ namespace zSpace.External
             }
             
             Debug.WriteLine("Graph created successfully");
-        }
-
-        /// <summary>
-        /// Computes the shortest path between two vertices.
-        /// </summary>
-        /// <param name="startVertexId">Start vertex index</param>
-        /// <param name="endVertexId">End vertex index</param>
-        /// <returns>Array of vertex indices representing the path from start to end</returns>
-        /// <exception cref="ZSpaceExternalException">Thrown if the operation fails.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if vertex indices are out of range.</exception>
-        public int[] ComputeShortestPath(int startVertexId, int endVertexId)
-        {
-            ThrowIfDisposed();
-            
-            if (startVertexId < 0 || startVertexId >= VertexCount)
-                throw new ArgumentOutOfRangeException(nameof(startVertexId), "Start vertex index out of range.");
-            
-            if (endVertexId < 0 || endVertexId >= VertexCount)
-                throw new ArgumentOutOfRangeException(nameof(endVertexId), "End vertex index out of range.");
-            
-            // Allocate arrays with maximum possible path length (all vertices)
-            int[] pathVertices = new int[VertexCount];
-            int pathLength = 0;
-            
-            Debug.WriteLine($"Computing shortest path from vertex {startVertexId} to vertex {endVertexId}...");
-            if (!NativeMethods.zext_graph_compute_shortest_path(_handle, startVertexId, endVertexId, 
-                                                              pathVertices, ref pathLength, VertexCount))
-            {
-                ThrowLastError("Failed to compute shortest path");
-            }
-            
-            // Create a correctly sized result array
-            int[] result = new int[pathLength];
-            Array.Copy(pathVertices, result, pathLength);
-            
-            Debug.WriteLine($"Shortest path computed successfully with {pathLength} vertices");
-            return result;
         }
 
         /// <summary>

@@ -144,4 +144,122 @@ ZSPACE_EXTERNAL_API int zext_mesh_compute_geodesic_heat_interpolated(zExtMeshHan
     , 0)
 }
 
+ZSPACE_EXTERNAL_API int zext_mesh_compute_geodesic_contours(zExtMeshHandle mesh_handle,
+                                                         const int* source_vertex_ids, int source_vertex_count,
+                                                         int steps, float dist,
+                                                         zExtGraphHandle* out_contours, int* out_contour_count,
+                                                         int max_contours) {
+    TRY_CATCH_RETURN(
+        if (!mesh_handle) {
+            zSpace::SetError("Invalid mesh handle");
+            return 0;
+        }
+        
+        if (!source_vertex_ids || source_vertex_count <= 0) {
+            zSpace::SetError("Invalid source vertices");
+            return 0;
+        }
+        
+        if (steps <= 0) {
+            zSpace::SetError("Invalid number of steps");
+            return 0;
+        }
+        
+        if (!out_contours || !out_contour_count || max_contours <= 0) {
+            zSpace::SetError("Invalid output parameters");
+            return 0;
+        }
+        
+        auto* mesh = static_cast<zSpace::zExtMesh*>(mesh_handle);
+        
+        // Temporary storage for the contours
+        std::vector<zSpace::zExtGraph*> contourGraphs;
+        
+        // Compute the contours
+        bool success = mesh->computeGeodesicContours(source_vertex_ids, source_vertex_count, steps, dist, contourGraphs);
+        
+        if (!success) {
+            *out_contour_count = 0;
+            return 0;
+        }
+        
+        // Copy the contours to the output array, limited by max_contours
+        *out_contour_count = std::min(static_cast<int>(contourGraphs.size()), max_contours);
+        
+        for (int i = 0; i < *out_contour_count; i++) {
+            out_contours[i] = static_cast<zExtGraphHandle>(contourGraphs[i]);
+        }
+        
+        // Free any extra contours that won't fit in the output array
+        for (int i = *out_contour_count; i < static_cast<int>(contourGraphs.size()); i++) {
+            delete contourGraphs[i];
+        }
+        
+        return 1;
+    , 0)
+}
+
+ZSPACE_EXTERNAL_API int zext_mesh_compute_geodesic_contours_interpolated(zExtMeshHandle mesh_handle,
+                                                                      const int* start_vertex_ids, int start_vertex_count,
+                                                                      const int* end_vertex_ids, int end_vertex_count,
+                                                                      int steps, float dist,
+                                                                      zExtGraphHandle* out_contours, int* out_contour_count,
+                                                                      int max_contours) {
+    TRY_CATCH_RETURN(
+        if (!mesh_handle) {
+            zSpace::SetError("Invalid mesh handle");
+            return 0;
+        }
+        
+        if (!start_vertex_ids || start_vertex_count <= 0) {
+            zSpace::SetError("Invalid start vertices");
+            return 0;
+        }
+        
+        if (!end_vertex_ids || end_vertex_count <= 0) {
+            zSpace::SetError("Invalid end vertices");
+            return 0;
+        }
+        
+        if (steps <= 0) {
+            zSpace::SetError("Invalid number of steps");
+            return 0;
+        }
+        
+        if (!out_contours || !out_contour_count || max_contours <= 0) {
+            zSpace::SetError("Invalid output parameters");
+            return 0;
+        }
+        
+        auto* mesh = static_cast<zSpace::zExtMesh*>(mesh_handle);
+        
+        // Temporary storage for the contours
+        std::vector<zSpace::zExtGraph*> contourGraphs;
+        
+        // Compute the contours
+        bool success = mesh->computeGeodesicContours_interpolated(start_vertex_ids, start_vertex_count, 
+                                                               end_vertex_ids, end_vertex_count,
+                                                               steps, dist, contourGraphs);
+        
+        if (!success) {
+            *out_contour_count = 0;
+            return 0;
+        }
+        
+        // Copy the contours to the output array, limited by max_contours
+        *out_contour_count = std::min(static_cast<int>(contourGraphs.size()), max_contours);
+        
+        for (int i = 0; i < *out_contour_count; i++) {
+            out_contours[i] = static_cast<zExtGraphHandle>(contourGraphs[i]);
+        }
+        
+        // Free any extra contours that won't fit in the output array
+        for (int i = *out_contour_count; i < static_cast<int>(contourGraphs.size()); i++) {
+            delete contourGraphs[i];
+        }
+        
+        return 1;
+    , 0)
+}
+
 } // extern "C" 

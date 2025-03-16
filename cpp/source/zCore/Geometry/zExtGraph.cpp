@@ -56,8 +56,8 @@ zObjGraph& zExtGraph::getRawGraph() const {
 
 void zExtGraph::updateAttributes() {
     if (m_graph) {
-        m_vertexCount = static_cast<int>(m_graph->graph.n_v());
-        m_edgeCount = static_cast<int>(m_graph->graph.n_e());
+        m_vertexCount = static_cast<int>(m_graph->graph.n_v);
+        m_edgeCount = static_cast<int>(m_graph->graph.n_e);
     } else {
         m_vertexCount = 0;
         m_edgeCount = 0;
@@ -92,24 +92,14 @@ bool zExtGraph::createGraph(
             ));
         }
 
-        // Create vertices
-        for (const auto& pos : positions) {
-            fnGraph.addVertex(pos);
+        // Create edges
+        zIntArray edgeConnects;
+        edgeConnects.reserve(edgeConnectionsSize);
+        for (int i = 0; i < edgeConnectionsSize; i++) {
+            edgeConnects.push_back(edgeConnections[i]);
         }
 
-        // Create edges
-        int numEdges = edgeConnectionsSize / 2;
-        for (int i = 0; i < numEdges; i++) {
-            int startIdx = edgeConnections[i * 2];
-            int endIdx = edgeConnections[i * 2 + 1];
-            
-            // Validate indices
-            if (startIdx < 0 || startIdx >= vertexCount || endIdx < 0 || endIdx >= vertexCount) {
-                continue; // Skip invalid edge
-            }
-            
-            fnGraph.addEdge(startIdx, endIdx);
-        }
+        fnGraph.create(positions, edgeConnects);
 
         // Check if creation was successful
         if (fnGraph.numVertices() > 0) {
@@ -131,51 +121,6 @@ bool zExtGraph::createGraph(
     }
 }
 
-bool zExtGraph::computeShortestPath(
-    int startVertexId, int endVertexId,
-    int* out_pathVertices, int* out_pathVertexCount,
-    int maxPathLength
-) {
-    try {
-        if (!m_graph || !out_pathVertices || !out_pathVertexCount) {
-            return false;
-        }
-
-        // Validate vertex IDs
-        if (startVertexId < 0 || startVertexId >= m_vertexCount || 
-            endVertexId < 0 || endVertexId >= m_vertexCount) {
-            *out_pathVertexCount = 0;
-            return false;
-        }
-
-        // Create a function object for the graph
-        zFnGraph fnGraph(*m_graph);
-
-        // Compute shortest path
-        vector<int> path;
-        bool success = fnGraph.getShortestPath(startVertexId, endVertexId, path);
-        
-        if (!success || path.empty()) {
-            *out_pathVertexCount = 0;
-            return false;
-        }
-
-        // Copy path to output array
-        int pathSize = std::min(static_cast<int>(path.size()), maxPathLength);
-        for (int i = 0; i < pathSize; i++) {
-            out_pathVertices[i] = path[i];
-        }
-        
-        *out_pathVertexCount = pathSize;
-        return true;
-    } catch (const std::exception&) {
-        if (out_pathVertexCount) {
-            *out_pathVertexCount = 0;
-        }
-        return false;
-    }
-}
-
 bool zExtGraph::setVertexPositions(
     const double* vertexPositions, int vertexCount
 ) {
@@ -193,16 +138,18 @@ bool zExtGraph::setVertexPositions(
         }
 
         // Update vertex positions
+        zPointArray pos;
+        pos.reserve(vertexCount);
         for (int i = 0; i < vertexCount; i++) {
             int baseIndex = i * 3; // Each vertex has 3 components (x, y, z)
-            zPoint pos(
+            pos.emplace_back(
                 vertexPositions[baseIndex],
                 vertexPositions[baseIndex + 1],
                 vertexPositions[baseIndex + 2]
             );
-            
-            fnGraph.setVertexPosition(i, pos);
         }
+        fnGraph.setVertexPositions(pos);
+
 
         return true;
     } catch (const std::exception&) {
@@ -222,13 +169,13 @@ bool zExtGraph::getVertexPositions(
         zFnGraph fnGraph(*m_graph);
 
         // Get vertex positions
+        zPointArray pos;
+        fnGraph.getVertexPositions(pos);
         for (int i = 0; i < m_vertexCount; i++) {
-            zPoint pos = fnGraph.getVertexPosition(i);
-            
             int baseIndex = i * 3; // Each vertex has 3 components (x, y, z)
-            out_vertexPositions[baseIndex] = pos.x;
-            out_vertexPositions[baseIndex + 1] = pos.y;
-            out_vertexPositions[baseIndex + 2] = pos.z;
+            out_vertexPositions[baseIndex] = pos[i].x;
+            out_vertexPositions[baseIndex + 1] = pos[i].y;
+            out_vertexPositions[baseIndex + 2] = pos[i].z;
         }
 
         return true;

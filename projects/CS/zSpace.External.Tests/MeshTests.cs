@@ -273,6 +273,194 @@ namespace zSpace.External.Tests
             }
         }
 
+        [TestMethod]
+        public void CanComputeGeodesicContours()
+        {
+            try
+            {
+                using (var mesh = new zSpace.External.zExtMesh())
+                {
+                    // Create a simple quad mesh with center vertex
+                    double[] vertices = new double[] {
+                        -1.0, -1.0, 0.0,  // Vertex 0
+                        1.0, -1.0, 0.0,   // Vertex 1
+                        1.0, 1.0, 0.0,    // Vertex 2
+                        -1.0, 1.0, 0.0,   // Vertex 3
+                        0.0, 0.0, 0.0,    // Vertex 4 (center)
+                    };
+                    
+                    // Each face has 3 vertices (triangulated quad)
+                    int[] polyCounts = new int[] { 3, 3, 3, 3 };
+                    
+                    // Face vertex indices (4 triangles with shared center vertex)
+                    int[] polyConnections = new int[] { 
+                        0, 1, 4,
+                        1, 2, 4,
+                        2, 3, 4,
+                        3, 0, 4
+                    };
+                    
+                    // Create the mesh
+                    mesh.CreateMesh(vertices, polyCounts, polyConnections);
+                    
+                    // Validate mesh creation
+                    Assert.AreEqual(5, mesh.VertexCount, "Vertex count should be 5");
+                    Assert.AreEqual(4, mesh.FaceCount, "Face count should be 4");
+                    
+                    // Source vertex (corner vertex 0)
+                    int[] sourceVertices = new int[] { 0 };
+                    
+                    // Compute geodesic contours with 3 steps (should generate 3 contours)
+                    Console.WriteLine("Computing geodesic contours...");
+                    int steps = 3;
+                    float dist = 0.0f; // Use steps instead of fixed distance
+                    var contours = mesh.ComputeGeodesicContours(sourceVertices, steps, dist);
+                    
+                    // Basic validation
+                    Console.WriteLine($"Generated {contours.Length} contours");
+                    Assert.IsTrue(contours.Length > 0, "Should generate at least one contour");
+                    Assert.IsTrue(contours.Length <= steps, "Should not generate more contours than steps");
+                    
+                    // Verify each contour is valid
+                    for (int i = 0; i < contours.Length; i++)
+                    {
+                        Console.WriteLine($"Contour {i}: {contours[i].VertexCount} vertices, {contours[i].EdgeCount} edges");
+                        Assert.IsTrue(contours[i].IsValid, $"Contour {i} should be valid");
+                        Assert.IsTrue(contours[i].VertexCount > 0, $"Contour {i} should have vertices");
+                        Assert.IsTrue(contours[i].EdgeCount > 0, $"Contour {i} should have edges");
+                        
+                        // Get vertex positions from the contour graph
+                        double[] positions = contours[i].GetVertexPositions();
+                        
+                        // Output first vertex position for debugging
+                        if (positions.Length >= 3)
+                        {
+                            Console.WriteLine($"  First vertex position: ({positions[0]}, {positions[1]}, {positions[2]})");
+                        }
+                        
+                        // Clean up contour
+                        contours[i].Dispose();
+                    }
+                    
+                    // Test with fixed distance
+                    Console.WriteLine("Computing geodesic contours with fixed distance...");
+                    steps = 10; // Allow up to 10 contours
+                    dist = 0.25f; // Fixed distance between contours
+                    
+                    var distanceContours = mesh.ComputeGeodesicContours(sourceVertices, steps, dist);
+                    Console.WriteLine($"Generated {distanceContours.Length} contours with fixed distance {dist}");
+                    
+                    // Clean up
+                    foreach (var contour in distanceContours)
+                    {
+                        contour.Dispose();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception in CanComputeGeodesicContours: {ex.Message}");
+                Console.WriteLine($"Exception type: {ex.GetType().FullName}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                throw;
+            }
+        }
+
+        [TestMethod]
+        public void CanComputeGeodesicContoursInterpolated()
+        {
+            try
+            {
+                using (var mesh = new zSpace.External.zExtMesh())
+                {
+                    // Create a simple quad mesh with center vertex
+                    double[] vertices = new double[] {
+                        -1.0, -1.0, 0.0,  // Vertex 0
+                        1.0, -1.0, 0.0,   // Vertex 1
+                        1.0, 1.0, 0.0,    // Vertex 2
+                        -1.0, 1.0, 0.0,   // Vertex 3
+                        0.0, 0.0, 0.0,    // Vertex 4 (center)
+                    };
+                    
+                    // Each face has 3 vertices (triangulated quad)
+                    int[] polyCounts = new int[] { 3, 3, 3, 3 };
+                    
+                    // Face vertex indices (4 triangles with shared center vertex)
+                    int[] polyConnections = new int[] { 
+                        0, 1, 4,
+                        1, 2, 4,
+                        2, 3, 4,
+                        3, 0, 4
+                    };
+                    
+                    // Create the mesh
+                    mesh.CreateMesh(vertices, polyCounts, polyConnections);
+                    
+                    // Validate mesh creation
+                    Assert.AreEqual(5, mesh.VertexCount, "Vertex count should be 5");
+                    Assert.AreEqual(4, mesh.FaceCount, "Face count should be 4");
+                    
+                    // Source vertices (opposite corners)
+                    int[] startVertices = new int[] { 0 }; // bottom-left
+                    int[] endVertices = new int[] { 2 };   // top-right
+                    
+                    // Compute interpolated geodesic contours with 3 steps
+                    Console.WriteLine("Computing interpolated geodesic contours...");
+                    int steps = 3;
+                    float dist = 0.0f; // Use steps instead of fixed distance
+                    
+                    var contours = mesh.ComputeGeodesicContoursInterpolated(startVertices, endVertices, steps, dist);
+                    
+                    // Basic validation
+                    Console.WriteLine($"Generated {contours.Length} interpolated contours");
+                    Assert.IsTrue(contours.Length > 0, "Should generate at least one contour");
+                    Assert.IsTrue(contours.Length <= steps, "Should not generate more contours than steps");
+                    
+                    // Verify each contour is valid
+                    for (int i = 0; i < contours.Length; i++)
+                    {
+                        Console.WriteLine($"Contour {i}: {contours[i].VertexCount} vertices, {contours[i].EdgeCount} edges");
+                        Assert.IsTrue(contours[i].IsValid, $"Contour {i} should be valid");
+                        Assert.IsTrue(contours[i].VertexCount > 0, $"Contour {i} should have vertices");
+                        Assert.IsTrue(contours[i].EdgeCount > 0, $"Contour {i} should have edges");
+                        
+                        // Get vertex positions from the contour graph
+                        double[] positions = contours[i].GetVertexPositions();
+                        
+                        // Output first vertex position for debugging
+                        if (positions.Length >= 3)
+                        {
+                            Console.WriteLine($"  First vertex position: ({positions[0]}, {positions[1]}, {positions[2]})");
+                        }
+                        
+                        // Clean up contour
+                        contours[i].Dispose();
+                    }
+                    
+                    // Test with fixed distance
+                    Console.WriteLine("Computing interpolated geodesic contours with fixed distance...");
+                    steps = 10; // Allow up to 10 contours
+                    dist = 0.25f; // Fixed distance between contours
+                    
+                    var distanceContours = mesh.ComputeGeodesicContoursInterpolated(startVertices, endVertices, steps, dist);
+                    Console.WriteLine($"Generated {distanceContours.Length} interpolated contours with fixed distance {dist}");
+                    
+                    // Clean up
+                    foreach (var contour in distanceContours)
+                    {
+                        contour.Dispose();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception in CanComputeGeodesicContoursInterpolated: {ex.Message}");
+                Console.WriteLine($"Exception type: {ex.GetType().FullName}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                throw;
+            }
+        }
+
         #region Helper Methods
 
         private static void DiagnoseNativeLibrary()

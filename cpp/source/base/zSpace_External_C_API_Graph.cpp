@@ -80,25 +80,6 @@ ZSPACE_EXTERNAL_API int zext_graph_create_graph(zExtGraphHandle graph_handle,
     , 0)
 }
 
-ZSPACE_EXTERNAL_API int zext_graph_compute_shortest_path(zExtGraphHandle graph_handle,
-                                                      int startVertexId, int endVertexId,
-                                                      int* out_pathVertices, int* out_pathVertexCount,
-                                                      int maxPathLength) {
-    TRY_CATCH_RETURN(
-        if (!graph_handle) {
-            zSpace::SetError("Invalid graph handle");
-            return 0;
-        }
-        
-        if (!out_pathVertices || !out_pathVertexCount) {
-            zSpace::SetError("Invalid output arrays");
-            return 0;
-        }
-        
-        auto* graph = static_cast<zSpace::zExtGraph*>(graph_handle);
-        return graph->computeShortestPath(startVertexId, endVertexId, out_pathVertices, out_pathVertexCount, maxPathLength) ? 1 : 0;
-    , 0)
-}
 
 ZSPACE_EXTERNAL_API int zext_graph_set_vertex_positions(zExtGraphHandle graph_handle,
                                                      const double* vertexPositions, int vertexCount) {

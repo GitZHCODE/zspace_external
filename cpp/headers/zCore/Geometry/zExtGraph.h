@@ -96,22 +96,6 @@ public:
     );
     
     /**
-     * Compute shortest path between two vertices using Dijkstra's algorithm.
-     * 
-     * @param startVertexId Start vertex index
-     * @param endVertexId End vertex index
-     * @param out_pathVertices Output array for vertex indices along the path (pre-allocated)
-     * @param out_pathVertexCount Output for the number of vertices in the path
-     * @param maxPathLength Maximum number of vertices in the path (size of out_pathVertices array)
-     * @return True if successful, false otherwise.
-     */
-    bool computeShortestPath(
-        int startVertexId, int endVertexId,
-        int* out_pathVertices, int* out_pathVertexCount,
-        int maxPathLength
-    );
-    
-    /**
      * Set vertex positions in the graph.
      * 
      * @param vertexPositions Array of vertex positions (x1, y1, z1, x2, y2, z2, ...)
@@ -152,7 +136,6 @@ private:
     friend int zext_graph_get_vertex_count(zExtGraphHandle);
     friend int zext_graph_get_edge_count(zExtGraphHandle);
     friend int zext_graph_create_graph(zExtGraphHandle, const double*, int, const int*, int);
-    friend int zext_graph_compute_shortest_path(zExtGraphHandle, int, int, int*, int*, int);
     friend int zext_graph_set_vertex_positions(zExtGraphHandle, const double*, int);
     friend int zext_graph_get_vertex_positions(zExtGraphHandle, double*);
 };

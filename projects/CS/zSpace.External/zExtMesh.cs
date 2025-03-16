@@ -151,11 +151,11 @@ namespace zSpace.External
         /// </summary>
         /// <param name="startVertexIds">Array of start vertex indices</param>
         /// <param name="endVertexIds">Array of end vertex indices</param>
-        /// <param name="weight">Interpolation weight (0 to 1)</param>
+        /// <param name="weight">Interpolation weight (0 to 1) where 0 favors end vertices and 1 favors start vertices</param>
         /// <param name="outGeodesicDistances">Pre-allocated array that will be filled with geodesic distances (must be of length VertexCount)</param>
         /// <exception cref="ZSpaceExternalException">Thrown if the operation fails.</exception>
         /// <exception cref="ArgumentNullException">Thrown if any array is null.</exception>
-        /// <exception cref="ArgumentException">Thrown if any array has invalid length or if there are no vertices.</exception>
+        /// <exception cref="ArgumentException">Thrown if any array has invalid length, if there are no source vertices, or if weight is outside valid range.</exception>
         public void ComputeGeodesicHeatInterpolated(int[] startVertexIds, int[] endVertexIds, float weight, float[] outGeodesicDistances)
         {
             ThrowIfDisposed();
@@ -166,31 +166,127 @@ namespace zSpace.External
             
             if (startVertexIds.Length == 0)
                 throw new ArgumentException("Start vertex IDs array cannot be empty.", nameof(startVertexIds));
-                
+            
             if (endVertexIds.Length == 0)
                 throw new ArgumentException("End vertex IDs array cannot be empty.", nameof(endVertexIds));
-                
-            if (weight <= 0.0f)
-                throw new ArgumentException("Steps must be greater than zero.", nameof(weight));
-
-            if (weight >= 1.0f)
-                throw new ArgumentException("Steps must be less than one.", nameof(weight));
-
+            
+            if (weight <= 0.0f || weight >= 1.0f)
+                throw new ArgumentException("Weight must be between 0 and 1 exclusive.", nameof(weight));
+            
             if (outGeodesicDistances.Length < VertexCount)
                 throw new ArgumentException($"Output array must have at least {VertexCount} elements (one per vertex).", nameof(outGeodesicDistances));
             
             Debug.WriteLine($"Computing interpolated geodesic distances between {startVertexIds.Length} start vertices and {endVertexIds.Length} end vertices...");
-            if (!NativeMethods.zext_mesh_compute_geodesic_heat_interpolated(
-                _handle, 
-                startVertexIds, startVertexIds.Length, 
-                endVertexIds, endVertexIds.Length, 
-                weight, 
-                outGeodesicDistances))
+            if (!NativeMethods.zext_mesh_compute_geodesic_heat_interpolated(_handle, startVertexIds, startVertexIds.Length, 
+                                                                         endVertexIds, endVertexIds.Length, 
+                                                                         weight, outGeodesicDistances))
             {
                 ThrowLastError("Failed to compute interpolated geodesic distances");
             }
             
             Debug.WriteLine("Interpolated geodesic distances computed successfully");
+        }
+        
+        /// <summary>
+        /// Computes geodesic contours on the mesh from source vertices.
+        /// </summary>
+        /// <param name="sourceVertexIds">Array of source vertex indices</param>
+        /// <param name="steps">Number of contour steps to generate</param>
+        /// <param name="dist">Distance between contours (if 0, uses steps instead)</param>
+        /// <returns>Array of contour graphs</returns>
+        /// <exception cref="ZSpaceExternalException">Thrown if the operation fails.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if the source vertex array is null.</exception>
+        /// <exception cref="ArgumentException">Thrown if there are no source vertices or if steps is less than or equal to 0.</exception>
+        public zExtGraph[] ComputeGeodesicContours(int[] sourceVertexIds, int steps, float dist = 0.0f)
+        {
+            ThrowIfDisposed();
+            
+            if (sourceVertexIds == null) throw new ArgumentNullException(nameof(sourceVertexIds));
+            
+            if (sourceVertexIds.Length == 0)
+                throw new ArgumentException("Source vertex IDs array cannot be empty.", nameof(sourceVertexIds));
+            
+            if (steps <= 0)
+                throw new ArgumentException("Steps must be greater than 0.", nameof(steps));
+            
+            // Maximum number of contours we'll allow
+            const int maxContours = 1000;
+            
+            // Pre-allocate array for contour handles
+            IntPtr[] contourHandles = new IntPtr[maxContours];
+            int contourCount = 0;
+            
+            Debug.WriteLine($"Computing geodesic contours from {sourceVertexIds.Length} source vertices with {steps} steps...");
+            if (!NativeMethods.zext_mesh_compute_geodesic_contours(_handle, sourceVertexIds, sourceVertexIds.Length, 
+                                                                steps, dist,
+                                                                contourHandles, ref contourCount, maxContours))
+            {
+                ThrowLastError("Failed to compute geodesic contours");
+            }
+            
+            // Create managed wrappers for the contour graphs
+            zExtGraph[] contours = new zExtGraph[contourCount];
+            for (int i = 0; i < contourCount; i++)
+            {
+                contours[i] = new zExtGraph(contourHandles[i]);
+            }
+            
+            Debug.WriteLine($"Generated {contourCount} geodesic contours successfully");
+            return contours;
+        }
+        
+        /// <summary>
+        /// Computes interpolated geodesic contours on the mesh between two sets of vertices.
+        /// </summary>
+        /// <param name="startVertexIds">Array of start vertex indices</param>
+        /// <param name="endVertexIds">Array of end vertex indices</param>
+        /// <param name="steps">Number of contour steps to generate</param>
+        /// <param name="dist">Distance between contours (if 0, uses steps instead)</param>
+        /// <returns>Array of contour graphs</returns>
+        /// <exception cref="ZSpaceExternalException">Thrown if the operation fails.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if any vertex array is null.</exception>
+        /// <exception cref="ArgumentException">Thrown if there are no source vertices or if steps is less than or equal to 0.</exception>
+        public zExtGraph[] ComputeGeodesicContoursInterpolated(int[] startVertexIds, int[] endVertexIds, int steps, float dist = 0.0f)
+        {
+            ThrowIfDisposed();
+            
+            if (startVertexIds == null) throw new ArgumentNullException(nameof(startVertexIds));
+            if (endVertexIds == null) throw new ArgumentNullException(nameof(endVertexIds));
+            
+            if (startVertexIds.Length == 0)
+                throw new ArgumentException("Start vertex IDs array cannot be empty.", nameof(startVertexIds));
+            
+            if (endVertexIds.Length == 0)
+                throw new ArgumentException("End vertex IDs array cannot be empty.", nameof(endVertexIds));
+            
+            if (steps <= 0)
+                throw new ArgumentException("Steps must be greater than 0.", nameof(steps));
+            
+            // Maximum number of contours we'll allow
+            const int maxContours = 1000;
+            
+            // Pre-allocate array for contour handles
+            IntPtr[] contourHandles = new IntPtr[maxContours];
+            int contourCount = 0;
+            
+            Debug.WriteLine($"Computing interpolated geodesic contours between {startVertexIds.Length} start vertices and {endVertexIds.Length} end vertices with {steps} steps...");
+            if (!NativeMethods.zext_mesh_compute_geodesic_contours_interpolated(_handle, startVertexIds, startVertexIds.Length, 
+                                                                             endVertexIds, endVertexIds.Length,
+                                                                             steps, dist,
+                                                                             contourHandles, ref contourCount, maxContours))
+            {
+                ThrowLastError("Failed to compute interpolated geodesic contours");
+            }
+            
+            // Create managed wrappers for the contour graphs
+            zExtGraph[] contours = new zExtGraph[contourCount];
+            for (int i = 0; i < contourCount; i++)
+            {
+                contours[i] = new zExtGraph(contourHandles[i]);
+            }
+            
+            Debug.WriteLine($"Generated {contourCount} interpolated geodesic contours successfully");
+            return contours;
         }
 
         /// <summary>

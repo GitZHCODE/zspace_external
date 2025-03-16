@@ -6,7 +6,6 @@
 
 // Include local header (relative to cpp directory)
 #include "headers/zCore/Geometry/zExtMesh.h"
-#include "headers/zCore/Geometry/zExtGraph.h"
 
 // Include zspace_core headers
 #include <headers/zInterface/functionsets/zFnMesh.h>
@@ -135,7 +134,7 @@ bool zExtMesh::createMesh(
 bool zExtMesh::computeGeodesicHeat(
     const int* sourceVIds, int sourceVCount,
     float* out_geodesicScalars
-)
+	)
 {
     try {
         if (!m_mesh || !out_geodesicScalars || !sourceVIds || sourceVCount <= 0) {
@@ -160,9 +159,9 @@ bool zExtMesh::computeGeodesicHeat(
         }
 
         // Setup mesh parameterization
-        zTsMeshParam myMeshParam;
-        myMeshParam.o_TriMesh = *m_mesh;
-        
+	zTsMeshParam myMeshParam;
+	myMeshParam.o_TriMesh = *m_mesh;
+
         zFnMesh fnMesh(myMeshParam.o_TriMesh);
         fnMesh.computeMeshNormals();
         fnMesh.getMatrices_trimesh(myMeshParam.triMesh_V, myMeshParam.triMesh_FTris);
@@ -173,7 +172,7 @@ bool zExtMesh::computeGeodesicHeat(
         }
 
         // Compute geodesic heat
-        zDomainFloat outMinMax(0, 1);
+	zDomainFloat outMinMax(0, 1);
 
         // Convert source IDs to vector
         vector<int> sourceVertices;
@@ -183,7 +182,7 @@ bool zExtMesh::computeGeodesicHeat(
         }
 
         // Compute geodesic distances
-        vector<float> geodesicsScalars;
+	vector<float> geodesicsScalars;
         myMeshParam.computeGeodesics_Heat(sourceVertices, geodesicsScalars);
         
         // Check if we got valid results
@@ -192,9 +191,9 @@ bool zExtMesh::computeGeodesicHeat(
         }
 
         // Normalize values to [0,1] range
-        zDomainFloat startMinMax(myMeshParam.coreUtils.zMin(geodesicsScalars), myMeshParam.coreUtils.zMax(geodesicsScalars));
+		zDomainFloat startMinMax(myMeshParam.coreUtils.zMin(geodesicsScalars), myMeshParam.coreUtils.zMax(geodesicsScalars));
         for (auto& v : geodesicsScalars) {
-            v = myMeshParam.coreUtils.ofMap(v, startMinMax, outMinMax);
+			v = myMeshParam.coreUtils.ofMap(v, startMinMax, outMinMax);
         }
 
         // Copy results to output array (safely handling size differences)
@@ -204,19 +203,19 @@ bool zExtMesh::computeGeodesicHeat(
         }
 
         // Color the mesh
-        zColor* mesh_vColors = fnMesh.getRawVertexColors();
+	zColor* mesh_vColors = fnMesh.getRawVertexColors();
 
-        zScalar minScalar = myMeshParam.coreUtils.zMin(geodesicsScalars);
-        zScalar maxScalar = myMeshParam.coreUtils.zMax(geodesicsScalars);
+	zScalar minScalar = myMeshParam.coreUtils.zMin(geodesicsScalars);
+	zScalar maxScalar = myMeshParam.coreUtils.zMax(geodesicsScalars);
 
-        zDomainFloat distanceDomain(minScalar, maxScalar);
-        zDomainColor colDomain(zColor(1, 0, 0, 1), zColor(0, 1, 0, 1));
+	zDomainFloat distanceDomain(minScalar, maxScalar);
+	zDomainColor colDomain(zColor(1, 0, 0, 1), zColor(0, 1, 0, 1));
 
         for (int i = 0; i < min(fnMesh.numVertices(), (int)geodesicsScalars.size()); i++) {
-            mesh_vColors[i] = myMeshParam.coreUtils.blendColor(geodesicsScalars[i], distanceDomain, colDomain, zRGB);
-        }
+		mesh_vColors[i] = myMeshParam.coreUtils.blendColor(geodesicsScalars[i], distanceDomain, colDomain, zRGB);
+	}
 
-        fnMesh.computeFaceColorfromVertexColor();
+	fnMesh.computeFaceColorfromVertexColor();
 
         return true;
     }
@@ -300,140 +299,201 @@ bool zExtMesh::computeGeodesicHeat_interpolated(
 bool zExtMesh::computeGeodesicContours(
     const int* sourceVIds, int sourceVCount,
     int steps, float dist,
-    vector<zExtGraph*> out_contours
+    std::vector<zExtGraph*> out_contours
 )
 {
-    // Allocate memory for the start and end geodesic distances
-    std::vector<float> geodesicScalars(m_vertexCount, 0.0f);
+    try {
+        if (!m_mesh || !sourceVIds || sourceVCount <= 0 || steps <= 0) {
+            return false;
+        }
 
-    // Compute geodesic distances from start and end vertices
-    if (!computeGeodesicHeat(sourceVIds, sourceVCount, geodesicScalars.data())) {
+        // Clear any existing contours in the output vector
+        for (auto& graph : out_contours) {
+            delete graph;
+        }
+        out_contours.clear();
+
+        // Compute geodesic distances from source vertices
+        std::vector<float> geodesicScalars(m_vertexCount, 0.0f);
+        if (!computeGeodesicHeat(sourceVIds, sourceVCount, geodesicScalars.data())) {
+            return false;
+        }
+
+        // Get min/max values for the scalar field
+        zUtilsCore core;
+        zScalar minScalar = core.zMin(geodesicScalars);
+        zScalar maxScalar = core.zMax(geodesicScalars);
+        zScalar range = maxScalar - minScalar;
+
+        // Determine how many contours to generate based on user input
+        int numContours;
+        if (dist == 0.0f) {
+            // If dist is 0, use the fixed number of steps
+            numContours = steps;
+        } else {
+            // Otherwise, calculate how many contours fit in the range based on dist
+            numContours = (int)(range / dist);
+            // Ensure we have at least one contour
+            numContours = std::max(1, numContours);
+        }
+
+        // Create function object for the mesh
+        zFnMesh fnMesh(*m_mesh);
+
+        // Create contours at regular intervals
+        for (int i = 0; i < numContours; i++) {
+            // Calculate normalized weight for this contour
+            float weight = (float)(i + 1) / (float)(numContours + 1);
+            
+            // Generate the isocontour using the threshold value
+            zPointArray positions;
+            zIntArray edgeConnects;
+            zColorArray vColors;
+            int precision = 6;
+            float tolerance = std::pow(10, -precision);
+
+            // Extract contour at the current iso value
+            fnMesh.getIsoContour(geodesicScalars, weight, positions, edgeConnects, vColors, precision, tolerance);
+            
+            // Create graph from the isocontour (only if we have valid geometry)
+            if (!positions.empty() && !edgeConnects.empty()) {
+                zObjGraph* contourPtr = new zObjGraph();
+                zFnGraph fnGraph(*contourPtr);
+                fnGraph.create(positions, edgeConnects);
+                
+                // Add the contour to the output vector
+                out_contours.push_back(new zExtGraph(contourPtr));
+            }
+        }
+
+        // Color the mesh based on the geodesic field (optional)
+        zColor* mesh_vColors = fnMesh.getRawVertexColors();
+        zDomainFloat distanceDomain(minScalar, maxScalar);
+        zDomainColor colDomain(zColor(1, 0, 0, 1), zColor(0, 1, 0, 1));
+
+        for (int i = 0; i < fnMesh.numVertices(); i++) {
+            mesh_vColors[i] = core.blendColor(geodesicScalars[i], distanceDomain, colDomain, zRGB);
+        }
+        fnMesh.computeFaceColorfromVertexColor();
+
+        return !out_contours.empty();
+    }
+    catch (const std::exception&) {
+        // Clean up any contours created so far
+        for (auto& graph : out_contours) {
+            delete graph;
+        }
+        out_contours.clear();
         return false;
     }
-    zUtilsCore core;
-    zScalar minScalar = core.zMin(geodesicScalars);
-    zScalar maxScalar = core.zMax(geodesicScalars);
-
-    int numGraphs;
-    if (dist == 0.0f) numGraphs = steps;
-    else
-	{
-		numGraphs = (int)((maxScalar - minScalar) / (float)dist);
-    }
-
-    // weighted scalars
-    zFnMesh fnMesh(*m_mesh);
-
-    for (int step = 0; step < numGraphs; step++)
-    {
-        float weight = ((float)(step + 1) / (float)numGraphs);
-
-        out_contours.clear();
-        out_contours.assign(numGraphs, new zExtGraph());
-
-        // Generate the isocontour using the threshold value
-        zPointArray positions;
-        zIntArray edgeConnects;
-        zColorArray vColors;
-        int pres = 6;
-
-        fnMesh.getIsoContour(geodesicScalars, weight, positions, edgeConnects, vColors, pres, pow(10, -1 * pres));
-
-        // Create graph from the isocontour
-        zObjGraph* contourPtr = new zObjGraph();
-        zFnGraph fnGraph(*contourPtr);
-        fnGraph.create(positions, edgeConnects);
-        out_contours.emplace_back(contourPtr);
-    }
-
-    // color mesh
-    zColor* mesh_vColors = fnMesh.getRawVertexColors();
-
-    zDomainFloat distanceDomain(minScalar, maxScalar);
-    zDomainColor colDomain(zColor(1, 0, 0, 1), zColor(0, 1, 0, 1));
-
-    for (int i = 0; i < fnMesh.numVertices(); i++)
-    {
-        mesh_vColors[i] = core.blendColor(geodesicScalars[i], distanceDomain, colDomain, zRGB);
-    }
-
-    fnMesh.computeFaceColorfromVertexColor();
 }
 
 bool zExtMesh::computeGeodesicContours_interpolated(
     const int* startVIds, int startCount,
     const int* endVIds, int endCount,
     int steps, float dist,
-    vector<zExtGraph*> out_contours
+    std::vector<zExtGraph*> out_contours
 )
 {
-    // Allocate memory for the start and end geodesic distances
-    std::vector<float> geodesicStart(m_vertexCount, 0.0f);
-    std::vector<float> geodesicEnd(m_vertexCount, 0.0f);
-    std::vector<float> geodesicScalars(m_vertexCount, 0.0f);
-
-    // Compute geodesic distances from start and end vertices
-    if (!computeGeodesicHeat(startVIds, startCount, geodesicStart.data())) {
-        return false;
-    }
-
-    if (!computeGeodesicHeat(endVIds, endCount, geodesicEnd.data())) {
-        return false;
-    }
-
-    zUtilsCore core;
-    zScalar minScalar = core.zMin(geodesicScalars);
-    zScalar maxScalar = core.zMax(geodesicScalars);
-
-    int numGraphs;
-    if (dist == 0.0f) numGraphs = steps;
-    else
-    {
-        numGraphs = (int)((maxScalar - minScalar) / (float)dist);
-    }
-
-    // weighted scalars
-    zFnMesh fnMesh(*m_mesh);
-
-    for (int step = 0; step < numGraphs; step++)
-    {
-        float weight = ((float)(step + 1) / (float)numGraphs);
-
-        // Interpolate between the start and end geodesic distances
-        for (int j = 0; j < m_vertexCount; j++) {
-            geodesicScalars[j] = weight * geodesicStart[j] + (1.0f - weight) * geodesicEnd[j];
+    try {
+        if (!m_mesh || !startVIds || !endVIds || startCount <= 0 || endCount <= 0 || steps <= 0) {
+            return false;
         }
 
+        // Clear any existing contours in the output vector
+        for (auto& graph : out_contours) {
+            delete graph;
+        }
         out_contours.clear();
-        out_contours.assign(numGraphs, new zExtGraph());
 
-        // Generate the isocontour using the threshold value
-        zPointArray positions;
-        zIntArray edgeConnects;
-        zColorArray vColors;
-        int pres = 6;
+        // Compute geodesic distances from start and end vertices
+        std::vector<float> geodesicStart(m_vertexCount, 0.0f);
+        std::vector<float> geodesicEnd(m_vertexCount, 0.0f);
+        
+        if (!computeGeodesicHeat(startVIds, startCount, geodesicStart.data())) {
+            return false;
+        }
 
-        fnMesh.getIsoContour(geodesicScalars, 0.0, positions, edgeConnects, vColors, pres, pow(10, -1 * pres));
+        if (!computeGeodesicHeat(endVIds, endCount, geodesicEnd.data())) {
+            return false;
+        }
 
-        // Create graph from the isocontour
-        zObjGraph* contourPtr = new zObjGraph();
-        zFnGraph fnGraph(*contourPtr);
-        fnGraph.create(positions, edgeConnects);
-        out_contours.emplace_back(contourPtr);
+        // Create function object for the mesh
+        zFnMesh fnMesh(*m_mesh);
+
+        // Initialize working scalar field for interpolation
+        std::vector<float> geodesicScalars(m_vertexCount, 0.0f);
+        
+        // Use default weight for initial analysis
+        float blendWeight = 0.5f;  // Equal blend between start and end
+        
+        // Blend the start and end scalar fields
+        for (int j = 0; j < m_vertexCount; j++) {
+            geodesicScalars[j] = blendWeight * geodesicStart[j] + (1.0f - blendWeight) * geodesicEnd[j];
+        }
+        
+        // Get min/max values for this interpolated field
+        zUtilsCore core;
+        zScalar minScalar = core.zMin(geodesicScalars);
+        zScalar maxScalar = core.zMax(geodesicScalars);
+        zScalar range = maxScalar - minScalar;
+
+        // Determine how many contours to generate based on user input
+        int numContours;
+        if (dist == 0.0f) {
+            // If dist is 0, use the fixed number of steps
+            numContours = steps;
+        } else {
+            // Otherwise, calculate how many contours fit in the range based on dist
+            numContours = (int)(range / dist);
+            // Ensure we have at least one contour
+            numContours = std::max(1, numContours);
+        }
+        
+        // For each step, generate a contour
+        for (int i = 0; i < numContours; i++) {
+            // Calculate interpolation weight for this contour
+            float weight = (float)(i + 1) / (float)(numContours + 1);
+            
+            // Interpolate between start and end geodesic distances
+            for (int j = 0; j < m_vertexCount; j++) {
+                geodesicScalars[j] = weight * geodesicStart[j] + (1.0f - weight) * geodesicEnd[j];
+            }
+
+            // Generate the isocontour at a mid-value
+            zPointArray positions;
+            zIntArray edgeConnects;
+            zColorArray vColors;
+            int precision = 6;
+            float tolerance = std::pow(10, -precision);
+            
+            // Use fixed iso value at 0.0
+            float isoValue = 0.0f;
+
+            // Extract contour at the current iso value
+            fnMesh.getIsoContour(geodesicScalars, isoValue, positions, edgeConnects, vColors, precision, tolerance);
+            
+            // Create graph from the isocontour (only if we have valid geometry)
+            if (!positions.empty() && !edgeConnects.empty()) {
+                zObjGraph* contourPtr = new zObjGraph();
+                zFnGraph fnGraph(*contourPtr);
+                fnGraph.create(positions, edgeConnects);
+                
+                // Add the contour to the output vector
+                out_contours.push_back(new zExtGraph(contourPtr));
+            }
+        }
+
+        return !out_contours.empty();
     }
-
-    // color mesh
-    zColor* mesh_vColors = fnMesh.getRawVertexColors();
-
-    zDomainFloat distanceDomain(minScalar, maxScalar);
-    zDomainColor colDomain(zColor(1, 0, 0, 1), zColor(0, 1, 0, 1));
-
-    for (int i = 0; i < fnMesh.numVertices(); i++)
-    {
-        mesh_vColors[i] = core.blendColor(geodesicScalars[i], distanceDomain, colDomain, zRGB);
+    catch (const std::exception&) {
+        // Clean up any contours created so far
+        for (auto& graph : out_contours) {
+            delete graph;
+        }
+        out_contours.clear();
+        return false;
     }
-
-    fnMesh.computeFaceColorfromVertexColor();
 }
 
 } // namespace zSpace 

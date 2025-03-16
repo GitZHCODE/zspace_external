@@ -97,6 +97,38 @@ namespace zSpace.External
             float weight,
             [MarshalAs(UnmanagedType.LPArray)] float[] outGeodesicScalars);
         
+        /// <summary>
+        /// Computes geodesic contours on the mesh.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool zext_mesh_compute_geodesic_contours(
+            IntPtr mesh_handle,
+            [MarshalAs(UnmanagedType.LPArray)] int[] sourceVertexIds,
+            int sourceVertexCount,
+            int steps,
+            float dist,
+            [MarshalAs(UnmanagedType.LPArray)] IntPtr[] outContours,
+            ref int outContourCount,
+            int maxContours);
+            
+        /// <summary>
+        /// Computes interpolated geodesic contours on the mesh between two sets of vertices.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool zext_mesh_compute_geodesic_contours_interpolated(
+            IntPtr mesh_handle,
+            [MarshalAs(UnmanagedType.LPArray)] int[] startVertexIds,
+            int startVertexCount,
+            [MarshalAs(UnmanagedType.LPArray)] int[] endVertexIds,
+            int endVertexCount,
+            int steps,
+            float dist,
+            [MarshalAs(UnmanagedType.LPArray)] IntPtr[] outContours,
+            ref int outContourCount,
+            int maxContours);
+        
         // Graph Functions
         
         /// <summary>
@@ -141,19 +173,6 @@ namespace zSpace.External
             int vertexCount,
             [MarshalAs(UnmanagedType.LPArray)] int[] edgeConnections, 
             int edgeConnectionsSize);
-            
-        /// <summary>
-        /// Computes shortest path between two vertices.
-        /// </summary>
-        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.I1)]
-        public static extern bool zext_graph_compute_shortest_path(
-            IntPtr graph_handle,
-            int startVertexId, 
-            int endVertexId,
-            [MarshalAs(UnmanagedType.LPArray)] int[] outPathVertices,
-            ref int outPathVertexCount,
-            int maxPathLength);
             
         /// <summary>
         /// Sets vertex positions in the graph.
