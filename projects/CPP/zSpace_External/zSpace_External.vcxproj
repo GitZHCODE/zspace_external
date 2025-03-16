@@ -182,11 +182,14 @@
     <ClInclude Include="..\..\..\cpp\headers\base\zSpace_External_C_API.h" />
     <ClInclude Include="..\..\..\cpp\headers\base\zSpace_External_C_API_Common.h" />
     <ClInclude Include="..\..\..\cpp\headers\zCore\Geometry\zExtMesh.h" />
+    <ClInclude Include="..\..\..\cpp\headers\zCore\Geometry\zExtGraph.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\cpp\source\base\zSpace_External_C_API_Common.cpp" />
     <ClCompile Include="..\..\..\cpp\source\base\zSpace_External_C_API_Mesh.cpp" />
+    <ClCompile Include="..\..\..\cpp\source\base\zSpace_External_C_API_Graph.cpp" />
     <ClCompile Include="..\..\..\cpp\source\zCore\Geometry\zExtMesh.cpp" />
+    <ClCompile Include="..\..\..\cpp\source\zCore\Geometry\zExtGraph.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

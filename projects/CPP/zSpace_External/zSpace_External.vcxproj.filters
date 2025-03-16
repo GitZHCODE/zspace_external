@@ -42,6 +42,9 @@
     <ClInclude Include="..\..\..\cpp\headers\zCore\Geometry\zExtMesh.h">
       <Filter>Header Files\zCore\Geometry</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\cpp\headers\zCore\Geometry\zExtGraph.h">
+      <Filter>Header Files\zCore\Geometry</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\cpp\source\base\zSpace_External_C_API_Common.cpp">
@@ -50,7 +53,13 @@
     <ClCompile Include="..\..\..\cpp\source\base\zSpace_External_C_API_Mesh.cpp">
       <Filter>Source Files\base</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\cpp\source\base\zSpace_External_C_API_Graph.cpp">
+      <Filter>Source Files\base</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\cpp\source\zCore\Geometry\zExtMesh.cpp">
+      <Filter>Source Files\zCore\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\source\zCore\Geometry\zExtGraph.cpp">
       <Filter>Source Files\zCore\Geometry</Filter>
     </ClCompile>
   </ItemGroup>

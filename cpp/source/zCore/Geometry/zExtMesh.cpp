@@ -6,6 +6,7 @@
 
 // Include local header (relative to cpp directory)
 #include "headers/zCore/Geometry/zExtMesh.h"
+#include "headers/zCore/Geometry/zExtGraph.h"
 
 // Include zspace_core headers
 #include <headers/zInterface/functionsets/zFnMesh.h>
@@ -46,6 +47,13 @@ int zExtMesh::getVertexCount() const {
 
 int zExtMesh::getFaceCount() const {
     return m_faceCount;
+}
+
+zObjMesh& zExtMesh::getRawMesh() const {
+    if (!m_mesh) {
+        throw std::runtime_error("Mesh is not initialized");
+    }
+    return *m_mesh;
 }
 
 void zExtMesh::updateAttributes() {
@@ -295,7 +303,61 @@ bool zExtMesh::computeGeodesicContours(
     vector<zExtGraph*> out_contours
 )
 {
+    // Allocate memory for the start and end geodesic distances
+    std::vector<float> geodesicScalars(m_vertexCount, 0.0f);
 
+    // Compute geodesic distances from start and end vertices
+    if (!computeGeodesicHeat(sourceVIds, sourceVCount, geodesicScalars.data())) {
+        return false;
+    }
+    zUtilsCore core;
+    zScalar minScalar = core.zMin(geodesicScalars);
+    zScalar maxScalar = core.zMax(geodesicScalars);
+
+    int numGraphs;
+    if (dist == 0.0f) numGraphs = steps;
+    else
+	{
+		numGraphs = (int)((maxScalar - minScalar) / (float)dist);
+    }
+
+    // weighted scalars
+    zFnMesh fnMesh(*m_mesh);
+
+    for (int step = 0; step < numGraphs; step++)
+    {
+        float weight = ((float)(step + 1) / (float)numGraphs);
+
+        out_contours.clear();
+        out_contours.assign(numGraphs, new zExtGraph());
+
+        // Generate the isocontour using the threshold value
+        zPointArray positions;
+        zIntArray edgeConnects;
+        zColorArray vColors;
+        int pres = 6;
+
+        fnMesh.getIsoContour(geodesicScalars, weight, positions, edgeConnects, vColors, pres, pow(10, -1 * pres));
+
+        // Create graph from the isocontour
+        zObjGraph* contourPtr = new zObjGraph();
+        zFnGraph fnGraph(*contourPtr);
+        fnGraph.create(positions, edgeConnects);
+        out_contours.emplace_back(contourPtr);
+    }
+
+    // color mesh
+    zColor* mesh_vColors = fnMesh.getRawVertexColors();
+
+    zDomainFloat distanceDomain(minScalar, maxScalar);
+    zDomainColor colDomain(zColor(1, 0, 0, 1), zColor(0, 1, 0, 1));
+
+    for (int i = 0; i < fnMesh.numVertices(); i++)
+    {
+        mesh_vColors[i] = core.blendColor(geodesicScalars[i], distanceDomain, colDomain, zRGB);
+    }
+
+    fnMesh.computeFaceColorfromVertexColor();
 }
 
 bool zExtMesh::computeGeodesicContours_interpolated(
@@ -305,7 +367,73 @@ bool zExtMesh::computeGeodesicContours_interpolated(
     vector<zExtGraph*> out_contours
 )
 {
+    // Allocate memory for the start and end geodesic distances
+    std::vector<float> geodesicStart(m_vertexCount, 0.0f);
+    std::vector<float> geodesicEnd(m_vertexCount, 0.0f);
+    std::vector<float> geodesicScalars(m_vertexCount, 0.0f);
 
+    // Compute geodesic distances from start and end vertices
+    if (!computeGeodesicHeat(startVIds, startCount, geodesicStart.data())) {
+        return false;
+    }
+
+    if (!computeGeodesicHeat(endVIds, endCount, geodesicEnd.data())) {
+        return false;
+    }
+
+    zUtilsCore core;
+    zScalar minScalar = core.zMin(geodesicScalars);
+    zScalar maxScalar = core.zMax(geodesicScalars);
+
+    int numGraphs;
+    if (dist == 0.0f) numGraphs = steps;
+    else
+    {
+        numGraphs = (int)((maxScalar - minScalar) / (float)dist);
+    }
+
+    // weighted scalars
+    zFnMesh fnMesh(*m_mesh);
+
+    for (int step = 0; step < numGraphs; step++)
+    {
+        float weight = ((float)(step + 1) / (float)numGraphs);
+
+        // Interpolate between the start and end geodesic distances
+        for (int j = 0; j < m_vertexCount; j++) {
+            geodesicScalars[j] = weight * geodesicStart[j] + (1.0f - weight) * geodesicEnd[j];
+        }
+
+        out_contours.clear();
+        out_contours.assign(numGraphs, new zExtGraph());
+
+        // Generate the isocontour using the threshold value
+        zPointArray positions;
+        zIntArray edgeConnects;
+        zColorArray vColors;
+        int pres = 6;
+
+        fnMesh.getIsoContour(geodesicScalars, 0.0, positions, edgeConnects, vColors, pres, pow(10, -1 * pres));
+
+        // Create graph from the isocontour
+        zObjGraph* contourPtr = new zObjGraph();
+        zFnGraph fnGraph(*contourPtr);
+        fnGraph.create(positions, edgeConnects);
+        out_contours.emplace_back(contourPtr);
+    }
+
+    // color mesh
+    zColor* mesh_vColors = fnMesh.getRawVertexColors();
+
+    zDomainFloat distanceDomain(minScalar, maxScalar);
+    zDomainColor colDomain(zColor(1, 0, 0, 1), zColor(0, 1, 0, 1));
+
+    for (int i = 0; i < fnMesh.numVertices(); i++)
+    {
+        mesh_vColors[i] = core.blendColor(geodesicScalars[i], distanceDomain, colDomain, zRGB);
+    }
+
+    fnMesh.computeFaceColorfromVertexColor();
 }
 
 } // namespace zSpace 

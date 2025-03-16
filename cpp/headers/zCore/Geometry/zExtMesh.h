@@ -17,6 +17,7 @@
 // Forward declaration to avoid including zObjMesh.h directly
 namespace zSpace {
     class zObjMesh;
+    class zObjGraph;
 }
 
 // Handle type forward declaration
@@ -72,6 +73,14 @@ public:
      * @return Number of faces.
      */
     int getFaceCount() const;
+    
+    /**
+     * Get the raw internal mesh object.
+     * Use with caution as this exposes the internal implementation.
+     * 
+     * @return Reference to the internal zObjMesh object.
+     */
+    zObjMesh& getRawMesh() const;
     
     /**
      * Create a mesh from the given vertex positions and face data.
@@ -155,6 +164,8 @@ private:
     friend int zext_mesh_get_face_count(zExtMeshHandle);
     friend int zext_mesh_compute_geodesic_heat(zExtMeshHandle, const int*, int, float*);
     friend int zext_mesh_compute_geodesic_heat_interpolated(zExtMeshHandle, const int*, int, const int*, int, int, float*);
+    friend int zext_mesh_compute_geodesic_contours(zExtMeshHandle, const int*, int, int, float, zExtGraphHandle*, int*, int);
+    friend int zext_mesh_compute_geodesic_contours_interpolated(zExtMeshHandle, const int*, int, const int*, int, int, float, zExtGraphHandle*, int*, int);
 };
 
 } // namespace zSpace

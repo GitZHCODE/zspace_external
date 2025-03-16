@@ -96,5 +96,82 @@ namespace zSpace.External
             int endVertexCount,
             float weight,
             [MarshalAs(UnmanagedType.LPArray)] float[] outGeodesicScalars);
+        
+        // Graph Functions
+        
+        /// <summary>
+        /// Creates a new graph.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr zext_graph_create();
+        
+        /// <summary>
+        /// Destroys a graph.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void zext_graph_destroy(IntPtr graph_handle);
+        
+        /// <summary>
+        /// Checks if a graph is valid.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool zext_graph_is_valid(IntPtr graph_handle);
+        
+        /// <summary>
+        /// Gets the number of vertices in a graph.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int zext_graph_get_vertex_count(IntPtr graph_handle);
+        
+        /// <summary>
+        /// Gets the number of edges in a graph.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int zext_graph_get_edge_count(IntPtr graph_handle);
+        
+        /// <summary>
+        /// Creates a graph from vertex positions and edge data.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool zext_graph_create_graph(
+            IntPtr graph_handle, 
+            [MarshalAs(UnmanagedType.LPArray)] double[] vertexPositions, 
+            int vertexCount,
+            [MarshalAs(UnmanagedType.LPArray)] int[] edgeConnections, 
+            int edgeConnectionsSize);
+            
+        /// <summary>
+        /// Computes shortest path between two vertices.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool zext_graph_compute_shortest_path(
+            IntPtr graph_handle,
+            int startVertexId, 
+            int endVertexId,
+            [MarshalAs(UnmanagedType.LPArray)] int[] outPathVertices,
+            ref int outPathVertexCount,
+            int maxPathLength);
+            
+        /// <summary>
+        /// Sets vertex positions in the graph.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool zext_graph_set_vertex_positions(
+            IntPtr graph_handle,
+            [MarshalAs(UnmanagedType.LPArray)] double[] vertexPositions,
+            int vertexCount);
+            
+        /// <summary>
+        /// Gets vertex positions from the graph.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool zext_graph_get_vertex_positions(
+            IntPtr graph_handle,
+            [MarshalAs(UnmanagedType.LPArray)] double[] outVertexPositions);
     }
 } 
