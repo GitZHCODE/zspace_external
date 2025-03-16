@@ -232,7 +232,7 @@ bool zExtMesh::computeGeodesicHeat(
     }
 }
 
-bool zExtMesh::computeGeodesicHeat(
+bool zExtMesh::computeGeodesicHeat_interpolated(
     const int* startVIds, int startCount,
     const int* endVIds, int endCount,
     float weight,
@@ -288,4 +288,24 @@ bool zExtMesh::computeGeodesicHeat(
         return false;
     }
 }
+
+bool zExtMesh::computeGeodesicContours(
+    const int* sourceVIds, int sourceVCount,
+    int steps, float dist,
+    vector<zExtGraph*> out_contours
+)
+{
+
+}
+
+bool zExtMesh::computeGeodesicContours_interpolated(
+    const int* startVIds, int startCount,
+    const int* endVIds, int endCount,
+    int steps, float dist,
+    vector<zExtGraph*> out_contours
+)
+{
+
+}
+
 } // namespace zSpace 

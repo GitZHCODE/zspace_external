@@ -137,7 +137,7 @@ ZSPACE_EXTERNAL_API int zext_mesh_compute_geodesic_heat_interpolated(zExtMeshHan
         }
         
         auto* mesh = static_cast<zSpace::zExtMesh*>(mesh_handle);
-        return mesh->computeGeodesicHeat(start_vertex_ids, start_vertex_count, 
+        return mesh->computeGeodesicHeat_interpolated(start_vertex_ids, start_vertex_count, 
                                         end_vertex_ids, end_vertex_count, 
                                         weight, 
                                         out_geodesic_scalars) ? 1 : 0;
