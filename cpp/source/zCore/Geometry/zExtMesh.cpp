@@ -299,7 +299,7 @@ bool zExtMesh::computeGeodesicHeat_interpolated(
 bool zExtMesh::computeGeodesicContours(
     const int* sourceVIds, int sourceVCount,
     int steps, float dist,
-    std::vector<zExtGraph*> out_contours
+    std::vector<zExtGraph*>& out_contours
 )
 {
     try {
@@ -392,7 +392,7 @@ bool zExtMesh::computeGeodesicContours_interpolated(
     const int* startVIds, int startCount,
     const int* endVIds, int endCount,
     int steps, float dist,
-    std::vector<zExtGraph*> out_contours
+    std::vector<zExtGraph*>& out_contours
 )
 {
     try {

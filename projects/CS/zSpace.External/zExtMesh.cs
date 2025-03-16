@@ -209,29 +209,44 @@ namespace zSpace.External
             if (steps <= 0)
                 throw new ArgumentException("Steps must be greater than 0.", nameof(steps));
             
-            // Maximum number of contours we'll allow
-            const int maxContours = 1000;
-            
-            // Pre-allocate array for contour handles
-            IntPtr[] contourHandles = new IntPtr[maxContours];
+            // First, get the count of contours
             int contourCount = 0;
             
-            Debug.WriteLine($"Computing geodesic contours from {sourceVertexIds.Length} source vertices with {steps} steps...");
+            Debug.WriteLine($"Getting count of geodesic contours for {sourceVertexIds.Length} source vertices with {steps} steps...");
             if (!NativeMethods.zext_mesh_compute_geodesic_contours(_handle, sourceVertexIds, sourceVertexIds.Length, 
                                                                 steps, dist,
-                                                                contourHandles, ref contourCount, maxContours))
+                                                                null, ref contourCount, 0))
             {
-                ThrowLastError("Failed to compute geodesic contours");
+                ThrowLastError("Failed to compute geodesic contours count");
+            }
+            
+            Debug.WriteLine($"Expected count: {contourCount} contours");
+            
+            // If no contours were generated, return an empty array
+            if (contourCount == 0)
+            {
+                return new zExtGraph[0];
+            }
+            
+            // Now allocate the exact size array and get the contours
+            IntPtr[] contourHandles = new IntPtr[contourCount];
+            int actualCount = contourCount; // Will be updated by the native call
+            
+            if (!NativeMethods.zext_mesh_compute_geodesic_contours(_handle, sourceVertexIds, sourceVertexIds.Length, 
+                                                                steps, dist,
+                                                                contourHandles, ref actualCount, contourCount))
+            {
+                ThrowLastError("Failed to retrieve geodesic contours");
             }
             
             // Create managed wrappers for the contour graphs
-            zExtGraph[] contours = new zExtGraph[contourCount];
-            for (int i = 0; i < contourCount; i++)
+            zExtGraph[] contours = new zExtGraph[actualCount];
+            for (int i = 0; i < actualCount; i++)
             {
                 contours[i] = new zExtGraph(contourHandles[i]);
             }
             
-            Debug.WriteLine($"Generated {contourCount} geodesic contours successfully");
+            Debug.WriteLine($"Retrieved {actualCount} geodesic contours successfully");
             return contours;
         }
         
@@ -262,30 +277,46 @@ namespace zSpace.External
             if (steps <= 0)
                 throw new ArgumentException("Steps must be greater than 0.", nameof(steps));
             
-            // Maximum number of contours we'll allow
-            const int maxContours = 1000;
-            
-            // Pre-allocate array for contour handles
-            IntPtr[] contourHandles = new IntPtr[maxContours];
+            // First, get the count of contours
             int contourCount = 0;
             
-            Debug.WriteLine($"Computing interpolated geodesic contours between {startVertexIds.Length} start vertices and {endVertexIds.Length} end vertices with {steps} steps...");
+            Debug.WriteLine($"Getting count of interpolated geodesic contours between {startVertexIds.Length} start vertices and {endVertexIds.Length} end vertices with {steps} steps...");
             if (!NativeMethods.zext_mesh_compute_geodesic_contours_interpolated(_handle, startVertexIds, startVertexIds.Length, 
                                                                              endVertexIds, endVertexIds.Length,
                                                                              steps, dist,
-                                                                             contourHandles, ref contourCount, maxContours))
+                                                                             null, ref contourCount, 0))
             {
-                ThrowLastError("Failed to compute interpolated geodesic contours");
+                ThrowLastError("Failed to compute interpolated geodesic contours count");
+            }
+            
+            Debug.WriteLine($"Expected count: {contourCount} contours");
+            
+            // If no contours were generated, return an empty array
+            if (contourCount == 0)
+            {
+                return new zExtGraph[0];
+            }
+            
+            // Now allocate the exact size array and get the contours
+            IntPtr[] contourHandles = new IntPtr[contourCount];
+            int actualCount = contourCount; // Will be updated by the native call
+            
+            if (!NativeMethods.zext_mesh_compute_geodesic_contours_interpolated(_handle, startVertexIds, startVertexIds.Length, 
+                                                                             endVertexIds, endVertexIds.Length,
+                                                                             steps, dist,
+                                                                             contourHandles, ref actualCount, contourCount))
+            {
+                ThrowLastError("Failed to retrieve interpolated geodesic contours");
             }
             
             // Create managed wrappers for the contour graphs
-            zExtGraph[] contours = new zExtGraph[contourCount];
-            for (int i = 0; i < contourCount; i++)
+            zExtGraph[] contours = new zExtGraph[actualCount];
+            for (int i = 0; i < actualCount; i++)
             {
                 contours[i] = new zExtGraph(contourHandles[i]);
             }
             
-            Debug.WriteLine($"Generated {contourCount} interpolated geodesic contours successfully");
+            Debug.WriteLine($"Retrieved {actualCount} interpolated geodesic contours successfully");
             return contours;
         }
 

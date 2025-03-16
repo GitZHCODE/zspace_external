@@ -134,14 +134,14 @@ public:
     bool computeGeodesicContours(
         const int* sourceVIds, int sourceVCount,
         int steps, float dist,
-        std:: vector<zExtGraph*> out_contours
+        std::vector<zExtGraph*>& out_contours
     );
 
     bool computeGeodesicContours_interpolated(
         const int* startVIds, int startCount,
         const int* endVIds, int endCount,
         int steps, float dist,
-        std::vector<zExtGraph*> out_contours
+        std::vector<zExtGraph*>& out_contours
     );
     
 private:

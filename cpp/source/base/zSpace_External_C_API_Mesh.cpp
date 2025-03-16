@@ -165,8 +165,9 @@ ZSPACE_EXTERNAL_API int zext_mesh_compute_geodesic_contours(zExtMeshHandle mesh_
             return 0;
         }
         
-        if (!out_contours || !out_contour_count || max_contours <= 0) {
-            zSpace::SetError("Invalid output parameters");
+        // Allow null out_contours when just getting the count
+        if (!out_contour_count) {
+            zSpace::SetError("Invalid output count parameter");
             return 0;
         }
         
@@ -183,15 +184,24 @@ ZSPACE_EXTERNAL_API int zext_mesh_compute_geodesic_contours(zExtMeshHandle mesh_
             return 0;
         }
         
+        // Return the count of contours
+        int totalContours = static_cast<int>(contourGraphs.size());
+        
+        // If only getting the count, return it
+        if (!out_contours || max_contours <= 0) {
+            *out_contour_count = totalContours;
+            return 1;
+        }
+        
         // Copy the contours to the output array, limited by max_contours
-        *out_contour_count = std::min(static_cast<int>(contourGraphs.size()), max_contours);
+        *out_contour_count = std::min(totalContours, max_contours);
         
         for (int i = 0; i < *out_contour_count; i++) {
             out_contours[i] = static_cast<zExtGraphHandle>(contourGraphs[i]);
         }
         
         // Free any extra contours that won't fit in the output array
-        for (int i = *out_contour_count; i < static_cast<int>(contourGraphs.size()); i++) {
+        for (int i = *out_contour_count; i < totalContours; i++) {
             delete contourGraphs[i];
         }
         
@@ -226,8 +236,9 @@ ZSPACE_EXTERNAL_API int zext_mesh_compute_geodesic_contours_interpolated(zExtMes
             return 0;
         }
         
-        if (!out_contours || !out_contour_count || max_contours <= 0) {
-            zSpace::SetError("Invalid output parameters");
+        // Allow null out_contours when just getting the count
+        if (!out_contour_count) {
+            zSpace::SetError("Invalid output count parameter");
             return 0;
         }
         
@@ -246,15 +257,24 @@ ZSPACE_EXTERNAL_API int zext_mesh_compute_geodesic_contours_interpolated(zExtMes
             return 0;
         }
         
+        // Return the count of contours
+        int totalContours = static_cast<int>(contourGraphs.size());
+        
+        // If only getting the count, return it
+        if (!out_contours || max_contours <= 0) {
+            *out_contour_count = totalContours;
+            return 1;
+        }
+        
         // Copy the contours to the output array, limited by max_contours
-        *out_contour_count = std::min(static_cast<int>(contourGraphs.size()), max_contours);
+        *out_contour_count = std::min(totalContours, max_contours);
         
         for (int i = 0; i < *out_contour_count; i++) {
             out_contours[i] = static_cast<zExtGraphHandle>(contourGraphs[i]);
         }
         
         // Free any extra contours that won't fit in the output array
-        for (int i = *out_contour_count; i < static_cast<int>(contourGraphs.size()); i++) {
+        for (int i = *out_contour_count; i < totalContours; i++) {
             delete contourGraphs[i];
         }
         

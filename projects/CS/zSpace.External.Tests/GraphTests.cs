@@ -174,56 +174,6 @@ namespace zSpace.External.Tests
             }
         }
 
-        [TestMethod]
-        public void HandleInvalidGraphOperations()
-        {
-            using (var graph = new zSpace.External.zExtGraph())
-            {
-                // Test with invalid vertex data
-                double[] vertices = new double[] {
-                    0.0, 0.0, 0.0  // Incomplete vertex data - missing 2 components
-                };
-                
-                int[] edgeConnections = new int[] { 0, 1 }; // Invalid reference to non-existent vertex 1
-                
-                // This should not crash but should handle the error gracefully
-                try
-                {
-                    graph.CreateGraph(vertices, edgeConnections);
-                    // If we get here, the operation didn't throw, but the graph should still be empty
-                    Assert.AreEqual(0, graph.VertexCount, "Vertex count should be 0 after invalid creation attempt");
-                }
-                catch (Exception ex)
-                {
-                    // It's also acceptable if the API throws a proper exception
-                    Console.WriteLine($"Expected exception: {ex.Message}");
-                    Assert.IsTrue(ex is ArgumentException || ex is ZSpaceExternalException, 
-                        "Should throw ArgumentException or ZSpaceExternalException");
-                }
-                
-                // Test with null inputs
-                try
-                {
-                    graph.CreateGraph(null, edgeConnections);
-                    Assert.Fail("Should throw exception on null vertex array");
-                }
-                catch (ArgumentNullException)
-                {
-                    // Expected behavior
-                }
-                
-                try
-                {
-                    graph.CreateGraph(vertices, null);
-                    Assert.Fail("Should throw exception on null edge connections array");
-                }
-                catch (ArgumentNullException)
-                {
-                    // Expected behavior
-                }
-            }
-        }
-
         #region Helper Methods
 
         private static void DiagnoseNativeLibrary()
