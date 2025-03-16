@@ -129,58 +129,107 @@ bool zExtMesh::computeGeodesicHeat(
     float* out_geodesicScalars
 )
 {
-    // Setup mesh parameterization
-    zTsMeshParam myMeshParam;
-    myMeshParam.o_TriMesh = *m_mesh;
-    
-    zFnMesh fnMesh(myMeshParam.o_TriMesh);
-    fnMesh.computeMeshNormals();
-    fnMesh.getMatrices_trimesh(myMeshParam.triMesh_V, myMeshParam.triMesh_FTris);
+    try {
+        if (!m_mesh || !out_geodesicScalars || !sourceVIds || sourceVCount <= 0) {
+            // Initialize the output array to zeros in case of error
+            if (out_geodesicScalars && m_vertexCount > 0) {
+                for (int i = 0; i < m_vertexCount; i++) {
+                    out_geodesicScalars[i] = 0.0f;
+                }
+            }
+            return false;
+        }
 
-    // Compute geodesic heat
-    zDomainFloat outMinMax(0, 1);
+        // Validate if all source vertex IDs are in valid range
+        for (int i = 0; i < sourceVCount; i++) {
+            if (sourceVIds[i] < 0 || sourceVIds[i] >= m_vertexCount) {
+                // Invalid vertex index detected
+                for (int j = 0; j < m_vertexCount; j++) {
+                    out_geodesicScalars[j] = 0.0f;
+                }
+                return false;
+            }
+        }
 
-    vector<int> sourceVertices;
-    sourceVertices.reserve(sourceVCount);
-    for (int i = 0; i < sourceVCount; i++) {
-        sourceVertices.push_back(sourceVIds[i]);
-    }
+        // Setup mesh parameterization
+        zTsMeshParam myMeshParam;
+        myMeshParam.o_TriMesh = *m_mesh;
+        
+        zFnMesh fnMesh(myMeshParam.o_TriMesh);
+        fnMesh.computeMeshNormals();
+        fnMesh.getMatrices_trimesh(myMeshParam.triMesh_V, myMeshParam.triMesh_FTris);
 
-    vector<float> geodesicsScalars;
+        // Initialize the output array to zeros
+        for (int i = 0; i < m_vertexCount; i++) {
+            out_geodesicScalars[i] = 0.0f;
+        }
 
-    if (sourceVCount > 0)
-    {
+        // Compute geodesic heat
+        zDomainFloat outMinMax(0, 1);
+
+        // Convert source IDs to vector
+        vector<int> sourceVertices;
+        sourceVertices.reserve(sourceVCount);
+        for (int i = 0; i < sourceVCount; i++) {
+            sourceVertices.push_back(sourceVIds[i]);
+        }
+
+        // Compute geodesic distances
+        vector<float> geodesicsScalars;
         myMeshParam.computeGeodesics_Heat(sourceVertices, geodesicsScalars);
-        zDomainFloat startMinMax(myMeshParam.coreUtils.zMin(geodesicsScalars), myMeshParam.coreUtils.zMax(geodesicsScalars));
-        for (auto& v : geodesicsScalars)
-            v = myMeshParam.coreUtils.ofMap(v, startMinMax, outMinMax);
-    }
+        
+        // Check if we got valid results
+        if (geodesicsScalars.size() == 0 || geodesicsScalars.size() != (size_t)m_vertexCount) {
+            return false;
+        }
 
-    // Copy results to output array
-    if (geodesicsScalars.size() > 0) {
-        for (int i = 0; i < min((int)geodesicsScalars.size(), m_vertexCount); i++) {
+        // Normalize values to [0,1] range
+        zDomainFloat startMinMax(myMeshParam.coreUtils.zMin(geodesicsScalars), myMeshParam.coreUtils.zMax(geodesicsScalars));
+        for (auto& v : geodesicsScalars) {
+            v = myMeshParam.coreUtils.ofMap(v, startMinMax, outMinMax);
+        }
+
+        // Copy results to output array (safely handling size differences)
+        int copySize = min((int)geodesicsScalars.size(), m_vertexCount);
+        for (int i = 0; i < copySize; i++) {
             out_geodesicScalars[i] = geodesicsScalars[i];
         }
+
+        // Color the mesh
+        zColor* mesh_vColors = fnMesh.getRawVertexColors();
+
+        zScalar minScalar = myMeshParam.coreUtils.zMin(geodesicsScalars);
+        zScalar maxScalar = myMeshParam.coreUtils.zMax(geodesicsScalars);
+
+        zDomainFloat distanceDomain(minScalar, maxScalar);
+        zDomainColor colDomain(zColor(1, 0, 0, 1), zColor(0, 1, 0, 1));
+
+        for (int i = 0; i < min(fnMesh.numVertices(), (int)geodesicsScalars.size()); i++) {
+            mesh_vColors[i] = myMeshParam.coreUtils.blendColor(geodesicsScalars[i], distanceDomain, colDomain, zRGB);
+        }
+
+        fnMesh.computeFaceColorfromVertexColor();
+
+        return true;
     }
-
-    // color mesh
-    zColor* mesh_vColors = fnMesh.getRawVertexColors();
-
-    zScalar minScalar = myMeshParam.coreUtils.zMin(geodesicsScalars);
-    zScalar maxScalar = myMeshParam.coreUtils.zMax(geodesicsScalars);
-
-    zDomainFloat distanceDomain(minScalar, maxScalar);
-    zDomainColor colDomain(zColor(1, 0, 0, 1), zColor(0, 1, 0, 1));
-
-    for (int i = 0; i < fnMesh.numVertices(); i++)
-    {
-        mesh_vColors[i] = myMeshParam.coreUtils.blendColor(geodesicsScalars[i], distanceDomain, colDomain, zRGB);
+    catch (const std::exception& e) {
+        // Initialize the output array to zeros in case of error
+        if (out_geodesicScalars && m_vertexCount > 0) {
+            for (int i = 0; i < m_vertexCount; i++) {
+                out_geodesicScalars[i] = 0.0f;
+            }
+        }
+        return false;
     }
-
-    fnMesh.computeFaceColorfromVertexColor();
-
-    if (geodesicsScalars.size() > 0) return true;
-    else return false;
+    catch (...) {
+        // Initialize the output array to zeros in case of error
+        if (out_geodesicScalars && m_vertexCount > 0) {
+            for (int i = 0; i < m_vertexCount; i++) {
+                out_geodesicScalars[i] = 0.0f;
+            }
+        }
+        return false;
+    }
 }
 
 } // namespace zSpace 
