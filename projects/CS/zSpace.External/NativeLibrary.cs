@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace zSpace.External
 {
@@ -12,6 +13,7 @@ namespace zSpace.External
     {
         private const string LibraryName = "zSpace_External";
         private static bool _isInitialized;
+        private static bool _initializeAttempted;
         
         /// <summary>
         /// Initializes the native library.
@@ -19,77 +21,82 @@ namespace zSpace.External
         /// <exception cref="DllNotFoundException">Thrown when the native library cannot be loaded.</exception>
         public static void Initialize()
         {
+            // Return immediately if we've already successfully initialized
             if (_isInitialized)
+            {
+                Debug.WriteLine("NativeLibrary.Initialize: Already initialized, returning early");
                 return;
+            }
                 
+            // If we've already attempted initialization and failed, don't try again
+            if (_initializeAttempted)
+            {
+                Debug.WriteLine("NativeLibrary.Initialize: Already attempted and failed, returning early");
+                return;
+            }
+                
+            _initializeAttempted = true;
+            
+            Debug.WriteLine("NativeLibrary.Initialize: Starting initialization");
+            
             try
             {
-                // Use the enhanced library loader with diagnostics
-                bool loaded = NativeLibraryLoader.LoadNativeLibrary(LibraryName);
-                
-                if (!loaded)
+                // Look for the DLL in various locations and log what we find
+                string[] searchPaths = new[]
                 {
-                    // If the enhanced loader fails, try the traditional approach as a fallback
-                    TraditionalLoadLibrary();
+                    AppDomain.CurrentDomain.BaseDirectory,
+                    Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
+                    Environment.CurrentDirectory
+                };
+                
+                Debug.WriteLine("NativeLibrary.Initialize: Searching for DLL in the following paths:");
+                foreach (string path in searchPaths)
+                {
+                    string dllPath = Path.Combine(path, LibraryName + ".dll");
+                    bool exists = File.Exists(dllPath);
+                    Debug.WriteLine($"  {dllPath}: {(exists ? "EXISTS" : "NOT FOUND")}");
+                    
+                    if (exists)
+                    {
+                        FileInfo fileInfo = new FileInfo(dllPath);
+                        Debug.WriteLine($"    Size: {fileInfo.Length} bytes");
+                        Debug.WriteLine($"    Modified: {fileInfo.LastWriteTime}");
+                    }
                 }
                 
-                _isInitialized = true;
-            }
-            catch (Exception ex)
-            {
-                throw new DllNotFoundException($"Failed to load native library '{LibraryName}'. Error: {ex.Message}", ex);
-            }
-        }
-        
-        /// <summary>
-        /// Traditional approach to loading the native library.
-        /// </summary>
-        private static void TraditionalLoadLibrary()
-        {
-            // Force loading the DLL to trigger the loader
-            // This will throw a DllNotFoundException if it can't be loaded
-            try
-            {
-                // Make a simple API call to force the library to load
+                Debug.WriteLine("NativeLibrary.Initialize: Attempting to force load DLL via P/Invoke call");
+                
+                // Simple approach: try to make a call to force the library to load
                 string errorMessage = NativeMethods.zext_get_last_error();
-                if (!string.IsNullOrEmpty(errorMessage))
-                {
-                    // Clear any error
-                    NativeMethods.zext_clear_last_error();
-                }
                 
+                // If we get here, the library loaded successfully
+                Debug.WriteLine("NativeLibrary.Initialize: Successfully called zext_get_last_error()");
                 _isInitialized = true;
+                Debug.WriteLine("NativeLibrary.Initialize: Initialization completed successfully");
             }
-            catch (DllNotFoundException)
+            catch (DllNotFoundException ex)
             {
-                LogDllSearchPaths();
-                throw;
+                // Provide minimal but useful error information
+                string paths = string.Join(Path.PathSeparator.ToString(), 
+                    new[] { 
+                        AppDomain.CurrentDomain.BaseDirectory,
+                        Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
+                    });
+                
+                Debug.WriteLine($"NativeLibrary.Initialize: DllNotFoundException: {ex.Message}");
+                Debug.WriteLine($"NativeLibrary.Initialize: Search paths: {paths}");
+                
+                throw new DllNotFoundException(
+                    $"Failed to load native library '{LibraryName}'. Error: {ex.Message}\n" +
+                    $"Search paths: {paths}", ex);
             }
             catch (Exception ex)
             {
-                throw new DllNotFoundException($"Failed to initialize native library '{LibraryName}'. Error: {ex.Message}", ex);
-            }
-        }
-        
-        private static void LogDllSearchPaths()
-        {
-            // Log search paths to help with debugging
-            string dllName = LibraryName + ".dll";
-            string appDir = AppDomain.CurrentDomain.BaseDirectory;
-            string assemblyDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            
-            Console.WriteLine($"Native DLL search paths for '{dllName}':");
-            Console.WriteLine($"Current directory: {Environment.CurrentDirectory}");
-            Console.WriteLine($"Application directory: {appDir}");
-            Console.WriteLine($"Assembly directory: {assemblyDir}");
-            
-            string dllPath = Path.Combine(appDir, dllName);
-            Console.WriteLine($"Looking for: {dllPath}, Exists: {File.Exists(dllPath)}");
-            
-            if (!string.Equals(appDir, assemblyDir, StringComparison.OrdinalIgnoreCase))
-            {
-                dllPath = Path.Combine(assemblyDir, dllName);
-                Console.WriteLine($"Looking for: {dllPath}, Exists: {File.Exists(dllPath)}");
+                Debug.WriteLine($"NativeLibrary.Initialize: Unexpected exception: {ex.GetType().Name}: {ex.Message}");
+                Debug.WriteLine($"NativeLibrary.Initialize: Stack trace: {ex.StackTrace}");
+                
+                throw new DllNotFoundException(
+                    $"Failed to initialize native library '{LibraryName}'. Error: {ex.GetType().Name} - {ex.Message}", ex);
             }
         }
     }

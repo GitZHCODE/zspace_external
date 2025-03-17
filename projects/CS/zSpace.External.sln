@@ -8,6 +8,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zSpace.External.Demo", "zSp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zSpace.External.Tests", "zSpace.External.Tests\zSpace.External.Tests.csproj", "{8B23A7F1-5E2A-4B70-A8D6-C5DC77C2C843}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zSpace.External.Examples", "zSpace.External.Examples\zSpace.External.Examples.csproj", "{E87623F1-5E2A-4B70-A8D6-C5DC1177C843}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,14 @@ Global
 		{8B23A7F1-5E2A-4B70-A8D6-C5DC77C2C843}.Release|Any CPU.Build.0 = Release|x64
 		{8B23A7F1-5E2A-4B70-A8D6-C5DC77C2C843}.Release|x64.ActiveCfg = Release|x64
 		{8B23A7F1-5E2A-4B70-A8D6-C5DC77C2C843}.Release|x64.Build.0 = Release|x64
+		{E87623F1-5E2A-4B70-A8D6-C5DC1177C843}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{E87623F1-5E2A-4B70-A8D6-C5DC1177C843}.Debug|Any CPU.Build.0 = Debug|x64
+		{E87623F1-5E2A-4B70-A8D6-C5DC1177C843}.Debug|x64.ActiveCfg = Debug|x64
+		{E87623F1-5E2A-4B70-A8D6-C5DC1177C843}.Debug|x64.Build.0 = Debug|x64
+		{E87623F1-5E2A-4B70-A8D6-C5DC1177C843}.Release|Any CPU.ActiveCfg = Release|x64
+		{E87623F1-5E2A-4B70-A8D6-C5DC1177C843}.Release|Any CPU.Build.0 = Release|x64
+		{E87623F1-5E2A-4B70-A8D6-C5DC1177C843}.Release|x64.ActiveCfg = Release|x64
+		{E87623F1-5E2A-4B70-A8D6-C5DC1177C843}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>zSpace.External.Examples</RootNamespace>
+    <AssemblyName>zSpace.External.Examples</AssemblyName>
+    <Description>Example code for the zSpace External library</Description>
+    <Authors>zSpace</Authors>
+    <Copyright>© 2023 zSpace. All rights reserved.</Copyright>
+    <Platforms>x64</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\zSpace.External\zSpace.External.csproj" />
+  </ItemGroup>
+
+</Project> 

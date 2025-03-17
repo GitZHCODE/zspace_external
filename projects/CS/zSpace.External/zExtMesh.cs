@@ -57,11 +57,14 @@ namespace zSpace.External
         /// </summary>
         public zExtMesh()
         {
+            if (!zSpaceExternal.IsInitialized)
+            {
+                throw new InvalidOperationException(
+                    "zSpace.External library is not initialized. Call zSpaceExternal.Initialize() before creating any objects.");
+            }
+
             try
             {
-                Debug.WriteLine("Initializing native library...");
-                NativeLibrary.Initialize();
-                
                 Debug.WriteLine("Creating native mesh handle...");
                 _handle = NativeMethods.zext_mesh_create();
                 if (_handle == IntPtr.Zero)

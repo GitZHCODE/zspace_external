@@ -17,6 +17,19 @@ namespace zSpace.External.Tests
         {
             // Setup code that runs once before any tests
             DiagnoseNativeLibrary();
+            
+            // Verify the library is initialized
+            Assert.IsTrue(zSpaceExternal.IsInitialized, "zSpace.External library should be initialized");
+        }
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            // Verify the library is still initialized before each test
+            Assert.IsTrue(zSpaceExternal.IsInitialized, 
+                "zSpace.External library should be initialized. Make sure TestSetup.AssemblyInit ran successfully.");
+            
+            Console.WriteLine("Test initialization complete - library is initialized.");
         }
 
         [TestMethod]

@@ -57,11 +57,14 @@ namespace zSpace.External
         /// </summary>
         public zExtGraph()
         {
+            if (!zSpaceExternal.IsInitialized)
+            {
+                throw new InvalidOperationException(
+                    "zSpace.External library is not initialized. Call zSpaceExternal.Initialize() before creating any objects.");
+            }
+
             try
             {
-                Debug.WriteLine("Initializing native library...");
-                NativeLibrary.Initialize();
-                
                 Debug.WriteLine("Creating native graph handle...");
                 _handle = NativeMethods.zext_graph_create();
                 if (_handle == IntPtr.Zero)
@@ -89,11 +92,14 @@ namespace zSpace.External
         /// <param name="handle">Handle to an existing graph.</param>
         internal zExtGraph(IntPtr handle)
         {
+            if (!zSpaceExternal.IsInitialized)
+            {
+                throw new InvalidOperationException(
+                    "zSpace.External library is not initialized. Call zSpaceExternal.Initialize() before creating any objects.");
+            }
+
             try
             {
-                Debug.WriteLine("Initializing native library...");
-                NativeLibrary.Initialize();
-                
                 if (handle == IntPtr.Zero)
                 {
                     throw new ArgumentException("Invalid graph handle", nameof(handle));
