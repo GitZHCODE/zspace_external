@@ -227,6 +227,8 @@ When passing data between C++ and C#, use these patterns:
 | `const double*` | `[MarshalAs(UnmanagedType.LPArray)] double[]` | For array marshaling |
 | struct | `[StructLayout(LayoutKind.Sequential)]` struct | Ensure fields match exactly |
 
+> **Note on Array Data Transfer**: The zSpace External library uses a consistent two-phase pattern for transferring array data between C++ and C#. See the "Array Data Transfer" section in **C_Sharp_CPP_Object_Transfer.md** for detailed information on the pattern, implementation examples, and best practices.
+
 Examples:
 
 ```cpp

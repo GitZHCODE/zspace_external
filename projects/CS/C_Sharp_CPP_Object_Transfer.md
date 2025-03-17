@@ -254,4 +254,127 @@ The current implementation has a shared ownership model:
 
 3. **More Explicit Ownership Model**: Make it clearer who owns the objects and when they should be freed.
 
-4. **Direct Array Transfer**: For small arrays, consider transferring all handles in a single call rather than retrieving them individually. 
+4. **Direct Array Transfer**: For small arrays, consider transferring all handles in a single call rather than retrieving them individually.
+
+## 7. Array Data Transfer
+
+The zSpace External library also transfers array data between C++ and C# using a consistent two-phase pattern, which is important to understand for efficient interop.
+
+### 7.1 Two-Phase Array Transfer Pattern
+
+Many methods that need to return variable-sized arrays use a two-phase approach:
+
+1. **Phase 1 - Size Determination**: 
+   - Call the function with `checkCount = true`
+   - Pass `null` for output arrays
+   - Function fills in the required sizes for output arrays
+   
+2. **Phase 2 - Data Retrieval**:
+   - Allocate arrays of the required sizes
+   - Call the function again with `checkCount = false`
+   - Function fills the preallocated arrays with actual data
+
+This approach avoids needing to know the size of arrays in advance and prevents memory leaks.
+
+### 7.2 Example: Mesh Data Retrieval
+
+#### C# Side (Client Code):
+```csharp
+// Phase 1: Get the sizes
+int vertexCount = 0;
+int polyCountsSize = 0;
+int polyConnectionsSize = 0;
+
+NativeMethods.zext_mesh_get_mesh_data(
+    _handle,
+    true, // checkCount = true, only get sizes
+    null, // no arrays yet
+    ref vertexCount,
+    null,
+    ref polyCountsSize,
+    null,
+    ref polyConnectionsSize);
+
+// Allocate arrays with the correct sizes
+double[] vertexPositions = new double[vertexCount];
+int[] polyCounts = new int[polyCountsSize];
+int[] polyConnections = new int[polyConnectionsSize];
+
+// Phase 2: Get the actual data
+NativeMethods.zext_mesh_get_mesh_data(
+    _handle,
+    false, // checkCount = false, get the actual data
+    vertexPositions,
+    ref vertexCount,
+    polyCounts,
+    ref polyCountsSize,
+    polyConnections,
+    ref polyConnectionsSize);
+```
+
+#### C++ Side (Implementation):
+```cpp
+ZSPACE_EXTERNAL_API int zext_mesh_get_mesh_data(
+    zExtMeshHandle mesh_handle, bool checkCount,
+    double* vertexPositions, int* vertexCount,
+    int* polyCounts, int* polyCountsSize,
+    int* polyConnections, int* polyConnectionsSize)
+{
+    // ... Error checking ...
+    
+    // Get the data into temporary vectors
+    std::vector<double> positions;
+    std::vector<int> pCounts;
+    std::vector<int> pConnects;
+    mesh->getMeshData(positions, pConnects, pCounts);
+    
+    // Set the output count values
+    *vertexCount = positions.size();
+    *polyCountsSize = pCounts.size();
+    *polyConnectionsSize = pConnects.size();
+    
+    // If checkCount is true, we only return the sizes
+    if (checkCount) return 1;
+    
+    // Otherwise, copy the data to the output arrays
+    for (int i = 0; i < positions.size(); i++) {
+        vertexPositions[i] = positions[i];
+    }
+    
+    // ... Copy other arrays ...
+    
+    return 1;
+}
+```
+
+### 7.3 Benefits of Two-Phase Transfer
+
+1. **No Memory Leaks**: The C++ side doesn't allocate memory that would need to be freed by C#.
+2. **Exact Sizing**: Arrays are created with the exact size needed, avoiding wasted space.
+3. **Error Checking**: The first phase can validate input without risking memory issues.
+4. **Interface Consistency**: All array-returning functions follow the same pattern.
+
+### 7.4 Implementation Notes
+
+1. **Parameter Order**: Keep input parameters first, followed by output parameters.
+2. **Use `ref` in C#**: Output array sizes should be passed with `ref` to allow modification.
+3. **Null Handling**: The C++ side should check for `null` pointers in output arrays.
+4. **Type Marshaling**: Use [MarshalAs] attributes for proper array type conversion:
+   ```csharp
+   [MarshalAs(UnmanagedType.LPArray)] double[] vertexPositions
+   ```
+
+### 7.5 Common Pitfalls
+
+1. **Parameter Type Mismatch**: Ensure that the P/Invoke declaration matches the actual C function.
+2. **Buffer Overruns**: Always validate array indices before accessing elements.
+3. **Missing out parameters**: Make sure all size parameters are properly filled.
+4. **Out Parameters vs Return Values**: Be consistent in parameter naming to indicate input vs. output.
+5. **Not Checking Error Codes**: Always check the function's return value to detect errors.
+
+### 7.6 Memory Considerations
+
+- For large arrays, the two-phase approach may be inefficient due to multiple calls.
+- Consider using a single-phase approach with preallocated buffers for fixed-size arrays.
+- Remember that C# arrays are bounds-checked while C++ arrays are not, which can lead to subtle bugs.
+- Be careful when passing arrays of objects - marshaling may not work as expected for complex types. 
