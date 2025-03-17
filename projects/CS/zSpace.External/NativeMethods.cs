@@ -81,6 +81,7 @@ namespace zSpace.External
             IntPtr mesh_handle,
             [MarshalAs(UnmanagedType.LPArray)] int[] sourceVertexIds,
             int sourceVertexCount,
+            bool normalised,
             [MarshalAs(UnmanagedType.LPArray)] float[] outGeodesicScalars);
             
         /// <summary>
@@ -101,11 +102,10 @@ namespace zSpace.External
         /// Computes geodesic contours on the mesh.
         /// 
         /// This method can be called in two ways:
-        /// 1. With outContours=null and maxContours=0 to just get the count in outContourCount.
-        /// 2. With an array of appropriate size to retrieve the contours. 
+        /// 1. To get the number of contours without retrieving them: pass null for outContours and 0 for maxContours
+        /// 2. To retrieve the contours: provide a pre-allocated array in outContours with size maxContours
         /// 
-        /// For efficient usage, pre-allocate an array with a reasonable capacity and pass that capacity
-        /// as maxContours. The actual number of contours will be returned in outContourCount.
+        /// The return value indicates success or failure.
         /// </summary>
         [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.I1)]
@@ -123,11 +123,10 @@ namespace zSpace.External
         /// Computes interpolated geodesic contours on the mesh between two sets of vertices.
         /// 
         /// This method can be called in two ways:
-        /// 1. With outContours=null and maxContours=0 to just get the count in outContourCount.
-        /// 2. With an array of appropriate size to retrieve the contours.
+        /// 1. To get the number of contours without retrieving them: pass null for outContours and 0 for maxContours
+        /// 2. To retrieve the contours: provide a pre-allocated array in outContours with size maxContours
         /// 
-        /// For efficient usage, pre-allocate an array with a reasonable capacity and pass that capacity
-        /// as maxContours. The actual number of contours will be returned in outContourCount.
+        /// The return value indicates success or failure.
         /// </summary>
         [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.I1)]

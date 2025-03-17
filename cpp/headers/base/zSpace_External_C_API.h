@@ -79,15 +79,6 @@ ZSPACE_EXTERNAL_API int zext_mesh_get_vertex_count(zExtMeshHandle mesh_handle);
 ZSPACE_EXTERNAL_API int zext_mesh_get_face_count(zExtMeshHandle mesh_handle);
 
 /**
- * Create a simple test cube mesh.
- * 
- * @param mesh_handle Handle to the mesh.
- * @param size Size of the cube.
- * @return 1 if successful, 0 if an error occurred.
- */
-ZSPACE_EXTERNAL_API int zext_mesh_create_test_cube(zExtMeshHandle mesh_handle, double size);
-
-/**
  * Create a mesh from vertex positions and face data.
  * 
  * @param mesh_handle Handle to the mesh.
@@ -110,11 +101,13 @@ ZSPACE_EXTERNAL_API int zext_mesh_create_mesh(zExtMeshHandle mesh_handle,
  * @param mesh_handle Handle to the mesh.
  * @param source_vertex_ids Array of source vertex indices.
  * @param source_vertex_count Number of source vertices.
+ * @param source_vertex_count Number of source vertices.
+ * @param nomarlised Option to normalise the output geodesicScalars
  * @param out_geodesic_scalars Output array for computed geodesic distances (pre-allocated with size equal to vertex count).
  * @return 1 if successful, 0 if an error occurred.
  */
 ZSPACE_EXTERNAL_API int zext_mesh_compute_geodesic_heat(zExtMeshHandle mesh_handle,
-                                                      const int* source_vertex_ids, int source_vertex_count,
+                                                      const int* source_vertex_ids, int source_vertex_count, bool normalised,
                                                       float* out_geodesic_scalars);
 
 /**
@@ -134,6 +127,47 @@ ZSPACE_EXTERNAL_API int zext_mesh_compute_geodesic_heat_interpolated(zExtMeshHan
                                                                   const int* end_vertex_ids, int end_vertex_count,
                                                                   float weight,
                                                                   float* out_geodesic_scalars);
+
+/**
+ * Compute geodesic contours on a mesh.
+ * 
+ * @param mesh_handle Handle to the mesh
+ * @param source_vertex_ids Array of source vertex indices
+ * @param source_vertex_count Number of source vertices
+ * @param steps Number of contour steps to generate
+ * @param dist Distance between contours (if 0, uses steps instead)
+ * @param out_contours Output array for contour handles (can be null if only getting count)
+ * @param out_contour_count Output for the number of contours (will be set to total count regardless of array size)
+ * @param max_contours Maximum number of contours to retrieve (size of out_contours array, 0 if just getting count)
+ * @return 1 if successful, 0 if an error occurred (boolean semantics)
+ */
+ZSPACE_EXTERNAL_API int zext_mesh_compute_geodesic_contours(zExtMeshHandle mesh_handle,
+                                                         const int* source_vertex_ids, int source_vertex_count,
+                                                         int steps, float dist,
+                                                         zExtGraphHandle* out_contours, int* out_contour_count,
+                                                         int max_contours);
+
+/**
+ * Compute interpolated geodesic contours on a mesh between two sets of vertices.
+ *
+ * @param mesh_handle Handle to the mesh
+ * @param start_vertex_ids Array of start vertex indices
+ * @param start_vertex_count Number of start vertices
+ * @param end_vertex_ids Array of end vertex indices
+ * @param end_vertex_count Number of end vertices
+ * @param steps Number of contour steps to generate
+ * @param dist Distance between contours (if 0, uses steps instead)
+ * @param out_contours Output array for contour handles (can be null if only getting count)
+ * @param out_contour_count Output for the number of contours (will be set to total count regardless of array size)
+ * @param max_contours Maximum number of contours to retrieve (size of out_contours array, 0 if just getting count)
+ * @return 1 if successful, 0 if an error occurred (boolean semantics)
+ */
+ZSPACE_EXTERNAL_API int zext_mesh_compute_geodesic_contours_interpolated(zExtMeshHandle mesh_handle,
+                                                                      const int* start_vertex_ids, int start_vertex_count,
+                                                                      const int* end_vertex_ids, int end_vertex_count,
+                                                                      int steps, float dist,
+                                                                      zExtGraphHandle* out_contours, int* out_contour_count,
+                                                                      int max_contours);
 
 //--- GRAPH API ---//
 

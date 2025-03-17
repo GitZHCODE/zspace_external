@@ -105,11 +105,12 @@ public:
      * 
      * @param sourceVIds Array of source vertex indices
      * @param sourceVCount Number of source vertices
+     * @param nomarlised Option to normalise the output geodesicScalars
      * @param out_geodesicScalars Output array for computed geodesic distances (pre-allocated with size equal to vertex count)
      * @return True if successful, false otherwise.
      */
     bool computeGeodesicHeat(
-        const int* sourceVIds, int sourceVCount,
+        const int* sourceVIds, int sourceVCount, bool normalised,
         float* out_geodesicScalars
     );
     

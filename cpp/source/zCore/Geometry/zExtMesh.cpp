@@ -132,7 +132,7 @@ bool zExtMesh::createMesh(
 }
 
 bool zExtMesh::computeGeodesicHeat(
-    const int* sourceVIds, int sourceVCount,
+    const int* sourceVIds, int sourceVCount, bool normalised,
     float* out_geodesicScalars
 	)
 {
@@ -172,8 +172,6 @@ bool zExtMesh::computeGeodesicHeat(
         }
 
         // Compute geodesic heat
-	zDomainFloat outMinMax(0, 1);
-
         // Convert source IDs to vector
         vector<int> sourceVertices;
         sourceVertices.reserve(sourceVCount);
@@ -182,37 +180,41 @@ bool zExtMesh::computeGeodesicHeat(
         }
 
         // Compute geodesic distances
-	vector<float> geodesicsScalars;
-        myMeshParam.computeGeodesics_Heat(sourceVertices, geodesicsScalars);
+	vector<float> geodesicScalars;
+        myMeshParam.computeGeodesics_Heat(sourceVertices, geodesicScalars);
         
         // Check if we got valid results
-        if (geodesicsScalars.size() == 0 || geodesicsScalars.size() != (size_t)m_vertexCount) {
+        if (geodesicScalars.size() == 0 || geodesicScalars.size() != (size_t)m_vertexCount) {
             return false;
         }
 
-        // Normalize values to [0,1] range
-		zDomainFloat startMinMax(myMeshParam.coreUtils.zMin(geodesicsScalars), myMeshParam.coreUtils.zMax(geodesicsScalars));
-        for (auto& v : geodesicsScalars) {
-			v = myMeshParam.coreUtils.ofMap(v, startMinMax, outMinMax);
+        if (normalised)
+        {
+            // Normalize values to [0,1] range
+            zDomainFloat startMinMax(myMeshParam.coreUtils.zMin(geodesicScalars), myMeshParam.coreUtils.zMax(geodesicScalars));
+            zDomainFloat outMinMax(0, 1);
+            for (auto& v : geodesicScalars) {
+                v = myMeshParam.coreUtils.ofMap(v, startMinMax, outMinMax);
+            }
         }
 
         // Copy results to output array (safely handling size differences)
-        int copySize = min((int)geodesicsScalars.size(), m_vertexCount);
+        int copySize = min((int)geodesicScalars.size(), m_vertexCount);
         for (int i = 0; i < copySize; i++) {
-            out_geodesicScalars[i] = geodesicsScalars[i];
+            out_geodesicScalars[i] = geodesicScalars[i];
         }
 
         // Color the mesh
 	zColor* mesh_vColors = fnMesh.getRawVertexColors();
 
-	zScalar minScalar = myMeshParam.coreUtils.zMin(geodesicsScalars);
-	zScalar maxScalar = myMeshParam.coreUtils.zMax(geodesicsScalars);
+	zScalar minScalar = myMeshParam.coreUtils.zMin(geodesicScalars);
+	zScalar maxScalar = myMeshParam.coreUtils.zMax(geodesicScalars);
 
 	zDomainFloat distanceDomain(minScalar, maxScalar);
 	zDomainColor colDomain(zColor(1, 0, 0, 1), zColor(0, 1, 0, 1));
 
-        for (int i = 0; i < min(fnMesh.numVertices(), (int)geodesicsScalars.size()); i++) {
-		mesh_vColors[i] = myMeshParam.coreUtils.blendColor(geodesicsScalars[i], distanceDomain, colDomain, zRGB);
+        for (int i = 0; i < min(fnMesh.numVertices(), (int)geodesicScalars.size()); i++) {
+		mesh_vColors[i] = myMeshParam.coreUtils.blendColor(geodesicScalars[i], distanceDomain, colDomain, zRGB);
 	}
 
 	fnMesh.computeFaceColorfromVertexColor();
@@ -261,11 +263,11 @@ bool zExtMesh::computeGeodesicHeat_interpolated(
         std::vector<float> geodesicEnd(m_vertexCount, 0.0f);
 
         // Compute geodesic distances from start and end vertices
-        if (!computeGeodesicHeat(startVIds, startCount, geodesicStart.data())) {
+		if (!computeGeodesicHeat(startVIds, startCount, true, geodesicStart.data())) {
             return false;
         }
 
-        if (!computeGeodesicHeat(endVIds, endCount, geodesicEnd.data())) {
+		if (!computeGeodesicHeat(endVIds, endCount, true, geodesicEnd.data())) {
             return false;
         }
 
@@ -315,7 +317,7 @@ bool zExtMesh::computeGeodesicContours(
 
         // Compute geodesic distances from source vertices
         std::vector<float> geodesicScalars(m_vertexCount, 0.0f);
-        if (!computeGeodesicHeat(sourceVIds, sourceVCount, geodesicScalars.data())) {
+		if (!computeGeodesicHeat(sourceVIds, sourceVCount, false, geodesicScalars.data())) {
             return false;
         }
 
@@ -335,6 +337,13 @@ bool zExtMesh::computeGeodesicContours(
             numContours = (int)(range / dist);
             // Ensure we have at least one contour
             numContours = std::max(1, numContours);
+        }
+
+        // Normalize values to [0,1] range
+		zDomainFloat startMinMax(minScalar, maxScalar);
+		zDomainFloat outMinMax(0, 1);
+        for (auto& v : geodesicScalars) {
+            v = core.ofMap(v, startMinMax, outMinMax);
         }
 
         // Create function object for the mesh
@@ -410,12 +419,40 @@ bool zExtMesh::computeGeodesicContours_interpolated(
         std::vector<float> geodesicStart(m_vertexCount, 0.0f);
         std::vector<float> geodesicEnd(m_vertexCount, 0.0f);
         
-        if (!computeGeodesicHeat(startVIds, startCount, geodesicStart.data())) {
+		if (!computeGeodesicHeat(startVIds, startCount, false, geodesicStart.data())) {
             return false;
         }
 
-        if (!computeGeodesicHeat(endVIds, endCount, geodesicEnd.data())) {
+		if (!computeGeodesicHeat(endVIds, endCount, true, geodesicEnd.data())) {
             return false;
+        }
+
+        // Get min/max values for this interpolated field
+        zUtilsCore core;
+        zScalar minScalar = core.zMin(geodesicStart);
+        zScalar maxScalar = core.zMax(geodesicStart);
+        zScalar range = maxScalar - minScalar;
+
+        // Determine how many contours to generate based on user input
+        int numContours;
+        if (dist == 0.0f) {
+            // If dist is 0, use the fixed number of steps
+            numContours = steps;
+        }
+        else {
+            // Otherwise, calculate how many contours fit in the range based on dist
+            numContours = (int)(range / dist);
+            // Number of contours will be half of one side because we blend two scalars
+            numContours *= 0.5;
+            // Ensure we have at least one contour
+            numContours = std::max(1, numContours);
+        }
+
+        // Normalize values to [0,1] range
+        zDomainFloat startMinMax(minScalar, maxScalar);
+        zDomainFloat outMinMax(0, 1);
+        for (auto& v : geodesicStart) {
+            v = core.ofMap(v, startMinMax, outMinMax);
         }
 
         // Create function object for the mesh
@@ -424,32 +461,6 @@ bool zExtMesh::computeGeodesicContours_interpolated(
         // Initialize working scalar field for interpolation
         std::vector<float> geodesicScalars(m_vertexCount, 0.0f);
         
-        // Use default weight for initial analysis
-        float blendWeight = 0.5f;  // Equal blend between start and end
-        
-        // Blend the start and end scalar fields
-        for (int j = 0; j < m_vertexCount; j++) {
-            geodesicScalars[j] = blendWeight * geodesicStart[j] + (1.0f - blendWeight) * geodesicEnd[j];
-        }
-        
-        // Get min/max values for this interpolated field
-        zUtilsCore core;
-        zScalar minScalar = core.zMin(geodesicScalars);
-        zScalar maxScalar = core.zMax(geodesicScalars);
-        zScalar range = maxScalar - minScalar;
-
-        // Determine how many contours to generate based on user input
-        int numContours;
-        if (dist == 0.0f) {
-            // If dist is 0, use the fixed number of steps
-            numContours = steps;
-        } else {
-            // Otherwise, calculate how many contours fit in the range based on dist
-            numContours = (int)(range / dist);
-            // Ensure we have at least one contour
-            numContours = std::max(1, numContours);
-        }
-        
         // For each step, generate a contour
         for (int i = 0; i < numContours; i++) {
             // Calculate interpolation weight for this contour
@@ -457,7 +468,7 @@ bool zExtMesh::computeGeodesicContours_interpolated(
             
             // Interpolate between start and end geodesic distances
             for (int j = 0; j < m_vertexCount; j++) {
-                geodesicScalars[j] = weight * geodesicStart[j] + (1.0f - weight) * geodesicEnd[j];
+                geodesicScalars[j] = weight * geodesicStart[j] - (1.0f - weight) * geodesicEnd[j];
             }
 
             // Generate the isocontour at a mid-value

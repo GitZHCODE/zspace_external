@@ -82,7 +82,7 @@ ZSPACE_EXTERNAL_API int zext_mesh_create_mesh(zExtMeshHandle mesh_handle,
 }
 
 ZSPACE_EXTERNAL_API int zext_mesh_compute_geodesic_heat(zExtMeshHandle mesh_handle, 
-                                                    const int* source_vertex_ids, int source_vertex_count,
+                                                    const int* source_vertex_ids, int source_vertex_count, bool normalised,
                                                     float* out_geodesic_scalars) {
     TRY_CATCH_RETURN(
         if (!mesh_handle) {
@@ -101,7 +101,7 @@ ZSPACE_EXTERNAL_API int zext_mesh_compute_geodesic_heat(zExtMeshHandle mesh_hand
         }
         
         auto* mesh = static_cast<zSpace::zExtMesh*>(mesh_handle);
-        return mesh->computeGeodesicHeat(source_vertex_ids, source_vertex_count, out_geodesic_scalars) ? 1 : 0;
+		return mesh->computeGeodesicHeat(source_vertex_ids, source_vertex_count, normalised, out_geodesic_scalars) ? 1 : 0;
     , 0)
 }
 

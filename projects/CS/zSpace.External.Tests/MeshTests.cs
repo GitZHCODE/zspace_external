@@ -112,9 +112,9 @@ namespace zSpace.External.Tests
                 
                 // Pre-allocate result array (one float per vertex)
                 float[] geodesicDistances = new float[mesh.VertexCount];
-                
+
                 // Compute geodesic distances
-                mesh.ComputeGeodesicHeat(sourceVertices, geodesicDistances);
+                mesh.ComputeGeodesicHeat(sourceVertices, true, geodesicDistances);
 
                 // Basic validation
                 Assert.IsTrue(geodesicDistances.Length == mesh.VertexCount, "GeodesicDistances should have equal number of values as mesh vertices");
