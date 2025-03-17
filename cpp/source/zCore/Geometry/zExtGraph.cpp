@@ -121,6 +121,41 @@ bool zExtGraph::createGraph(
     }
 }
 
+bool zExtGraph::getGraphData(
+    std::vector<double>& vertexPositions,
+    std::vector<int>& edgeConnections
+)
+{
+    try {
+        if (!m_graph) {
+            return false;
+        }
+
+        zFnGraph fnGraph(*m_graph);
+        
+        // Get vertex positions (zPoint array)
+        std::vector<zPoint> positions;
+        fnGraph.getVertexPositions(positions);
+        
+        // Convert zPoint array to flat double array (x1,y1,z1,x2,y2,z2,...)
+        vertexPositions.clear();
+        vertexPositions.reserve(positions.size() * 3);
+        for (size_t i = 0; i < positions.size(); i++) {
+            vertexPositions.push_back(positions[i].x);
+            vertexPositions.push_back(positions[i].y);
+            vertexPositions.push_back(positions[i].z);
+        }
+        
+        // Get edge connections
+        fnGraph.getEdgeData(edgeConnections);
+        
+        return true;
+    }
+    catch (const std::exception&) {
+        return false;
+    }
+}
+
 bool zExtGraph::setVertexPositions(
     const double* vertexPositions, int vertexCount
 ) {

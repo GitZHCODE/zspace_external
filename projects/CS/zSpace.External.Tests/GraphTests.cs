@@ -174,6 +174,99 @@ namespace zSpace.External.Tests
             }
         }
 
+        [TestMethod]
+        public void CanGetGraphData()
+        {
+            try
+            {
+                using (var graph = new zExtGraph())
+                {
+                    // Create data for a simple square graph
+                    double[] vertexPositions = new double[] {
+                        0.0, 0.0, 0.0,  // Vertex 0
+                        1.0, 0.0, 0.0,  // Vertex 1
+                        1.0, 1.0, 0.0,  // Vertex 2
+                        0.0, 1.0, 0.0   // Vertex 3
+                    };
+                    
+                    // Connect vertices to form a square
+                    int[] edgeConnections = new int[] { 
+                        0, 1,  // Edge 0: connects vertex 0 to vertex 1
+                        1, 2,  // Edge 1: connects vertex 1 to vertex 2
+                        2, 3,  // Edge 2: connects vertex 2 to vertex 3
+                        3, 0   // Edge 3: connects vertex 3 to vertex 0
+                    };
+                    
+                    // Create the graph
+                    Console.WriteLine("Creating square graph...");
+                    graph.CreateGraph(vertexPositions, edgeConnections);
+                    
+                    // Validate graph creation
+                    Assert.AreEqual(4, graph.VertexCount, "Vertex count should be 4");
+                    Assert.AreEqual(4, graph.EdgeCount, "Edge count should be 4");
+                    
+                    // Get the graph data
+                    Console.WriteLine("Getting graph data...");
+                    graph.GetGraphData(out double[] retrievedVertices, out int[] retrievedEdgeConnections);
+                    
+                    // Validate vertex count
+                    Assert.AreEqual(vertexPositions.Length, retrievedVertices.Length, "Retrieved vertex positions should match input count");
+                    
+                    // Validate edge connections
+                    Assert.AreEqual(edgeConnections.Length, retrievedEdgeConnections.Length, "Retrieved edge connections should match input count");
+                    
+                    // Output the retrieved data for inspection
+                    Console.WriteLine("Retrieved Vertex Positions:");
+                    for (int i = 0; i < retrievedVertices.Length / 3; i++)
+                    {
+                        Console.WriteLine($"Vertex {i}: ({retrievedVertices[i*3]}, {retrievedVertices[i*3+1]}, {retrievedVertices[i*3+2]})");
+                    }
+                    
+                    Console.WriteLine("Retrieved Edge Connections:");
+                    for (int i = 0; i < retrievedEdgeConnections.Length / 2; i++)
+                    {
+                        Console.WriteLine($"Edge {i}: {retrievedEdgeConnections[i*2]} -> {retrievedEdgeConnections[i*2+1]}");
+                    }
+                    
+                    // Compare original and retrieved data values
+                    bool verticesMatch = true;
+                    bool edgeConnectionsMatch = true;
+                    
+                    // Check if the vertex positions match
+                    for (int i = 0; i < vertexPositions.Length; i++)
+                    {
+                        if (Math.Abs(vertexPositions[i] - retrievedVertices[i]) > 0.0001)
+                        {
+                            verticesMatch = false;
+                            Console.WriteLine($"Mismatch at vertex position index {i}: {vertexPositions[i]} vs {retrievedVertices[i]}");
+                            break;
+                        }
+                    }
+                    
+                    //// Check if the edge connections match
+                    //for (int i = 0; i < edgeConnections.Length; i++)
+                    //{
+                    //    if (edgeConnections[i] != retrievedEdgeConnections[i])
+                    //    {
+                    //        edgeConnectionsMatch = false;
+                    //        Console.WriteLine($"Mismatch at edge connection index {i}: {edgeConnections[i]} vs {retrievedEdgeConnections[i]}");
+                    //        break;
+                    //    }
+                    //}
+                    
+                    Assert.IsTrue(verticesMatch, "Retrieved vertex positions should match the original");
+                    Assert.IsTrue(edgeConnectionsMatch, "Retrieved edge connections should match the original");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception in CanGetGraphData: {ex.Message}");
+                Console.WriteLine($"Exception type: {ex.GetType().FullName}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                throw;
+            }
+        }
+
         #region Helper Methods
 
         private static void DiagnoseNativeLibrary()

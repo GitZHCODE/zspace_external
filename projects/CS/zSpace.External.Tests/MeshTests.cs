@@ -461,6 +461,132 @@ namespace zSpace.External.Tests
             }
         }
 
+        [TestMethod]
+        public void CanGetMeshData()
+        {
+            try
+            {
+                using (var mesh = new zSpace.External.zExtMesh())
+                {
+                    // Create a simple quad mesh with center vertex
+                    double[] vertexPositions = new double[] {
+                        -1.0, -1.0, 0.0,  // Vertex 0
+                        1.0, -1.0, 0.0,   // Vertex 1
+                        1.0, 1.0, 0.0,    // Vertex 2
+                        -1.0, 1.0, 0.0,   // Vertex 3
+                        0.0, 0.0, 0.0,    // Vertex 4 (center)
+                    };
+                    
+                    // Each face has 3 vertices (triangulated quad)
+                    int[] polyCounts = new int[] { 3, 3, 3, 3 };
+                    
+                    // Face vertex indices (4 triangles with shared center vertex)
+                    int[] polyConnections = new int[] { 
+                        0, 1, 4,
+                        1, 2, 4,
+                        2, 3, 4,
+                        3, 0, 4
+                    };
+                    
+                    // Create the mesh
+                    Console.WriteLine("Creating mesh with triangulated quad...");
+                    mesh.CreateMesh(vertexPositions, polyCounts, polyConnections);
+                    
+                    // Validate mesh creation
+                    Assert.AreEqual(5, mesh.VertexCount, "Vertex count should be 5");
+                    Assert.AreEqual(4, mesh.FaceCount, "Face count should be 4");
+                    
+                    // Get the mesh data
+                    Console.WriteLine("Getting mesh data...");
+                    mesh.GetMeshData(out double[] retrievedVertices, out int[] retrievedPolyCounts, out int[] retrievedPolyConnections);
+                    
+                    // Validate vertex count
+                    Assert.AreEqual(vertexPositions.Length, retrievedVertices.Length, "Retrieved vertex positions should match input count");
+                    
+                    // Validate poly counts
+                    Assert.AreEqual(polyCounts.Length, retrievedPolyCounts.Length, "Retrieved polygon counts should match input count");
+                    
+                    // Validate poly connections
+                    Assert.AreEqual(polyConnections.Length, retrievedPolyConnections.Length, "Retrieved polygon connections should match input count");
+                    
+                    // Output the retrieved data for inspection
+                    Console.WriteLine("Retrieved Vertex Positions:");
+                    for (int i = 0; i < retrievedVertices.Length / 3; i++)
+                    {
+                        Console.WriteLine($"Vertex {i}: ({retrievedVertices[i*3]}, {retrievedVertices[i*3+1]}, {retrievedVertices[i*3+2]})");
+                    }
+                    
+                    Console.WriteLine("Retrieved Polygon Counts:");
+                    for (int i = 0; i < retrievedPolyCounts.Length; i++)
+                    {
+                        Console.WriteLine($"Polygon {i}: {retrievedPolyCounts[i]} vertices");
+                    }
+                    
+                    Console.WriteLine("Retrieved Polygon Connections:");
+                    int connectionIndex = 0;
+                    for (int i = 0; i < retrievedPolyCounts.Length; i++)
+                    {
+                        Console.Write($"Polygon {i} connections: ");
+                        for (int j = 0; j < retrievedPolyCounts[i]; j++)
+                        {
+                            Console.Write($"{retrievedPolyConnections[connectionIndex]} ");
+                            connectionIndex++;
+                        }
+                        Console.WriteLine();
+                    }
+                    
+                    // Compare original and retrieved data values
+                    bool verticesMatch = true;
+                    bool polyCountsMatch = true;
+                    bool polyConnectionsMatch = true;
+                    
+                    // Check if the vertex positions match
+                    for (int i = 0; i < vertexPositions.Length; i++)
+                    {
+                        if (Math.Abs(vertexPositions[i] - retrievedVertices[i]) > 0.0001)
+                        {
+                            verticesMatch = false;
+                            Console.WriteLine($"Mismatch at vertex position index {i}: {vertexPositions[i]} vs {retrievedVertices[i]}");
+                            break;
+                        }
+                    }
+                    
+                    // Check if the polygon counts match
+                    for (int i = 0; i < polyCounts.Length; i++)
+                    {
+                        if (polyCounts[i] != retrievedPolyCounts[i])
+                        {
+                            polyCountsMatch = false;
+                            Console.WriteLine($"Mismatch at polygon count index {i}: {polyCounts[i]} vs {retrievedPolyCounts[i]}");
+                            break;
+                        }
+                    }
+                    
+                    // Check if the polygon connections match
+                    for (int i = 0; i < polyConnections.Length; i++)
+                    {
+                        if (polyConnections[i] != retrievedPolyConnections[i])
+                        {
+                            polyConnectionsMatch = false;
+                            Console.WriteLine($"Mismatch at polygon connection index {i}: {polyConnections[i]} vs {retrievedPolyConnections[i]}");
+                            break;
+                        }
+                    }
+                    
+                    Assert.IsTrue(verticesMatch, "Retrieved vertex positions should match the original");
+                    Assert.IsTrue(polyCountsMatch, "Retrieved polygon counts should match the original");
+                    Assert.IsTrue(polyConnectionsMatch, "Retrieved polygon connections should match the original");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception in CanGetMeshData: {ex.Message}");
+                Console.WriteLine($"Exception type: {ex.GetType().FullName}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                throw;
+            }
+        }
+
         #region Helper Methods
 
         private static void DiagnoseNativeLibrary()

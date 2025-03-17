@@ -102,8 +102,8 @@ namespace zSpace.External
         /// Computes geodesic contours on the mesh.
         /// 
         /// This method can be called in two ways:
-        /// 1. To get the number of contours without retrieving them: pass null for outContours and 0 for maxContours
-        /// 2. To retrieve the contours: provide a pre-allocated array in outContours with size maxContours
+        /// 1. To get the number of contours without retrieving them: set checkCount to true
+        /// 2. To retrieve the contours: set checkCount to false and provide a pre-allocated array
         /// 
         /// The return value indicates success or failure.
         /// </summary>
@@ -111,20 +111,20 @@ namespace zSpace.External
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool zext_mesh_compute_geodesic_contours(
             IntPtr mesh_handle,
+            bool checkCount,
             [MarshalAs(UnmanagedType.LPArray)] int[] sourceVertexIds,
             int sourceVertexCount,
             int steps,
             float dist,
             [MarshalAs(UnmanagedType.LPArray)] IntPtr[] outContours,
-            ref int outContourCount,
-            int maxContours);
+            ref int outContourCount);
             
         /// <summary>
         /// Computes interpolated geodesic contours on the mesh between two sets of vertices.
         /// 
         /// This method can be called in two ways:
-        /// 1. To get the number of contours without retrieving them: pass null for outContours and 0 for maxContours
-        /// 2. To retrieve the contours: provide a pre-allocated array in outContours with size maxContours
+        /// 1. To get the number of contours without retrieving them: set checkCount to true
+        /// 2. To retrieve the contours: set checkCount to false and provide a pre-allocated array
         /// 
         /// The return value indicates success or failure.
         /// </summary>
@@ -132,6 +132,7 @@ namespace zSpace.External
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool zext_mesh_compute_geodesic_contours_interpolated(
             IntPtr mesh_handle,
+            bool checkCount,
             [MarshalAs(UnmanagedType.LPArray)] int[] startVertexIds,
             int startVertexCount,
             [MarshalAs(UnmanagedType.LPArray)] int[] endVertexIds,
@@ -139,8 +140,22 @@ namespace zSpace.External
             int steps,
             float dist,
             [MarshalAs(UnmanagedType.LPArray)] IntPtr[] outContours,
-            ref int outContourCount,
-            int maxContours);
+            ref int outContourCount);
+        
+        /// <summary>
+        /// Gets mesh data including vertex positions, polygon counts, and polygon connections.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool zext_mesh_get_mesh_data(
+            IntPtr mesh_handle,
+            bool checkCount,
+            [MarshalAs(UnmanagedType.LPArray)] double[] vertexPositions,
+            ref int vertexCount,
+            [MarshalAs(UnmanagedType.LPArray)] int[] polyCounts,
+            ref int polyCountsSize,
+            [MarshalAs(UnmanagedType.LPArray)] int[] polyConnections,
+            ref int polyConnectionsSize);
         
         // Graph Functions
         
@@ -205,5 +220,18 @@ namespace zSpace.External
         public static extern bool zext_graph_get_vertex_positions(
             IntPtr graph_handle,
             [MarshalAs(UnmanagedType.LPArray)] double[] outVertexPositions);
+        
+        /// <summary>
+        /// Gets graph data including vertex positions and edge connections.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool zext_graph_get_graph_data(
+            IntPtr graph_handle,
+            bool checkCount,
+            [MarshalAs(UnmanagedType.LPArray)] double[] vertexPositions,
+            ref int vertexCount,
+            [MarshalAs(UnmanagedType.LPArray)] int[] edgeConnections,
+            ref int edgeConnectionsSize);
     }
 } 

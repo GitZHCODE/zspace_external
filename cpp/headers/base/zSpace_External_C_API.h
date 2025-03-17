@@ -132,42 +132,60 @@ ZSPACE_EXTERNAL_API int zext_mesh_compute_geodesic_heat_interpolated(zExtMeshHan
  * Compute geodesic contours on a mesh.
  * 
  * @param mesh_handle Handle to the mesh
+ * @param checkCount If true, only gets the count without copying data. If false, copies data to the output array.
  * @param source_vertex_ids Array of source vertex indices
  * @param source_vertex_count Number of source vertices
  * @param steps Number of contour steps to generate
  * @param dist Distance between contours (if 0, uses steps instead)
- * @param out_contours Output array for contour handles (can be null if only getting count)
- * @param out_contour_count Output for the number of contours (will be set to total count regardless of array size)
- * @param max_contours Maximum number of contours to retrieve (size of out_contours array, 0 if just getting count)
+ * @param out_contours Output array for contour handles (can be null when checkCount is true)
+ * @param out_contour_count Pointer to receive the number of contours
  * @return 1 if successful, 0 if an error occurred (boolean semantics)
  */
 ZSPACE_EXTERNAL_API int zext_mesh_compute_geodesic_contours(zExtMeshHandle mesh_handle,
+                                                         bool checkCount,
                                                          const int* source_vertex_ids, int source_vertex_count,
                                                          int steps, float dist,
-                                                         zExtGraphHandle* out_contours, int* out_contour_count,
-                                                         int max_contours);
+                                                         zExtGraphHandle* out_contours, int* out_contour_count);
 
 /**
  * Compute interpolated geodesic contours on a mesh between two sets of vertices.
  *
  * @param mesh_handle Handle to the mesh
+ * @param checkCount If true, only gets the count without copying data. If false, copies data to the output array.
  * @param start_vertex_ids Array of start vertex indices
  * @param start_vertex_count Number of start vertices
  * @param end_vertex_ids Array of end vertex indices
  * @param end_vertex_count Number of end vertices
  * @param steps Number of contour steps to generate
  * @param dist Distance between contours (if 0, uses steps instead)
- * @param out_contours Output array for contour handles (can be null if only getting count)
- * @param out_contour_count Output for the number of contours (will be set to total count regardless of array size)
- * @param max_contours Maximum number of contours to retrieve (size of out_contours array, 0 if just getting count)
+ * @param out_contours Output array for contour handles (can be null when checkCount is true)
+ * @param out_contour_count Pointer to receive the number of contours
  * @return 1 if successful, 0 if an error occurred (boolean semantics)
  */
 ZSPACE_EXTERNAL_API int zext_mesh_compute_geodesic_contours_interpolated(zExtMeshHandle mesh_handle,
+                                                                      bool checkCount,
                                                                       const int* start_vertex_ids, int start_vertex_count,
                                                                       const int* end_vertex_ids, int end_vertex_count,
                                                                       int steps, float dist,
-                                                                      zExtGraphHandle* out_contours, int* out_contour_count,
-                                                                      int max_contours);
+                                                                      zExtGraphHandle* out_contours, int* out_contour_count);
+
+/**
+ * Get mesh data including vertex positions, polygon counts, and polygon connections.
+ * 
+ * @param mesh_handle Handle to the mesh.
+ * @param checkCount If true, only gets the counts without copying data. If false, copies data to the output arrays.
+ * @param vertexPositions Output array for vertex positions (pre-allocated with size vertexCount*3).
+ * @param vertexCount Pointer to receive the number of vertex positions.
+ * @param polyCounts Output array for polygon counts (pre-allocated with size polyCountsSize).
+ * @param polyCountsSize Pointer to receive the number of polygon counts.
+ * @param polyConnections Output array for polygon connections (pre-allocated with size polyConnectionsSize).
+ * @param polyConnectionsSize Pointer to receive the number of polygon connections.
+ * @return 1 if successful, 0 if an error occurred.
+ */
+ZSPACE_EXTERNAL_API int zext_mesh_get_mesh_data(zExtMeshHandle mesh_handle, bool checkCount,
+                                               double* vertexPositions, int* vertexCount,
+                                               int* polyCounts, int* polyCountsSize,
+                                               int* polyConnections, int* polyConnectionsSize);
 
 //--- GRAPH API ---//
 
@@ -225,22 +243,6 @@ ZSPACE_EXTERNAL_API int zext_graph_create_graph(zExtGraphHandle graph_handle,
                                               const int* edgeConnections, int edgeConnectionsSize);
 
 /**
- * Compute shortest path between two vertices.
- * 
- * @param graph_handle Handle to the graph.
- * @param startVertexId Start vertex index.
- * @param endVertexId End vertex index.
- * @param out_pathVertices Output array for vertex indices along the path (pre-allocated).
- * @param out_pathVertexCount Output for the number of vertices in the path.
- * @param maxPathLength Maximum number of vertices in the path (size of out_pathVertices array).
- * @return 1 if successful, 0 if an error occurred.
- */
-ZSPACE_EXTERNAL_API int zext_graph_compute_shortest_path(zExtGraphHandle graph_handle,
-                                                       int startVertexId, int endVertexId,
-                                                       int* out_pathVertices, int* out_pathVertexCount,
-                                                       int maxPathLength);
-
-/**
  * Set vertex positions in the graph.
  * 
  * @param graph_handle Handle to the graph.
@@ -260,6 +262,21 @@ ZSPACE_EXTERNAL_API int zext_graph_set_vertex_positions(zExtGraphHandle graph_ha
  */
 ZSPACE_EXTERNAL_API int zext_graph_get_vertex_positions(zExtGraphHandle graph_handle,
                                                       double* out_vertexPositions);
+
+/**
+ * Get graph data including vertex positions and edge connections.
+ * 
+ * @param graph_handle Handle to the graph.
+ * @param checkCount If true, only gets the counts without copying data. If false, copies data to the output arrays.
+ * @param vertexPositions Output array for vertex positions (pre-allocated with size vertexCount*3).
+ * @param vertexCount Pointer to receive the number of vertex positions.
+ * @param edgeConnections Output array for edge connections (pre-allocated with size edgeConnectionsSize).
+ * @param edgeConnectionsSize Pointer to receive the number of edge connections.
+ * @return 1 if successful, 0 if an error occurred.
+ */
+ZSPACE_EXTERNAL_API int zext_graph_get_graph_data(zExtGraphHandle graph_handle, bool checkCount,
+                                               double* vertexPositions, int* vertexCount,
+                                               int* edgeConnections, int* edgeConnectionsSize);
 
 #ifdef __cplusplus
 }

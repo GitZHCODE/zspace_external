@@ -81,6 +81,77 @@ ZSPACE_EXTERNAL_API int zext_mesh_create_mesh(zExtMeshHandle mesh_handle,
     , 0)
 }
 
+ZSPACE_EXTERNAL_API int zext_mesh_get_mesh_data(zExtMeshHandle mesh_handle, 
+                                            bool checkCount,
+                                            double* vertexPositions, int* vertexCount,
+                                            int* polyCounts, int* polyCountsSize,
+                                            int* polyConnections, int* polyConnectionsSize)
+{
+    TRY_CATCH_RETURN(
+        if (!mesh_handle) {
+            zSpace::SetError("Invalid mesh handle");
+            return 0;
+        }
+        
+        // Check if output pointers for sizes are valid
+        if (!vertexCount || !polyCountsSize || !polyConnectionsSize) {
+            zSpace::SetError("Invalid output size pointers");
+            return 0;
+        }
+        
+        auto* mesh = static_cast<zSpace::zExtMesh*>(mesh_handle);
+        
+        // Create vectors to hold the data
+        std::vector<double> positions;
+        std::vector<int> pCounts;
+        std::vector<int> pConnects;
+        
+        // Get the mesh data
+        bool success = mesh->getMeshData(positions, pConnects, pCounts);
+        
+        if (!success) {
+            zSpace::SetError("Failed to get mesh data");
+            return 0;
+        }
+        
+        // Store the counts
+        int numPositions = static_cast<int>(positions.size());
+        int numPCounts = static_cast<int>(pCounts.size());
+        int numPConnects = static_cast<int>(pConnects.size());
+        
+        // Set the output count values
+        *vertexCount = numPositions;
+        *polyCountsSize = numPCounts;
+        *polyConnectionsSize = numPConnects;
+        
+        // If checkCount is true, we only return the sizes without copying data
+        if (checkCount) {
+            return 1; // Success
+        }
+        
+        // When not just checking counts, make sure output arrays are valid
+        if (!vertexPositions || !polyCounts || !polyConnections) {
+            zSpace::SetError("Invalid output array pointers");
+            return 0;
+        }
+        
+        // Copy the data to the output arrays
+        for (int i = 0; i < numPositions; i++) {
+            vertexPositions[i] = positions[i];
+        }
+        
+        for (int i = 0; i < numPCounts; i++) {
+            polyCounts[i] = pCounts[i];
+        }
+        
+        for (int i = 0; i < numPConnects; i++) {
+            polyConnections[i] = pConnects[i];
+        }
+        
+        return 1; // Success
+    , 0) // Return 0 on exception
+}
+
 ZSPACE_EXTERNAL_API int zext_mesh_compute_geodesic_heat(zExtMeshHandle mesh_handle, 
                                                     const int* source_vertex_ids, int source_vertex_count, bool normalised,
                                                     float* out_geodesic_scalars) {
@@ -145,10 +216,10 @@ ZSPACE_EXTERNAL_API int zext_mesh_compute_geodesic_heat_interpolated(zExtMeshHan
 }
 
 ZSPACE_EXTERNAL_API int zext_mesh_compute_geodesic_contours(zExtMeshHandle mesh_handle,
+                                                         bool checkCount,
                                                          const int* source_vertex_ids, int source_vertex_count,
                                                          int steps, float dist,
-                                                         zExtGraphHandle* out_contours, int* out_contour_count,
-                                                         int max_contours) {
+                                                         zExtGraphHandle* out_contours, int* out_contour_count) {
     TRY_CATCH_RETURN(
         if (!mesh_handle) {
             zSpace::SetError("Invalid mesh handle");
@@ -165,7 +236,7 @@ ZSPACE_EXTERNAL_API int zext_mesh_compute_geodesic_contours(zExtMeshHandle mesh_
             return 0;
         }
         
-        // Allow null out_contours when just getting the count
+        // Check if output count pointer is valid
         if (!out_contour_count) {
             zSpace::SetError("Invalid output count parameter");
             return 0;
@@ -186,23 +257,31 @@ ZSPACE_EXTERNAL_API int zext_mesh_compute_geodesic_contours(zExtMeshHandle mesh_
         
         // Return the count of contours
         int totalContours = static_cast<int>(contourGraphs.size());
+        *out_contour_count = totalContours;
         
-        // If only getting the count, return it
-        if (!out_contours || max_contours <= 0) {
-            *out_contour_count = totalContours;
-            return 1;
+        // If checkCount is true, we only return the count without copying data
+        if (checkCount) {
+            // Free all contours
+            for (auto& graph : contourGraphs) {
+                delete graph;
+            }
+            return 1; // Success
         }
         
-        // Copy the contours to the output array, limited by max_contours
-        *out_contour_count = std::min(totalContours, max_contours);
+        // When not just checking counts, make sure output array is valid
+        if (!out_contours) {
+            zSpace::SetError("Invalid output array pointer");
+            
+            // Free all contours
+            for (auto& graph : contourGraphs) {
+                delete graph;
+            }
+            return 0;
+        }
         
-        for (int i = 0; i < *out_contour_count; i++) {
+        // Copy the contours to the output array
+        for (int i = 0; i < totalContours; i++) {
             out_contours[i] = static_cast<zExtGraphHandle>(contourGraphs[i]);
-        }
-        
-        // Free any extra contours that won't fit in the output array
-        for (int i = *out_contour_count; i < totalContours; i++) {
-            delete contourGraphs[i];
         }
         
         return 1;
@@ -210,11 +289,11 @@ ZSPACE_EXTERNAL_API int zext_mesh_compute_geodesic_contours(zExtMeshHandle mesh_
 }
 
 ZSPACE_EXTERNAL_API int zext_mesh_compute_geodesic_contours_interpolated(zExtMeshHandle mesh_handle,
+                                                                      bool checkCount,
                                                                       const int* start_vertex_ids, int start_vertex_count,
                                                                       const int* end_vertex_ids, int end_vertex_count,
                                                                       int steps, float dist,
-                                                                      zExtGraphHandle* out_contours, int* out_contour_count,
-                                                                      int max_contours) {
+                                                                      zExtGraphHandle* out_contours, int* out_contour_count) {
     TRY_CATCH_RETURN(
         if (!mesh_handle) {
             zSpace::SetError("Invalid mesh handle");
@@ -236,7 +315,7 @@ ZSPACE_EXTERNAL_API int zext_mesh_compute_geodesic_contours_interpolated(zExtMes
             return 0;
         }
         
-        // Allow null out_contours when just getting the count
+        // Check if output count pointer is valid
         if (!out_contour_count) {
             zSpace::SetError("Invalid output count parameter");
             return 0;
@@ -259,27 +338,34 @@ ZSPACE_EXTERNAL_API int zext_mesh_compute_geodesic_contours_interpolated(zExtMes
         
         // Return the count of contours
         int totalContours = static_cast<int>(contourGraphs.size());
+        *out_contour_count = totalContours;
         
-        // If only getting the count, return it
-        if (!out_contours || max_contours <= 0) {
-            *out_contour_count = totalContours;
-            return 1;
+        // If checkCount is true, we only return the count without copying data
+        if (checkCount) {
+            // Free all contours
+            for (auto& graph : contourGraphs) {
+                delete graph;
+            }
+            return 1; // Success
         }
         
-        // Copy the contours to the output array, limited by max_contours
-        *out_contour_count = std::min(totalContours, max_contours);
+        // When not just checking counts, make sure output array is valid
+        if (!out_contours) {
+            zSpace::SetError("Invalid output array pointer");
+            
+            // Free all contours
+            for (auto& graph : contourGraphs) {
+                delete graph;
+            }
+            return 0;
+        }
         
-        for (int i = 0; i < *out_contour_count; i++) {
+        // Copy the contours to the output array
+        for (int i = 0; i < totalContours; i++) {
             out_contours[i] = static_cast<zExtGraphHandle>(contourGraphs[i]);
-        }
-        
-        // Free any extra contours that won't fit in the output array
-        for (int i = *out_contour_count; i < totalContours; i++) {
-            delete contourGraphs[i];
         }
         
         return 1;
     , 0)
 }
-
 } // extern "C" 

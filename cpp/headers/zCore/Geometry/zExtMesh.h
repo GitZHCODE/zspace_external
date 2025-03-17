@@ -99,6 +99,20 @@ public:
         const int* polyCounts, int polyCountsSize,
         const int* polyConnections, int polyConnectionsSize
     );
+
+    /**
+     * Get mesh data including vertex positions, polygon counts, and polygon connections.
+     *
+     * @param vertexPositions Output vector for vertex positions (x1, y1, z1, x2, y2, z2, ...)
+     * @param polyCounts Output vector for polygon counts
+     * @param polyConnects Output vector for polygon connections
+     * @return True if successful, false otherwise.
+     */
+    bool getMeshData(
+        std::vector<double>& vertexPositions,
+        std::vector<int>& polyConnects,
+        std::vector<int>& polyCounts
+    );
     
     /**
      * Compute geodesic distances using the heat method.
@@ -144,6 +158,7 @@ public:
         int steps, float dist,
         std::vector<zExtGraph*>& out_contours
     );
+    
     
 private:
     /**

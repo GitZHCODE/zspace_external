@@ -94,6 +94,18 @@ public:
         const double* vertexPositions, int vertexCount,
         const int* edgeConnections, int edgeConnectionsSize
     );
+
+    /**
+     * Get graph data including vertex positions and edge connections.
+     *
+     * @param vertexPositions Output vector for vertex positions (x1, y1, z1, x2, y2, z2, ...)
+     * @param edgeConnections Output vector for edge connections (start1, end1, start2, end2, ...)
+     * @return True if successful, false otherwise.
+     */
+    bool getGraphData(
+        std::vector<double>& vertexPositions,
+        std::vector<int>& edgeConnections
+    );
     
     /**
      * Set vertex positions in the graph.

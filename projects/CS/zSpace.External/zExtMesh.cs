@@ -214,8 +214,11 @@ namespace zSpace.External
             int contourCount = 0;
             Debug.WriteLine($"Getting count of geodesic contours for {sourceVertexIds.Length} source vertices with {steps} steps...");
             if (!NativeMethods.zext_mesh_compute_geodesic_contours(
-                _handle, sourceVertexIds, sourceVertexIds.Length, steps, dist, 
-                null, ref contourCount, 0))
+                _handle, 
+                true, // checkCount = true, only get count
+                sourceVertexIds, sourceVertexIds.Length, 
+                steps, dist, 
+                null, ref contourCount))
             {
                 ThrowLastError("Failed to get geodesic contours count");
             }
@@ -228,26 +231,28 @@ namespace zSpace.External
                 return new zExtGraph[0];
             }
             
-            // Now allocate the array and retrieve the contours in a single call
+            // Now allocate the array and retrieve the contours
             IntPtr[] contourHandles = new IntPtr[contourCount];
-            int actualCount = 0;
             
             Debug.WriteLine($"Retrieving {contourCount} geodesic contours...");
             if (!NativeMethods.zext_mesh_compute_geodesic_contours(
-                _handle, sourceVertexIds, sourceVertexIds.Length, steps, dist, 
-                contourHandles, ref actualCount, contourCount))
+                _handle, 
+                false, // checkCount = false, get actual contours
+                sourceVertexIds, sourceVertexIds.Length, 
+                steps, dist, 
+                contourHandles, ref contourCount))
             {
                 ThrowLastError("Failed to retrieve geodesic contours");
             }
             
             // Create managed wrappers for the contour graphs
-            zExtGraph[] contours = new zExtGraph[actualCount];
-            for (int i = 0; i < actualCount; i++)
+            zExtGraph[] contours = new zExtGraph[contourCount];
+            for (int i = 0; i < contourCount; i++)
             {
                 contours[i] = new zExtGraph(contourHandles[i]);
             }
             
-            Debug.WriteLine($"Retrieved {actualCount} geodesic contours successfully");
+            Debug.WriteLine($"Retrieved {contourCount} geodesic contours successfully");
             return contours;
         }
         
@@ -282,8 +287,12 @@ namespace zSpace.External
             int contourCount = 0;
             Debug.WriteLine($"Getting count of interpolated geodesic contours between {startVertexIds.Length} start vertices and {endVertexIds.Length} end vertices with {steps} steps...");
             if (!NativeMethods.zext_mesh_compute_geodesic_contours_interpolated(
-                _handle, startVertexIds, startVertexIds.Length, endVertexIds, endVertexIds.Length, 
-                steps, dist, null, ref contourCount, 0))
+                _handle, 
+                true, // checkCount = true, only get count
+                startVertexIds, startVertexIds.Length, 
+                endVertexIds, endVertexIds.Length, 
+                steps, dist, 
+                null, ref contourCount))
             {
                 ThrowLastError("Failed to get interpolated geodesic contours count");
             }
@@ -296,27 +305,84 @@ namespace zSpace.External
                 return new zExtGraph[0];
             }
             
-            // Now allocate the array and retrieve the contours in a single call
+            // Now allocate the array and retrieve the contours
             IntPtr[] contourHandles = new IntPtr[contourCount];
-            int actualCount = 0;
             
             Debug.WriteLine($"Retrieving {contourCount} interpolated geodesic contours...");
             if (!NativeMethods.zext_mesh_compute_geodesic_contours_interpolated(
-                _handle, startVertexIds, startVertexIds.Length, endVertexIds, endVertexIds.Length, 
-                steps, dist, contourHandles, ref actualCount, contourCount))
+                _handle, 
+                false, // checkCount = false, get actual contours
+                startVertexIds, startVertexIds.Length, 
+                endVertexIds, endVertexIds.Length, 
+                steps, dist, 
+                contourHandles, ref contourCount))
             {
                 ThrowLastError("Failed to retrieve interpolated geodesic contours");
             }
             
             // Create managed wrappers for the contour graphs
-            zExtGraph[] contours = new zExtGraph[actualCount];
-            for (int i = 0; i < actualCount; i++)
+            zExtGraph[] contours = new zExtGraph[contourCount];
+            for (int i = 0; i < contourCount; i++)
             {
                 contours[i] = new zExtGraph(contourHandles[i]);
             }
             
-            Debug.WriteLine($"Retrieved {actualCount} interpolated geodesic contours successfully");
+            Debug.WriteLine($"Retrieved {contourCount} interpolated geodesic contours successfully");
             return contours;
+        }
+
+        /// <summary>
+        /// Gets the mesh data including vertex positions, polygon counts, and polygon connections.
+        /// </summary>
+        /// <param name="vertexPositions">Output array of vertex positions (x1, y1, z1, x2, y2, z2, ...)</param>
+        /// <param name="polygonCounts">Output array of polygon counts</param>
+        /// <param name="polygonConnections">Output array of polygon connections</param>
+        /// <exception cref="ZSpaceExternalException">Thrown if the operation fails.</exception>
+        public void GetMeshData(out double[] vertexPositions, out int[] polygonCounts, out int[] polygonConnections)
+        {
+            ThrowIfDisposed();
+            
+            // First, get the counts to determine array sizes
+            int vertexCount = 0;
+            int polyCountsSize = 0;
+            int polyConnectionsSize = 0;
+            
+            Debug.WriteLine("Getting mesh data sizes...");
+            if (!NativeMethods.zext_mesh_get_mesh_data(
+                _handle,
+                true, // checkCount = true, only get sizes
+                null, // no arrays yet
+                ref vertexCount,
+                null,
+                ref polyCountsSize,
+                null,
+                ref polyConnectionsSize))
+            {
+                ThrowLastError("Failed to get mesh data sizes");
+            }
+            
+            // Allocate arrays with the correct sizes
+            vertexPositions = new double[vertexCount];
+            polygonCounts = new int[polyCountsSize];
+            polygonConnections = new int[polyConnectionsSize];
+            
+            Debug.WriteLine($"Getting mesh data: Vertices={vertexCount}, PolyCounts={polyCountsSize}, PolyConnections={polyConnectionsSize}");
+            
+            // Get the actual data
+            if (!NativeMethods.zext_mesh_get_mesh_data(
+                _handle,
+                false, // checkCount = false, get the actual data
+                vertexPositions,
+                ref vertexCount,
+                polygonCounts,
+                ref polyCountsSize,
+                polygonConnections,
+                ref polyConnectionsSize))
+            {
+                ThrowLastError("Failed to get mesh data");
+            }
+            
+            Debug.WriteLine($"Retrieved mesh data: Vertices={vertexCount}, PolyCounts={polyCountsSize}, PolyConnections={polyConnectionsSize}");
         }
 
         /// <summary>

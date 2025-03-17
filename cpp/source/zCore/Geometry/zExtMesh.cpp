@@ -131,6 +131,37 @@ bool zExtMesh::createMesh(
     }
 }
 
+bool zExtMesh::getMeshData(
+    vector<double>& vertexPositions,
+    vector<int>& polyConnects,
+    vector<int>& polyCounts
+) {
+    try {
+        if (!m_mesh) {
+            return false;
+        }
+
+        zFnMesh fnMesh(*m_mesh);
+        vector<zPoint> positions;
+        fnMesh.getVertexPositions(positions);
+
+        vertexPositions.reserve(fnMesh.numVertices() * 3);
+        for (size_t i = 0; i < positions.size(); i++)
+        {
+            vertexPositions.push_back(positions[i].x);
+            vertexPositions.push_back(positions[i].y);
+            vertexPositions.push_back(positions[i].z);
+        }
+
+        fnMesh.getPolygonData(polyConnects, polyCounts);
+
+        return true;
+    }
+    catch (const std::exception&) {
+        return false;
+    }
+}
+
 bool zExtMesh::computeGeodesicHeat(
     const int* sourceVIds, int sourceVCount, bool normalised,
     float* out_geodesicScalars

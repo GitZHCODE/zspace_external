@@ -198,6 +198,53 @@ namespace zSpace.External
         }
 
         /// <summary>
+        /// Gets the graph data including vertex positions and edge connections.
+        /// </summary>
+        /// <param name="vertexPositions">Output array of vertex positions (x1, y1, z1, x2, y2, z2, ...)</param>
+        /// <param name="edgeConnections">Output array of edge connections (start1, end1, start2, end2, ...)</param>
+        /// <exception cref="ZSpaceExternalException">Thrown if the operation fails.</exception>
+        public void GetGraphData(out double[] vertexPositions, out int[] edgeConnections)
+        {
+            ThrowIfDisposed();
+            
+            // First, get the counts to determine array sizes
+            int vertexCount = 0;
+            int edgeConnectionsSize = 0;
+            
+            Debug.WriteLine("Getting graph data sizes...");
+            if (!NativeMethods.zext_graph_get_graph_data(
+                _handle,
+                true, // checkCount = true, only get sizes
+                null, // no arrays yet
+                ref vertexCount,
+                null,
+                ref edgeConnectionsSize))
+            {
+                ThrowLastError("Failed to get graph data sizes");
+            }
+            
+            // Allocate arrays with the correct sizes
+            vertexPositions = new double[vertexCount];
+            edgeConnections = new int[edgeConnectionsSize];
+            
+            Debug.WriteLine($"Getting graph data: Vertices={vertexCount}, EdgeConnections={edgeConnectionsSize}");
+            
+            // Get the actual data
+            if (!NativeMethods.zext_graph_get_graph_data(
+                _handle,
+                false, // checkCount = false, get the actual data
+                vertexPositions,
+                ref vertexCount,
+                edgeConnections,
+                ref edgeConnectionsSize))
+            {
+                ThrowLastError("Failed to get graph data");
+            }
+            
+            Debug.WriteLine($"Retrieved graph data: Vertices={vertexCount}, EdgeConnections={edgeConnectionsSize}");
+        }
+
+        /// <summary>
         /// Disposes the graph resources.
         /// </summary>
         public void Dispose()

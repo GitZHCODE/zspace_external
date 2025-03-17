@@ -117,4 +117,67 @@ ZSPACE_EXTERNAL_API int zext_graph_get_vertex_positions(zExtGraphHandle graph_ha
     , 0)
 }
 
+ZSPACE_EXTERNAL_API int zext_graph_get_graph_data(zExtGraphHandle graph_handle, 
+                                              bool checkCount,
+                                              double* vertexPositions, int* vertexCount,
+                                              int* edgeConnections, int* edgeConnectionsSize)
+{
+    TRY_CATCH_RETURN(
+        if (!graph_handle) {
+            zSpace::SetError("Invalid graph handle");
+            return 0;
+        }
+        
+        // Check if output pointers for sizes are valid
+        if (!vertexCount || !edgeConnectionsSize) {
+            zSpace::SetError("Invalid output size pointers");
+            return 0;
+        }
+        
+        auto* graph = static_cast<zSpace::zExtGraph*>(graph_handle);
+        
+        // Create vectors to hold the data
+        std::vector<double> positions;
+        std::vector<int> connects;
+        
+        // Get the graph data
+        bool success = graph->getGraphData(positions, connects);
+        
+        if (!success) {
+            zSpace::SetError("Failed to get graph data");
+            return 0;
+        }
+        
+        // Store the counts
+        int numPositions = static_cast<int>(positions.size());
+        int numConnects = static_cast<int>(connects.size());
+        
+        // Set the output count values
+        *vertexCount = numPositions;
+        *edgeConnectionsSize = numConnects;
+        
+        // If checkCount is true, we only return the sizes without copying data
+        if (checkCount) {
+            return 1; // Success
+        }
+        
+        // When not just checking counts, make sure output arrays are valid
+        if (!vertexPositions || !edgeConnections) {
+            zSpace::SetError("Invalid output array pointers");
+            return 0;
+        }
+        
+        // Copy the data to the output arrays
+        for (int i = 0; i < numPositions; i++) {
+            vertexPositions[i] = positions[i];
+        }
+        
+        for (int i = 0; i < numConnects; i++) {
+            edgeConnections[i] = connects[i];
+        }
+        
+        return 1; // Success
+    , 0) // Return 0 on exception
+}
+
 } // extern "C" 
