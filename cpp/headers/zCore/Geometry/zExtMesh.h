@@ -18,7 +18,6 @@
 // Forward declaration to avoid including zObjMesh.h directly
 namespace zSpace {
     class zObjMesh;
-    class zObjGraph;
 }
 
 // Handle type forward declaration

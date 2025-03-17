@@ -18,8 +18,8 @@ Global
 		{A830A7C2-1AB9-4C4D-9785-02F2E1CB1685}.Debug|x86.Build.0 = Debug|Win32
 		{A830A7C2-1AB9-4C4D-9785-02F2E1CB1685}.Release|x64.ActiveCfg = Release|x64
 		{A830A7C2-1AB9-4C4D-9785-02F2E1CB1685}.Release|x64.Build.0 = Release|x64
-		{A830A7C2-1AB9-4C4D-9785-02F2E1CB1685}.Release|x86.ActiveCfg = Release|Win32
-		{A830A7C2-1AB9-4C4D-9785-02F2E1CB1685}.Release|x86.Build.0 = Release|Win32
+		{A830A7C2-1AB9-4C4D-9785-02F2E1CB1685}.Release|x86.ActiveCfg = Release|x64
+		{A830A7C2-1AB9-4C4D-9785-02F2E1CB1685}.Release|x86.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -27,4 +27,4 @@ Global
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D9D60D8B-C3F3-4F4A-A4E1-9E4A77F4136E}
 	EndGlobalSection
-EndGlobal 
+EndGlobal

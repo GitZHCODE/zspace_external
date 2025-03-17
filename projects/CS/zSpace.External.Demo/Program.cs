@@ -67,15 +67,12 @@ namespace zSpace.External.Demo
 
         private static void RunNativeDllDiagnostics()
         {
-            string dllName = "zSpace_External.dll";
+            string dllName = "zSpace.External.dll";
             string[] searchPaths = new[]
             {
                 Environment.CurrentDirectory,
                 AppDomain.CurrentDomain.BaseDirectory,
                 Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
-                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "x64"),
-                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\bin\x64\Debug"),
-                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\bin\x64\Release")
             };
 
             Console.WriteLine("\nNative DLL Diagnostics:");
