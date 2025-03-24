@@ -400,8 +400,7 @@ bool zExtMesh::computeGeodesicContours(
                 zObjGraph* contourPtr = new zObjGraph();
                 zFnGraph fnGraph(*contourPtr);
                 fnGraph.create(positions, edgeConnects);
-                
-                // Add the contour to the output vector
+
                 out_contours.push_back(new zExtGraph(contourPtr));
             }
         }
@@ -521,7 +520,6 @@ bool zExtMesh::computeGeodesicContours_interpolated(
                 zFnGraph fnGraph(*contourPtr);
                 fnGraph.create(positions, edgeConnects);
                 
-                // Add the contour to the output vector
                 out_contours.push_back(new zExtGraph(contourPtr));
             }
         }

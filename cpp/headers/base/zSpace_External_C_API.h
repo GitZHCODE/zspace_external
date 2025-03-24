@@ -278,6 +278,30 @@ ZSPACE_EXTERNAL_API int zext_graph_get_graph_data(zExtGraphHandle graph_handle, 
                                                double* vertexPositions, int* vertexCount,
                                                int* edgeConnections, int* edgeConnectionsSize);
 
+/**
+ * Merge vertices in the graph that are within a given tolerance distance of each other.
+ * This operation is useful for cleaning up graphs with duplicate or nearly-duplicate vertices.
+ * After merging, edges will be reindexed to use the updated vertex indices.
+ *
+ * @param graph_handle Handle to the graph.
+ * @param tolerance Maximum distance between vertices to be considered for merging.
+ * @return 1 if successful, 0 if an error occurred.
+ */
+ZSPACE_EXTERNAL_API int zext_graph_merge_vertices(zExtGraphHandle graph_handle, double tolerance);
+
+/**
+ * Separates a graph into its disconnected components.
+ * Each component is a subgraph that has no connections to other components.
+ * 
+ * @param graph_handle Handle to the graph.
+ * @param checkCount If true, only gets the count without copying data. If false, copies data to the output array.
+ * @param out_components Output array for component graph handles (can be null when checkCount is true).
+ * @param out_component_count Pointer to receive the number of components.
+ * @return 1 if successful, 0 if an error occurred.
+ */
+ZSPACE_EXTERNAL_API int zext_graph_separate_graph(zExtGraphHandle graph_handle, bool checkCount,
+                                              zExtGraphHandle* out_components, int* out_component_count);
+
 #ifdef __cplusplus
 }
 #endif

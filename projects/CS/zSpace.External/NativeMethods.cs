@@ -233,5 +233,33 @@ namespace zSpace.External
             ref int vertexCount,
             [MarshalAs(UnmanagedType.LPArray)] int[] edgeConnections,
             ref int edgeConnectionsSize);
+            
+        /// <summary>
+        /// Merges vertices in the graph that are within a given tolerance distance of each other.
+        /// This is useful for cleaning up graphs with duplicate or nearly-duplicate vertices.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool zext_graph_merge_vertices(
+            IntPtr graph_handle,
+            double tolerance);
+            
+        /// <summary>
+        /// Separates a graph into its disconnected components.
+        /// Each component is a subgraph that has no connections to other components.
+        /// 
+        /// This method can be called in two ways:
+        /// 1. To get the number of components without retrieving them: set checkCount to true
+        /// 2. To retrieve the components: set checkCount to false and provide a pre-allocated array
+        /// 
+        /// The return value indicates success or failure.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool zext_graph_separate_graph(
+            IntPtr graph_handle,
+            bool checkCount,
+            [MarshalAs(UnmanagedType.LPArray)] IntPtr[] outComponents,
+            ref int outComponentCount);
     }
 } 

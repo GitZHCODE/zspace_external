@@ -251,6 +251,83 @@ namespace zSpace.External
         }
 
         /// <summary>
+        /// Merges vertices in the graph that are within a given tolerance distance of each other.
+        /// This is useful for cleaning up graphs with duplicate or nearly-duplicate vertices.
+        /// </summary>
+        /// <param name="tolerance">Maximum distance between vertices to be considered for merging</param>
+        /// <exception cref="ZSpaceExternalException">Thrown if the operation fails.</exception>
+        public void MergeVertices(double tolerance)
+        {
+            ThrowIfDisposed();
+            
+            if (tolerance < 0)
+                throw new ArgumentException("Tolerance must be a non-negative value", nameof(tolerance));
+            
+            Debug.WriteLine($"Merging vertices with tolerance {tolerance}...");
+            if (!NativeMethods.zext_graph_merge_vertices(_handle, tolerance))
+            {
+                ThrowLastError("Failed to merge vertices");
+            }
+            
+            Debug.WriteLine("Vertices merged successfully");
+        }
+        
+        /// <summary>
+        /// Separates a graph into its disconnected components.
+        /// Each component is a subgraph that has no connections to other components.
+        /// </summary>
+        /// <returns>Array of graph components</returns>
+        /// <exception cref="ZSpaceExternalException">Thrown if the operation fails.</exception>
+        public zExtGraph[] SeparateGraph()
+        {
+            ThrowIfDisposed();
+            
+            // First, get the count of components
+            int componentCount = 0;
+            Debug.WriteLine("Getting component count...");
+            if (!NativeMethods.zext_graph_separate_graph(
+                _handle,
+                true, // checkCount = true, only get count
+                null, // no array yet
+                ref componentCount))
+            {
+                ThrowLastError("Failed to get component count");
+            }
+            
+            Debug.WriteLine($"Found {componentCount} components");
+            
+            // If no components, return empty array
+            if (componentCount == 0)
+            {
+                return Array.Empty<zExtGraph>();
+            }
+            
+            // Allocate array for component handles
+            IntPtr[] componentHandles = new IntPtr[componentCount];
+            
+            // Get the actual components
+            Debug.WriteLine("Retrieving components...");
+            if (!NativeMethods.zext_graph_separate_graph(
+                _handle,
+                false, // checkCount = false, get the actual components
+                componentHandles,
+                ref componentCount))
+            {
+                ThrowLastError("Failed to retrieve components");
+            }
+            
+            // Convert handles to zExtGraph objects
+            zExtGraph[] components = new zExtGraph[componentCount];
+            for (int i = 0; i < componentCount; i++)
+            {
+                components[i] = new zExtGraph(componentHandles[i]);
+            }
+            
+            Debug.WriteLine($"Retrieved {componentCount} components successfully");
+            return components;
+        }
+
+        /// <summary>
         /// Disposes the graph resources.
         /// </summary>
         public void Dispose()

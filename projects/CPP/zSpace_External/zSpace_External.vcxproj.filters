@@ -31,6 +31,9 @@
     <Filter Include="Source Files\zCore\Geometry">
       <UniqueIdentifier>{b3d4e4f8-7d89-4cf8-b506-53e9e5e6afed}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\zCore\Utilities">
+      <UniqueIdentifier>{d6be53e7-fb85-496c-9e9b-0c841780cda6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\cpp\headers\base\zSpace_External_C_API.h">
@@ -44,6 +47,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\cpp\headers\zCore\Geometry\zExtGraph.h">
       <Filter>Header Files\zCore\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\cpp\source\zCore\Utilities\RapidMaker.h">
+      <Filter>Source Files\zCore\Utilities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -62,5 +68,14 @@
     <ClCompile Include="..\..\..\cpp\source\zCore\Geometry\zExtGraph.cpp">
       <Filter>Source Files\zCore\Geometry</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\cpp\source\zCore\Utilities\GraphProcessor.cpp">
+      <Filter>Source Files\zCore\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\source\zCore\Utilities\RapidMaker.cpp">
+      <Filter>Source Files\zCore\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\source\zCore\Utilities\zSpatialField.cpp">
+      <Filter>Source Files\zCore\Utilities</Filter>
+    </ClCompile>
   </ItemGroup>
-</Project> 
+</Project>

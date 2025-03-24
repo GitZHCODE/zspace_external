@@ -267,6 +267,163 @@ namespace zSpace.External.Tests
             }
         }
 
+        [TestMethod]
+        public void CanMergeVertices()
+        {
+            using (var graph = new zSpace.External.zExtGraph())
+            {
+                // Create a graph with some vertices close to each other
+                double[] vertices = new double[] {
+                    0.0, 0.0, 0.0,  // Vertex 0
+                    1.0, 0.0, 0.0,  // Vertex 1
+                    1.0, 1.0,.01,   // Vertex 2 - slightly offset in Z
+                    1.0, 1.0, 0.0,  // Vertex 3 - very close to vertex 2
+                    0.0, 1.0, 0.0,  // Vertex 4
+                    0.001, 0.0, 0.0, // Vertex 5 - very close to vertex 0
+                };
+                
+                // Connect vertices
+                int[] edgeConnections = new int[] { 
+                    0, 1,  // Edge 0
+                    1, 2,  // Edge 1
+                    3, 4,  // Edge 2
+                    4, 5   // Edge 3
+                };
+                
+                // Create graph
+                graph.CreateGraph(vertices, edgeConnections);
+                
+                // Verify initial state
+                Assert.AreEqual(6, graph.VertexCount, "Initial vertex count should be 6");
+                Assert.AreEqual(4, graph.EdgeCount, "Initial edge count should be 4");
+                
+                // Act: Merge vertices with tolerance 0.02
+                graph.MergeVertices(0.02);
+                
+                // Assert: Vertex count should be reduced, but edge count maintained
+                Assert.AreEqual(4, graph.VertexCount, "After merging, vertex count should be 4 (0-5 and 2-3 merged)");
+                Assert.AreEqual(4, graph.EdgeCount, "Edge count should remain 4");
+                
+                // Get updated data to verify
+                graph.GetGraphData(out double[] newPositions, out int[] newConnections);
+                
+                // Print debug info
+                Console.WriteLine("After merge:");
+                Console.WriteLine($"Vertex count: {graph.VertexCount}");
+                Console.WriteLine($"Edge count: {graph.EdgeCount}");
+                Console.WriteLine("New vertices:");
+                for (int i = 0; i < newPositions.Length; i += 3)
+                {
+                    Console.WriteLine($"  {i/3}: ({newPositions[i]:F3}, {newPositions[i+1]:F3}, {newPositions[i+2]:F3})");
+                }
+                Console.WriteLine("New connections:");
+                for (int i = 0; i < newConnections.Length; i += 2)
+                {
+                    Console.WriteLine($"  Edge {i/2}: {newConnections[i]} -> {newConnections[i+1]}");
+                }
+                
+                // Verify connections are valid (no index out of range)
+                foreach (int idx in newConnections)
+                {
+                    Assert.IsTrue(idx >= 0 && idx < graph.VertexCount, 
+                        $"Connection index {idx} should be within valid range [0, {graph.VertexCount-1}]");
+                }
+            }
+        }
+
+        [TestMethod]
+        public void CanSeparateGraph()
+        {
+            using (var graph = new zSpace.External.zExtGraph())
+            {
+                // Create a graph with disconnected components
+                double[] vertices = new double[] {
+                    // First component: triangle
+                    0.0, 0.0, 0.0,  // Vertex 0
+                    1.0, 0.0, 0.0,  // Vertex 1
+                    0.5, 1.0, 0.0,  // Vertex 2
+                    
+                    // Second component: line segment (disconnected)
+                    3.0, 0.0, 0.0,  // Vertex 3
+                    4.0, 0.0, 0.0,  // Vertex 4
+                    
+                    // Third component: square (disconnected) 
+                    0.0, 3.0, 0.0,  // Vertex 5
+                    1.0, 3.0, 0.0,  // Vertex 6
+                    1.0, 4.0, 0.0,  // Vertex 7
+                    0.0, 4.0, 0.0   // Vertex 8
+                };
+                
+                // Connections for the three components
+                int[] edgeConnections = new int[] { 
+                    // Triangle edges
+                    0, 1,
+                    1, 2,
+                    2, 0,
+                    
+                    // Line segment edge
+                    3, 4,
+                    
+                    // Square edges
+                    5, 6,
+                    6, 7,
+                    7, 8,
+                    8, 5
+                };
+                
+                // Create graph
+                graph.CreateGraph(vertices, edgeConnections);
+                
+                // Verify initial state
+                Assert.AreEqual(9, graph.VertexCount, "Vertex count should be 9");
+                Assert.AreEqual(8, graph.EdgeCount, "Edge count should be 8");
+                
+                // Act: Separate the graph
+                zExtGraph[] components = graph.SeparateGraph();
+                
+                // Assert: Should have 3 components
+                Assert.AreEqual(3, components.Length, "Should have 3 disconnected components");
+                
+                // Verify the components
+                foreach (var component in components)
+                {
+                    Assert.IsTrue(component.IsValid, "Component should be valid");
+                    
+                    // Print debug info about each component
+                    Console.WriteLine($"Component with {component.VertexCount} vertices and {component.EdgeCount} edges");
+                    
+                    // Verify each component is a valid graph
+                    Assert.IsTrue(component.VertexCount >= 2, "Component should have at least 2 vertices");
+                    Assert.IsTrue(component.EdgeCount >= 1, "Component should have at least 1 edge");
+                }
+                
+                // Find the specific components by their size
+                bool foundTriangle = false;
+                bool foundLine = false;
+                bool foundSquare = false;
+                
+                foreach (var component in components)
+                {
+                    if (component.VertexCount == 3 && component.EdgeCount == 3)
+                    {
+                        foundTriangle = true;
+                    }
+                    else if (component.VertexCount == 2 && component.EdgeCount == 1)
+                    {
+                        foundLine = true;
+                    }
+                    else if (component.VertexCount == 4 && component.EdgeCount == 4)
+                    {
+                        foundSquare = true;
+                    }
+                }
+                
+                Assert.IsTrue(foundTriangle, "Should find a triangle component (3 vertices, 3 edges)");
+                Assert.IsTrue(foundLine, "Should find a line component (2 vertices, 1 edge)");
+                Assert.IsTrue(foundSquare, "Should find a square component (4 vertices, 4 edges)");
+            }
+        }
+
         #region Helper Methods
 
         private static void DiagnoseNativeLibrary()

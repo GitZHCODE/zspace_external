@@ -128,6 +128,29 @@ public:
         double* out_vertexPositions
     );
     
+    /**
+     * Merge vertices in the graph that are within a given tolerance distance of each other.
+     * This operation is useful for cleaning up graphs with duplicate or nearly-duplicate vertices.
+     * After merging, edges will be reindexed to use the updated vertex indices.
+     *
+     * @param tolerance Maximum distance between vertices to be considered for merging
+     * @return True if successful, false otherwise
+     */
+    bool mergeVertices(
+        double tolerance
+    );
+    
+    /**
+     * Separates a graph into its disconnected components.
+     * Each component is a subgraph that has no connections to other components.
+     * 
+     * @param out_components Output vector of separated graph components
+     * @return True if successful, false otherwise
+     */
+    bool separateGraph(
+        std::vector<zExtGraph*>& out_components
+    );
+    
 private:
     /**
      * Update internal attributes (vertex and edge counts).
@@ -150,6 +173,7 @@ private:
     friend int zext_graph_create_graph(zExtGraphHandle, const double*, int, const int*, int);
     friend int zext_graph_set_vertex_positions(zExtGraphHandle, const double*, int);
     friend int zext_graph_get_vertex_positions(zExtGraphHandle, double*);
+    friend int zext_graph_merge_vertices(zExtGraphHandle, double);
 };
 
 } // namespace zSpace
