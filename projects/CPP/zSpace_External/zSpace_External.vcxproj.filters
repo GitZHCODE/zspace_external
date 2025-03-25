@@ -51,6 +51,12 @@
     <ClInclude Include="..\..\..\cpp\source\zCore\Utilities\RapidMaker.h">
       <Filter>Source Files\zCore\Utilities</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\cpp\source\zCore\Utilities\zSMin.h">
+      <Filter>Source Files\zCore\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\cpp\headers\zCore\Geometry\zExtMeshField.h">
+      <Filter>Header Files\zCore\Geometry</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\cpp\source\base\zSpace_External_C_API_Common.cpp">
@@ -76,6 +82,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\cpp\source\zCore\Utilities\zSpatialField.cpp">
       <Filter>Source Files\zCore\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\source\zCore\Utilities\zSMin.cpp">
+      <Filter>Source Files\zCore\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\source\zCore\Geometry\zExtMeshField.cpp">
+      <Filter>Source Files\zCore\Geometry</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

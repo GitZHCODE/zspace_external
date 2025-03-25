@@ -183,7 +183,9 @@
     <ClInclude Include="..\..\..\cpp\headers\base\zSpace_External_C_API_Common.h" />
     <ClInclude Include="..\..\..\cpp\headers\zCore\Geometry\zExtMesh.h" />
     <ClInclude Include="..\..\..\cpp\headers\zCore\Geometry\zExtGraph.h" />
+    <ClInclude Include="..\..\..\cpp\headers\zCore\Geometry\zExtMeshField.h" />
     <ClInclude Include="..\..\..\cpp\source\zCore\Utilities\RapidMaker.h" />
+    <ClInclude Include="..\..\..\cpp\source\zCore\Utilities\zSMin.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\cpp\source\base\zSpace_External_C_API_Common.cpp" />
@@ -191,8 +193,10 @@
     <ClCompile Include="..\..\..\cpp\source\base\zSpace_External_C_API_Graph.cpp" />
     <ClCompile Include="..\..\..\cpp\source\zCore\Geometry\zExtMesh.cpp" />
     <ClCompile Include="..\..\..\cpp\source\zCore\Geometry\zExtGraph.cpp" />
+    <ClCompile Include="..\..\..\cpp\source\zCore\Geometry\zExtMeshField.cpp" />
     <ClCompile Include="..\..\..\cpp\source\zCore\Utilities\GraphProcessor.cpp" />
     <ClCompile Include="..\..\..\cpp\source\zCore\Utilities\RapidMaker.cpp" />
+    <ClCompile Include="..\..\..\cpp\source\zCore\Utilities\zSMin.cpp" />
     <ClCompile Include="..\..\..\cpp\source\zCore\Utilities\zSpatialField.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
