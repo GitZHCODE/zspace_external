@@ -212,7 +212,7 @@ bool zExtMesh::computeGeodesicHeat(
 
         // Compute geodesic distances
 	vector<float> geodesicScalars;
-        myMeshParam.computeGeodesics_Heat(sourceVertices, geodesicScalars);
+        myMeshParam.computeGeodesics_Exact(sourceVertices, geodesicScalars);
         
         // Check if we got valid results
         if (geodesicScalars.size() == 0 || geodesicScalars.size() != (size_t)m_vertexCount) {

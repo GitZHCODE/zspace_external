@@ -9,6 +9,10 @@ namespace zSpace {
         float k,
         MODE mode)
     {
+        if (a.size() != b.size()) return;
+
+        result.resize(a.size());
+
         for (size_t i = 0; i < result.size(); i++)
         {
             float ai = a[i];

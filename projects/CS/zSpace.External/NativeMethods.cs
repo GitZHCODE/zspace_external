@@ -261,5 +261,241 @@ namespace zSpace.External
             bool checkCount,
             [MarshalAs(UnmanagedType.LPArray)] IntPtr[] outComponents,
             ref int outComponentCount);
+        
+        // MeshField Functions
+        
+        /// <summary>
+        /// Creates a new mesh field.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr zext_field_create();
+        
+        /// <summary>
+        /// Destroys a mesh field.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void zext_field_destroy(IntPtr field_handle);
+        
+        /// <summary>
+        /// Checks if a mesh field is valid.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool zext_field_is_valid(IntPtr field_handle);
+        
+        /// <summary>
+        /// Gets the number of vertices in a mesh field.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int zext_field_get_vertex_count(IntPtr field_handle);
+        
+        /// <summary>
+        /// Gets the number of scalar values in a mesh field.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int zext_field_get_value_count(IntPtr field_handle);
+        
+        /// <summary>
+        /// Creates a field with the given bounding box and resolution.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool zext_field_create_field(
+            IntPtr field_handle,
+            [MarshalAs(UnmanagedType.LPArray, SizeConst = 3)] double[] minBB,
+            [MarshalAs(UnmanagedType.LPArray, SizeConst = 3)] double[] maxBB,
+            int numX,
+            int numY);
+        
+        /// <summary>
+        /// Sets the field values.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool zext_field_set_field_values(
+            IntPtr field_handle,
+            [MarshalAs(UnmanagedType.LPArray)] float[] values,
+            int valueCount);
+        
+        /// <summary>
+        /// Gets the field values.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool zext_field_get_field_values(
+            IntPtr field_handle,
+            bool checkCount,
+            [MarshalAs(UnmanagedType.LPArray)] float[] outValues,
+            ref int outValueCount);
+        
+        /// <summary>
+        /// Calculates scalar field values based on distance to a graph's edges.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool zext_field_get_scalars_graph_edge_distance(
+            IntPtr field_handle,
+            IntPtr graph_handle,
+            float offset,
+            bool normalise,
+            [MarshalAs(UnmanagedType.LPArray)] float[] outValues,
+            ref int outValueCount);
+        
+        /// <summary>
+        /// Calculates scalar field values based on distance to a circle.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool zext_field_get_scalars_circle(
+            IntPtr field_handle,
+            [MarshalAs(UnmanagedType.LPArray, SizeConst = 3)] double[] centre,
+            float radius,
+            float offset,
+            bool normalise,
+            [MarshalAs(UnmanagedType.LPArray)] float[] outValues,
+            ref int outValueCount);
+        
+        /// <summary>
+        /// Calculates scalar field values based on distance to a line.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool zext_field_get_scalars_line(
+            IntPtr field_handle,
+            [MarshalAs(UnmanagedType.LPArray, SizeConst = 3)] double[] start,
+            [MarshalAs(UnmanagedType.LPArray, SizeConst = 3)] double[] end,
+            float offset,
+            bool normalise,
+            [MarshalAs(UnmanagedType.LPArray)] float[] outValues,
+            ref int outValueCount);
+        
+        /// <summary>
+        /// Calculates scalar field values based on distance to a polygon defined by a graph.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool zext_field_get_scalars_polygon(
+            IntPtr field_handle,
+            IntPtr graph_handle,
+            bool normalise,
+            [MarshalAs(UnmanagedType.LPArray)] float[] outValues,
+            ref int outValueCount);
+        
+        /// <summary>
+        /// Performs a boolean union operation between two scalar fields.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool zext_field_boolean_union(
+            IntPtr field_handle,
+            [MarshalAs(UnmanagedType.LPArray)] float[] scalarsA,
+            int scalarsACount,
+            [MarshalAs(UnmanagedType.LPArray)] float[] scalarsB,
+            int scalarsBCount,
+            bool normalise,
+            [MarshalAs(UnmanagedType.LPArray)] float[] outValues,
+            ref int outValueCount);
+        
+        /// <summary>
+        /// Performs a boolean subtraction operation between two scalar fields.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool zext_field_boolean_subtract(
+            IntPtr field_handle,
+            [MarshalAs(UnmanagedType.LPArray)] float[] scalarsA,
+            int scalarsACount,
+            [MarshalAs(UnmanagedType.LPArray)] float[] scalarsB,
+            int scalarsBCount,
+            bool normalise,
+            [MarshalAs(UnmanagedType.LPArray)] float[] outValues,
+            ref int outValueCount);
+        
+        /// <summary>
+        /// Performs a boolean intersection operation between two scalar fields.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool zext_field_boolean_intersect(
+            IntPtr field_handle,
+            [MarshalAs(UnmanagedType.LPArray)] float[] scalarsA,
+            int scalarsACount,
+            [MarshalAs(UnmanagedType.LPArray)] float[] scalarsB,
+            int scalarsBCount,
+            bool normalise,
+            [MarshalAs(UnmanagedType.LPArray)] float[] outValues,
+            ref int outValueCount);
+        
+        /// <summary>
+        /// Performs a boolean difference operation between two scalar fields.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool zext_field_boolean_difference(
+            IntPtr field_handle,
+            [MarshalAs(UnmanagedType.LPArray)] float[] scalarsA,
+            int scalarsACount,
+            [MarshalAs(UnmanagedType.LPArray)] float[] scalarsB,
+            int scalarsBCount,
+            bool normalise,
+            [MarshalAs(UnmanagedType.LPArray)] float[] outValues,
+            ref int outValueCount);
+        
+        /// <summary>
+        /// Computes smooth minimum between two scalar fields.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool zext_field_get_scalars_smin(
+            IntPtr field_handle,
+            [MarshalAs(UnmanagedType.LPArray)] float[] scalarsA,
+            int scalarsACount,
+            [MarshalAs(UnmanagedType.LPArray)] float[] scalarsB,
+            int scalarsBCount,
+            float k,
+            int mode,
+            [MarshalAs(UnmanagedType.LPArray)] float[] outValues,
+            ref int outValueCount);
+        
+        /// <summary>
+        /// Gets the field bounds.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool zext_field_get_bounds(
+            IntPtr field_handle,
+            [MarshalAs(UnmanagedType.LPArray, SizeConst = 3)] double[] minBB,
+            [MarshalAs(UnmanagedType.LPArray, SizeConst = 3)] double[] maxBB);
+        
+        /// <summary>
+        /// Gets iso contour from the field at a given threshold value.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool zext_field_get_iso_contour(
+            IntPtr field_handle,
+            IntPtr graph_handle,
+            float threshold);
+        
+        /// <summary>
+        /// Gets field gradient vectors.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool zext_field_get_gradients(
+            IntPtr field_handle,
+            bool checkCount,
+            [MarshalAs(UnmanagedType.LPArray)] double[] outGradientVectors,
+            ref int outVectorCount);
+            
+        /// <summary>
+        /// Gets the vertex ID at the given position.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool zext_field_get_id(
+            IntPtr field_handle,
+            [MarshalAs(UnmanagedType.LPArray, SizeConst = 3)] double[] position,
+            out int outId);
     }
 } 

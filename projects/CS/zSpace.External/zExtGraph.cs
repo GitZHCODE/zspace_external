@@ -9,7 +9,7 @@ namespace zSpace.External
     /// </summary>
     public class zExtGraph : IDisposable
     {
-        private IntPtr _handle;
+        internal IntPtr _handle;
         private bool _disposed;
 
         /// <summary>

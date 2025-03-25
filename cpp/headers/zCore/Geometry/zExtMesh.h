@@ -158,13 +158,12 @@ public:
         std::vector<zExtGraph*>& out_contours
     );
     
-    
-private:
     /**
-     * Update internal attributes (vertex and face counts).
-     */
+    * Update internal attributes (vertex and face counts).
+    */
     void updateAttributes();
-    
+
+private:
     // The underlying mesh object
     std::unique_ptr<zObjMesh> m_mesh;
     

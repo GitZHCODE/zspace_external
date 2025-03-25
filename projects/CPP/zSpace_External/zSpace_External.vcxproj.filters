@@ -68,6 +68,9 @@
     <ClCompile Include="..\..\..\cpp\source\base\zSpace_External_C_API_Graph.cpp">
       <Filter>Source Files\base</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\cpp\source\base\zSpace_External_C_API_MeshField.cpp">
+      <Filter>Source Files\base</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\cpp\source\zCore\Geometry\zExtMesh.cpp">
       <Filter>Source Files\zCore\Geometry</Filter>
     </ClCompile>

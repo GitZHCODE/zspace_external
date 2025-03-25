@@ -191,6 +191,7 @@
     <ClCompile Include="..\..\..\cpp\source\base\zSpace_External_C_API_Common.cpp" />
     <ClCompile Include="..\..\..\cpp\source\base\zSpace_External_C_API_Mesh.cpp" />
     <ClCompile Include="..\..\..\cpp\source\base\zSpace_External_C_API_Graph.cpp" />
+    <ClCompile Include="..\..\..\cpp\source\base\zSpace_External_C_API_MeshField.cpp" />
     <ClCompile Include="..\..\..\cpp\source\zCore\Geometry\zExtMesh.cpp" />
     <ClCompile Include="..\..\..\cpp\source\zCore\Geometry\zExtGraph.cpp" />
     <ClCompile Include="..\..\..\cpp\source\zCore\Geometry\zExtMeshField.cpp" />

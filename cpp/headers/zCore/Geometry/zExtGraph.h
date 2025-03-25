@@ -151,12 +151,12 @@ public:
         std::vector<zExtGraph*>& out_components
     );
     
-private:
     /**
-     * Update internal attributes (vertex and edge counts).
-     */
+    * Update internal attributes (vertex and edge counts).
+    */
     void updateAttributes();
-    
+
+private:
     // The underlying graph object
     std::unique_ptr<zObjGraph> m_graph;
     
