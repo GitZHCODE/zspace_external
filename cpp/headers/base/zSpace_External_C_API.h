@@ -654,6 +654,16 @@ ZSPACE_EXTERNAL_API int zext_field_get_id(zExtMeshFieldHandle field_handle,
 ZSPACE_EXTERNAL_API int zext_field_get_positions(zExtMeshFieldHandle field_handle,
                                                 double* out_positions);
 
+/**
+ * Get the mesh representation of the field.
+ * 
+ * @param field_handle Handle to the mesh field.
+ * @param out_mesh_handle Pointer to receive the mesh handle.
+ * @return 1 if successful, 0 if an error occurred.
+ */
+ZSPACE_EXTERNAL_API int zext_field_get_mesh(zExtMeshFieldHandle field_handle,
+                                          zExtMeshHandle mesh_handle);
+
 #ifdef __cplusplus
 }
 #endif

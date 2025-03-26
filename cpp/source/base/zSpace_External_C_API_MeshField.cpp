@@ -11,6 +11,7 @@
 // Type conversion helpers
 #define FIELD_CAST(handle) static_cast<zSpace::zExtMeshField*>(handle)
 #define GRAPH_CAST(handle) static_cast<zSpace::zExtGraph*>(handle)
+#define MESH_CAST(handle) static_cast<zSpace::zExtMesh*>(handle)
 
 // Error handling macros (defined in zSpace_External_C_API_Common.h)
 // TRY_CATCH_RETURN - Execute code inside a try-catch block
@@ -784,5 +785,26 @@ extern "C" {
             std::copy(positions.begin(), positions.end(), out_positions);
             return 1;
             , 0)
+    }
+
+    ZSPACE_EXTERNAL_API int zext_field_get_mesh(zExtMeshFieldHandle field_handle,
+        zExtMeshHandle mesh_handle) {
+        TRY_CATCH_RETURN(
+            if (!field_handle) {
+                zSpace::SetError("Invalid field handle");
+                return 0;
+            }
+
+            if (!mesh_handle) {
+                zSpace::SetError("Invalid output parameter");
+                return 0;
+            }
+
+            auto* field = FIELD_CAST(field_handle);
+            auto* mesh = MESH_CAST(mesh_handle);
+
+            // Set the output handle
+            return field->getMesh(mesh) ? 1 : 0;
+            ,0)
     }
 }

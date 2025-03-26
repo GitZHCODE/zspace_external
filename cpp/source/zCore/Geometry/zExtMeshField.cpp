@@ -427,5 +427,25 @@ namespace zSpace {
         }
     }
 
+    bool zExtMeshField::getMesh(zExtMesh* mesh) {
+        try {
+            if (!m_field) {
+                return false;
+            }
+            zObjMesh& m = mesh->getRawMesh();
+
+            zFnMeshScalarField fnField(*m_field);
+            m = *fnField.getRawMesh();
+
+            // Update the mesh attributes to ensure vertex and face counts are correct
+            mesh->updateAttributes();
+
+            return true;
+        }
+        catch (const std::exception& e) {
+            return false;
+        }
+    }
+
 
 } // namespace zSpace 

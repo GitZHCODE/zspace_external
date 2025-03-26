@@ -14,6 +14,7 @@
 // Include the C API header for declarations
 #include "headers/base/zSpace_External_C_API.h"
 #include "headers/zCore/Geometry/zExtGraph.h"
+#include "headers/zCore/Geometry/zExtMesh.h"
 
 // Forward declaration to avoid including zObjMeshField.h directly
 namespace zSpace {
@@ -341,6 +342,16 @@ public:
     );
 
     /**
+     * Get the mesh representation of the field.
+     * 
+     * @param mesh Output pointer to store the mesh object
+     * @return True if successful, false otherwise.
+     */
+    bool getMesh(
+        zExtMesh* mesh
+    );
+
+    /**
     * Update internal attributes (vertex and value counts).
     */
     void updateAttributes();
@@ -377,6 +388,7 @@ private:
     friend int zext_field_get_gradients(zExtMeshFieldHandle, double*, int*);
     friend int zext_field_get_id(zExtMeshFieldHandle, double*, int*);
     friend int zext_field_get_positions(zExtMeshFieldHandle, double*, int*);
+    friend int zext_field_get_mesh(zExtMeshFieldHandle, zExtMeshHandle);
 };
 
 } // namespace zSpace

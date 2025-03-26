@@ -701,22 +701,43 @@ namespace zSpace.External
         public double[] GetPositions()
         {
             ThrowIfDisposed();
-            
-            // Get the vertex count to pre-allocate the positions array
-            int vertexCount = VertexCount;
-            if (vertexCount <= 0)
+
+            if (VertexCount == 0)
+            {
                 return new double[0];
-            
-            // Pre-allocate the positions array (3 components per vertex)
-            double[] positions = new double[vertexCount * 3];
-            
-            Debug.WriteLine($"Getting positions for {vertexCount} vertices");
+            }
+
+            double[] positions = new double[VertexCount * 3];
             if (!NativeMethods.zext_field_get_positions(_handle, positions))
             {
                 ThrowLastError("Failed to get vertex positions");
             }
-            
+
             return positions;
+        }
+
+        /// <summary>
+        /// Gets the mesh representation of the field.
+        /// </summary>
+        /// <returns>A new mesh object representing the field.</returns>
+        /// <exception cref="ObjectDisposedException">Thrown when the field has been disposed.</exception>
+        /// <exception cref="ZSpaceExternalException">Thrown when the operation fails.</exception>
+        public zExtMesh GetMesh()
+        {
+            ThrowIfDisposed();
+
+            // Create a new graph to hold the contour
+            zExtMesh mesh = new zExtMesh();
+
+            // Extract the contour
+            Debug.WriteLine($"Getting mesh from field");
+            if (!NativeMethods.zext_field_get_mesh(_handle, mesh._handle))
+            {
+                mesh.Dispose();
+                ThrowLastError("Failed to get iso contour");
+            }
+
+            return mesh;
         }
 
         /// <summary>

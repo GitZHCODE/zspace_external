@@ -541,6 +541,44 @@ namespace zSpace.External.Tests
         }
 
         [TestMethod]
+        public void CanGetMesh()
+        {
+            using (var field = new zExtMeshField())
+            {
+                // Create a 10x10 field
+                double[] minBB = new double[] { -1.0, -1.0, 0.0 };
+                double[] maxBB = new double[] { 1.0, 1.0, 0.0 };
+                int numX = 10;
+                int numY = 10;
+                
+                field.CreateField(minBB, maxBB, numX, numY);
+                
+                // Get the mesh representation
+                using (var mesh = field.GetMesh())
+                {
+                    // Verify mesh is valid
+                    Assert.IsNotNull(mesh, "Mesh should not be null");
+                    Assert.IsTrue(mesh.IsValid, "Mesh should be valid");
+                    
+                    // Verify mesh has the same number of vertices as the field
+                    Assert.AreEqual(field.VertexCount, mesh.VertexCount, 
+                        "Mesh should have the same number of vertices as the field");
+                    
+                    // Get mesh positions and field positions
+                    double[] fieldPositions = field.GetPositions();
+                    
+                    // Verify positions match - note that fieldPositions has 3 components per vertex
+                    Assert.AreEqual(mesh.VertexCount * 3, fieldPositions.Length,
+                        "Mesh vertex count * 3 should equal field positions array length (x,y,z per vertex)");
+                    
+                    // Output some diagnostic information
+                    Console.WriteLine($"Mesh vertex count: {mesh.VertexCount}");
+                    Console.WriteLine($"Field vertex count: {field.VertexCount}");
+                }
+            }
+        }
+
+        [TestMethod]
         public void CanGetScalarsForDifferentShapes()
         {
             using (var field = new zExtMeshField())

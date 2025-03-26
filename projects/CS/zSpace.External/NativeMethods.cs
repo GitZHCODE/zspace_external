@@ -506,5 +506,14 @@ namespace zSpace.External
         public static extern bool zext_field_get_positions(
             IntPtr field_handle,
             [MarshalAs(UnmanagedType.LPArray)] double[] outPositions);
+
+        /// <summary>
+        /// Gets the mesh representation of the field.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool zext_field_get_mesh(
+            IntPtr field_handle,
+            IntPtr outMeshHandle);
     }
 } 
