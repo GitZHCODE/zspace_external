@@ -757,4 +757,32 @@ extern "C" {
         return 1;
         , 0)
     }
+
+    ZSPACE_EXTERNAL_API int zext_field_get_positions(zExtMeshFieldHandle field_handle,
+        double* out_positions) {
+        TRY_CATCH_RETURN(
+            if (!field_handle) {
+                zSpace::SetError("Invalid field handle");
+                return 0;
+            }
+
+            if (!out_positions) {
+                zSpace::SetError("Invalid output parameter");
+                return 0;
+            }
+
+            auto* field = FIELD_CAST(field_handle);
+            
+            // Get the positions
+            std::vector<double> positions;
+            if (!field->getPositions(positions)) {
+                zSpace::SetError("Failed to get vertex positions");
+                return 0;
+            }
+
+            // Copy the positions to the output array
+            std::copy(positions.begin(), positions.end(), out_positions);
+            return 1;
+            , 0)
+    }
 }

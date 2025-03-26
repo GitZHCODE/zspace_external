@@ -402,4 +402,30 @@ namespace zSpace {
 		}
 	}
 
+    bool zExtMeshField::getPositions(
+        std::vector<double>& positions
+    ) {
+        try {
+            if (!m_field) {
+                return false;
+            }
+            zFnMeshScalarField fnField(*m_field);
+            vector<zPoint> pos;
+            fnField.getPositions(pos);
+            
+            positions.reserve(pos.size() * 3);
+            for (size_t i = 0; i < pos.size(); i++)
+            {
+                positions.push_back(pos[i].x);
+                positions.push_back(pos[i].y);
+                positions.push_back(pos[i].z);
+            }
+            return true;
+        }
+        catch (const std::exception&) {
+            return false;
+        }
+    }
+
+
 } // namespace zSpace 

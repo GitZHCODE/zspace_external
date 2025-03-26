@@ -497,5 +497,14 @@ namespace zSpace.External
             IntPtr field_handle,
             [MarshalAs(UnmanagedType.LPArray, SizeConst = 3)] double[] position,
             out int outId);
+
+        /// <summary>
+        /// Gets all vertex positions from the field.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool zext_field_get_positions(
+            IntPtr field_handle,
+            [MarshalAs(UnmanagedType.LPArray)] double[] outPositions);
     }
 } 

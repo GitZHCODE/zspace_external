@@ -644,6 +644,16 @@ ZSPACE_EXTERNAL_API int zext_field_get_id(zExtMeshFieldHandle field_handle,
                                          double* position,
                                          int* out_id);
 
+/**
+ * Get all vertex positions from the field.
+ * 
+ * @param field_handle Handle to the mesh field.
+ * @param out_positions Array to store vertex positions (x1, y1, z1, x2, y2, z2, ...)
+ * @return 1 if successful, 0 if an error occurred.
+ */
+ZSPACE_EXTERNAL_API int zext_field_get_positions(zExtMeshFieldHandle field_handle,
+                                                double* out_positions);
+
 #ifdef __cplusplus
 }
 #endif

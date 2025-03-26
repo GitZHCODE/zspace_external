@@ -493,5 +493,153 @@ namespace zSpace.External.Tests
                 }
             }
         }
+
+        [TestMethod]
+        public void CanGetPositions()
+        {
+            using (var field = new zExtMeshField())
+            {
+                // Create a 10x10 field
+                double[] minBB = new double[] { -1.0, -1.0, 0.0 };
+                double[] maxBB = new double[] { 1.0, 1.0, 0.0 };
+                int numX = 10;
+                int numY = 10;
+                
+                field.CreateField(minBB, maxBB, numX, numY);
+                
+                // Get all vertex positions
+                double[] positions = field.GetPositions();
+                
+                // Verify positions array
+                Assert.IsNotNull(positions, "Positions array should not be null");
+                Assert.AreEqual(field.VertexCount * 3, positions.Length, 
+                    $"Positions array should have 3 values per vertex (got {positions.Length} for {field.VertexCount} vertices)");
+                
+                // Verify positions are within bounds
+                for (int i = 0; i < positions.Length; i += 3)
+                {
+                    double x = positions[i];
+                    double y = positions[i + 1];
+                    double z = positions[i + 2];
+                    
+                    Assert.IsTrue(x >= minBB[0] && x <= maxBB[0], 
+                        $"X coordinate {x} should be within bounds [{minBB[0]}, {maxBB[0]}]");
+                    Assert.IsTrue(y >= minBB[1] && y <= maxBB[1], 
+                        $"Y coordinate {y} should be within bounds [{minBB[1]}, {maxBB[1]}]");
+                    Assert.IsTrue(z >= minBB[2] && z <= maxBB[2], 
+                        $"Z coordinate {z} should be within bounds [{minBB[2]}, {maxBB[2]}]");
+                }
+                
+                // Output some positions for inspection
+                Console.WriteLine("Sample vertex positions:");
+                for (int i = 0; i < Math.Min(5, field.VertexCount); i++)
+                {
+                    int baseIndex = i * 3;
+                    Console.WriteLine($"Vertex {i}: ({positions[baseIndex]:F4}, {positions[baseIndex+1]:F4}, {positions[baseIndex+2]:F4})");
+                }
+            }
+        }
+
+        [TestMethod]
+        public void CanGetScalarsForDifferentShapes()
+        {
+            using (var field = new zExtMeshField())
+            {
+                // Create a 20x20 field for better resolution
+                double[] minBB = new double[] { -1.0, -1.0, 0.0 };
+                double[] maxBB = new double[] { 1.0, 1.0, 0.0 };
+                int numX = 20;
+                int numY = 20;
+                
+                field.CreateField(minBB, maxBB, numX, numY);
+                float[] lineValues = null;
+                float[] graphValues = null;
+                float[] polygonValues = null;
+
+                // Test 1: GetScalarsLine
+                Console.WriteLine("\nTesting GetScalarsLine...");
+                double[] start = new double[] { -0.5, 0.0, 0.0 };
+                double[] end = new double[] { 0.5, 0.0, 0.0 };
+                lineValues = field.GetScalarsLine(start, end, 0.0f, false);
+                
+                Assert.IsNotNull(lineValues, "Line values should not be null");
+                Assert.AreEqual(field.ValueCount, lineValues.Length, "Line values should match field value count");
+                Assert.IsTrue(lineValues.Any(v => v != 0), "Line values should have non-zero values");
+                Assert.IsTrue(lineValues.Distinct().Count() > 1, "Line values should not be the same");
+
+                // Test 2: GetScalarsGraphEdgeDistance
+                Console.WriteLine("\nTesting GetScalarsGraphEdgeDistance...");
+                using (var graph = new zExtGraph())
+                {
+                    // Create a simple square graph
+                    double[] vertices = new double[] 
+                    {
+                        -0.5, -0.5, 0.0,  // Bottom left
+                        0.5, -0.5, 0.0,   // Bottom right
+                        0.5, 0.5, 0.0,    // Top right
+                        -0.5, 0.5, 0.0    // Top left
+                    };
+                    
+                    int[] edges = new int[] 
+                    {
+                        0, 1,  // Bottom edge
+                        1, 2,  // Right edge
+                        2, 3,  // Top edge
+                        3, 0   // Left edge
+                    };
+                    
+                    graph.CreateGraph(vertices, edges);
+                    
+                    graphValues = field.GetScalarsGraphEdgeDistance(graph, 0.0f, false);
+                    
+                    Assert.IsNotNull(graphValues, "Graph values should not be null");
+                    Assert.AreEqual(field.ValueCount, graphValues.Length, "Graph values should match field value count");
+                    Assert.IsTrue(graphValues.Any(v => v != 0), "Graph values should have non-zero values");
+                    Assert.IsTrue(graphValues.Distinct().Count() > 1, "Graph values should not be the same");
+                }
+                
+                // Test 3: GetScalarsPolygon
+                Console.WriteLine("\nTesting GetScalarsPolygon...");
+                using (var polygonGraph = new zExtGraph())
+                {
+                    // Create a triangle polygon
+                    double[] vertices = new double[] 
+                    {
+                        0.0, 0.0, 0.0,    // Center
+                        0.5, 0.0, 0.0,    // Right
+                        0.25, 0.5, 0.0    // Top
+                    };
+                    
+                    int[] edges = new int[] 
+                    {
+                        0, 1,  // Bottom edge
+                        1, 2,  // Right edge
+                        2, 0   // Left edge
+                    };
+                    
+                    polygonGraph.CreateGraph(vertices, edges);
+                    
+                    polygonValues = field.GetScalarsPolygon(polygonGraph, false);
+                    
+                    Assert.IsNotNull(polygonValues, "Polygon values should not be null");
+                    Assert.AreEqual(field.ValueCount, polygonValues.Length, "Polygon values should match field value count");
+                    Assert.IsTrue(polygonValues.Any(v => v != 0), "Polygon values should have non-zero values");
+                    Assert.IsTrue(polygonValues.Distinct().Count() > 1, "Polygon values should not be the same");
+                }
+                
+                // Output value ranges for inspection
+                Console.WriteLine("\nValue ranges for each shape:");
+                Console.WriteLine($"Line values: {lineValues.Min():F4} to {lineValues.Max():F4}");
+                Console.WriteLine($"Graph values: {graphValues.Min():F4} to {graphValues.Max():F4}");
+                Console.WriteLine($"Polygon values: {polygonValues.Min():F4} to {polygonValues.Max():F4}");
+                
+                // Set field values to line values and get iso-contour for visualization
+                field.SetFieldValues(lineValues);
+                using (var contour = field.GetIsoContour(0.1f))
+                {
+                    Console.WriteLine($"Line iso-contour: VertexCount={contour.VertexCount}, EdgeCount={contour.EdgeCount}");
+                }
+            }
+        }
     }
 }

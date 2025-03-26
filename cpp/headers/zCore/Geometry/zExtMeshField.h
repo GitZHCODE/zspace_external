@@ -331,6 +331,16 @@ public:
     );
 
     /**
+     * Get all vertex positions from the field.
+     *
+     * @param position Output array of 3 doubles representing the position (x, y, z)
+     * @return True if successful, false otherwise.
+     */
+    bool getPositions(
+        std::vector<double>& positions
+    );
+
+    /**
     * Update internal attributes (vertex and value counts).
     */
     void updateAttributes();
@@ -366,6 +376,7 @@ private:
     friend int zext_field_get_iso_contour(zExtMeshFieldHandle, zExtGraphHandle, float);
     friend int zext_field_get_gradients(zExtMeshFieldHandle, double*, int*);
     friend int zext_field_get_id(zExtMeshFieldHandle, double*, int*);
+    friend int zext_field_get_positions(zExtMeshFieldHandle, double*, int*);
 };
 
 } // namespace zSpace

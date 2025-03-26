@@ -694,6 +694,32 @@ namespace zSpace.External
         }
 
         /// <summary>
+        /// Gets all vertex positions from the field.
+        /// </summary>
+        /// <returns>Array of vertex positions (x1, y1, z1, x2, y2, z2, ...)</returns>
+        /// <exception cref="ZSpaceExternalException">Thrown if the operation fails.</exception>
+        public double[] GetPositions()
+        {
+            ThrowIfDisposed();
+            
+            // Get the vertex count to pre-allocate the positions array
+            int vertexCount = VertexCount;
+            if (vertexCount <= 0)
+                return new double[0];
+            
+            // Pre-allocate the positions array (3 components per vertex)
+            double[] positions = new double[vertexCount * 3];
+            
+            Debug.WriteLine($"Getting positions for {vertexCount} vertices");
+            if (!NativeMethods.zext_field_get_positions(_handle, positions))
+            {
+                ThrowLastError("Failed to get vertex positions");
+            }
+            
+            return positions;
+        }
+
+        /// <summary>
         /// Disposes the mesh field, releasing unmanaged resources.
         /// </summary>
         public void Dispose()
