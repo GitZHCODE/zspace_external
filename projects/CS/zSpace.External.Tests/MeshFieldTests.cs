@@ -579,6 +579,89 @@ namespace zSpace.External.Tests
         }
 
         [TestMethod]
+        public void CanPerformWeightedSMin()
+        {
+            using (var field = new zExtMeshField())
+            {
+                // Create a 20x20 field
+                double[] minBB = new double[] { -1.0, -1.0, 0.0 };
+                double[] maxBB = new double[] { 1.0, 1.0, 0.0 };
+                int numX = 20;
+                int numY = 20;
+                
+                field.CreateField(minBB, maxBB, numX, numY);
+                
+                // Create two circle distance fields
+                double[] center1 = new double[] { -0.3, 0.0, 0.0 };
+                double[] center2 = new double[] { 0.3, 0.0, 0.0 };
+                float radius = 0.5f;
+                bool normalize = false;
+                
+                // Get the circle values
+                float[] circle1 = field.GetScalarsCircle(center1, radius, 0.0f, normalize);
+                float[] circle2 = field.GetScalarsCircle(center2, radius, 0.0f, normalize);
+                
+                // Verify circle values are valid
+                Assert.IsTrue(circle1.Length > 0, "Circle 1 should have values");
+                Assert.IsTrue(circle2.Length > 0, "Circle 2 should have values");
+                
+                // Test with different weights
+                float k = 0.1f; // Smoothing factor
+                
+                // Weight = 0.0 (should be mostly circle1)
+                float[] resultA = field.GetScalarsSMinExponentialWeighted(circle1, circle2, k, 0.0f);
+                
+                // Weight = 0.5 (equal blend)
+                float[] resultB = field.GetScalarsSMinExponentialWeighted(circle1, circle2, k, 0.5f);
+                
+                // Weight = 1.0 (should be mostly circle2)
+                float[] resultC = field.GetScalarsSMinExponentialWeighted(circle1, circle2, k, 1.0f);
+                
+                // Verify results
+                Assert.AreEqual(field.ValueCount, resultA.Length, "Result A should have same length as field values");
+                Assert.AreEqual(field.ValueCount, resultB.Length, "Result B should have same length as field values");
+                Assert.AreEqual(field.ValueCount, resultC.Length, "Result C should have same length as field values");
+                
+                // Verify weights are properly applied - calculate average distance to circle centers
+                double avgA = CalculateAverageDifference(resultA, circle1);
+                double avgB = CalculateAverageDifference(resultB, circle1);
+                double avgC = CalculateAverageDifference(resultC, circle1);
+                
+                // Output results
+                Console.WriteLine($"Average difference from circle1 with weight 0.0: {avgA}");
+                Console.WriteLine($"Average difference from circle1 with weight 0.5: {avgB}");
+                Console.WriteLine($"Average difference from circle1 with weight 1.0: {avgC}");
+                
+                // As weight increases (towards circle2), difference from circle1 should increase
+                Assert.IsTrue(avgA <= avgB, "Weight 0.0 result should be closer to circle1 than weight 0.5 result");
+                Assert.IsTrue(avgB <= avgC, "Weight 0.5 result should be closer to circle1 than weight 1.0 result");
+                
+                // Extract iso-contours to visualize results
+                field.SetFieldValues(resultB);
+                using (zExtGraph contour = field.GetIsoContour(0.0f))
+                {
+                    Console.WriteLine($"Weighted SMin (w=0.5) iso-contour: Vertices={contour.VertexCount}, Edges={contour.EdgeCount}");
+                    Assert.IsTrue(contour.VertexCount > 0, "Contour should have vertices");
+                }
+            }
+        }
+        
+        // Helper method to calculate average difference between two scalar fields
+        private double CalculateAverageDifference(float[] field1, float[] field2)
+        {
+            if (field1.Length != field2.Length || field1.Length == 0)
+                return double.NaN;
+                
+            double totalDiff = 0;
+            for (int i = 0; i < field1.Length; i++)
+            {
+                totalDiff += Math.Abs(field1[i] - field2[i]);
+            }
+            
+            return totalDiff / field1.Length;
+        }
+
+        [TestMethod]
         public void CanGetScalarsForDifferentShapes()
         {
             using (var field = new zExtMeshField())

@@ -585,6 +585,58 @@ extern "C" {
         , 0)
     }
 
+    ZSPACE_EXTERNAL_API int zext_field_get_scalars_smin_exponential_weighted(zExtMeshFieldHandle field_handle,
+        const float* scalars_A,
+        int scalars_A_count,
+        const float* scalars_B,
+        int scalars_B_count,
+        float k,
+        float wt,
+        float* out_values,
+        int* out_value_count) {
+        TRY_CATCH_RETURN(
+            if (!field_handle) {
+                zSpace::SetError("Invalid field handle");
+                return 0;
+            }
+
+        if (!scalars_A || scalars_A_count <= 0 || !scalars_B || scalars_B_count <= 0) {
+            zSpace::SetError("Invalid scalar arrays");
+            return 0;
+        }
+
+        if (!out_value_count) {
+            zSpace::SetError("Invalid output parameter");
+            return 0;
+        }
+
+        auto* field = FIELD_CAST(field_handle);
+
+        // Convert C arrays to vector
+        std::vector<float> vecA(scalars_A, scalars_A + scalars_A_count);
+        std::vector<float> vecB(scalars_B, scalars_B + scalars_B_count);
+
+        // Get result into a temporary vector
+        std::vector<float> result;
+        if (!field->getScalars_smin_exponential_weighted(result, vecA, vecB, k, wt)) {
+            return 0;
+        }
+
+        // Set the output count
+        *out_value_count = static_cast<int>(result.size());
+
+        // If out_values is null, we only return the count
+        if (!out_values) return 1;
+
+        // Otherwise, copy the data to the output array
+        for (int i = 0; i < result.size(); i++) {
+            out_values[i] = result[i];
+        }
+
+        return 1;
+        , 0)
+    }
+
     ZSPACE_EXTERNAL_API int zext_field_get_scalars_smin_multiple(zExtMeshFieldHandle field_handle,
         const float* const* scalar_arrays,
         const int* scalar_counts,

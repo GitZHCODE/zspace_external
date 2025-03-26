@@ -300,6 +300,23 @@ namespace zSpace {
         }
     }
 
+    bool zExtMeshField::getScalars_smin_exponential_weighted(
+        std::vector<float>& out_scalars,
+        const std::vector<float>& scalars_A,
+        const std::vector<float>& scalars_B,
+        float k,
+        float wt
+    ) {
+        try {
+            zSpace::zSMin smin;
+            smin.smin_exponential_weighted(scalars_A, scalars_B, out_scalars, k, wt);
+            return true;
+        }
+        catch (const std::exception&) {
+            return false;
+        }
+    }
+
     bool zExtMeshField::getBounds(
         double* minBB,
         double* maxBB

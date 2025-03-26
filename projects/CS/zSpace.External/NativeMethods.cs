@@ -442,7 +442,7 @@ namespace zSpace.External
             ref int outValueCount);
         
         /// <summary>
-        /// Computes smooth minimum between two scalar fields.
+        /// Gets scalar field values using smooth minimum (smin) operation between two scalar fields.
         /// </summary>
         [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.I1)]
@@ -455,7 +455,8 @@ namespace zSpace.External
             float k,
             int mode,
             [MarshalAs(UnmanagedType.LPArray)] float[] outValues,
-            ref int outValueCount);
+            ref int outValueCount,
+            bool checkCount);
         
         /// <summary>
         /// Gets the field bounds.
@@ -515,5 +516,21 @@ namespace zSpace.External
         public static extern bool zext_field_get_mesh(
             IntPtr field_handle,
             IntPtr outMeshHandle);
+            
+        /// <summary>
+        /// Computes weighted smooth minimum between two scalar fields using exponential mode.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool zext_field_get_scalars_smin_exponential_weighted(
+            IntPtr field_handle,
+            [MarshalAs(UnmanagedType.LPArray)] float[] scalars_A,
+            int scalars_A_count,
+            [MarshalAs(UnmanagedType.LPArray)] float[] scalars_B,
+            int scalars_B_count,
+            float k,
+            float wt,
+            [MarshalAs(UnmanagedType.LPArray)] float[] out_values,
+            ref int out_value_count);
     }
 } 

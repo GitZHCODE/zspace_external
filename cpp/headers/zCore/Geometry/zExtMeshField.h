@@ -270,6 +270,24 @@ public:
     );
 
     /**
+       * Compute weighted smooth minimum between two scalar fields using exponential mode.
+       *
+       * @param out_scalars Output vector to store the resulting field values
+       * @param scalars_A First input scalar field values
+       * @param scalars_B Second input scalar field values
+       * @param k Smoothing factor
+       * @param wt Weight between two input scalar field values (0=first, 1=second)
+       * @return True if successful, false otherwise.
+       */
+    bool getScalars_smin_exponential_weighted(
+        std::vector<float>& out_scalars,
+        const std::vector<float>& scalars_A,
+        const std::vector<float>& scalars_B,
+        float k,
+        float wt
+    );
+
+    /**
      * Compute smooth minimum across multiple scalar fields.
      * 
      * @param out_scalars Output vector to store the resulting field values
@@ -382,6 +400,7 @@ private:
     friend int zext_field_boolean_intersect(zExtMeshFieldHandle, const float*, int, const float*, int, bool, float*, int*);
     friend int zext_field_boolean_difference(zExtMeshFieldHandle, const float*, int, const float*, int, bool, float*, int*);
     friend int zext_field_get_scalars_smin(zExtMeshFieldHandle, const float*, int, const float*, int, float, int, float*, int*);
+    friend int zext_field_get_scalars_smin_exponential_weighted(zExtMeshFieldHandle, const float*, int, const float*, int, float, int, float*, float*);
     friend int zext_field_get_scalars_smin_multiple(zExtMeshFieldHandle, const float* const*, const int*, int, float, int, float*, int*);
     friend int zext_field_get_bounds(zExtMeshFieldHandle, double*, double*);
     friend int zext_field_get_iso_contour(zExtMeshFieldHandle, zExtGraphHandle, float);

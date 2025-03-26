@@ -18,4 +18,8 @@ ZSPACE_EXTERNAL_API const char* zext_get_last_error() {
     return zSpace::g_lastErrorMessage.c_str();
 }
 
+ZSPACE_EXTERNAL_API void zext_clear_last_error() {
+    zSpace::g_lastErrorMessage.clear();
+}
+
 } // extern "C" 

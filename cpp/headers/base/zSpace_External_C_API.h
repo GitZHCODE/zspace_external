@@ -38,6 +38,11 @@ typedef void* zExtMeshFieldHandle;
  */
 ZSPACE_EXTERNAL_API const char* zext_get_last_error();
 
+/**
+ * Clear the last error message.
+ */
+ZSPACE_EXTERNAL_API void zext_clear_last_error();
+
 //--- MESH API ---//
 
 /**
@@ -571,6 +576,30 @@ ZSPACE_EXTERNAL_API int zext_field_get_scalars_smin(zExtMeshFieldHandle field_ha
                                                    int mode,
                                                    float* out_values,
                                                    int* out_value_count);
+
+/**
+ * Compute weighted smooth minimum between two scalar fields using exponential mode.
+ *
+ * @param field_handle Handle to the mesh field.
+ * @param scalars_A First input scalar field values
+ * @param scalars_A_count Number of values in the first input array
+ * @param scalars_B Second input scalar field values
+ * @param scalars_B_count Number of values in the second input array
+ * @param k Smoothing factor
+ * @param wt Weight between two input scalar field values (0=first, 1=second)
+ * @param out_values Output array for field values (pre-allocated with size equal to value count)
+ * @param out_value_count Pointer to receive the number of values
+ * @return 1 if successful, 0 if an error occurred.
+ */
+ZSPACE_EXTERNAL_API int zext_field_get_scalars_smin_exponential_weighted(zExtMeshFieldHandle field_handle,
+    const float* scalars_A,
+    int scalars_A_count,
+    const float* scalars_B,
+    int scalars_B_count,
+    float k,
+    float wt,
+    float* out_values,
+    int* out_value_count);
 
 /**
  * Compute smooth minimum across multiple scalar fields.

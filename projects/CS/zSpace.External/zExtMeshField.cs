@@ -520,15 +520,15 @@ namespace zSpace.External
         }
 
         /// <summary>
-        /// Computes smooth minimum between two scalar fields.
+        /// Calculates scalar field values using smooth minimum (smin) operation between two scalar fields.
         /// </summary>
-        /// <param name="scalarsA">First input scalar field values</param>
-        /// <param name="scalarsB">Second input scalar field values</param>
-        /// <param name="k">Smoothing factor</param>
-        /// <param name="mode">Smooth minimum mode (0=polynomial, 1=exponential)</param>
-        /// <returns>Array of scalar field values</returns>
+        /// <param name="scalarsA">First set of scalar field values</param>
+        /// <param name="scalarsB">Second set of scalar field values</param>
+        /// <param name="k">Smoothing factor (smaller values = smoother blending)</param>
+        /// <param name="mode">Mode for smooth minimum operation (0=polynomial, 1=exponential)</param>
+        /// <returns>Array of scalar field values after smin operation</returns>
         /// <exception cref="ZSpaceExternalException">Thrown if the operation fails.</exception>
-        /// <exception cref="ArgumentNullException">Thrown if either array is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if either scalar array is null.</exception>
         public float[] GetScalarsSMin(float[] scalarsA, float[] scalarsB, float k, int mode = 0)
         {
             ThrowIfDisposed();
@@ -538,25 +538,79 @@ namespace zSpace.External
             
             int valueCount = 0;
             
-            // First, get the count of values (this is critical - we need to do this check phase)
-            if (!NativeMethods.zext_field_get_scalars_smin(_handle, scalarsA, scalarsA.Length, scalarsB, scalarsB.Length, k, mode, null, ref valueCount))
+            // First, get the count of values
+            if (!NativeMethods.zext_field_get_scalars_smin(_handle, 
+                                                         scalarsA, 
+                                                         scalarsA.Length, 
+                                                         scalarsB, 
+                                                         scalarsB.Length, 
+                                                         k, mode, 
+                                                         null, ref valueCount,
+                                                         true))
             {
-                ThrowLastError("Failed to compute smooth minimum");
+                ThrowLastError("Failed to compute smin values");
             }
             
             if (valueCount <= 0)
-            {
-                Debug.WriteLine("Warning: SMin returned zero values");
                 return new float[0];
-            }
-            
+                
             // Then, allocate an array and get the values
             float[] values = new float[valueCount];
             
-            // Call the native method again to get the actual values
-            if (!NativeMethods.zext_field_get_scalars_smin(_handle, scalarsA, scalarsA.Length, scalarsB, scalarsB.Length, k, mode, values, ref valueCount))
+            if (!NativeMethods.zext_field_get_scalars_smin(_handle, 
+                                                         scalarsA, 
+                                                         scalarsA.Length, 
+                                                         scalarsB, 
+                                                         scalarsB.Length, 
+                                                         k, mode, 
+                                                         values, ref valueCount,
+                                                         false))
             {
-                ThrowLastError("Failed to compute smooth minimum");
+                ThrowLastError("Failed to compute smin values");
+            }
+            
+            return values;
+        }
+        
+        /// <summary>
+        /// Calculates scalar field values using weighted smooth minimum (smin) operation between two scalar fields with exponential blending.
+        /// </summary>
+        /// <param name="scalarsA">First set of scalar field values</param>
+        /// <param name="scalarsB">Second set of scalar field values</param>
+        /// <param name="k">Smoothing factor (smaller values = smoother blending)</param>
+        /// <param name="weight">Weight between two scalar fields (0.0 = all A, 1.0 = all B, 0.5 = equal blend)</param>
+        /// <returns>Array of scalar field values after weighted smin operation</returns>
+        /// <exception cref="ZSpaceExternalException">Thrown if the operation fails.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if either scalar array is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if weight is outside the [0,1] range.</exception>
+        public float[] GetScalarsSMinExponentialWeighted(float[] scalarsA, float[] scalarsB, float k, float weight)
+        {
+            ThrowIfDisposed();
+            
+            if (scalarsA == null) throw new ArgumentNullException(nameof(scalarsA));
+            if (scalarsB == null) throw new ArgumentNullException(nameof(scalarsB));
+            if (weight < 0 || weight > 1) throw new ArgumentOutOfRangeException(nameof(weight), "Weight must be between 0 and 1");
+            
+            int valueCount = 0;
+            
+            // Get the result array size
+            valueCount = scalarsA.Length;
+            if (valueCount != scalarsB.Length)
+            {
+                ThrowLastError("Input scalar arrays must have the same length");
+            }
+            
+            // Allocate an array for the result
+            float[] values = new float[valueCount];
+            
+            if (!NativeMethods.zext_field_get_scalars_smin_exponential_weighted(
+                _handle,
+                scalarsA, scalarsA.Length,
+                scalarsB, scalarsB.Length,
+                k, weight,
+                values, ref valueCount))
+            {
+                ThrowLastError("Failed to compute weighted smin values");
             }
             
             return values;
