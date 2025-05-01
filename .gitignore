@@ -1,4 +1,5 @@
 # Visual Studio files
+*.code-workspace
 .vs/
 *.suo
 *.user
@@ -83,3 +84,13 @@ Debug_DLL/
 .Trashes
 ehthumbs.db
 Thumbs.db 
+
+# Unignore directories explicitly
+![Bb]in/
+![Bb]in/x64/
+![Bb]in/x64/Release/
+
+# Unignore files inside them
+![Bb]in/x64/Release/*.dll
+![Bb]in/x64/Release/*.lib
+[Bb]in/x64/Release/*.pdb
