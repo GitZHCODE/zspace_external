@@ -157,6 +157,37 @@ namespace zSpace.External
             [MarshalAs(UnmanagedType.LPArray)] int[] polyConnections,
             ref int polyConnectionsSize);
         
+        /// <summary>
+        /// Computes the intersection of a mesh with a plane.
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool zext_mesh_intersect_plane(
+            IntPtr mesh_handle,
+            [MarshalAs(UnmanagedType.LPArray)] float[] origin,
+            [MarshalAs(UnmanagedType.LPArray)] float[] normal,
+            IntPtr out_intersection);
+        
+        /// <summary>
+        /// Transforms a mesh using a 4x4 transformation matrix.
+        /// 
+        /// IMPORTANT: The matrix should be provided in column-major format (translation in last column).
+        /// This is because Eigen stores matrices internally in column-major format.
+        /// 
+        /// Matrix layout (column-major):
+        /// [m00, m10, m20, m30]  // Column 0
+        /// [m01, m11, m21, m31]  // Column 1  
+        /// [m02, m12, m22, m32]  // Column 2
+        /// [m03, m13, m23, m33]  // Column 3 (translation)
+        /// 
+        /// For a translation matrix, the translation vector should be in elements [3, 7, 11].
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool zext_mesh_transform(
+            IntPtr mesh_handle,
+            [MarshalAs(UnmanagedType.LPArray)] float[] tMatrix);
+        
         // Graph Functions
         
         /// <summary>
@@ -261,6 +292,26 @@ namespace zSpace.External
             bool checkCount,
             [MarshalAs(UnmanagedType.LPArray)] IntPtr[] outComponents,
             ref int outComponentCount);
+        
+        /// <summary>
+        /// Transforms a graph using a 4x4 transformation matrix.
+        /// 
+        /// IMPORTANT: The matrix should be provided in column-major format (translation in last column).
+        /// This is because Eigen stores matrices internally in column-major format.
+        /// 
+        /// Matrix layout (column-major):
+        /// [m00, m10, m20, m30]  // Column 0
+        /// [m01, m11, m21, m31]  // Column 1  
+        /// [m02, m12, m22, m32]  // Column 2
+        /// [m03, m13, m23, m33]  // Column 3 (translation)
+        /// 
+        /// For a translation matrix, the translation vector should be in elements [3, 7, 11].
+        /// </summary>
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool zext_graph_transform(
+            IntPtr graph_handle,
+            [MarshalAs(UnmanagedType.LPArray)] float[] tMatrix);
         
         // MeshField Functions
         

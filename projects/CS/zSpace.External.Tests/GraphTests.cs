@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using zSpace.External;
+using System.Collections.Generic;
 
 namespace zSpace.External.Tests
 {
@@ -421,6 +422,131 @@ namespace zSpace.External.Tests
                 Assert.IsTrue(foundTriangle, "Should find a triangle component (3 vertices, 3 edges)");
                 Assert.IsTrue(foundLine, "Should find a line component (2 vertices, 1 edge)");
                 Assert.IsTrue(foundSquare, "Should find a square component (4 vertices, 4 edges)");
+            }
+        }
+
+        [TestMethod]
+        public void TestGraphTransform_Translation()
+        {
+            using (var graph = new zExtGraph())
+            {
+                // Create a simple line graph
+                var vertices = new double[]
+                {
+                    0, 0, 0,  // Start point
+                    1, 0, 0,  // End point
+                    0.5, 0.5, 0  // Mid point
+                };
+
+                var edgeConnections = new int[]
+                {
+                    0, 1,  // Edge from vertex 0 to 1
+                    1, 2,  // Edge from vertex 1 to 2
+                    2, 0   // Edge from vertex 2 to 0 (triangle)
+                };
+
+                graph.CreateGraph(vertices, edgeConnections);
+
+                // Get original vertex positions
+                var originalVertices = graph.GetVertexPositions();
+
+                // Create translation matrix (translate by 2 units in X, 3 units in Y, 1 unit in Z)
+                var translationMatrix = new float[]
+                {
+                    //1, 0, 0, 2,  // Translate X by 2
+                    //0, 1, 0, 3,  // Translate Y by 3
+                    //0, 0, 1, 1,  // Translate Z by 1
+                    //0, 0, 0, 1   // Homogeneous coordinate
+
+                    1, 0, 0, 0,  // Translate X by 2
+                    0, 1, 0, 0,  // Translate Y by 3
+                    0, 0, 1, 0,  // Translate Z by 1
+                    2, 3, 1, 1   // Homogeneous coordinate
+                };
+
+                // Apply transformation
+                graph.Transform(translationMatrix);
+
+                // Get transformed vertex positions
+                var transformedVertices = graph.GetVertexPositions();
+
+                // Verify transformation was applied correctly
+                Assert.AreEqual(originalVertices.Length, transformedVertices.Length, "Vertex count should remain the same after transformation");
+
+                for (int i = 0; i < originalVertices.Length; i += 3)
+                {
+                    // Check X coordinate (should be translated by 2)
+                    Assert.AreEqual(originalVertices[i] + 2, transformedVertices[i], 1e-6, $"X coordinate at vertex {i/3} should be translated by 2");
+                    
+                    // Check Y coordinate (should be translated by 3)
+                    Assert.AreEqual(originalVertices[i + 1] + 3, transformedVertices[i + 1], 1e-6, $"Y coordinate at vertex {i/3} should be translated by 3");
+                    
+                    // Check Z coordinate (should be translated by 1)
+                    Assert.AreEqual(originalVertices[i + 2] + 1, transformedVertices[i + 2], 1e-6, $"Z coordinate at vertex {i/3} should be translated by 1");
+                }
+            }
+        }
+
+        [TestMethod]
+        public void TestGraphTransform_Rotation()
+        {
+            using (var graph = new zExtGraph())
+            {
+                // Create a simple square graph
+                var vertices = new double[]
+                {
+                    0, 0, 0,  // Vertex 0
+                    1, 0, 0,  // Vertex 1
+                    1, 1, 0,  // Vertex 2
+                    0, 1, 0   // Vertex 3
+                };
+
+                var edgeConnections = new int[]
+                {
+                    0, 1,  // Edge from vertex 0 to 1
+                    1, 2,  // Edge from vertex 1 to 2
+                    2, 3,  // Edge from vertex 2 to 3
+                    3, 0   // Edge from vertex 3 to 0
+                };
+
+                graph.CreateGraph(vertices, edgeConnections);
+
+                // Create rotation matrix (90 degrees around Z-axis)
+                // Column-major format
+                float cos90 = 0;
+                float sin90 = 1;
+                var rotationMatrix = new float[]
+                {
+                    cos90, sin90, 0, 0,  // Column 0
+                    -sin90, cos90, 0, 0, // Column 1
+                    0, 0, 1, 0,         // Column 2
+                    0, 0, 0, 1          // Column 3
+                };
+
+                // Apply transformation
+                graph.Transform(rotationMatrix);
+
+                // Get transformed vertex positions
+                var transformedVertices = graph.GetVertexPositions();
+
+                // Verify transformation was applied correctly
+                Assert.AreEqual(vertices.Length, transformedVertices.Length, "Vertex count should remain the same after transformation");
+
+                // Check a few key vertices after 90-degree Z rotation
+                // Original vertex 0: (0, 0, 0) should remain (0, 0, 0)
+                Assert.AreEqual(0, transformedVertices[0], 1e-6, "Vertex 0 X coordinate after rotation");
+                Assert.AreEqual(0, transformedVertices[1], 1e-6, "Vertex 0 Y coordinate after rotation");
+                Assert.AreEqual(0, transformedVertices[2], 1e-6, "Vertex 0 Z coordinate after rotation");
+
+                // Original vertex 1: (1, 0, 0) should become (0, 1, 0)
+                Assert.AreEqual(0, transformedVertices[3], 1e-6, "Vertex 1 X coordinate after rotation");
+                Assert.AreEqual(1, transformedVertices[4], 1e-6, "Vertex 1 Y coordinate after rotation");
+                Assert.AreEqual(0, transformedVertices[5], 1e-6, "Vertex 1 Z coordinate after rotation");
+
+                // Original vertex 2: (1, 1, 0) should become (-1, 1, 0)
+                Assert.AreEqual(-1, transformedVertices[6], 1e-6, "Vertex 2 X coordinate after rotation");
+                Assert.AreEqual(1, transformedVertices[7], 1e-6, "Vertex 2 Y coordinate after rotation");
+                Assert.AreEqual(0, transformedVertices[8], 1e-6, "Vertex 2 Z coordinate after rotation");
             }
         }
 

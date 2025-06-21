@@ -114,6 +114,41 @@ public:
     );
     
     /**
+     * Compute the intersection of the mesh with a plane.
+     * 
+     * @param origin Array of 3 floats representing the origin point of the plane (x, y, z)
+     * @param normal Array of 3 floats representing the normal vector of the plane (x, y, z)
+     * @param out_intersection zExtGraph object that will point to the intersection result
+     * @return True if successful, false otherwise.
+     */
+    bool intersect_plane(
+        const float* origin,
+        const float* normal,
+        zExtGraph* out_intersection
+    );
+
+    /**
+     * Transform the mesh using a 4x4 transformation matrix.
+     * 
+     * IMPORTANT: The matrix should be provided in column-major format (translation in last column).
+     * This is because Eigen stores matrices internally in column-major format.
+     * 
+     * Matrix layout (column-major):
+     * [m00, m10, m20, m30]  // Column 0
+     * [m01, m11, m21, m31]  // Column 1  
+     * [m02, m12, m22, m32]  // Column 2
+     * [m03, m13, m23, m33]  // Column 3 (translation)
+     * 
+     * For a translation matrix, the translation vector should be in elements [3, 7, 11].
+     * 
+     * @param tMatrix Array of 16 floats representing a 4x4 transformation matrix (column-major order)
+     * @return True if successful, false otherwise.
+     */
+    bool transform(
+        const float* tMatrix
+    );
+
+    /**
      * Compute geodesic distances using the heat method.
      * 
      * @param sourceVIds Array of source vertex indices
@@ -157,7 +192,7 @@ public:
         int steps, float dist,
         std::vector<zExtGraph*>& out_contours
     );
-    
+
     /**
     * Update internal attributes (vertex and face counts).
     */

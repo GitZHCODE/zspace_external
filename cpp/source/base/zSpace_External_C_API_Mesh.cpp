@@ -368,4 +368,54 @@ extern "C" {
 		return 1;
 		, 0)
 	}
+
+	ZSPACE_EXTERNAL_API int zext_mesh_intersect_plane(zExtMeshHandle mesh_handle,
+		const float* origin,
+		const float* normal,
+		zExtGraphHandle out_intersection) {
+		TRY_CATCH_RETURN(
+			if (!mesh_handle) {
+				zSpace::SetError("Invalid mesh handle");
+				return 0;
+			}
+
+		if (!origin) {
+			zSpace::SetError("Invalid origin parameter");
+			return 0;
+		}
+
+		if (!normal) {
+			zSpace::SetError("Invalid normal parameter");
+			return 0;
+		}
+
+		if (!out_intersection) {
+			zSpace::SetError("Invalid output intersection parameter");
+			return 0;
+		}
+
+		auto* mesh = static_cast<zSpace::zExtMesh*>(mesh_handle);
+		auto* graph = static_cast<zSpace::zExtGraph*>(out_intersection);
+
+		return mesh->intersect_plane(origin, normal, graph) ? 1 : 0;
+		, 0)
+	}
+
+	ZSPACE_EXTERNAL_API int zext_mesh_transform(zExtMeshHandle mesh_handle,
+		const float* tMatrix) {
+		TRY_CATCH_RETURN(
+			if (!mesh_handle) {
+				zSpace::SetError("Invalid mesh handle");
+				return 0;
+			}
+
+		if (!tMatrix) {
+			zSpace::SetError("Invalid transformation matrix");
+			return 0;
+		}
+
+		auto* mesh = static_cast<zSpace::zExtMesh*>(mesh_handle);
+		return mesh->transform(tMatrix) ? 1 : 0;
+		, 0)
+	}
 } // extern "C" 

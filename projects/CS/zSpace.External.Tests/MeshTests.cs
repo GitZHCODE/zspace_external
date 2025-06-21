@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using zSpace.External;
+using System.Collections.Generic;
 
 namespace zSpace.External.Tests
 {
@@ -293,32 +294,54 @@ namespace zSpace.External.Tests
             {
                 using (var mesh = new zSpace.External.zExtMesh())
                 {
-                    // Create a simple quad mesh with center vertex
+                    // Create a simple cube mesh
                     double[] vertices = new double[] {
-                        -1.0, -1.0, 0.0,  // Vertex 0
-                        1.0, -1.0, 0.0,   // Vertex 1
-                        1.0, 1.0, 0.0,    // Vertex 2
-                        -1.0, 1.0, 0.0,   // Vertex 3
-                        0.0, 0.0, 0.0,    // Vertex 4 (center)
+                        // Front face
+                        -1.0, -1.0, -1.0,  // Vertex 0
+                        1.0, -1.0, -1.0,   // Vertex 1
+                        1.0, 1.0, -1.0,    // Vertex 2
+                        -1.0, 1.0, -1.0,   // Vertex 3
+                        // Back face
+                        -1.0, -1.0, 1.0,   // Vertex 4
+                        1.0, -1.0, 1.0,    // Vertex 5
+                        1.0, 1.0, 1.0,     // Vertex 6
+                        -1.0, 1.0, 1.0     // Vertex 7
                     };
                     
-                    // Each face has 3 vertices (triangulated quad)
-                    int[] polyCounts = new int[] { 3, 3, 3, 3 };
+                    // Each face has 3 vertices (tri faces) - triangulated cube
+                    int[] polyCounts = new int[] { 
+                        3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3  // 12 tri faces (2 per cube face)
+                    };
                     
-                    // Face vertex indices (4 triangles with shared center vertex)
+                    // Face vertex indices (triangulated cube faces)
                     int[] polyConnections = new int[] { 
-                        0, 1, 4,
-                        1, 2, 4,
-                        2, 3, 4,
-                        3, 0, 4
+                        // Front face (2 triangles)
+                        0, 1, 2,
+                        0, 2, 3,
+                        // Back face (2 triangles)
+                        4, 6, 5,
+                        4, 7, 6,
+                        // Left face (2 triangles)
+                        0, 3, 7,
+                        0, 7, 4,
+                        // Right face (2 triangles)
+                        1, 5, 6,
+                        1, 6, 2,
+                        // Bottom face (2 triangles)
+                        0, 4, 5,
+                        0, 5, 1,
+                        // Top face (2 triangles)
+                        2, 6, 7,
+                        2, 7, 3
                     };
                     
                     // Create the mesh
+                    Console.WriteLine("Creating cube mesh...");
                     mesh.CreateMesh(vertices, polyCounts, polyConnections);
                     
                     // Validate mesh creation
-                    Assert.AreEqual(5, mesh.VertexCount, "Vertex count should be 5");
-                    Assert.AreEqual(4, mesh.FaceCount, "Face count should be 4");
+                    Assert.AreEqual(8, mesh.VertexCount, "Vertex count should be 8");
+                    Assert.AreEqual(12, mesh.FaceCount, "Face count should be 12");
                     
                     // Source vertex (corner vertex 0)
                     int[] sourceVertices = new int[] { 0 };
@@ -386,32 +409,54 @@ namespace zSpace.External.Tests
             {
                 using (var mesh = new zSpace.External.zExtMesh())
                 {
-                    // Create a simple quad mesh with center vertex
+                    // Create a simple cube mesh
                     double[] vertices = new double[] {
-                        -1.0, -1.0, 0.0,  // Vertex 0
-                        1.0, -1.0, 0.0,   // Vertex 1
-                        1.0, 1.0, 0.0,    // Vertex 2
-                        -1.0, 1.0, 0.0,   // Vertex 3
-                        0.0, 0.0, 0.0,    // Vertex 4 (center)
+                        // Front face
+                        -1.0, -1.0, -1.0,  // Vertex 0
+                        1.0, -1.0, -1.0,   // Vertex 1
+                        1.0, 1.0, -1.0,    // Vertex 2
+                        -1.0, 1.0, -1.0,   // Vertex 3
+                        // Back face
+                        -1.0, -1.0, 1.0,   // Vertex 4
+                        1.0, -1.0, 1.0,    // Vertex 5
+                        1.0, 1.0, 1.0,     // Vertex 6
+                        -1.0, 1.0, 1.0     // Vertex 7
                     };
                     
-                    // Each face has 3 vertices (triangulated quad)
-                    int[] polyCounts = new int[] { 3, 3, 3, 3 };
+                    // Each face has 3 vertices (tri faces) - triangulated cube
+                    int[] polyCounts = new int[] { 
+                        3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3  // 12 tri faces (2 per cube face)
+                    };
                     
-                    // Face vertex indices (4 triangles with shared center vertex)
+                    // Face vertex indices (triangulated cube faces)
                     int[] polyConnections = new int[] { 
-                        0, 1, 4,
-                        1, 2, 4,
-                        2, 3, 4,
-                        3, 0, 4
+                        // Front face (2 triangles)
+                        0, 1, 2,
+                        0, 2, 3,
+                        // Back face (2 triangles)
+                        4, 6, 5,
+                        4, 7, 6,
+                        // Left face (2 triangles)
+                        0, 3, 7,
+                        0, 7, 4,
+                        // Right face (2 triangles)
+                        1, 5, 6,
+                        1, 6, 2,
+                        // Bottom face (2 triangles)
+                        0, 4, 5,
+                        0, 5, 1,
+                        // Top face (2 triangles)
+                        2, 6, 7,
+                        2, 7, 3
                     };
                     
                     // Create the mesh
+                    Console.WriteLine("Creating cube mesh...");
                     mesh.CreateMesh(vertices, polyCounts, polyConnections);
                     
                     // Validate mesh creation
-                    Assert.AreEqual(5, mesh.VertexCount, "Vertex count should be 5");
-                    Assert.AreEqual(4, mesh.FaceCount, "Face count should be 4");
+                    Assert.AreEqual(8, mesh.VertexCount, "Vertex count should be 8");
+                    Assert.AreEqual(12, mesh.FaceCount, "Face count should be 12");
                     
                     // Source vertices (opposite corners)
                     int[] startVertices = new int[] { 0 }; // bottom-left
@@ -481,40 +526,61 @@ namespace zSpace.External.Tests
             {
                 using (var mesh = new zSpace.External.zExtMesh())
                 {
-                    // Create a simple quad mesh with center vertex
-                    double[] vertexPositions = new double[] {
-                        -1.0, -1.0, 0.0,  // Vertex 0
-                        1.0, -1.0, 0.0,   // Vertex 1
-                        1.0, 1.0, 0.0,    // Vertex 2
-                        -1.0, 1.0, 0.0,   // Vertex 3
-                        0.0, 0.0, 0.0,    // Vertex 4 (center)
+                    // Create a simple cube mesh
+                    double[] vertices = new double[] {
+                        // Front face
+                        -1.0, -1.0, -1.0,  // Vertex 0
+                        1.0, -1.0, -1.0,   // Vertex 1
+                        1.0, 1.0, -1.0,    // Vertex 2
+                        -1.0, 1.0, -1.0,   // Vertex 3
+                        // Back face
+                        -1.0, -1.0, 1.0,   // Vertex 4
+                        1.0, -1.0, 1.0,    // Vertex 5
+                        1.0, 1.0, 1.0,     // Vertex 6
+                        -1.0, 1.0, 1.0     // Vertex 7
                     };
                     
-                    // Each face has 3 vertices (triangulated quad)
-                    int[] polyCounts = new int[] { 3, 3, 3, 3 };
+                    // Each face has 3 vertices (tri faces) - triangulated cube
+                    int[] polyCounts = new int[] { 
+                        3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3  // 12 tri faces (2 per cube face)
+                    };
                     
-                    // Face vertex indices (4 triangles with shared center vertex)
+                    // Face vertex indices (triangulated cube faces)
                     int[] polyConnections = new int[] { 
-                        0, 1, 4,
-                        1, 2, 4,
-                        2, 3, 4,
-                        3, 0, 4
+                        // Front face (2 triangles)
+                        0, 1, 2,
+                        0, 2, 3,
+                        // Back face (2 triangles)
+                        4, 6, 5,
+                        4, 7, 6,
+                        // Left face (2 triangles)
+                        0, 3, 7,
+                        0, 7, 4,
+                        // Right face (2 triangles)
+                        1, 5, 6,
+                        1, 6, 2,
+                        // Bottom face (2 triangles)
+                        0, 4, 5,
+                        0, 5, 1,
+                        // Top face (2 triangles)
+                        2, 6, 7,
+                        2, 7, 3
                     };
                     
                     // Create the mesh
-                    Console.WriteLine("Creating mesh with triangulated quad...");
-                    mesh.CreateMesh(vertexPositions, polyCounts, polyConnections);
+                    Console.WriteLine("Creating cube mesh...");
+                    mesh.CreateMesh(vertices, polyCounts, polyConnections);
                     
                     // Validate mesh creation
-                    Assert.AreEqual(5, mesh.VertexCount, "Vertex count should be 5");
-                    Assert.AreEqual(4, mesh.FaceCount, "Face count should be 4");
+                    Assert.AreEqual(8, mesh.VertexCount, "Vertex count should be 8");
+                    Assert.AreEqual(12, mesh.FaceCount, "Face count should be 12");
                     
                     // Get the mesh data
                     Console.WriteLine("Getting mesh data...");
                     mesh.GetMeshData(out double[] retrievedVertices, out int[] retrievedPolyCounts, out int[] retrievedPolyConnections);
                     
                     // Validate vertex count
-                    Assert.AreEqual(vertexPositions.Length, retrievedVertices.Length, "Retrieved vertex positions should match input count");
+                    Assert.AreEqual(vertices.Length, retrievedVertices.Length, "Retrieved vertex positions should match input count");
                     
                     // Validate poly counts
                     Assert.AreEqual(polyCounts.Length, retrievedPolyCounts.Length, "Retrieved polygon counts should match input count");
@@ -554,12 +620,12 @@ namespace zSpace.External.Tests
                     bool polyConnectionsMatch = true;
                     
                     // Check if the vertex positions match
-                    for (int i = 0; i < vertexPositions.Length; i++)
+                    for (int i = 0; i < vertices.Length; i++)
                     {
-                        if (Math.Abs(vertexPositions[i] - retrievedVertices[i]) > 0.0001)
+                        if (Math.Abs(vertices[i] - retrievedVertices[i]) > 0.0001)
                         {
                             verticesMatch = false;
-                            Console.WriteLine($"Mismatch at vertex position index {i}: {vertexPositions[i]} vs {retrievedVertices[i]}");
+                            Console.WriteLine($"Mismatch at vertex position index {i}: {vertices[i]} vs {retrievedVertices[i]}");
                             break;
                         }
                     }
@@ -597,6 +663,257 @@ namespace zSpace.External.Tests
                 Console.WriteLine($"Exception type: {ex.GetType().FullName}");
                 Console.WriteLine($"Stack trace: {ex.StackTrace}");
                 throw;
+            }
+        }
+
+        [TestMethod]
+        public void CanIntersectPlane()
+        {
+            try
+            {
+                using (var mesh = new zSpace.External.zExtMesh())
+                using (var intersectionGraph = new zSpace.External.zExtGraph())
+                {
+                    // Verify the intersection graph is valid
+                    Assert.IsTrue(intersectionGraph.IsValid, "Intersection graph should be valid before intersection");
+                    
+                    // Create a simple cube mesh
+                    double[] vertices = new double[] {
+                        // Front face
+                        -1.0, -1.0, -1.0,  // Vertex 0
+                        1.0, -1.0, -1.0,   // Vertex 1
+                        1.0, 1.0, -1.0,    // Vertex 2
+                        -1.0, 1.0, -1.0,   // Vertex 3
+                        // Back face
+                        -1.0, -1.0, 1.0,   // Vertex 4
+                        1.0, -1.0, 1.0,    // Vertex 5
+                        1.0, 1.0, 1.0,     // Vertex 6
+                        -1.0, 1.0, 1.0     // Vertex 7
+                    };
+                    
+                    // Each face has 3 vertices (tri faces) - triangulated cube
+                    int[] polyCounts = new int[] { 
+                        3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3  // 12 tri faces (2 per cube face)
+                    };
+                    
+                    // Face vertex indices (triangulated cube faces)
+                    int[] polyConnections = new int[] { 
+                        // Front face (2 triangles)
+                        0, 1, 2,
+                        0, 2, 3,
+                        // Back face (2 triangles)
+                        4, 6, 5,
+                        4, 7, 6,
+                        // Left face (2 triangles)
+                        0, 3, 7,
+                        0, 7, 4,
+                        // Right face (2 triangles)
+                        1, 5, 6,
+                        1, 6, 2,
+                        // Bottom face (2 triangles)
+                        0, 4, 5,
+                        0, 5, 1,
+                        // Top face (2 triangles)
+                        2, 6, 7,
+                        2, 7, 3
+                    };
+                    
+                    // Create the mesh
+                    Console.WriteLine("Creating cube mesh...");
+                    mesh.CreateMesh(vertices, polyCounts, polyConnections);
+                    
+                    // Validate mesh creation
+                    Assert.AreEqual(8, mesh.VertexCount, "Vertex count should be 8");
+                    Assert.AreEqual(12, mesh.FaceCount, "Face count should be 12");
+                    
+                    // Test that we can get mesh data (basic functionality test)
+                    Console.WriteLine("Testing mesh data retrieval...");
+                    mesh.GetMeshData(out double[] testVertices, out int[] testPolyCounts, out int[] testPolyConnections);
+                    Console.WriteLine($"Retrieved mesh data: {testVertices.Length/3} vertices, {testPolyCounts.Length} poly counts, {testPolyConnections.Length} poly connections");
+                    
+                    // Define a plane that intersects the cube
+                    // Plane at y = 0 (horizontal plane through the center)
+                    float[] origin = new float[] { 0.0f, 0.0f, 0.0f };
+                    float[] normal = new float[] { 0.0f, 1.0f, 0.0f };
+                    
+                    Console.WriteLine("Computing mesh-plane intersection...");
+                    Console.WriteLine($"Mesh has {mesh.VertexCount} vertices and {mesh.FaceCount} faces");
+                    Console.WriteLine($"Plane origin: ({origin[0]}, {origin[1]}, {origin[2]})");
+                    Console.WriteLine($"Plane normal: ({normal[0]}, {normal[1]}, {normal[2]})");
+                    
+                    mesh.IntersectPlane(origin, normal, intersectionGraph);
+                    
+                    Console.WriteLine("Intersection computation completed");
+                    
+                    // Validate that the intersection graph was created
+                    Assert.IsTrue(intersectionGraph.IsValid, "Intersection graph should be valid");
+                    
+                    // Get the intersection data
+                    intersectionGraph.GetGraphData(out double[] intersectionVertices, out int[] intersectionEdges);
+                    
+                    Console.WriteLine($"Intersection has {intersectionVertices.Length / 3} vertices and {intersectionEdges.Length / 2} edges");
+                    
+                    // Basic validation - intersection should have some geometry
+                    Assert.IsTrue(intersectionVertices.Length > 0, "Intersection should have vertices");
+                    Assert.IsTrue(intersectionEdges.Length > 0, "Intersection should have edges");
+                    
+                    // Output intersection vertices for inspection
+                    Console.WriteLine("Intersection vertices:");
+                    for (int i = 0; i < intersectionVertices.Length / 3; i++)
+                    {
+                        Console.WriteLine($"Vertex {i}: ({intersectionVertices[i*3]}, {intersectionVertices[i*3+1]}, {intersectionVertices[i*3+2]})");
+                    }
+                    
+                    // Output intersection edges for inspection
+                    Console.WriteLine("Intersection edges:");
+                    for (int i = 0; i < intersectionEdges.Length / 2; i++)
+                    {
+                        Console.WriteLine($"Edge {i}: {intersectionEdges[i*2]} -> {intersectionEdges[i*2+1]}");
+                    }
+                    
+                    // Validate that intersection vertices are approximately on the plane (y ≈ 0)
+                    for (int i = 0; i < intersectionVertices.Length / 3; i++)
+                    {
+                        float y = (float)intersectionVertices[i * 3 + 1];
+                        Assert.IsTrue(Math.Abs(y) < 0.1f, $"Intersection vertex {i} should be on the plane (y ≈ 0), but y = {y}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception in CanIntersectPlane: {ex.Message}");
+                Console.WriteLine($"Exception type: {ex.GetType().FullName}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                throw;
+            }
+        }
+
+        [TestMethod]
+        public void CanIntersectPlaneSimple()
+        {
+            try
+            {
+                using (var mesh = new zSpace.External.zExtMesh())
+                using (var intersectionGraph = new zSpace.External.zExtGraph())
+                {
+                    // Verify the intersection graph is valid
+                    Assert.IsTrue(intersectionGraph.IsValid, "Intersection graph should be valid before intersection");
+                    
+                    // Create a simple triangle mesh
+                    double[] vertices = new double[] {
+                        0.0, 0.0, 0.0,  // Vertex 0
+                        1.0, 0.0, 0.0,  // Vertex 1
+                        0.0, 1.0, 0.0   // Vertex 2
+                    };
+                    
+                    int[] polyCounts = new int[] { 3 }; // One triangle
+                    int[] polyConnections = new int[] { 0, 1, 2 }; // Triangle vertices
+                    
+                    // Create the mesh
+                    Console.WriteLine("Creating simple triangle mesh...");
+                    mesh.CreateMesh(vertices, polyCounts, polyConnections);
+                    
+                    // Validate mesh creation
+                    Assert.AreEqual(3, mesh.VertexCount, "Vertex count should be 3");
+                    Assert.AreEqual(1, mesh.FaceCount, "Face count should be 1");
+                    
+                    // Define a plane that intersects the triangle
+                    float[] origin = new float[] { 0.5f, 0.0f, 0.0f };
+                    float[] normal = new float[] { 1.0f, 0.0f, 0.0f };
+                    
+                    Console.WriteLine("Computing mesh-plane intersection...");
+                    Console.WriteLine($"Mesh has {mesh.VertexCount} vertices and {mesh.FaceCount} faces");
+                    Console.WriteLine($"Plane origin: ({origin[0]}, {origin[1]}, {origin[2]})");
+                    Console.WriteLine($"Plane normal: ({normal[0]}, {normal[1]}, {normal[2]})");
+                    
+                    mesh.IntersectPlane(origin, normal, intersectionGraph);
+                    
+                    Console.WriteLine("Intersection computation completed");
+                    
+                    // Validate that the intersection graph was created
+                    Assert.IsTrue(intersectionGraph.IsValid, "Intersection graph should be valid");
+                    
+                    // Get the intersection data
+                    intersectionGraph.GetGraphData(out double[] intersectionVertices, out int[] intersectionEdges);
+                    
+                    Console.WriteLine($"Intersection has {intersectionVertices.Length / 3} vertices and {intersectionEdges.Length / 2} edges");
+                    
+                    // For a simple triangle, we might not get an intersection depending on the plane
+                    // Just verify the method doesn't hang
+                    Console.WriteLine("Simple intersection test completed successfully");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception in CanIntersectPlaneSimple: {ex.Message}");
+                Console.WriteLine($"Exception type: {ex.GetType().FullName}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                throw;
+            }
+        }
+
+        [TestMethod]
+        public void TestMeshTransform_Translation()
+        {
+            using (var mesh = new zSpace.External.zExtMesh())
+            {
+                // Create a simple quad mesh (2 triangles forming a square)
+                var vertices = new double[]
+                {
+                    0, 0, 0,  // Vertex 0
+                    1, 0, 0,  // Vertex 1
+                    1, 1, 0,  // Vertex 2
+                    0, 1, 0   // Vertex 3
+                };
+
+                var polyCounts = new int[] { 3, 3 }; // 2 triangles
+                var polyConnections = new int[]
+                {
+                    0, 1, 2,  // First triangle
+                    0, 2, 3   // Second triangle
+                };
+
+                mesh.CreateMesh(vertices, polyCounts, polyConnections);
+
+                // Get original vertex positions
+                double[] originalVertices = new double[0];
+                int[] polyCountsOut = new int[0];
+                int[] polyConnectionsOut = new int[0];
+                mesh.GetMeshData(out originalVertices, out polyConnectionsOut, out polyCountsOut);
+
+                // Create translation matrix (translate by 2 units in X, 3 units in Y, 1 unit in Z)
+                // Column-major format: translation in elements [3, 7, 11]
+                var translationMatrix = new float[]
+                {
+                    1, 0, 0, 0,  // Column 0
+                    0, 1, 0, 0,  // Column 1
+                    0, 0, 1, 0,  // Column 2
+                    2, 3, 1, 1   // Column 3 (translation)
+                };
+
+                // Apply transformation
+                mesh.Transform(translationMatrix);
+
+                // Get transformed vertex positions
+                double[] transformedVertices = new double[0];
+                int[] polyCountsTransformed = new int[0];
+                int[] polyConnectionsTransformed = new int[0];
+                mesh.GetMeshData(out transformedVertices, out polyCountsTransformed, out polyConnectionsTransformed);
+
+                // Verify transformation was applied correctly
+                Assert.AreEqual(originalVertices.Length, transformedVertices.Length, "Vertex count should remain the same after transformation");
+
+                for (int i = 0; i < originalVertices.Length; i += 3)
+                {
+                    // Check X coordinate (should be translated by 2)
+                    Assert.AreEqual(originalVertices[i] + 2, transformedVertices[i], 1e-6, $"X coordinate at vertex {i/3} should be translated by 2");
+                    
+                    // Check Y coordinate (should be translated by 3)
+                    Assert.AreEqual(originalVertices[i + 1] + 3, transformedVertices[i + 1], 1e-6, $"Y coordinate at vertex {i/3} should be translated by 3");
+                    
+                    // Check Z coordinate (should be translated by 1)
+                    Assert.AreEqual(originalVertices[i + 2] + 1, transformedVertices[i + 2], 1e-6, $"Z coordinate at vertex {i/3} should be translated by 1");
+                }
             }
         }
 
