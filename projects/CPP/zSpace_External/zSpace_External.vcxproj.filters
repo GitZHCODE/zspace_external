@@ -1,265 +1,96 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Source Files">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Depends">
-      <UniqueIdentifier>{6656313f-8926-489a-9d92-998cbf387a56}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Depends\Alglib">
-      <UniqueIdentifier>{73433eee-e1b7-4f05-9c3e-32e0239c63d1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Depends\QuickHull">
-      <UniqueIdentifier>{a422da4e-4b69-4cbb-96a3-8a5cc2cb3990}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Depends\SPA">
-      <UniqueIdentifier>{651748a5-ec62-4b83-9b83-1f77dc5504b3}</UniqueIdentifier>
+    <Filter Include="Header Files\base">
+      <UniqueIdentifier>{a1d4e4f8-7d89-4cf8-b506-53e9e5e6afed}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\zCore">
-      <UniqueIdentifier>{6d032704-71ae-40f2-bd28-512b4fa6d138}</UniqueIdentifier>
+      <UniqueIdentifier>{a2d4e4f8-7d89-4cf8-b506-53e9e5e6afed}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\zCore">
-      <UniqueIdentifier>{059dd727-5373-44cb-a1dc-f41a4d61f24a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\zToolset">
-      <UniqueIdentifier>{3e85f300-3499-4fff-b20a-2eeca5e4c066}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\zToolset\Data">
-      <UniqueIdentifier>{fb1cb5aa-bd21-4e6a-bb9a-2cb82d8272f3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\zToolset\DigiFab">
-      <UniqueIdentifier>{2f462b92-fc84-4e0c-9559-d6fc0f48d7de}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\zToolset\Geometry">
-      <UniqueIdentifier>{734460e2-4bec-4f38-8220-ce287d43d6c2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\zToolset\PathNetworks">
-      <UniqueIdentifier>{4cc5e7fe-d200-4c63-8be1-b74402a40a9b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\zToolset\Statics">
-      <UniqueIdentifier>{c3172f2b-fe6f-457e-9827-0aa1f7ffc670}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\zToolset\Streamlines">
-      <UniqueIdentifier>{167d8c45-e7a1-4535-920a-256126af02b0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\zToolset">
-      <UniqueIdentifier>{ad459902-ecf8-4f09-a308-3313c3c994f1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\zToolset\Data">
-      <UniqueIdentifier>{ea0606fa-7a28-4cab-8300-82b39ff54ee8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\zToolset\DigiFab">
-      <UniqueIdentifier>{b2005bf0-0b7c-4e58-bf99-30ae489589bd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\zToolset\Geometry">
-      <UniqueIdentifier>{6096f4d0-262c-48a9-a945-dc85d759746b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\zToolset\PathNetworks">
-      <UniqueIdentifier>{0996eae9-f824-4333-8163-e7a23f02326f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\zToolset\Statics">
-      <UniqueIdentifier>{5303844a-7a6e-4bc6-b26e-b53a34015503}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\zToolset\Streamlines">
-      <UniqueIdentifier>{64d52869-aa5e-4471-80b8-9a40ac396e90}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\base">
-      <UniqueIdentifier>{01380c76-d164-459d-8a91-13e4636426a6}</UniqueIdentifier>
+    <Filter Include="Header Files\zCore\Geometry">
+      <UniqueIdentifier>{a3d4e4f8-7d89-4cf8-b506-53e9e5e6afed}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\base">
-      <UniqueIdentifier>{cf698b10-d310-4519-a8cf-e338654bbc42}</UniqueIdentifier>
+      <UniqueIdentifier>{b1d4e4f8-7d89-4cf8-b506-53e9e5e6afed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\zCore">
+      <UniqueIdentifier>{b2d4e4f8-7d89-4cf8-b506-53e9e5e6afed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\zCore\Geometry">
+      <UniqueIdentifier>{b3d4e4f8-7d89-4cf8-b506-53e9e5e6afed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\zCore\Utilities">
+      <UniqueIdentifier>{d6be53e7-fb85-496c-9e9b-0c841780cda6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\zspace_core\cpp\depends\alglib\cpp\src\alglibinternal.h">
-      <Filter>Depends\Alglib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\zspace_core\cpp\depends\alglib\cpp\src\alglibmisc.h">
-      <Filter>Depends\Alglib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\zspace_core\cpp\depends\alglib\cpp\src\ap.h">
-      <Filter>Depends\Alglib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\zspace_core\cpp\depends\alglib\cpp\src\dataanalysis.h">
-      <Filter>Depends\Alglib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\zspace_core\cpp\depends\alglib\cpp\src\diffequations.h">
-      <Filter>Depends\Alglib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\zspace_core\cpp\depends\alglib\cpp\src\fasttransforms.h">
-      <Filter>Depends\Alglib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\zspace_core\cpp\depends\alglib\cpp\src\integration.h">
-      <Filter>Depends\Alglib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\zspace_core\cpp\depends\alglib\cpp\src\interpolation.h">
-      <Filter>Depends\Alglib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\zspace_core\cpp\depends\alglib\cpp\src\linalg.h">
-      <Filter>Depends\Alglib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\zspace_core\cpp\depends\alglib\cpp\src\optimization.h">
-      <Filter>Depends\Alglib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\zspace_core\cpp\depends\alglib\cpp\src\solvers.h">
-      <Filter>Depends\Alglib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\zspace_core\cpp\depends\alglib\cpp\src\specialfunctions.h">
-      <Filter>Depends\Alglib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\zspace_core\cpp\depends\alglib\cpp\src\statistics.h">
-      <Filter>Depends\Alglib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\zspace_core\cpp\depends\alglib\cpp\src\stdafx.h">
-      <Filter>Depends\Alglib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\zspace_core\cpp\depends\spa\spa.h">
-      <Filter>Depends\SPA</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\cpp\headers\zToolsets\data\zExtKMeans.h">
-      <Filter>Header Files\zToolset\Data</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtMesh.h">
-      <Filter>Header Files\zCore</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\cpp\headers\base\zSpace_External.h">
+    <ClInclude Include="..\..\..\cpp\headers\base\zSpace_External_C_API.h">
       <Filter>Header Files\base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtGraph.h">
-      <Filter>Header Files\zCore</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\cpp\headers\zToolsets\digifab\zExtRobot.h">
-      <Filter>Header Files\zToolset\DigiFab</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtPoint.h">
-      <Filter>Header Files\zCore</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtUtilsCore.h">
-      <Filter>Header Files\zCore</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtParticle.h">
-      <Filter>Header Files\zCore</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtColor.h">
-      <Filter>Header Files\zCore</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtJSON.h">
-      <Filter>Header Files\zCore</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtUSD.h">
-      <Filter>Header Files\zCore</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtField.h">
-      <Filter>Header Files\zCore</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\cpp\headers\zToolsets\statics\zExtVault.h">
-      <Filter>Header Files\zToolset\Statics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\cpp\headers\zCore\zExtTransform.h">
-      <Filter>Header Files\zCore</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\cpp\headers\base\zStatus.h">
+    <ClInclude Include="..\..\..\cpp\headers\base\zSpace_External_C_API_Common.h">
       <Filter>Header Files\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\cpp\headers\zCore\Geometry\zExtMesh.h">
+      <Filter>Header Files\zCore\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\cpp\headers\zCore\Geometry\zExtGraph.h">
+      <Filter>Header Files\zCore\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\cpp\source\zCore\Utilities\RapidMaker.h">
+      <Filter>Source Files\zCore\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\cpp\source\zCore\Utilities\zSMin.h">
+      <Filter>Source Files\zCore\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\cpp\headers\zCore\Geometry\zExtMeshField.h">
+      <Filter>Header Files\zCore\Geometry</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\zspace_core\cpp\depends\alglib\cpp\src\alglibinternal.cpp">
-      <Filter>Depends\Alglib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\zspace_core\cpp\depends\alglib\cpp\src\alglibmisc.cpp">
-      <Filter>Depends\Alglib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\zspace_core\cpp\depends\alglib\cpp\src\ap.cpp">
-      <Filter>Depends\Alglib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\zspace_core\cpp\depends\alglib\cpp\src\dataanalysis.cpp">
-      <Filter>Depends\Alglib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\zspace_core\cpp\depends\alglib\cpp\src\diffequations.cpp">
-      <Filter>Depends\Alglib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\zspace_core\cpp\depends\alglib\cpp\src\fasttransforms.cpp">
-      <Filter>Depends\Alglib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\zspace_core\cpp\depends\alglib\cpp\src\integration.cpp">
-      <Filter>Depends\Alglib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\zspace_core\cpp\depends\alglib\cpp\src\interpolation.cpp">
-      <Filter>Depends\Alglib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\zspace_core\cpp\depends\alglib\cpp\src\linalg.cpp">
-      <Filter>Depends\Alglib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\zspace_core\cpp\depends\alglib\cpp\src\optimization.cpp">
-      <Filter>Depends\Alglib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\zspace_core\cpp\depends\alglib\cpp\src\solvers.cpp">
-      <Filter>Depends\Alglib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\zspace_core\cpp\depends\alglib\cpp\src\specialfunctions.cpp">
-      <Filter>Depends\Alglib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\zspace_core\cpp\depends\alglib\cpp\src\statistics.cpp">
-      <Filter>Depends\Alglib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\zspace_core\cpp\depends\spa\spa.c">
-      <Filter>Depends\SPA</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\cpp\source\zToolsets\data\zExtKMeans.cpp">
-      <Filter>Source Files\zToolset\Data</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\cpp\source\zCore\zExtMesh.cpp">
-      <Filter>Source Files\zCore</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\cpp\source\zCore\zExtGraph.cpp">
-      <Filter>Source Files\zCore</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\cpp\source\zCore\zExtTransform.cpp">
-      <Filter>Source Files\zCore</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\cpp\source\zToolsets\digiFab\zExtRobot.cpp">
-      <Filter>Source Files\zToolset\DigiFab</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\cpp\source\zCore\zExtPoint.cpp">
-      <Filter>Source Files\zCore</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\cpp\source\zCore\zExtUtilsCore.cpp">
-      <Filter>Source Files\zCore</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\cpp\source\zCore\zExtParticle.cpp">
-      <Filter>Source Files\zCore</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\cpp\source\zCore\zExtColor.cpp">
-      <Filter>Source Files\zCore</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\cpp\source\zCore\zExtJSON.cpp">
-      <Filter>Source Files\zCore</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\cpp\source\zCore\zExtUSD.cpp">
-      <Filter>Source Files\zCore</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\cpp\source\zCore\zExtField.cpp">
-      <Filter>Source Files\zCore</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\cpp\source\zToolsets\statics\zExtVault.cpp">
-      <Filter>Source Files\zToolset\Statics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\cpp\source\base\zStatus.cpp">
+    <ClCompile Include="..\..\..\cpp\source\base\zSpace_External_C_API_Common.cpp">
       <Filter>Source Files\base</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
-    <None Include="cpp.hint" />
+    <ClCompile Include="..\..\..\cpp\source\base\zSpace_External_C_API_Mesh.cpp">
+      <Filter>Source Files\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\source\base\zSpace_External_C_API_Graph.cpp">
+      <Filter>Source Files\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\source\base\zSpace_External_C_API_MeshField.cpp">
+      <Filter>Source Files\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\source\zCore\Geometry\zExtMesh.cpp">
+      <Filter>Source Files\zCore\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\source\zCore\Geometry\zExtGraph.cpp">
+      <Filter>Source Files\zCore\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\source\zCore\Utilities\GraphProcessor.cpp">
+      <Filter>Source Files\zCore\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\source\zCore\Utilities\RapidMaker.cpp">
+      <Filter>Source Files\zCore\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\source\zCore\Utilities\zSpatialField.cpp">
+      <Filter>Source Files\zCore\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\source\zCore\Utilities\zSMin.cpp">
+      <Filter>Source Files\zCore\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cpp\source\zCore\Geometry\zExtMeshField.cpp">
+      <Filter>Source Files\zCore\Geometry</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,0 +1,60 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zSpace.External", "zSpace.External\zSpace.External.csproj", "{1233CCA1-9F5C-454B-8C48-2F7BB1A86B11}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zSpace.External.Demo", "zSpace.External.Demo\zSpace.External.Demo.csproj", "{53CC9DF6-8FEA-4ECA-B8A8-1DD13DCC9C2B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zSpace.External.Tests", "zSpace.External.Tests\zSpace.External.Tests.csproj", "{8B23A7F1-5E2A-4B70-A8D6-C5DC77C2C843}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zSpace.External.Examples", "zSpace.External.Examples\zSpace.External.Examples.csproj", "{E87623F1-5E2A-4B70-A8D6-C5DC1177C843}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1233CCA1-9F5C-454B-8C48-2F7BB1A86B11}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{1233CCA1-9F5C-454B-8C48-2F7BB1A86B11}.Debug|Any CPU.Build.0 = Debug|x64
+		{1233CCA1-9F5C-454B-8C48-2F7BB1A86B11}.Debug|x64.ActiveCfg = Debug|x64
+		{1233CCA1-9F5C-454B-8C48-2F7BB1A86B11}.Debug|x64.Build.0 = Debug|x64
+		{1233CCA1-9F5C-454B-8C48-2F7BB1A86B11}.Release|Any CPU.ActiveCfg = Release|x64
+		{1233CCA1-9F5C-454B-8C48-2F7BB1A86B11}.Release|Any CPU.Build.0 = Release|x64
+		{1233CCA1-9F5C-454B-8C48-2F7BB1A86B11}.Release|x64.ActiveCfg = Release|x64
+		{1233CCA1-9F5C-454B-8C48-2F7BB1A86B11}.Release|x64.Build.0 = Release|x64
+		{53CC9DF6-8FEA-4ECA-B8A8-1DD13DCC9C2B}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{53CC9DF6-8FEA-4ECA-B8A8-1DD13DCC9C2B}.Debug|Any CPU.Build.0 = Debug|x64
+		{53CC9DF6-8FEA-4ECA-B8A8-1DD13DCC9C2B}.Debug|x64.ActiveCfg = Debug|x64
+		{53CC9DF6-8FEA-4ECA-B8A8-1DD13DCC9C2B}.Debug|x64.Build.0 = Debug|x64
+		{53CC9DF6-8FEA-4ECA-B8A8-1DD13DCC9C2B}.Release|Any CPU.ActiveCfg = Release|x64
+		{53CC9DF6-8FEA-4ECA-B8A8-1DD13DCC9C2B}.Release|Any CPU.Build.0 = Release|x64
+		{53CC9DF6-8FEA-4ECA-B8A8-1DD13DCC9C2B}.Release|x64.ActiveCfg = Release|x64
+		{53CC9DF6-8FEA-4ECA-B8A8-1DD13DCC9C2B}.Release|x64.Build.0 = Release|x64
+		{8B23A7F1-5E2A-4B70-A8D6-C5DC77C2C843}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{8B23A7F1-5E2A-4B70-A8D6-C5DC77C2C843}.Debug|Any CPU.Build.0 = Debug|x64
+		{8B23A7F1-5E2A-4B70-A8D6-C5DC77C2C843}.Debug|x64.ActiveCfg = Debug|x64
+		{8B23A7F1-5E2A-4B70-A8D6-C5DC77C2C843}.Debug|x64.Build.0 = Debug|x64
+		{8B23A7F1-5E2A-4B70-A8D6-C5DC77C2C843}.Release|Any CPU.ActiveCfg = Release|x64
+		{8B23A7F1-5E2A-4B70-A8D6-C5DC77C2C843}.Release|Any CPU.Build.0 = Release|x64
+		{8B23A7F1-5E2A-4B70-A8D6-C5DC77C2C843}.Release|x64.ActiveCfg = Release|x64
+		{8B23A7F1-5E2A-4B70-A8D6-C5DC77C2C843}.Release|x64.Build.0 = Release|x64
+		{E87623F1-5E2A-4B70-A8D6-C5DC1177C843}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{E87623F1-5E2A-4B70-A8D6-C5DC1177C843}.Debug|Any CPU.Build.0 = Debug|x64
+		{E87623F1-5E2A-4B70-A8D6-C5DC1177C843}.Debug|x64.ActiveCfg = Debug|x64
+		{E87623F1-5E2A-4B70-A8D6-C5DC1177C843}.Debug|x64.Build.0 = Debug|x64
+		{E87623F1-5E2A-4B70-A8D6-C5DC1177C843}.Release|Any CPU.ActiveCfg = Release|x64
+		{E87623F1-5E2A-4B70-A8D6-C5DC1177C843}.Release|Any CPU.Build.0 = Release|x64
+		{E87623F1-5E2A-4B70-A8D6-C5DC1177C843}.Release|x64.ActiveCfg = Release|x64
+		{E87623F1-5E2A-4B70-A8D6-C5DC1177C843}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B2A36B4B-59BC-4402-86E2-A69AF4F7A4A5}
+	EndGlobalSection
+EndGlobal
