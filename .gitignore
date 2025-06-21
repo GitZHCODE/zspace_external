@@ -16,6 +16,8 @@ ipch/
 *.cachefile
 *.VC.db
 *.VC.VC.opendb
+*.exp
+*.zip
 
 # Build results
 [Dd]ebug/
