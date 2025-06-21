@@ -458,4 +458,36 @@ bool zExtGraph::separateGraph(
     }
 }
 
+bool zExtGraph::transform(
+    const float* tMatrix
+)
+{
+    try {
+        if (!m_graph || !tMatrix) {
+            return false;
+        }
+
+        Eigen::Matrix4f transformationMatrix = Eigen::Matrix4f::Identity();
+        for (int i = 0; i < 4; i++)
+            for (int j = 0; j < 4; j++)
+            {
+                // IMPORTANT
+                // the input matrix should be column major but we feed eigen matrix in a row major
+                // this is because eigen will pick it up internally to a column major matrix
+                // this step is meant to avoid confusion since the input format will eventually match eigen format.
+
+            transformationMatrix(i, j) = tMatrix[i * 4 + j];  // row-major
+        }
+
+    zTransform transform(transformationMatrix);
+    zFnGraph fnGraph(*m_graph);
+	fnGraph.setTransform(transform, false, true);
+
+        return true;
+    }
+    catch (const std::exception&) {
+        return false;
+    }
+}
+
 } // namespace zSpace 

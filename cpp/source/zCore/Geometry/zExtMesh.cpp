@@ -14,6 +14,9 @@
 
 #include <algorithm>
 #include <stdexcept>
+#include <vector>
+#include <cmath>
+#include <math.h>
 
 namespace zSpace {
 
@@ -154,6 +157,95 @@ bool zExtMesh::getMeshData(
         }
 
         fnMesh.getPolygonData(polyConnects, polyCounts);
+
+        return true;
+    }
+    catch (const std::exception&) {
+        return false;
+    }
+}
+
+bool zExtMesh::intersect_plane(
+    const float* origin,
+    const float* normal,
+    zExtGraph* out_intersection
+)
+{
+    try {
+        if (!m_mesh || !origin || !normal || !out_intersection) {
+            return false;
+        }
+
+        zFnMesh fnMesh(*m_mesh);
+        if(!fnMesh.isTriMesh()) fnMesh.triangulate();
+
+        vector<zVector> positions;
+        vector<int> pConnects;
+
+        int counter = 0;
+        int faceCount = 0;
+
+        for (zItMeshFace f(*m_mesh); !f.end(); f++)
+        {
+            faceCount++;
+            vector<zPoint> vertices;
+            f.getVertexPositions(vertices);
+
+            zVector o(origin[0], origin[1], origin[2]);
+            zVector n(normal[0], normal[1], normal[2]);
+
+             float d0 = n* vertices[0]  - n * o;
+             float d1 = n* vertices[1]  - n * o;
+             float d2 = n* vertices[2]  - n * o;
+
+             // Check if triangle is intersected by the plane
+             bool pos = (d0 > 0) || (d1 > 0) || (d2 > 0);
+             bool neg = (d0 < 0) || (d1 < 0) || (d2 < 0);
+
+             if (!(pos && neg)) continue; // Triangle does not cross the plane
+
+             // Find edges that cross the plane
+             std::vector<std::pair<zVector, zVector>> edges;
+
+             if ((d0 * d1) < 0) edges.emplace_back(vertices[0], vertices[1]);
+             if ((d1 * d2) < 0) edges.emplace_back(vertices[1], vertices[2]);
+             if ((d2 * d0) < 0) edges.emplace_back(vertices[2], vertices[0]);
+             if (edges.size() < 2) continue;
+
+             // Intersect each edge with plane
+             zVector pts[2];
+             for (int j = 0; j < 2; ++j)
+             {
+                 zVector& a = edges[j].first;
+                 zVector& b = edges[j].second;
+                 float da = n * a - n * o;
+                 float db = n * b - n * o;
+                 float denom = da - db;
+                 if (fabs(denom) < EPS) continue;  // coplanar edge
+                 float t = da / denom;
+                 pts[j] = a + (b - a) * t;
+             }
+
+             positions.push_back(pts[0]);
+             positions.push_back(pts[1]);
+             pConnects.push_back(counter++);
+             pConnects.push_back(counter++);
+        }
+
+        // Create the intersection graph using the provided zExtGraph
+        zFnGraph fnGraph(out_intersection->getRawGraph());
+        
+        // Check if we have any intersection data
+        if (positions.empty() || pConnects.empty()) {
+            // No intersection found, create empty graph
+            fnGraph.clear();
+            return true;
+        }
+        
+        fnGraph.create(positions, pConnects);
+
+        // Make sure to update the graph's internal state
+        out_intersection->updateAttributes();
 
         return true;
     }
@@ -532,6 +624,38 @@ bool zExtMesh::computeGeodesicContours_interpolated(
             delete graph;
         }
         out_contours.clear();
+        return false;
+    }
+}
+
+bool zExtMesh::transform(
+    const float* tMatrix
+)
+{
+    try {
+        if (!m_mesh || !tMatrix) {
+            return false;
+        }
+
+        Eigen::Matrix4f transformationMatrix = Eigen::Matrix4f::Identity();
+        for (int i = 0; i < 4; i++)
+            for (int j = 0; j < 4; j++)
+            {
+                // IMPORTANT
+                // the input matrix should be column major but we feed eigen matrix in a row major
+                // this is because eigen will pick it up internally to a column major matrix
+                // this step is meant to avoid confusion since the input format will eventually match eigen format.
+
+                transformationMatrix(i, j) = tMatrix[i * 4 + j]; // row-major
+            }
+
+        zTransform transform(transformationMatrix);
+        zFnMesh fnMesh(*m_mesh);
+        fnMesh.setTransform(transform, false, true);
+
+        return true;
+    }
+    catch (const std::exception&) {
         return false;
     }
 }

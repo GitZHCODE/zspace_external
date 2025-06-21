@@ -389,6 +389,77 @@ namespace zSpace.External
         }
 
         /// <summary>
+        /// Computes the intersection of the mesh with a plane.
+        /// </summary>
+        /// <param name="origin">Origin point of the plane (x, y, z)</param>
+        /// <param name="normal">Normal vector of the plane (x, y, z)</param>
+        /// <param name="intersection">Graph that will contain the intersection result</param>
+        /// <exception cref="ZSpaceExternalException">Thrown if the operation fails.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if any parameter is null.</exception>
+        /// <exception cref="ArgumentException">Thrown if origin or normal arrays don't have exactly 3 elements.</exception>
+        public void IntersectPlane(float[] origin, float[] normal, zExtGraph intersection)
+        {
+            ThrowIfDisposed();
+            
+            if (origin == null) throw new ArgumentNullException(nameof(origin));
+            if (normal == null) throw new ArgumentNullException(nameof(normal));
+            if (intersection == null) throw new ArgumentNullException(nameof(intersection));
+            
+            if (origin.Length != 3)
+                throw new ArgumentException("Origin array must have exactly 3 elements (x, y, z).", nameof(origin));
+            
+            if (normal.Length != 3)
+                throw new ArgumentException("Normal array must have exactly 3 elements (x, y, z).", nameof(normal));
+            
+            Debug.WriteLine($"Computing mesh-plane intersection with origin ({origin[0]}, {origin[1]}, {origin[2]}) and normal ({normal[0]}, {normal[1]}, {normal[2]})...");
+            Debug.WriteLine($"Mesh handle: {_handle}, Graph handle: {intersection._handle}");
+            
+            if (!NativeMethods.zext_mesh_intersect_plane(_handle, origin, normal, intersection._handle))
+            {
+                ThrowLastError("Failed to compute mesh-plane intersection");
+            }
+            
+            Debug.WriteLine("Mesh-plane intersection computed successfully");
+        }
+
+        /// <summary>
+        /// Transforms the mesh using a 4x4 transformation matrix.
+        /// 
+        /// IMPORTANT: The matrix should be provided in column-major format (translation in last column).
+        /// This is because Eigen stores matrices internally in column-major format.
+        /// 
+        /// Matrix layout (column-major):
+        /// [m00, m10, m20, m30]  // Column 0
+        /// [m01, m11, m21, m31]  // Column 1  
+        /// [m02, m12, m22, m32]  // Column 2
+        /// [m03, m13, m23, m33]  // Column 3 (translation)
+        /// 
+        /// For a translation matrix, the translation vector should be in elements [3, 7, 11].
+        /// </summary>
+        /// <param name="tMatrix">Array of 16 floats representing a 4x4 transformation matrix (column-major order)</param>
+        /// <exception cref="ZSpaceExternalException">Thrown if the operation fails.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if the transformation matrix is null.</exception>
+        /// <exception cref="ArgumentException">Thrown if the transformation matrix doesn't have exactly 16 elements.</exception>
+        public void Transform(float[] tMatrix)
+        {
+            ThrowIfDisposed();
+            
+            if (tMatrix == null) throw new ArgumentNullException(nameof(tMatrix));
+            
+            if (tMatrix.Length != 16)
+                throw new ArgumentException("Transformation matrix must have exactly 16 elements (4x4 matrix).", nameof(tMatrix));
+            
+            Debug.WriteLine("Transforming mesh with 4x4 transformation matrix...");
+            
+            if (!NativeMethods.zext_mesh_transform(_handle, tMatrix))
+            {
+                ThrowLastError("Failed to transform mesh");
+            }
+            
+            Debug.WriteLine("Mesh transformation completed successfully");
+        }
+
+        /// <summary>
         /// Disposes the mesh resources.
         /// </summary>
         public void Dispose()

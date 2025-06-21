@@ -152,6 +152,27 @@ public:
     );
     
     /**
+     * Transform the graph using a 4x4 transformation matrix.
+     * 
+     * IMPORTANT: The matrix should be provided in column-major format (translation in last column).
+     * This is because Eigen stores matrices internally in column-major format.
+     * 
+     * Matrix layout (column-major):
+     * [m00, m10, m20, m30]  // Column 0
+     * [m01, m11, m21, m31]  // Column 1  
+     * [m02, m12, m22, m32]  // Column 2
+     * [m03, m13, m23, m33]  // Column 3 (translation)
+     * 
+     * For a translation matrix, the translation vector should be in elements [3, 7, 11].
+     * 
+     * @param tMatrix Array of 16 floats representing a 4x4 transformation matrix (column-major order)
+     * @return True if successful, false otherwise.
+     */
+    bool transform(
+        const float* tMatrix
+    );
+
+    /**
     * Update internal attributes (vertex and edge counts).
     */
     void updateAttributes();

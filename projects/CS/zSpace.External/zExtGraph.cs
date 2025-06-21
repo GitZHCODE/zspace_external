@@ -328,6 +328,43 @@ namespace zSpace.External
         }
 
         /// <summary>
+        /// Transforms the graph using a 4x4 transformation matrix.
+        /// 
+        /// IMPORTANT: The matrix should be provided in column-major format (translation in last column).
+        /// This is because Eigen stores matrices internally in column-major format.
+        /// 
+        /// Matrix layout (column-major):
+        /// [m00, m10, m20, m30]  // Column 0
+        /// [m01, m11, m21, m31]  // Column 1  
+        /// [m02, m12, m22, m32]  // Column 2
+        /// [m03, m13, m23, m33]  // Column 3 (translation)
+        /// 
+        /// For a translation matrix, the translation vector should be in elements [3, 7, 11].
+        /// </summary>
+        /// <param name="tMatrix">Array of 16 floats representing a 4x4 transformation matrix (column-major order)</param>
+        /// <exception cref="ZSpaceExternalException">Thrown if the operation fails.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if the transformation matrix is null.</exception>
+        /// <exception cref="ArgumentException">Thrown if the transformation matrix doesn't have exactly 16 elements.</exception>
+        public void Transform(float[] tMatrix)
+        {
+            ThrowIfDisposed();
+            
+            if (tMatrix == null) throw new ArgumentNullException(nameof(tMatrix));
+            
+            if (tMatrix.Length != 16)
+                throw new ArgumentException("Transformation matrix must have exactly 16 elements (4x4 matrix).", nameof(tMatrix));
+            
+            Debug.WriteLine("Transforming graph with 4x4 transformation matrix...");
+            
+            if (!NativeMethods.zext_graph_transform(_handle, tMatrix))
+            {
+                ThrowLastError("Failed to transform graph");
+            }
+            
+            Debug.WriteLine("Graph transformation completed successfully");
+        }
+
+        /// <summary>
         /// Disposes the graph resources.
         /// </summary>
         public void Dispose()

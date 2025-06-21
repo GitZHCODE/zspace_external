@@ -257,4 +257,22 @@ ZSPACE_EXTERNAL_API int zext_graph_separate_graph(zExtGraphHandle graph_handle, 
     , 0)
 }
 
+ZSPACE_EXTERNAL_API int zext_graph_transform(zExtGraphHandle graph_handle,
+	const float* tMatrix) {
+	TRY_CATCH_RETURN(
+		if (!graph_handle) {
+			zSpace::SetError("Invalid graph handle");
+			return 0;
+		}
+
+	if (!tMatrix) {
+		zSpace::SetError("Invalid transformation matrix");
+		return 0;
+	}
+
+	auto* graph = static_cast<zSpace::zExtGraph*>(graph_handle);
+	return graph->transform(tMatrix) ? 1 : 0;
+	, 0)
+}
+
 } // extern "C" 
