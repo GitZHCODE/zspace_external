@@ -10,16 +10,14 @@
 ---
 
 ## Table of Contents
-- [Scalar\_Field\_GH](#scalar_field_gh)
-  - [Table of Contents](#table-of-contents)
-  - [Introduction](#introduction)
-  - [Function Overview](#function-overview)
-  - [Example](#example)
-    - [Native JSON export (sample)](#native-json-export-sample)
-  - [Troubleshooting](#troubleshooting)
-  - [Citing](#citing)
-  - [License](#license)
-  - [Third-party dependencies](#third-party-dependencies)
+1.[Introduction](#introduction)
+2.[Function Overview](#function-overview)
+3.[Example](#example)
+4.[Native JSON export (sample)](#native-json-export-sample)
+5.[Troubleshooting](#troubleshooting)
+6.[Citing](#citing)
+7.[License](#license)
+8.[Third-party dependencies](#third-party-dependencies)
 
 ---
 
