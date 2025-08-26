@@ -17,9 +17,13 @@
 3.[Example](#example)
 
 4.[Native JSON export (sample)](#native-json-export-sample)
+
 5.[Troubleshooting](#troubleshooting)
+
 6.[Citing](#citing)
+
 7.[License](#license)
+
 8.[Third-party dependencies](#third-party-dependencies)
 
 ---
