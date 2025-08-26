@@ -20,11 +20,6 @@
 
 5.[Troubleshooting](#troubleshooting)
 
-6.[Citing](#citing)
-
-7.[License](#license)
-
-8.[Third-party dependencies](#third-party-dependencies)
 
 ---
 
@@ -100,29 +95,4 @@ The **native export** is a compact JSON containing grid **resolution**, **bounds
 - **Zero/flat field** — Ensure curves are **closed**, `resolution_x/y` > 0, and bounds aren’t degenerate.
 - **Sign flipped** — If interior/exterior is inverted, switch the winding test in script or standardize `sign_convention`.
 - **I/O permissions** — Export folder must be writable; try a path inside the repo.
-
----
-
-## Citing
-If you use the library of ZSPACE in a project, please refer to the GitHub repository.
-
-```bibtex
-@misc{zspace-framework,
-  title  = {{zspace}: A simple C++ header-only collection of geometry data-structures, algorithms and city data visualization framework.},
-  author = {Taizhong Chen},
-  note   = {https://github.com/venumb/ZSPACE},
-  year   = {2018}
-}
-```
-
-## License
-The library is licensed under the **MIT License**.
-
-## Third-party dependencies
-The library has some dependencies on third-party tools and services, which have different licensing as listed below. Thanks a lot!
-
-- **OpenGL** for display methods. End users, independent software vendors, and others writing code based on the OpenGL API are free from licensing requirements.
-- **stb** for text rendering. These single-file libraries are released into the **public domain** and can be used freely for any purpose.
-- **GLEW** for managing OpenGL extensions. GLEW is open-source and distributed under the **Modified BSD** license, allowing free use in both open and closed source projects.
-- **GLFW** for window and input management. GLFW is licensed under the **zlib/libpng** license, permitting free use in commercial and non-commercial applications.
 
